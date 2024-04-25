@@ -1,4 +1,6 @@
-test_sources = files()
+test_sources = files(
+  './ecs.test.cpp',
+)
 test_dependencies = [
   subproject('catch2').get_variable('catch2_with_main_dep'),
 ]

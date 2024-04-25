@@ -10,7 +10,12 @@ project(
   ],
 )
 
-sources = files()
+sources = files(
+  './src/ecs/entity_storage.cpp',
+  './src/ecs/pool.cpp',
+  './src/ecs/scene.cpp',
+
+)
 include = include_directories('./include')
 dependencies = [
   subproject('glm').get_variable('glm_dep'),
