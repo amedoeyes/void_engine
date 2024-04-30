@@ -11,8 +11,9 @@ project(
 )
 
 sources = files(
+  './src/ecs/common.cpp',
   './src/ecs/entity_storage.cpp',
-  './src/ecs/pool.cpp',
+  './src/ecs/pool_storage.cpp',
   './src/ecs/scene.cpp',
 
 )

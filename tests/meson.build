@@ -1,5 +1,10 @@
 test_sources = files(
-  './ecs.test.cpp',
+  './ecs/common.test.cpp',
+  './ecs/entity_storage.test.cpp',
+  './ecs/pool.test.cpp',
+  './ecs/pool_storage.test.cpp',
+  './ecs/scene.test.cpp',
+  './ecs/view.test.cpp',
 )
 test_dependencies = [
   subproject('catch2').get_variable('catch2_with_main_dep'),

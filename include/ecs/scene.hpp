@@ -3,60 +3,42 @@
 
 #include "ecs/common.hpp"
 #include "ecs/entity_storage.hpp"
-#include "ecs/pool.hpp"
+#include "ecs/pool_storage.hpp"
+#include "ecs/view.hpp"
 
 namespace Void::ECS {
 
 class Scene {
-	template <typename... Components>
-	friend class SceneView;
-
-	public:
-	Scene() = default;
-	~Scene();
-
 	public:
 	Entity create();
-	void destroy(const Entity& id);
+	void destroy(const Entity& entity);
 
-	template <typename T, typename... Args>
-	T* add(const Entity& id, Args&&... args) {
-		if (!_entities.exists(id)) return nullptr;
-
-		ComponentID component_id = get_component_id<T>();
-
-		if (component_id >= _pools.size()) {
-			_pools.resize(component_id + 1, nullptr);
-		}
-
-		if (_pools[component_id] == nullptr) {
-			_pools[component_id] = new Pool(sizeof(T));
-		}
-
-		EntityIndex index = _entities.get_index(id);
-
-		_masks[index].set(component_id);
-
-		return new (_pools[component_id]->get(index))
-			T{std::forward<Args>(args)...};
+	template <typename Component, typename... Args>
+	Component* add(const Entity& entity, Args&&... args) {
+		if (!_entities.contains(entity)) return nullptr;
+		return _pools.create<Component>(entity, std::forward<Args>(args)...);
 	}
 
-	template <typename T>
-	T* get(const Entity& id) {
-		if (!_entities.exists(id)) return nullptr;
+	template <typename Component>
+	void remove(const Entity& entity) {
+		if (!_entities.contains(entity)) return;
+		_pools.destroy<Component>(entity);
+	}
 
-		EntityIndex index = _entities.get_index(id);
-		ComponentID component_id = get_component_id<T>();
+	template <typename Component>
+	Component* get(const Entity& entity) {
+		if (!_entities.contains(entity)) return nullptr;
+		return _pools.get_component<Component>(entity);
+	}
 
-		if (!_masks[index].test(component_id)) return nullptr;
-
-		return reinterpret_cast<T*>(_pools[component_id]->get(index));
+	template <typename... Components>
+	View<Components...> view() {
+		return View<Components...>(_pools);
 	}
 
 	private:
 	EntityStorage _entities;
-	std::vector<Mask> _masks;
-	std::vector<Pool*> _pools;
+	PoolStorage _pools;
 };
 
 }  // namespace Void::ECS

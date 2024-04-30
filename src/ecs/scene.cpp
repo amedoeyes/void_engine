@@ -1,20 +1,15 @@
 #include "ecs/scene.hpp"
 
-using namespace Void::ECS;
-
-Scene::~Scene() {
-	for (Pool* p : _pools) {
-		delete p;
-	}
-}
+namespace Void::ECS {
 
 Entity Scene::create() {
-	_masks.emplace_back();
 	return _entities.create();
 }
 
-void Scene::destroy(const Entity& id) {
-	if (!_entities.exists(id)) return;
-	_masks[_entities.get_index(id)].reset();
-	_entities.destroy(id);
+void Scene::destroy(const Entity& entity) {
+	if (!_entities.contains(entity)) return;
+	_pools.destroy(entity);
+	_entities.destroy(entity);
 }
+
+}  // namespace Void::ECS
