@@ -4,7 +4,7 @@
 
 #include "ecs/common.hpp"
 
-using namespace Void::ECS;
+using namespace void_engine::ECS;
 
 TEST_CASE("EntityStorage", "[ecs][entity_storage]") {
 	EntityStorage storage;

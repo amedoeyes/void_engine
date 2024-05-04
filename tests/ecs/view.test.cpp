@@ -5,7 +5,7 @@
 #include "ecs/common.hpp"
 #include "ecs/pool_storage.hpp"
 
-using namespace Void::ECS;
+using namespace void_engine::ECS;
 
 struct Position {
 	int x;

@@ -2,7 +2,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace Void::ECS;
+using namespace void_engine::ECS;
 
 TEST_CASE("Entity", "[ecs][common]") {
 	EntityIndex index = 10;

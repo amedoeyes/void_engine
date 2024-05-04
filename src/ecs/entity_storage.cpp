@@ -2,7 +2,7 @@
 
 #include "ecs/common.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 Entity EntityStorage::create() {
 	if (!_free.empty()) {
@@ -35,4 +35,4 @@ bool EntityStorage::contains(const Entity& entity) const {
 	return _data[get_entity_index(entity)] == entity;
 }
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS

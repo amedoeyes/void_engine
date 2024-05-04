@@ -1,6 +1,6 @@
 #include "ecs/common.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 Entity create_entity(const EntityIndex& index, const EntityVersion& version) {
 	return (static_cast<Entity>(index) << 32) | static_cast<Entity>(version);
@@ -14,4 +14,4 @@ EntityVersion get_entity_version(const Entity& entity) {
 	return (EntityVersion)(entity);
 }
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS

@@ -6,7 +6,7 @@
 #include "ecs/common.hpp"
 #include "ecs/pool_storage.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 template <typename... Components>
 class View {
@@ -52,6 +52,6 @@ class View {
 	std::vector<Entity> _entities;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	//! VOID_ECS_VIEW_HPP

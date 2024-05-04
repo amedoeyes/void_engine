@@ -5,7 +5,7 @@
 
 #include "ecs/common.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 class PoolBase {
 	public:
@@ -14,6 +14,6 @@ class PoolBase {
 	virtual const std::vector<Entity>& get_entities() const = 0;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	// !VOID_ECS_POOL_BASE_HPP

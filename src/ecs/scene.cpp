@@ -1,6 +1,6 @@
 #include "ecs/scene.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 Entity Scene::create() {
 	return _entities.create();
@@ -12,4 +12,4 @@ void Scene::destroy(const Entity& entity) {
 	_entities.destroy(entity);
 }
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS

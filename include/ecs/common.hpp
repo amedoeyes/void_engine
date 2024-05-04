@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 using Entity = uint64_t;
 using EntityIndex = uint32_t;
@@ -29,6 +29,6 @@ ComponentID get_component_id() {
 	return id;
 }
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	// !VOID_ECS_COMMON_HPP

@@ -4,7 +4,7 @@
 
 #include "ecs/common.hpp"
 
-using namespace Void::ECS;
+using namespace void_engine::ECS;
 
 struct Position {
 	int x;

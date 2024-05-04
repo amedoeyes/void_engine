@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-using namespace Void::ECS;
+using namespace void_engine::ECS;
 
 PoolStorage::~PoolStorage() {
 	for (auto& [_, pool] : _pools) {

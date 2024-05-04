@@ -6,7 +6,7 @@
 #include "ecs/pool_storage.hpp"
 #include "ecs/view.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 class Scene {
 	public:
@@ -41,6 +41,6 @@ class Scene {
 	PoolStorage _pools;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	//! VOID_ECS_SCENE_HPP

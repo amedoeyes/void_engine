@@ -5,7 +5,7 @@
 
 #include "ecs/common.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 class EntityStorage {
 	public:
@@ -19,6 +19,6 @@ class EntityStorage {
 	std::vector<EntityIndex> _free;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	// !VOID_ECS_ENTITY_STORAGE_HPP

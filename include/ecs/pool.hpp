@@ -6,7 +6,7 @@
 #include "ecs/common.hpp"
 #include "ecs/pool_base.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 template <typename T>
 class Pool : public PoolBase {
@@ -82,6 +82,6 @@ class Pool : public PoolBase {
 	std::vector<T*> _data;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	// !VOID_ECS_POOL_HPP

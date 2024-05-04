@@ -7,7 +7,7 @@
 #include "ecs/pool.hpp"
 #include "ecs/pool_base.hpp"
 
-namespace Void::ECS {
+namespace void_engine::ECS {
 
 class PoolStorage {
 	public:
@@ -68,6 +68,6 @@ class PoolStorage {
 	std::unordered_map<ComponentID, PoolBase*> _pools;
 };
 
-}  // namespace Void::ECS
+}  // namespace void_engine::ECS
 
 #endif	// !VOID_ECS_POOL_SComponentORAGE_HPP
