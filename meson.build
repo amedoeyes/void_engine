@@ -15,14 +15,20 @@ sources = files(
   './src/ecs/entity_storage.cpp',
   './src/ecs/pool_storage.cpp',
   './src/ecs/scene.cpp',
+  './src/window/window.cpp',
+  './src/window/window_manager.cpp',
 
 )
 include = include_directories('./include')
 dependencies = [
   subproject('glm').get_variable('glm_dep'),
-  subproject('glfw').get_variable('glfw_dep'),
+  subproject('glfw', default_options: ['default_library=static']).get_variable(
+    'glfw_dep',
+  ),
   subproject('glad').get_variable('glad_dep'),
 ]
+
+add_project_arguments('-DGLFW_INCLUDE_NONE', language: 'cpp')
 
 void_engine = library(
   'void_engine',
