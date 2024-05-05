@@ -33,4 +33,8 @@ void WindowManager::destroy(Window* window) {
 	}
 }
 
+void WindowManager::poll_events() {
+	glfwPollEvents();
+}
+
 }  // namespace void_engine::window

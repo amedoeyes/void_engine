@@ -17,6 +17,8 @@ class WindowManager {
 	);
 	static void destroy(Window* window);
 
+	static void poll_events();
+
 	private:
 	static std::vector<Window*> _windows;
 };
