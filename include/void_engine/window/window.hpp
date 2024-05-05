@@ -1,5 +1,5 @@
-#ifndef VOID_WINDOW_HPP
-#define VOID_WINDOW_HPP
+#ifndef VOID_ENGINE_WINDOW_HPP
+#define VOID_ENGINE_WINDOW_HPP
 
 #include <GLFW/glfw3.h>
 
@@ -23,4 +23,4 @@ class Window {
 
 }  // namespace void_engine::window
 
-#endif	// !VOID_WINDOW_HPP
+#endif	// !VOID_ENGINE_WINDOW_HPP

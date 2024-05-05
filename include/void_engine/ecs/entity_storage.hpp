@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_ENTITY_STORAGE_HPP
-#define VOID_ECS_ENTITY_STORAGE_HPP
+#ifndef VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
+#define VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
 
 #include <vector>
 
@@ -21,4 +21,4 @@ class EntityStorage {
 
 }  // namespace void_engine::ECS
 
-#endif	// !VOID_ECS_ENTITY_STORAGE_HPP
+#endif	// !VOID_ENGINE_ECS_ENTITY_STORAGE_HPP

@@ -1,5 +1,5 @@
-#ifndef VOID_WINDOW_MANAGER_HPP
-#define VOID_WINDOW_MANAGER_HPP
+#ifndef VOID_ENGINE_WINDOW_MANAGER_HPP
+#define VOID_ENGINE_WINDOW_MANAGER_HPP
 
 #include <vector>
 
@@ -25,4 +25,4 @@ class WindowManager {
 
 }  // namespace void_engine::window
 
-#endif	// !VOID_WINDOW_MANAGER_HPP
+#endif	// !VOID_ENGINE_WINDOW_MANAGER_HPP

@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_VIEW_HPP
-#define VOID_ECS_VIEW_HPP
+#ifndef VOID_ENGINE_ECS_VIEW_HPP
+#define VOID_ENGINE_ECS_VIEW_HPP
 
 #include <algorithm>
 
@@ -54,4 +54,4 @@ class View {
 
 }  // namespace void_engine::ECS
 
-#endif	//! VOID_ECS_VIEW_HPP
+#endif	//! VOID_ENGINE_ECS_VIEW_HPP

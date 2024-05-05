@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_POOL_SComponentORAGE_HPP
-#define VOID_ECS_POOL_SComponentORAGE_HPP
+#ifndef VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP
+#define VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP
 
 #include <unordered_map>
 
@@ -70,4 +70,4 @@ class PoolStorage {
 
 }  // namespace void_engine::ECS
 
-#endif	// !VOID_ECS_POOL_SComponentORAGE_HPP
+#endif	// !VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP

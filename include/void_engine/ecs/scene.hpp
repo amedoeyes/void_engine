@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_SCENE_HPP
-#define VOID_ECS_SCENE_HPP
+#ifndef VOID_ENGINE_ECS_SCENE_HPP
+#define VOID_ENGINE_ECS_SCENE_HPP
 
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/entity_storage.hpp"
@@ -43,4 +43,4 @@ class Scene {
 
 }  // namespace void_engine::ECS
 
-#endif	//! VOID_ECS_SCENE_HPP
+#endif	//! VOID_ENGINE_ECS_SCENE_HPP

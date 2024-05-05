@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_COMMON_HPP
-#define VOID_ECS_COMMON_HPP
+#ifndef VOID_ENGINE_ECS_COMMON_HPP
+#define VOID_ENGINE_ECS_COMMON_HPP
 
 #include <cstdint>
 
@@ -31,4 +31,4 @@ ComponentID get_component_id() {
 
 }  // namespace void_engine::ECS
 
-#endif	// !VOID_ECS_COMMON_HPP
+#endif	// !VOID_ENGINE_ECS_COMMON_HPP

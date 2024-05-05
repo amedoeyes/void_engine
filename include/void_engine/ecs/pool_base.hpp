@@ -1,5 +1,5 @@
-#ifndef VOID_ECS_POOL_BASE_HPP
-#define VOID_ECS_POOL_BASE_HPP
+#ifndef VOID_ENGINE_ECS_POOL_BASE_HPP
+#define VOID_ENGINE_ECS_POOL_BASE_HPP
 
 #include <vector>
 
@@ -16,4 +16,4 @@ class PoolBase {
 
 }  // namespace void_engine::ECS
 
-#endif	// !VOID_ECS_POOL_BASE_HPP
+#endif	// !VOID_ENGINE_ECS_POOL_BASE_HPP
