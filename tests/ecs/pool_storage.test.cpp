@@ -1,8 +1,8 @@
-#include "ecs/pool_storage.hpp"
+#include "void_engine/ecs/pool_storage.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "ecs/common.hpp"
+#include "void_engine/ecs/common.hpp"
 
 using namespace void_engine::ECS;
 

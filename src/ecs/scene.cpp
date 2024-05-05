@@ -1,4 +1,4 @@
-#include "ecs/scene.hpp"
+#include "void_engine/ecs/scene.hpp"
 
 namespace void_engine::ECS {
 

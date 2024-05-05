@@ -1,4 +1,4 @@
-#include "ecs/common.hpp"
+#include "void_engine/ecs/common.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 

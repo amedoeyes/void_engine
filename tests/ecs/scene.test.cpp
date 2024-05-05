@@ -1,9 +1,9 @@
-#include "ecs/scene.hpp"
+#include "void_engine/ecs/scene.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 
-#include "ecs/common.hpp"
-#include "ecs/view.hpp"
+#include "void_engine/ecs/common.hpp"
+#include "void_engine/ecs/view.hpp"
 
 using namespace void_engine::ECS;
 

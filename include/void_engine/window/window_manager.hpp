@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "window/window.hpp"
+#include "void_engine/window/window.hpp"
 
 namespace void_engine::window {
 

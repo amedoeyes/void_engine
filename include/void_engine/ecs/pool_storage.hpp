@@ -3,9 +3,9 @@
 
 #include <unordered_map>
 
-#include "ecs/common.hpp"
-#include "ecs/pool.hpp"
-#include "ecs/pool_base.hpp"
+#include "void_engine/ecs/common.hpp"
+#include "void_engine/ecs/pool.hpp"
+#include "void_engine/ecs/pool_base.hpp"
 
 namespace void_engine::ECS {
 

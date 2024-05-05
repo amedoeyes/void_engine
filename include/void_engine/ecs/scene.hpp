@@ -1,10 +1,10 @@
 #ifndef VOID_ECS_SCENE_HPP
 #define VOID_ECS_SCENE_HPP
 
-#include "ecs/common.hpp"
-#include "ecs/entity_storage.hpp"
-#include "ecs/pool_storage.hpp"
-#include "ecs/view.hpp"
+#include "void_engine/ecs/common.hpp"
+#include "void_engine/ecs/entity_storage.hpp"
+#include "void_engine/ecs/pool_storage.hpp"
+#include "void_engine/ecs/view.hpp"
 
 namespace void_engine::ECS {
 

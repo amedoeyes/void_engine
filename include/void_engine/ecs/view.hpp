@@ -3,8 +3,8 @@
 
 #include <algorithm>
 
-#include "ecs/common.hpp"
-#include "ecs/pool_storage.hpp"
+#include "void_engine/ecs/common.hpp"
+#include "void_engine/ecs/pool_storage.hpp"
 
 namespace void_engine::ECS {
 
