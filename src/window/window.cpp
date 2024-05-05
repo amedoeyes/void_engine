@@ -12,10 +12,9 @@ Window::Window(const char* title, const int& width, const int& height) {
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 	_window = glfwCreateWindow(width, height, title, NULL, NULL);
-	if (_window == nullptr) {
-		glfwTerminate();
+	if (_window == nullptr)
 		assert(false && "GLFW Error: Failed to create window");
-	}
+
 	glfwMakeContextCurrent(_window);
 
 	glfwSetErrorCallback([]([[maybe_unused]] int, const char* description) {
