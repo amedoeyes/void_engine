@@ -20,9 +20,12 @@ Window::Window(const char* title, const int& width, const int& height) {
 	glfwSetErrorCallback([]([[maybe_unused]] int, const char* description) {
 		std::cerr << "GLFW Error: " << description << std::endl;
 	});
+
+	_input_handler = new InputHandler(_window);
 }
 
 Window::~Window() {
+	delete _input_handler;
 	glfwDestroyWindow(_window);
 }
 
@@ -44,6 +47,10 @@ bool Window::should_close() const {
 
 void Window::close() const {
 	glfwSetWindowShouldClose(_window, true);
+}
+
+InputHandler* Window::get_input_handler() const {
+	return _input_handler;
 }
 
 }  // namespace void_engine::window

@@ -34,6 +34,7 @@ void WindowManager::destroy(Window* window) {
 }
 
 void WindowManager::poll_events() {
+	for (auto window : _windows) window->get_input_handler()->update();
 	glfwPollEvents();
 }
 

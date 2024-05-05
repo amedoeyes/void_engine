@@ -15,6 +15,9 @@ sources = files(
   './src/ecs/entity_storage.cpp',
   './src/ecs/pool_storage.cpp',
   './src/ecs/scene.cpp',
+  './src/input/input_handler.cpp',
+  './src/input/keyboard.cpp',
+  './src/input/mouse.cpp',
   './src/window/window.cpp',
   './src/window/window_manager.cpp',
 

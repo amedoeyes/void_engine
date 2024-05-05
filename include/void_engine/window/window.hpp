@@ -3,7 +3,11 @@
 
 #include <GLFW/glfw3.h>
 
+#include "void_engine/input/input_handler.hpp"
+
 namespace void_engine::window {
+
+using namespace void_engine::input;
 
 class Window {
 	public:
@@ -16,9 +20,11 @@ class Window {
 	void swap_buffers() const;
 	bool should_close() const;
 	void close() const;
+	InputHandler* get_input_handler() const;
 
 	private:
 	GLFWwindow* _window;
+	InputHandler* _input_handler;
 };
 
 }  // namespace void_engine::window
