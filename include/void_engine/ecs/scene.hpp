@@ -11,22 +11,22 @@ namespace void_engine::ECS {
 class Scene {
 	public:
 	Entity create();
-	void destroy(const Entity& entity);
+	void destroy(Entity entity);
 
 	template <typename Component, typename... Args>
-	Component* add(const Entity& entity, Args&&... args) {
+	Component* add(Entity entity, Args&&... args) {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.create<Component>(entity, std::forward<Args>(args)...);
 	}
 
 	template <typename Component>
-	void remove(const Entity& entity) {
+	void remove(Entity entity) {
 		if (!_entities.contains(entity)) return;
 		_pools.destroy<Component>(entity);
 	}
 
 	template <typename Component>
-	Component* get(const Entity& entity) {
+	Component* get(Entity entity) {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.get_component<Component>(entity);
 	}

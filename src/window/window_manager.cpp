@@ -23,9 +23,7 @@ void WindowManager::terminate() {
 	glfwTerminate();
 }
 
-Window* WindowManager::create(
-	const char* title, const int& width, const int& height
-) {
+Window* WindowManager::create(const char* title, int width, int height) {
 	_windows.emplace_back(new Window(title, width, height));
 	return _windows.back();
 }

@@ -29,7 +29,7 @@ class View {
 			entities.erase(
 				std::remove_if(
 					entities.begin(), entities.end(),
-					[&](const Entity& entity) {
+					[&](Entity entity) {
 						return !(_pools.contains<Components>(entity) && ...);
 					}
 				),

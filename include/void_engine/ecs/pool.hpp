@@ -17,7 +17,7 @@ class Pool : public PoolBase {
 
 	public:
 	template <typename... Args>
-	T* create(const Entity& entity, Args&&... args) {
+	T* create(Entity entity, Args&&... args) {
 		EntityIndex index = get_entity_index(entity);
 
 		if (index >= _sparse.size()) {
@@ -36,7 +36,7 @@ class Pool : public PoolBase {
 		return _data.back();
 	}
 
-	void destroy(const Entity& entity) {
+	void destroy(Entity entity) {
 		if (!contains(entity)) return;
 
 		EntityIndex index = get_entity_index(entity);
@@ -61,12 +61,12 @@ class Pool : public PoolBase {
 		_data.clear();
 	}
 
-	T* get(const Entity& entity) {
+	T* get(Entity entity) {
 		if (!contains(entity)) return nullptr;
 		return _data[_sparse[get_entity_index(entity)]];
 	}
 
-	bool contains(const Entity& entity) const {
+	bool contains(Entity entity) const {
 		EntityIndex index = get_entity_index(entity);
 		if (index >= _sparse.size()) return false;
 		return _sparse[index] != INVALID_ENTITY;

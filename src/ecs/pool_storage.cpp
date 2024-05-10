@@ -10,7 +10,7 @@ PoolStorage::~PoolStorage() {
 	}
 }
 
-void PoolStorage::destroy(const Entity& entity) {
+void PoolStorage::destroy(Entity entity) {
 	for (auto& [_, pool] : _pools) {
 		pool->destroy(entity);
 	}

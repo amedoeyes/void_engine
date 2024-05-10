@@ -10,9 +10,9 @@ namespace void_engine::ECS {
 class EntityStorage {
 	public:
 	Entity create();
-	void destroy(const Entity& id);
-	Entity get(const EntityIndex& index) const;
-	bool contains(const Entity& id) const;
+	void destroy(Entity id);
+	Entity get(EntityIndex index) const;
+	bool contains(Entity id) const;
 
 	private:
 	std::vector<Entity> _data;

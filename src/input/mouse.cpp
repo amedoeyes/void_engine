@@ -10,39 +10,39 @@ void Mouse::update() {
 	_prev_states = _states;
 }
 
-bool Mouse::is_button_down(Button button) const {
+bool Mouse::is_button_down(MouseButton button) const {
 	return get_state(button);
 }
 
-bool Mouse::is_button_up(Button button) const {
+bool Mouse::is_button_up(MouseButton button) const {
 	return !get_state(button);
 }
 
-bool Mouse::is_button_pressed(Button button) const {
+bool Mouse::is_button_pressed(MouseButton button) const {
 	return get_state(button) && !get_prev_state(button);
 }
 
-bool Mouse::get_state(Button button) const {
+bool Mouse::get_state(MouseButton button) const {
 	auto it = _states.find(button);
 	if (it == _states.end()) return false;
 	return it->second;
 }
 
-void Mouse::set_state(Button button, bool state) {
+void Mouse::set_state(MouseButton button, bool state) {
 	_states[button] = state;
 }
 
-bool Mouse::get_prev_state(Button button) const {
+bool Mouse::get_prev_state(MouseButton button) const {
 	auto it = _prev_states.find(button);
 	if (it == _prev_states.end()) return false;
 	return it->second;
 }
 
-void Mouse::set_prev_state(Button button, bool state) {
+void Mouse::set_prev_state(MouseButton button, bool state) {
 	_prev_states[button] = state;
 }
 
-Mouse::Position Mouse::get_position() const {
+glm::vec2 Mouse::get_position() const {
 	return _position;
 }
 
@@ -50,7 +50,7 @@ void Mouse::set_position(float x, float y) {
 	_position = {x, y};
 }
 
-Mouse::Scroll Mouse::get_scroll() const {
+glm::vec2 Mouse::get_scroll() const {
 	return _scroll;
 }
 
@@ -65,9 +65,9 @@ void Mouse::button_callback(
 	auto mouse = ih->get_mouse();
 
 	if (action == GLFW_PRESS) {
-		mouse->set_state(static_cast<Mouse::Button>(button), true);
+		mouse->set_state(static_cast<MouseButton>(button), true);
 	} else if (action == GLFW_RELEASE) {
-		mouse->set_state(static_cast<Mouse::Button>(button), false);
+		mouse->set_state(static_cast<MouseButton>(button), false);
 	}
 }
 

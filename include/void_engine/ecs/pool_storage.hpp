@@ -1,5 +1,5 @@
-#ifndef VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP
-#define VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP
+#ifndef VOID_ENGINE_ECS_POOL_STORAGE_HPP
+#define VOID_ENGINE_ECS_POOL_STORAGE_HPP
 
 #include <unordered_map>
 
@@ -15,7 +15,7 @@ class PoolStorage {
 
 	public:
 	template <typename Component, typename... Args>
-	Component* create(const Entity& entity, Args&&... args) {
+	Component* create(Entity entity, Args&&... args) {
 		ComponentID id = get_component_id<Component>();
 		if (_pools.find(id) == _pools.end()) {
 			_pools[id] = new Pool<Component>();
@@ -25,13 +25,13 @@ class PoolStorage {
 	}
 
 	template <typename Component>
-	void destroy(const Entity& entity) {
+	void destroy(Entity entity) {
 		ComponentID id = get_component_id<Component>();
 		if (_pools.find(id) == _pools.end()) return;
 		static_cast<Pool<Component>*>(_pools[id])->destroy(entity);
 	}
 
-	void destroy(const Entity& entity);
+	void destroy(Entity entity);
 
 	template <typename Component>
 	void clear() {
@@ -41,7 +41,7 @@ class PoolStorage {
 	}
 
 	template <typename Component>
-	Component* get_component(const Entity& entity) {
+	Component* get_component(Entity entity) {
 		ComponentID id = get_component_id<Component>();
 		if (_pools.find(id) == _pools.end()) return nullptr;
 		return static_cast<Pool<Component>*>(_pools[id])->get(entity);
@@ -58,7 +58,7 @@ class PoolStorage {
 	const std::vector<Entity> get_entities() const;
 
 	template <typename Component>
-	bool contains(const Entity& entity) const {
+	bool contains(Entity entity) const {
 		ComponentID id = get_component_id<Component>();
 		if (_pools.find(id) == _pools.end()) return false;
 		return static_cast<Pool<Component>*>(_pools.at(id))->contains(entity);
@@ -70,4 +70,4 @@ class PoolStorage {
 
 }  // namespace void_engine::ECS
 
-#endif	// !VOID_ENGINE_ECS_POOL_SComponentORAGE_HPP
+#endif	// !VOID_ENGINE_ECS_POOL_STORAGE_HPP

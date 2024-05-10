@@ -4,7 +4,7 @@
 
 namespace void_engine::window {
 
-Window::Window(const char* title, const int& width, const int& height) {
+Window::Window(const char* title, int width, int height) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);

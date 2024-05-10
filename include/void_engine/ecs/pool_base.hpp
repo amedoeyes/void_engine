@@ -10,7 +10,7 @@ namespace void_engine::ECS {
 class PoolBase {
 	public:
 	virtual ~PoolBase() = default;
-	virtual void destroy(const Entity& entity) = 0;
+	virtual void destroy(Entity entity) = 0;
 	virtual const std::vector<Entity>& get_entities() const = 0;
 };
 

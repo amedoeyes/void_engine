@@ -20,18 +20,18 @@ Entity EntityStorage::create() {
 	return entity;
 }
 
-void EntityStorage::destroy(const Entity& entity) {
+void EntityStorage::destroy(Entity entity) {
 	_data[get_entity_index(entity)] =
 		create_entity(INVALID_ENTITY_INDEX, get_entity_version(entity));
 	_free.push_back(entity);
 }
 
-Entity EntityStorage::get(const EntityIndex& index) const {
+Entity EntityStorage::get(EntityIndex index) const {
 	if (index >= _data.size()) return INVALID_ENTITY;
 	return _data[index];
 }
 
-bool EntityStorage::contains(const Entity& entity) const {
+bool EntityStorage::contains(Entity entity) const {
 	return _data[get_entity_index(entity)] == entity;
 }
 

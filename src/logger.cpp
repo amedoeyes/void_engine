@@ -13,7 +13,7 @@ std::unordered_map<Logger::LogLevel, std::string_view> Logger::_log_level_map =
 		{Logger::LogLevel::error, "[ERROR]"},
 };
 
-void Logger::set_log_level(const LogLevel& log_level) {
+void Logger::set_log_level(LogLevel log_level) {
 	_log_level = log_level;
 }
 

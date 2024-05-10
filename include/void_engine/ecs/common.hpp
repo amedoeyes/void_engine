@@ -12,9 +12,9 @@ using EntityVersion = uint32_t;
 constexpr Entity INVALID_ENTITY = Entity(-1);
 constexpr EntityIndex INVALID_ENTITY_INDEX = EntityIndex(-1);
 
-Entity create_entity(const EntityIndex& index, const EntityVersion& version);
-EntityIndex get_entity_index(const Entity& entity);
-EntityVersion get_entity_version(const Entity& entity);
+Entity create_entity(EntityIndex index, EntityVersion version);
+EntityIndex get_entity_index(Entity entity);
+EntityVersion get_entity_version(Entity entity);
 
 using ComponentID = uint16_t;
 
