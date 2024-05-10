@@ -5,12 +5,17 @@
 #include <algorithm>
 #include <cassert>
 
+#include "void_engine/logger.hpp"
+
 namespace void_engine::window {
 
 std::vector<Window*> WindowManager::_windows;
 
 void WindowManager::init() {
-	if (!glfwInit()) assert(false && "GLFW Error: Failed to initialize GLFW");
+	if (!glfwInit()) {
+		Logger::error("Failed to initialize GLFW");
+		assert(false);
+	}
 }
 
 void WindowManager::terminate() {
