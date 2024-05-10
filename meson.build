@@ -19,9 +19,12 @@ sources = files(
   './src/input/keyboard.cpp',
   './src/input/mouse.cpp',
   './src/logger.cpp',
+  './src/renderer/buffer.cpp',
+  './src/renderer/renderer.cpp',
+  './src/renderer/shader.cpp',
+  './src/renderer/vertex_array.cpp',
   './src/window/window.cpp',
   './src/window/window_manager.cpp',
-
 )
 include = include_directories('./include')
 dependencies = [
