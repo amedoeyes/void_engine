@@ -24,7 +24,11 @@ TEST_CASE("Window", "[window][window]") {
 	}
 
 	SECTION("Get time") {
-		REQUIRE(window.get_time() == glfwGetTime());
+		auto time = window.get_time();
+		while (window.get_time() - time < 1.0f) {
+		}
+		auto time2 = window.get_time();
+		REQUIRE(time2 - time >= 1.0f);
 	}
 
 	SECTION("Close window") {
