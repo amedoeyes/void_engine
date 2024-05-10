@@ -14,6 +14,19 @@ TEST_CASE("Window", "[window][window]") {
 		REQUIRE_FALSE(window.should_close());
 	}
 
+	SECTION("Make context current") {
+		window.make_context_current();
+		REQUIRE(glfwGetCurrentContext() == window.get_window());
+	}
+
+	SECTION("Get InputHandler") {
+		REQUIRE(window.get_input_handler() != nullptr);
+	}
+
+	SECTION("Get time") {
+		REQUIRE(window.get_time() == glfwGetTime());
+	}
+
 	SECTION("Close window") {
 		window.close();
 		REQUIRE(window.should_close());

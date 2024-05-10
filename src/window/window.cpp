@@ -51,4 +51,8 @@ InputHandler* Window::get_input_handler() const {
 	return _input_handler;
 }
 
+float Window::get_time() const {
+	return glfwGetTime();
+}
+
 }  // namespace void_engine::window

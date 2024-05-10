@@ -21,6 +21,7 @@ class Window {
 	bool should_close() const;
 	void close() const;
 	InputHandler* get_input_handler() const;
+	float get_time() const;
 
 	private:
 	GLFWwindow* _window;
