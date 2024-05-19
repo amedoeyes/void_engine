@@ -1,5 +1,5 @@
-#ifndef VOID_ENGINE_WINDOW_HPP
-#define VOID_ENGINE_WINDOW_HPP
+#ifndef VOID_ENGINE_WINDOW_WINDOW_HPP
+#define VOID_ENGINE_WINDOW_WINDOW_HPP
 
 #include <GLFW/glfw3.h>
 
@@ -11,7 +11,7 @@ using namespace void_engine::input;
 
 class Window {
 	public:
-	Window(const char* title, const int& width, const int& height);
+	Window(const char* title, int width, int height);
 	~Window();
 
 	public:
@@ -30,4 +30,4 @@ class Window {
 
 }  // namespace void_engine::window
 
-#endif	// !VOID_ENGINE_WINDOW_HPP
+#endif	// !VOID_ENGINE_WINDOW_WINDOW_HPP

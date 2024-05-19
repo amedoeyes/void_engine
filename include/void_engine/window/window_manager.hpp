@@ -1,5 +1,5 @@
-#ifndef VOID_ENGINE_WINDOW_MANAGER_HPP
-#define VOID_ENGINE_WINDOW_MANAGER_HPP
+#ifndef VOID_ENGINE_WINDOW_WINDOW_MANAGER_HPP
+#define VOID_ENGINE_WINDOW_WINDOW_MANAGER_HPP
 
 #include <vector>
 
@@ -12,9 +12,7 @@ class WindowManager {
 	static void init();
 	static void terminate();
 
-	static Window* create(
-		const char* title, const int& width, const int& height
-	);
+	static Window* create(const char* title, int width, int height);
 	static void destroy(Window* window);
 
 	static void poll_events();
@@ -25,4 +23,4 @@ class WindowManager {
 
 }  // namespace void_engine::window
 
-#endif	// !VOID_ENGINE_WINDOW_MANAGER_HPP
+#endif	// !VOID_ENGINE_WINDOW_WINDOW_MANAGER_HPP

@@ -19,10 +19,10 @@ class Logger {
 	};
 
 	public:
-	Logger(const LogLevel& log_level = LogLevel::info);
+	Logger(LogLevel log_level = LogLevel::info);
 
 	public:
-	static void set_log_level(const LogLevel& log_level);
+	static void set_log_level(LogLevel log_level);
 
 	template <typename... Args>
 	static void debug(const std::string_view fmt, const Args&... args) {
@@ -51,7 +51,7 @@ class Logger {
 	private:
 	template <typename... Args>
 	static void log(
-		const LogLevel& level, const std::string_view fmt, const Args&... args
+		LogLevel level, const std::string_view fmt, const Args&... args
 	) {
 		if (level < _log_level || _log_level == LogLevel::none) return;
 
