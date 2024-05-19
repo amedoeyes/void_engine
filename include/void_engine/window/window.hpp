@@ -22,6 +22,7 @@ class Window {
 	void close() const;
 	InputHandler* get_input_handler() const;
 	float get_time() const;
+	float get_delta_time() const;
 
 	private:
 	GLFWwindow* _window;

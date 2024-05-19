@@ -55,4 +55,12 @@ float Window::get_time() const {
 	return glfwGetTime();
 }
 
+float Window::get_delta_time() const {
+	static float last_frame_time = 0.0f;
+	float current_time = glfwGetTime();
+	float delta_time = current_time - last_frame_time;
+	last_frame_time = current_time;
+	return delta_time;
+}
+
 }  // namespace void_engine::window
