@@ -22,7 +22,7 @@ class Shader {
 
 	void add(const char* path, ShaderType type);
 	void compile();
-	void recomplie();
+	void recompile();
 
 	void set_uniform(const char* name, int value) const;
 	void set_uniform(const char* name, unsigned int value) const;

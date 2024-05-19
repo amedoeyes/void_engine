@@ -50,7 +50,7 @@ void Shader::compile() {
 	}
 }
 
-void Shader::recomplie() {
+void Shader::recompile() {
 	glDeleteProgram(_id);
 	_uniforms.clear();
 	_id = glCreateProgram();

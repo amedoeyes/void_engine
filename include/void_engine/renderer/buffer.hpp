@@ -9,7 +9,6 @@ namespace void_engine::renderer {
 
 class Buffer {
 	public:
-	public:
 	Buffer(BufferTarget target);
 	~Buffer();
 
