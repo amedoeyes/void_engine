@@ -26,7 +26,7 @@ class VertexArray {
 	private:
 	unsigned int _id;
 	Buffer _vertex_buffer;
-	unsigned int _index;
+	unsigned int _index = 0;
 };
 
 }  // namespace void_engine::renderer
