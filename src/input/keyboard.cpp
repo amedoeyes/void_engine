@@ -8,15 +8,15 @@ void Keyboard::update() {
 	_prev_states = _states;
 }
 
-bool Keyboard::is_key_down(KeyboardKey key) const {
+bool Keyboard::is_down(KeyboardKey key) const {
 	return get_state(key);
 }
 
-bool Keyboard::is_key_up(KeyboardKey key) const {
+bool Keyboard::is_up(KeyboardKey key) const {
 	return !get_state(key);
 }
 
-bool Keyboard::is_key_pressed(KeyboardKey key) const {
+bool Keyboard::is_pressed(KeyboardKey key) const {
 	return get_state(key) && !get_prev_state(key);
 }
 

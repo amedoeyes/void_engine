@@ -103,9 +103,9 @@ class Keyboard {
 	public:
 	void update();
 
-	bool is_key_down(KeyboardKey key) const;
-	bool is_key_up(KeyboardKey key) const;
-	bool is_key_pressed(const KeyboardKey key) const;
+	bool is_down(KeyboardKey key) const;
+	bool is_up(KeyboardKey key) const;
+	bool is_pressed(const KeyboardKey key) const;
 
 	bool get_state(KeyboardKey key) const;
 	void set_state(KeyboardKey key, bool state);

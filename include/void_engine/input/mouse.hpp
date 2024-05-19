@@ -18,9 +18,9 @@ class Mouse {
 	public:
 	void update();
 
-	bool is_button_down(MouseButton button) const;
-	bool is_button_up(MouseButton button) const;
-	bool is_button_pressed(MouseButton button) const;
+	bool is_down(MouseButton button) const;
+	bool is_up(MouseButton button) const;
+	bool is_pressed(MouseButton button) const;
 
 	glm::vec2 get_position() const;
 	void set_position(float x, float y);

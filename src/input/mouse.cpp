@@ -10,15 +10,15 @@ void Mouse::update() {
 	_prev_states = _states;
 }
 
-bool Mouse::is_button_down(MouseButton button) const {
+bool Mouse::is_down(MouseButton button) const {
 	return get_state(button);
 }
 
-bool Mouse::is_button_up(MouseButton button) const {
+bool Mouse::is_up(MouseButton button) const {
 	return !get_state(button);
 }
 
-bool Mouse::is_button_pressed(MouseButton button) const {
+bool Mouse::is_pressed(MouseButton button) const {
 	return get_state(button) && !get_prev_state(button);
 }
 
