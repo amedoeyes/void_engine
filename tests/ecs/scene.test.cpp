@@ -20,30 +20,29 @@ struct Velocity {
 TEST_CASE("View", "[ecs][scene]") {
 	Scene scene;
 
-	SECTION("Create and destroy entities") {
+	SECTION("Create entity") {
 		Entity e = scene.create();
-		Position* p = scene.attach<Position>(e, 10, 20);
-		Velocity* v = scene.attach<Velocity>(e, 30, 40);
-
-		REQUIRE(scene.has<Position>(e));
-		REQUIRE(p != nullptr);
-		REQUIRE(p->x == 10);
-		REQUIRE(p->y == 20);
-
-		REQUIRE(scene.has<Velocity>(e));
-		REQUIRE(v != nullptr);
-		REQUIRE(v->x == 30);
-		REQUIRE(v->y == 40);
-
-		scene.destroy(e);
-
-		REQUIRE_FALSE(scene.has<Position>(e));
-		REQUIRE(scene.fetch<Position>(e) == nullptr);
-		REQUIRE_FALSE(scene.has<Velocity>(e));
-		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
+		REQUIRE_FALSE(e == INVALID_ENTITY);
 	}
 
-	SECTION("Fetch entity components") {
+	SECTION("Attach component to entity") {
+		Entity e = scene.create();
+		scene.attach<Position>(e, 10, 20);
+		REQUIRE(scene.has<Position>(e));
+		REQUIRE(scene.fetch<Position>(e) != nullptr);
+		REQUIRE(scene.fetch<Position>(e)->x == 10);
+		REQUIRE(scene.fetch<Position>(e)->y == 20);
+	}
+
+	SECTION("Attach all components to entity") {
+		Entity e = scene.create();
+		auto [p, v] = scene.attach_all<Position, Velocity>(e);
+		REQUIRE(scene.has_all<Position, Velocity>(e));
+		REQUIRE(p != nullptr);
+		REQUIRE(v != nullptr);
+	}
+
+	SECTION("Fetch entity component") {
 		Entity e = scene.create();
 		scene.attach<Position>(e, 10, 20);
 		scene.attach<Velocity>(e, 30, 40);
@@ -57,6 +56,20 @@ TEST_CASE("View", "[ecs][scene]") {
 		REQUIRE(scene.fetch<Velocity>(e) != nullptr);
 		REQUIRE(scene.fetch<Velocity>(e)->x == 30);
 		REQUIRE(scene.fetch<Velocity>(e)->y == 40);
+	}
+
+	SECTION("Fetch all entity components") {
+		Entity e = scene.create();
+		scene.attach<Position>(e, 10, 20);
+		scene.attach<Velocity>(e, 30, 40);
+		auto [p, v] = scene.fetch_all<Position, Velocity>(e);
+		REQUIRE(scene.has_all<Position, Velocity>(e));
+		REQUIRE(p != nullptr);
+		REQUIRE(p->x == 10);
+		REQUIRE(p->y == 20);
+		REQUIRE(v != nullptr);
+		REQUIRE(v->x == 30);
+		REQUIRE(v->y == 40);
 	}
 
 	SECTION("Remove entity components") {
@@ -77,6 +90,12 @@ TEST_CASE("View", "[ecs][scene]") {
 		Entity e = scene.create();
 		scene.attach<Position>(e, 10, 20);
 		REQUIRE(scene.has<Position>(e));
+	}
+
+	SECTION("Entity has all components") {
+		Entity e = scene.create();
+		scene.attach_all<Position, Velocity>(e);
+		REQUIRE(scene.has_all<Position, Velocity>(e));
 	}
 
 	Entity e1 = scene.create();

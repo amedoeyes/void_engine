@@ -1,6 +1,8 @@
 #ifndef VOID_ENGINE_ECS_SCENE_HPP
 #define VOID_ENGINE_ECS_SCENE_HPP
 
+#include <tuple>
+
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/entity_storage.hpp"
 #include "void_engine/ecs/pool_storage.hpp"
@@ -19,6 +21,11 @@ class Scene {
 		return _pools.create<Component>(entity, std::forward<Args>(args)...);
 	}
 
+	template <typename... Components>
+	std::tuple<Components*...> attach_all(Entity entity) {
+		return std::make_tuple(attach<Components>(entity)...);
+	}
+
 	template <typename Component>
 	void remove(Entity entity) {
 		if (!_entities.contains(entity)) return;
@@ -32,6 +39,11 @@ class Scene {
 	}
 
 	template <typename... Components>
+	std::tuple<Components*...> fetch_all(Entity entity) {
+		return std::make_tuple(fetch<Components>(entity)...);
+	}
+
+	template <typename... Components>
 	View<Components...> view() {
 		return View<Components...>(_pools);
 	}
@@ -40,6 +52,11 @@ class Scene {
 	bool has(Entity entity) {
 		if (!_entities.contains(entity)) return false;
 		return _pools.contains<Component>(entity);
+	}
+
+	template <typename... Components>
+	bool has_all(Entity entity) {
+		return (has<Components>(entity) && ...);
 	}
 
 	private:
