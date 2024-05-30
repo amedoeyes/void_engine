@@ -81,9 +81,15 @@ TEST_CASE("View", "[ecs][scene]") {
 		REQUIRE_FALSE(scene.has<Position>(e));
 		REQUIRE(scene.fetch<Position>(e) == nullptr);
 
-		scene.remove<Velocity>(e);
-		REQUIRE_FALSE(scene.has<Velocity>(e));
-		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
+	SECTION("Remove all entity components") {
+		Entity e = scene.create();
+		scene.attach_all<Position, Velocity>(e);
+		REQUIRE(scene.has_all<Position, Velocity>(e));
+		scene.remove_all<Position, Velocity>(e);
+		REQUIRE_FALSE(scene.has_all<Position, Velocity>(e));
+		auto [p, v] = scene.fetch_all<Position, Velocity>(e);
+		REQUIRE(p == nullptr);
+		REQUIRE(v == nullptr);
 	}
 
 	SECTION("Entity has all component") {

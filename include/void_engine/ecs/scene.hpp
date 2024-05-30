@@ -32,6 +32,11 @@ class Scene {
 		_pools.destroy<Component>(entity);
 	}
 
+	template <typename... Components>
+	void remove_all(Entity entity) {
+		(remove<Components>(entity), ...);
+	}
+
 	template <typename Component>
 	Component* fetch(Entity entity) {
 		if (!_entities.contains(entity)) return nullptr;
