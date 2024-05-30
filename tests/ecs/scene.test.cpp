@@ -25,17 +25,21 @@ TEST_CASE("View", "[ecs][scene]") {
 		Position* p = scene.attach<Position>(e, 10, 20);
 		Velocity* v = scene.attach<Velocity>(e, 30, 40);
 
+		REQUIRE(scene.has<Position>(e));
 		REQUIRE(p != nullptr);
 		REQUIRE(p->x == 10);
 		REQUIRE(p->y == 20);
 
+		REQUIRE(scene.has<Velocity>(e));
 		REQUIRE(v != nullptr);
 		REQUIRE(v->x == 30);
 		REQUIRE(v->y == 40);
 
 		scene.destroy(e);
 
+		REQUIRE_FALSE(scene.has<Position>(e));
 		REQUIRE(scene.fetch<Position>(e) == nullptr);
+		REQUIRE_FALSE(scene.has<Velocity>(e));
 		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
 	}
 
@@ -44,10 +48,12 @@ TEST_CASE("View", "[ecs][scene]") {
 		scene.attach<Position>(e, 10, 20);
 		scene.attach<Velocity>(e, 30, 40);
 
+		REQUIRE(scene.has<Position>(e));
 		REQUIRE(scene.fetch<Position>(e) != nullptr);
 		REQUIRE(scene.fetch<Position>(e)->x == 10);
 		REQUIRE(scene.fetch<Position>(e)->y == 20);
 
+		REQUIRE(scene.has<Velocity>(e));
 		REQUIRE(scene.fetch<Velocity>(e) != nullptr);
 		REQUIRE(scene.fetch<Velocity>(e)->x == 30);
 		REQUIRE(scene.fetch<Velocity>(e)->y == 40);
@@ -59,9 +65,18 @@ TEST_CASE("View", "[ecs][scene]") {
 		scene.attach<Velocity>(e, 30, 40);
 
 		scene.remove<Position>(e);
+		REQUIRE_FALSE(scene.has<Position>(e));
 		REQUIRE(scene.fetch<Position>(e) == nullptr);
+
 		scene.remove<Velocity>(e);
+		REQUIRE_FALSE(scene.has<Velocity>(e));
 		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
+	}
+
+	SECTION("Entity has all component") {
+		Entity e = scene.create();
+		scene.attach<Position>(e, 10, 20);
+		REQUIRE(scene.has<Position>(e));
 	}
 
 	Entity e1 = scene.create();

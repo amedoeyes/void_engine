@@ -36,6 +36,12 @@ class Scene {
 		return View<Components...>(_pools);
 	}
 
+	template <typename Component>
+	bool has(Entity entity) {
+		if (!_entities.contains(entity)) return false;
+		return _pools.contains<Component>(entity);
+	}
+
 	private:
 	EntityStorage _entities;
 	PoolStorage _pools;
