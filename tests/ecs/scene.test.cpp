@@ -46,16 +46,15 @@ TEST_CASE("View", "[ecs][scene]") {
 		Entity e = scene.create();
 		scene.attach<Position>(e, 10, 20);
 		scene.attach<Velocity>(e, 30, 40);
-
-		REQUIRE(scene.has<Position>(e));
-		REQUIRE(scene.fetch<Position>(e) != nullptr);
-		REQUIRE(scene.fetch<Position>(e)->x == 10);
-		REQUIRE(scene.fetch<Position>(e)->y == 20);
-
-		REQUIRE(scene.has<Velocity>(e));
-		REQUIRE(scene.fetch<Velocity>(e) != nullptr);
-		REQUIRE(scene.fetch<Velocity>(e)->x == 30);
-		REQUIRE(scene.fetch<Velocity>(e)->y == 40);
+		REQUIRE(scene.has_all<Position, Velocity>(e));
+		auto p = scene.fetch<Position>(e);
+		auto v = scene.fetch<Velocity>(e);
+		REQUIRE(p != nullptr);
+		REQUIRE(p->x == 10);
+		REQUIRE(p->y == 20);
+		REQUIRE(v != nullptr);
+		REQUIRE(v->x == 30);
+		REQUIRE(v->y == 40);
 	}
 
 	SECTION("Fetch all entity components") {
@@ -72,14 +71,15 @@ TEST_CASE("View", "[ecs][scene]") {
 		REQUIRE(v->y == 40);
 	}
 
-	SECTION("Remove entity components") {
+	SECTION("Remove entity component") {
 		Entity e = scene.create();
-		scene.attach<Position>(e, 10, 20);
-		scene.attach<Velocity>(e, 30, 40);
-
+		scene.attach<Position>(e);
+		REQUIRE(scene.has<Position>(e));
 		scene.remove<Position>(e);
 		REQUIRE_FALSE(scene.has<Position>(e));
-		REQUIRE(scene.fetch<Position>(e) == nullptr);
+		auto p = scene.fetch<Position>(e);
+		REQUIRE(p == nullptr);
+	}
 
 	SECTION("Remove all entity components") {
 		Entity e = scene.create();
@@ -92,7 +92,7 @@ TEST_CASE("View", "[ecs][scene]") {
 		REQUIRE(v == nullptr);
 	}
 
-	SECTION("Entity has all component") {
+	SECTION("Entity has component") {
 		Entity e = scene.create();
 		scene.attach<Position>(e, 10, 20);
 		REQUIRE(scene.has<Position>(e));
@@ -102,6 +102,8 @@ TEST_CASE("View", "[ecs][scene]") {
 		Entity e = scene.create();
 		scene.attach_all<Position, Velocity>(e);
 		REQUIRE(scene.has_all<Position, Velocity>(e));
+		scene.remove_all<Position, Velocity>(e);
+		REQUIRE_FALSE(scene.has_all<Position, Velocity>(e));
 	}
 
 	Entity e1 = scene.create();
@@ -118,7 +120,6 @@ TEST_CASE("View", "[ecs][scene]") {
 	SECTION("View with no components returns all entities") {
 		auto view = scene.view();
 		REQUIRE(view.begin() != view.end());
-
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
@@ -146,7 +147,6 @@ TEST_CASE("View", "[ecs][scene]") {
 	SECTION("View with one component") {
 		auto view = scene.view<Position>();
 		REQUIRE(view.begin() != view.end());
-
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
@@ -167,7 +167,6 @@ TEST_CASE("View", "[ecs][scene]") {
 	SECTION("View with multiple components") {
 		auto view = scene.view<Position, Velocity>();
 		REQUIRE(view.begin() != view.end());
-
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
