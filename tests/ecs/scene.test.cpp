@@ -22,8 +22,8 @@ TEST_CASE("View", "[ecs][scene]") {
 
 	SECTION("Create and destroy entities") {
 		Entity e = scene.create();
-		Position* p = scene.add<Position>(e, 10, 20);
-		Velocity* v = scene.add<Velocity>(e, 30, 40);
+		Position* p = scene.attach<Position>(e, 10, 20);
+		Velocity* v = scene.attach<Velocity>(e, 30, 40);
 
 		REQUIRE(p != nullptr);
 		REQUIRE(p->x == 10);
@@ -35,45 +35,45 @@ TEST_CASE("View", "[ecs][scene]") {
 
 		scene.destroy(e);
 
-		REQUIRE(scene.get<Position>(e) == nullptr);
-		REQUIRE(scene.get<Velocity>(e) == nullptr);
+		REQUIRE(scene.fetch<Position>(e) == nullptr);
+		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
 	}
 
-	SECTION("Get entity components") {
+	SECTION("Fetch entity components") {
 		Entity e = scene.create();
-		scene.add<Position>(e, 10, 20);
-		scene.add<Velocity>(e, 30, 40);
+		scene.attach<Position>(e, 10, 20);
+		scene.attach<Velocity>(e, 30, 40);
 
-		REQUIRE(scene.get<Position>(e) != nullptr);
-		REQUIRE(scene.get<Position>(e)->x == 10);
-		REQUIRE(scene.get<Position>(e)->y == 20);
+		REQUIRE(scene.fetch<Position>(e) != nullptr);
+		REQUIRE(scene.fetch<Position>(e)->x == 10);
+		REQUIRE(scene.fetch<Position>(e)->y == 20);
 
-		REQUIRE(scene.get<Velocity>(e) != nullptr);
-		REQUIRE(scene.get<Velocity>(e)->x == 30);
-		REQUIRE(scene.get<Velocity>(e)->y == 40);
+		REQUIRE(scene.fetch<Velocity>(e) != nullptr);
+		REQUIRE(scene.fetch<Velocity>(e)->x == 30);
+		REQUIRE(scene.fetch<Velocity>(e)->y == 40);
 	}
 
 	SECTION("Remove entity components") {
 		Entity e = scene.create();
-		scene.add<Position>(e, 10, 20);
-		scene.add<Velocity>(e, 30, 40);
+		scene.attach<Position>(e, 10, 20);
+		scene.attach<Velocity>(e, 30, 40);
 
 		scene.remove<Position>(e);
-		REQUIRE(scene.get<Position>(e) == nullptr);
+		REQUIRE(scene.fetch<Position>(e) == nullptr);
 		scene.remove<Velocity>(e);
-		REQUIRE(scene.get<Velocity>(e) == nullptr);
+		REQUIRE(scene.fetch<Velocity>(e) == nullptr);
 	}
 
 	Entity e1 = scene.create();
-	scene.add<Position>(e1, 10, 20);
-	scene.add<Velocity>(e1, 30, 40);
+	scene.attach<Position>(e1, 10, 20);
+	scene.attach<Velocity>(e1, 30, 40);
 	Entity e2 = scene.create();
-	scene.add<Position>(e2, 40, 50);
-	scene.add<Velocity>(e2, 60, 70);
+	scene.attach<Position>(e2, 40, 50);
+	scene.attach<Velocity>(e2, 60, 70);
 	Entity e3 = scene.create();
-	scene.add<Position>(e3, 80, 90);
+	scene.attach<Position>(e3, 80, 90);
 	Entity e4 = scene.create();
-	scene.add<Velocity>(e4, 100, 110);
+	scene.attach<Velocity>(e4, 100, 110);
 
 	SECTION("View with no components returns all entities") {
 		auto view = scene.view();
@@ -82,21 +82,21 @@ TEST_CASE("View", "[ecs][scene]") {
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
-				REQUIRE(scene.get<Position>(e)->x == 10);
-				REQUIRE(scene.get<Position>(e)->y == 20);
-				REQUIRE(scene.get<Velocity>(e)->x == 30);
-				REQUIRE(scene.get<Velocity>(e)->y == 40);
+				REQUIRE(scene.fetch<Position>(e)->x == 10);
+				REQUIRE(scene.fetch<Position>(e)->y == 20);
+				REQUIRE(scene.fetch<Velocity>(e)->x == 30);
+				REQUIRE(scene.fetch<Velocity>(e)->y == 40);
 			} else if (count == 1) {
-				REQUIRE(scene.get<Position>(e)->x == 40);
-				REQUIRE(scene.get<Position>(e)->y == 50);
-				REQUIRE(scene.get<Velocity>(e)->x == 60);
-				REQUIRE(scene.get<Velocity>(e)->y == 70);
+				REQUIRE(scene.fetch<Position>(e)->x == 40);
+				REQUIRE(scene.fetch<Position>(e)->y == 50);
+				REQUIRE(scene.fetch<Velocity>(e)->x == 60);
+				REQUIRE(scene.fetch<Velocity>(e)->y == 70);
 			} else if (count == 2) {
-				REQUIRE(scene.get<Position>(e)->x == 80);
-				REQUIRE(scene.get<Position>(e)->y == 90);
+				REQUIRE(scene.fetch<Position>(e)->x == 80);
+				REQUIRE(scene.fetch<Position>(e)->y == 90);
 			} else {
-				REQUIRE(scene.get<Velocity>(e)->x == 100);
-				REQUIRE(scene.get<Velocity>(e)->y == 110);
+				REQUIRE(scene.fetch<Velocity>(e)->x == 100);
+				REQUIRE(scene.fetch<Velocity>(e)->y == 110);
 			}
 			count++;
 		}
@@ -110,14 +110,14 @@ TEST_CASE("View", "[ecs][scene]") {
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
-				REQUIRE(scene.get<Position>(e)->x == 10);
-				REQUIRE(scene.get<Position>(e)->y == 20);
+				REQUIRE(scene.fetch<Position>(e)->x == 10);
+				REQUIRE(scene.fetch<Position>(e)->y == 20);
 			} else if (count == 1) {
-				REQUIRE(scene.get<Position>(e)->x == 40);
-				REQUIRE(scene.get<Position>(e)->y == 50);
+				REQUIRE(scene.fetch<Position>(e)->x == 40);
+				REQUIRE(scene.fetch<Position>(e)->y == 50);
 			} else {
-				REQUIRE(scene.get<Position>(e)->x == 80);
-				REQUIRE(scene.get<Position>(e)->y == 90);
+				REQUIRE(scene.fetch<Position>(e)->x == 80);
+				REQUIRE(scene.fetch<Position>(e)->y == 90);
 			}
 			count++;
 		}
@@ -131,15 +131,15 @@ TEST_CASE("View", "[ecs][scene]") {
 		int count = 0;
 		for (auto e : view) {
 			if (count == 0) {
-				REQUIRE(scene.get<Position>(e)->x == 10);
-				REQUIRE(scene.get<Position>(e)->y == 20);
-				REQUIRE(scene.get<Velocity>(e)->x == 30);
-				REQUIRE(scene.get<Velocity>(e)->y == 40);
+				REQUIRE(scene.fetch<Position>(e)->x == 10);
+				REQUIRE(scene.fetch<Position>(e)->y == 20);
+				REQUIRE(scene.fetch<Velocity>(e)->x == 30);
+				REQUIRE(scene.fetch<Velocity>(e)->y == 40);
 			} else {
-				REQUIRE(scene.get<Position>(e)->x == 40);
-				REQUIRE(scene.get<Position>(e)->y == 50);
-				REQUIRE(scene.get<Velocity>(e)->x == 60);
-				REQUIRE(scene.get<Velocity>(e)->y == 70);
+				REQUIRE(scene.fetch<Position>(e)->x == 40);
+				REQUIRE(scene.fetch<Position>(e)->y == 50);
+				REQUIRE(scene.fetch<Velocity>(e)->x == 60);
+				REQUIRE(scene.fetch<Velocity>(e)->y == 70);
 			}
 			count++;
 		}

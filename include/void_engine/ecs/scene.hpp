@@ -14,7 +14,7 @@ class Scene {
 	void destroy(Entity entity);
 
 	template <typename Component, typename... Args>
-	Component* add(Entity entity, Args&&... args) {
+	Component* attach(Entity entity, Args&&... args) {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.create<Component>(entity, std::forward<Args>(args)...);
 	}
@@ -26,7 +26,7 @@ class Scene {
 	}
 
 	template <typename Component>
-	Component* get(Entity entity) {
+	Component* fetch(Entity entity) {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.get_component<Component>(entity);
 	}
