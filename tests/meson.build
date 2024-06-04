@@ -5,7 +5,7 @@ test_sources = files(
   './ecs/pool_storage.test.cpp',
   './ecs/scene.test.cpp',
   './ecs/view.test.cpp',
-  './logger.test.cpp',
+  './utils/logger.test.cpp',
   './window/window.test.cpp',
   './window/window_manager.test.cpp',
 )

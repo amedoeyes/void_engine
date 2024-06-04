@@ -7,8 +7,6 @@
 
 namespace void_engine::window {
 
-using namespace void_engine::input;
-
 class Window {
 public:
 	Window(const char* title, int width, int height);
@@ -20,13 +18,14 @@ public:
 	void swap_buffers() const;
 	[[nodiscard]] auto should_close() const -> bool;
 	void close() const;
-	[[nodiscard]] auto get_input_handler() const -> InputHandler*;
+	[[nodiscard]] auto get_input_handler() const
+		-> void_engine::input::InputHandler*;
 	[[nodiscard]] auto get_time() const -> float;
 	[[nodiscard]] auto get_delta_time() const -> float;
 
 private:
 	GLFWwindow* _window;
-	InputHandler* _input_handler;
+	void_engine::input::InputHandler* _input_handler;
 };
 
 } // namespace void_engine::window

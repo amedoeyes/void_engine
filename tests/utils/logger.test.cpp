@@ -1,9 +1,9 @@
-#include "void_engine/logger.hpp"
+#include "void_engine/utils/logger.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 #include <sstream>
 
-using namespace void_engine;
+using namespace void_engine::utils;
 
 TEST_CASE("Logger", "[logger]") {
 	std::ostringstream oss_out;
@@ -12,7 +12,7 @@ TEST_CASE("Logger", "[logger]") {
 	auto old_cout = std::cout.rdbuf(oss_out.rdbuf());
 	auto old_cerr = std::cerr.rdbuf(oss_err.rdbuf());
 
-	Logger::set_log_level(Logger::LogLevel::debug);
+	Logger::set_log_level(LogLevel::debug);
 
 	SECTION("Debug") {
 		Logger::debug("debug message");
@@ -39,7 +39,7 @@ TEST_CASE("Logger", "[logger]") {
 	}
 
 	SECTION("Set level none") {
-		Logger::set_log_level(Logger::LogLevel::none);
+		Logger::set_log_level(LogLevel::none);
 		Logger::debug("debug message");
 		Logger::info("info message");
 		Logger::warning("warning message");
@@ -49,7 +49,7 @@ TEST_CASE("Logger", "[logger]") {
 	}
 
 	SECTION("Set level debug") {
-		Logger::set_log_level(Logger::LogLevel::debug);
+		Logger::set_log_level(LogLevel::debug);
 		Logger::debug("debug message");
 		Logger::info("info message");
 		Logger::warning("warning message");
@@ -64,7 +64,7 @@ TEST_CASE("Logger", "[logger]") {
 	}
 
 	SECTION("Set level info") {
-		Logger::set_log_level(Logger::LogLevel::info);
+		Logger::set_log_level(LogLevel::info);
 		Logger::debug("debug message");
 		Logger::info("info message");
 		Logger::warning("warning message");
@@ -77,7 +77,7 @@ TEST_CASE("Logger", "[logger]") {
 	}
 
 	SECTION("Set level warning") {
-		Logger::set_log_level(Logger::LogLevel::warning);
+		Logger::set_log_level(LogLevel::warning);
 		Logger::debug("debug message");
 		Logger::info("info message");
 		Logger::warning("warning message");
@@ -90,7 +90,7 @@ TEST_CASE("Logger", "[logger]") {
 	}
 
 	SECTION("Set level error") {
-		Logger::set_log_level(Logger::LogLevel::error);
+		Logger::set_log_level(LogLevel::error);
 		Logger::debug("debug message");
 		Logger::info("info message");
 		Logger::warning("warning message");
@@ -99,7 +99,7 @@ TEST_CASE("Logger", "[logger]") {
 		REQUIRE(oss_err.str() == "[ERROR]: error message\n");
 	}
 
-	Logger::set_log_level(Logger::LogLevel::debug);
+	Logger::set_log_level(LogLevel::debug);
 
 	SECTION("Debug with arguments") {
 		Logger::debug("debug message {}", 1);

@@ -1,6 +1,6 @@
 #include "void_engine/renderer/shader.hpp"
 
-#include "void_engine/logger.hpp"
+#include "void_engine/utils/logger.hpp"
 
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
@@ -105,7 +105,7 @@ auto Shader::compile_shader(const char* path, ShaderType type) const
 	-> unsigned int {
 	std::ifstream file(path);
 	if (!file.is_open()) {
-		Logger::error("Failed to open shader file: {}", path);
+		utils::Logger::error("Failed to open shader file: {}", path);
 		return 0;
 	}
 	std::string source(

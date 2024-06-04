@@ -1,8 +1,8 @@
 #include "void_engine/renderer/renderer.hpp"
 
 #include "GLFW/glfw3.h"
-#include "void_engine/logger.hpp"
 #include "void_engine/renderer/common.hpp"
+#include "void_engine/utils/logger.hpp"
 
 #include <cassert>
 
@@ -14,7 +14,7 @@ bool Renderer::_stencil = false;
 
 void Renderer::init() {
 	if (!gladLoadGL(glfwGetProcAddress)) {
-		Logger::error("Failed to initialize GLAD");
+		utils::Logger::error("Failed to initialize GLAD");
 		assert(false);
 	}
 
@@ -182,12 +182,12 @@ void Renderer::
 	}
 
 	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {
-		Logger::info(
+		utils::Logger::info(
 			"OpenGL: [{}] [{}] [{}] [{}] {}", source_str, type_str,
 			severity_str, id, message
 		);
 	} else {
-		Logger::error(
+		utils::Logger::error(
 			"OpenGL: [{}] [{}] [{}] [{}] {}", source_str, type_str,
 			severity_str, id, message
 		);

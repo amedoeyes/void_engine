@@ -18,7 +18,7 @@ sources = files(
   './src/input/input_handler.cpp',
   './src/input/keyboard.cpp',
   './src/input/mouse.cpp',
-  './src/logger.cpp',
+  './src/utils/logger.cpp',
   './src/renderer/buffer.cpp',
   './src/renderer/renderer.cpp',
   './src/renderer/shader.cpp',

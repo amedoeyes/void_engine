@@ -1,19 +1,18 @@
-#ifndef VOID_ENGINE_LOGGER_HPP
-#define VOID_ENGINE_LOGGER_HPP
+#ifndef VOID_ENGINE_UTILS_LOGGER_HPP
+#define VOID_ENGINE_UTILS_LOGGER_HPP
 
 #include <format>
 #include <iostream>
 #include <string_view>
-#include <unordered_map>
 
-namespace void_engine {
+namespace void_engine::utils {
 
 enum class LogLevel {
-	none,
 	debug,
 	info,
 	warning,
-	error
+	error,
+	none,
 };
 
 class Logger {
@@ -45,17 +44,23 @@ public:
 
 private:
 	static LogLevel _log_level;
-	static std::unordered_map<LogLevel, std::string_view> _log_level_map;
 
 private:
 	template <typename... Args>
 	static void
 	log(LogLevel level, const std::string_view fmt, const Args&... args) {
-		if (level < _log_level || _log_level == LogLevel::none) return;
+		if (level < _log_level) return;
 
 		std::string format_str =
 			std::vformat(fmt, std::make_format_args(args...));
-		std::string_view level_str = _log_level_map.at(level);
+		std::string_view level_str;
+		switch (level) {
+			case LogLevel::debug: level_str = "[DEBUG]"; break;
+			case LogLevel::info: level_str = "[INFO]"; break;
+			case LogLevel::warning: level_str = "[WARNING]"; break;
+			case LogLevel::error: level_str = "[ERROR]"; break;
+			default:;
+		}
 		std::string message = std::format("{}: {}\n", level_str, format_str);
 
 		if (level >= LogLevel::warning) {
@@ -66,6 +71,6 @@ private:
 	}
 };
 
-} // namespace void_engine
+} // namespace void_engine::utils
 
-#endif // !VOID_ENGINE_LOGGER_HPP
+#endif // !VOID_ENGINE_UTILS_LOGGER_HPP

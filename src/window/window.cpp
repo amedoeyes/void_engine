@@ -1,6 +1,6 @@
 #include "void_engine/window/window.hpp"
 
-#include "void_engine/logger.hpp"
+#include "void_engine/utils/logger.hpp"
 
 namespace void_engine::window {
 
@@ -11,15 +11,15 @@ Window::Window(const char* title, int width, int height) {
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
 	_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
-	if (_window == nullptr) Logger::error("Failed to create window");
+	if (_window == nullptr) utils::Logger::error("Failed to create window");
 
 	glfwMakeContextCurrent(_window);
 
 	glfwSetErrorCallback([](int, const char* description) {
-		Logger::error("GLFW Error: {}", description);
+		utils::Logger::error("GLFW Error: {}", description);
 	});
 
-	_input_handler = new InputHandler(_window);
+	_input_handler = new input::InputHandler(_window);
 }
 
 Window::~Window() {
@@ -47,7 +47,7 @@ void Window::close() const {
 	glfwSetWindowShouldClose(_window, true);
 }
 
-auto Window::get_input_handler() const -> InputHandler* {
+auto Window::get_input_handler() const -> input::InputHandler* {
 	return _input_handler;
 }
 

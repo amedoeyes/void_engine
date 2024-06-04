@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-using namespace void_engine::ECS;
+namespace void_engine::ECS {
 
 PoolStorage::~PoolStorage() {
 	for (auto& [_, pool] : _pools) {
@@ -40,3 +40,5 @@ auto PoolStorage::get_entities() const -> const std::vector<Entity> {
 
 	return entities;
 }
+
+} // namespace void_engine::ECS

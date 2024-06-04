@@ -1,6 +1,6 @@
 #include "void_engine/window/window_manager.hpp"
 
-#include "void_engine/logger.hpp"
+#include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -11,7 +11,7 @@ std::vector<Window*> WindowManager::_windows;
 
 void WindowManager::init() {
 	if (!glfwInit()) {
-		Logger::error("Failed to initialize GLFW");
+		utils::Logger::error("Failed to initialize GLFW");
 		assert(false);
 	}
 }
