@@ -7,28 +7,27 @@
 namespace void_engine::renderer {
 
 class VertexArray {
-	public:
+public:
 	VertexArray();
 	~VertexArray();
 
-	public:
+public:
 	void bind() const;
 	void unbind() const;
 
-	void set_vertex_buffer(
-		unsigned int size, const void* data, BufferUsage usage
-	);
+	void
+	set_vertex_buffer(unsigned int size, const void* data, BufferUsage usage);
 	void add_buffer(
-		int size, DataType type, bool normalized, unsigned int stride,
+		int size, DataType type, bool normalized, int stride,
 		unsigned int offset
 	);
 
-	private:
+private:
 	unsigned int _id;
 	Buffer _vertex_buffer;
 	unsigned int _index = 0;
 };
 
-}  // namespace void_engine::renderer
+} // namespace void_engine::renderer
 
-#endif	// !VOID_ENGINE_RENDERER_VERTEX_ARRAY_HPP
+#endif // !VOID_ENGINE_RENDERER_VERTEX_ARRAY_HPP

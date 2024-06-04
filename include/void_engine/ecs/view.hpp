@@ -1,16 +1,16 @@
 #ifndef VOID_ENGINE_ECS_VIEW_HPP
 #define VOID_ENGINE_ECS_VIEW_HPP
 
-#include <algorithm>
-
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/pool_storage.hpp"
+
+#include <algorithm>
 
 namespace void_engine::ECS {
 
 template <typename... Components>
 class View {
-	public:
+public:
 	View(const PoolStorage& pools) : _pools(pools) {
 		if constexpr (sizeof...(Components) == 0) {
 			_entities = _pools.get_entities();
@@ -39,19 +39,19 @@ class View {
 		}
 	}
 
-	std::vector<Entity>::iterator begin() {
+	auto begin() -> std::vector<Entity>::iterator {
 		return _entities.begin();
 	}
 
-	std::vector<Entity>::iterator end() {
+	auto end() -> std::vector<Entity>::iterator {
 		return _entities.end();
 	}
 
-	private:
+private:
 	const PoolStorage& _pools;
 	std::vector<Entity> _entities;
 };
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
 
-#endif	//! VOID_ENGINE_ECS_VIEW_HPP
+#endif //! VOID_ENGINE_ECS_VIEW_HPP

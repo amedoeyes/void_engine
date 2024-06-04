@@ -12,23 +12,23 @@ using EntityVersion = uint32_t;
 constexpr Entity INVALID_ENTITY = Entity(-1);
 constexpr EntityIndex INVALID_ENTITY_INDEX = EntityIndex(-1);
 
-Entity create_entity(EntityIndex index, EntityVersion version);
-EntityIndex get_entity_index(Entity entity);
-EntityVersion get_entity_version(Entity entity);
+auto create_entity(EntityIndex index, EntityVersion version) -> Entity;
+auto get_entity_index(Entity entity) -> EntityIndex;
+auto get_entity_version(Entity entity) -> EntityVersion;
 
 using ComponentID = uint16_t;
 
-inline ComponentID component_counter() {
+inline auto component_counter() -> ComponentID {
 	static ComponentID counter = 0;
 	return counter++;
 }
 
 template <typename T>
-ComponentID get_component_id() {
+auto get_component_id() -> ComponentID {
 	static ComponentID id = component_counter();
 	return id;
 }
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
 
-#endif	// !VOID_ENGINE_ECS_COMMON_HPP
+#endif // !VOID_ENGINE_ECS_COMMON_HPP

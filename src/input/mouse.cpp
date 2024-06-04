@@ -1,8 +1,8 @@
 #include "void_engine/input/mouse.hpp"
 
-#include <cstdio>
-
 #include "void_engine/input/input_handler.hpp"
+
+#include <cstdio>
 
 namespace void_engine::input {
 
@@ -10,19 +10,19 @@ void Mouse::update() {
 	_prev_states = _states;
 }
 
-bool Mouse::is_down(MouseButton button) const {
+auto Mouse::is_down(MouseButton button) const -> bool {
 	return get_state(button);
 }
 
-bool Mouse::is_up(MouseButton button) const {
+auto Mouse::is_up(MouseButton button) const -> bool {
 	return !get_state(button);
 }
 
-bool Mouse::is_pressed(MouseButton button) const {
+auto Mouse::is_pressed(MouseButton button) const -> bool {
 	return get_state(button) && !get_prev_state(button);
 }
 
-bool Mouse::get_state(MouseButton button) const {
+auto Mouse::get_state(MouseButton button) const -> bool {
 	auto it = _states.find(button);
 	if (it == _states.end()) return false;
 	return it->second;
@@ -32,7 +32,7 @@ void Mouse::set_state(MouseButton button, bool state) {
 	_states[button] = state;
 }
 
-bool Mouse::get_prev_state(MouseButton button) const {
+auto Mouse::get_prev_state(MouseButton button) const -> bool {
 	auto it = _prev_states.find(button);
 	if (it == _prev_states.end()) return false;
 	return it->second;
@@ -42,7 +42,7 @@ void Mouse::set_prev_state(MouseButton button, bool state) {
 	_prev_states[button] = state;
 }
 
-glm::vec2 Mouse::get_position() const {
+auto Mouse::get_position() const -> glm::vec2 {
 	return _position;
 }
 
@@ -50,7 +50,7 @@ void Mouse::set_position(float x, float y) {
 	_position = {x, y};
 }
 
-glm::vec2 Mouse::get_scroll() const {
+auto Mouse::get_scroll() const -> glm::vec2 {
 	return _scroll;
 }
 
@@ -58,11 +58,10 @@ void Mouse::set_scroll(float x, float y) {
 	_scroll = {x, y};
 }
 
-void Mouse::button_callback(
-	GLFWwindow *window, int button, int action, [[maybe_unused]] int mods
-) {
-	auto ih = static_cast<InputHandler *>(glfwGetWindowUserPointer(window));
-	auto mouse = ih->get_mouse();
+// NOLINTNEXTLINE
+void Mouse::button_callback(GLFWwindow* window, int button, int action, int) {
+	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* mouse = ih->get_mouse();
 
 	if (action == GLFW_PRESS) {
 		mouse->set_state(static_cast<MouseButton>(button), true);
@@ -71,20 +70,20 @@ void Mouse::button_callback(
 	}
 }
 
-void Mouse::position_callback(GLFWwindow *window, double xpos, double ypos) {
-	auto ih = static_cast<InputHandler *>(glfwGetWindowUserPointer(window));
-	auto mouse = ih->get_mouse();
+void Mouse::position_callback(GLFWwindow* window, double xpos, double ypos) {
+	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* mouse = ih->get_mouse();
 
-	mouse->set_position(xpos, ypos);
+	mouse->set_position(static_cast<float>(xpos), static_cast<float>(ypos));
 }
 
 void Mouse::scroll_callback(
-	GLFWwindow *window, double xoffset, double yoffset
+	GLFWwindow* window, double xoffset, double yoffset
 ) {
-	auto ih = static_cast<InputHandler *>(glfwGetWindowUserPointer(window));
-	auto mouse = ih->get_mouse();
+	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* mouse = ih->get_mouse();
 
-	mouse->set_scroll(xoffset, yoffset);
+	mouse->set_scroll(static_cast<float>(xoffset), static_cast<float>(yoffset));
 }
 
-}  // namespace void_engine::input
+} // namespace void_engine::input

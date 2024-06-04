@@ -1,0 +1,10 @@
+Checks:
+  -*,
+  bugprone-*,
+  llvm-*,
+  misc-*,
+  modernize-*,
+  performance-*,
+  portability-*,
+
+WarningsAsErrors: ''

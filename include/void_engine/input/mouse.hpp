@@ -2,7 +2,6 @@
 #define VOID_ENGINE_INPUT_MOUSE_HPP
 
 #include <GLFW/glfw3.h>
-
 #include <glm/glm.hpp>
 #include <unordered_map>
 
@@ -15,40 +14,38 @@ enum class MouseButton {
 };
 
 class Mouse {
-	public:
+public:
 	void update();
 
-	bool is_down(MouseButton button) const;
-	bool is_up(MouseButton button) const;
-	bool is_pressed(MouseButton button) const;
+	auto is_down(MouseButton button) const -> bool;
+	auto is_up(MouseButton button) const -> bool;
+	auto is_pressed(MouseButton button) const -> bool;
 
-	glm::vec2 get_position() const;
+	auto get_position() const -> glm::vec2;
 	void set_position(float x, float y);
 
-	glm::vec2 get_scroll() const;
+	auto get_scroll() const -> glm::vec2;
 	void set_scroll(float x, float y);
 
-	bool get_state(MouseButton button) const;
+	auto get_state(MouseButton button) const -> bool;
 	void set_state(MouseButton button, bool state);
 
-	bool get_prev_state(MouseButton button) const;
+	auto get_prev_state(MouseButton button) const -> bool;
 	void set_prev_state(MouseButton button, bool state);
 
-	static void button_callback(
-		GLFWwindow* window, int button, int action, [[maybe_unused]] int mods
-	);
+	static void
+	button_callback(GLFWwindow* window, int button, int action, int mods);
 	static void position_callback(GLFWwindow* window, double xpos, double ypos);
-	static void scroll_callback(
-		GLFWwindow* window, double xoffset, double yoffset
-	);
+	static void
+	scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 
-	private:
+private:
 	std::unordered_map<MouseButton, bool> _states;
 	std::unordered_map<MouseButton, bool> _prev_states;
 	glm::vec2 _position = {0.0f, 0.0f};
 	glm::vec2 _scroll = {0.0f, 0.0f};
 };
 
-}  // namespace void_engine::input
+} // namespace void_engine::input
 
-#endif	// !VOID_ENGINE_INPUT_MOUSE_HPP
+#endif // !VOID_ENGINE_INPUT_MOUSE_HPP

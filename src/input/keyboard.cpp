@@ -8,19 +8,19 @@ void Keyboard::update() {
 	_prev_states = _states;
 }
 
-bool Keyboard::is_down(KeyboardKey key) const {
+auto Keyboard::is_down(KeyboardKey key) const -> bool {
 	return get_state(key);
 }
 
-bool Keyboard::is_up(KeyboardKey key) const {
+auto Keyboard::is_up(KeyboardKey key) const -> bool {
 	return !get_state(key);
 }
 
-bool Keyboard::is_pressed(KeyboardKey key) const {
+auto Keyboard::is_pressed(KeyboardKey key) const -> bool {
 	return get_state(key) && !get_prev_state(key);
 }
 
-bool Keyboard::get_state(KeyboardKey key) const {
+auto Keyboard::get_state(KeyboardKey key) const -> bool {
 	auto it = _states.find(key);
 	if (it == _states.end()) return false;
 	return it->second;
@@ -30,7 +30,7 @@ void Keyboard::set_state(KeyboardKey key, bool state) {
 	_states[key] = state;
 }
 
-bool Keyboard::get_prev_state(KeyboardKey key) const {
+auto Keyboard::get_prev_state(KeyboardKey key) const -> bool {
 	auto it = _prev_states.find(key);
 	if (it == _prev_states.end()) return false;
 	return it->second;
@@ -39,12 +39,9 @@ void Keyboard::set_prev_state(KeyboardKey key, bool state) {
 	_prev_states[key] = state;
 }
 
-void Keyboard::callback(
-	GLFWwindow* window, int key, [[maybe_unused]] int scancode, int action,
-	[[maybe_unused]] int mods
-) {
-	auto ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
-	auto kb = ih->get_keyboard();
+void Keyboard::callback(GLFWwindow* window, int key, int, int action, int) {
+	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* kb = ih->get_keyboard();
 
 	if (action == GLFW_PRESS) {
 		kb->set_state(static_cast<KeyboardKey>(key), true);
@@ -53,4 +50,4 @@ void Keyboard::callback(
 	}
 }
 
-}  // namespace void_engine::input
+} // namespace void_engine::input

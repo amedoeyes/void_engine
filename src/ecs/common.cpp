@@ -2,16 +2,16 @@
 
 namespace void_engine::ECS {
 
-Entity create_entity(EntityIndex index, EntityVersion version) {
+auto create_entity(EntityIndex index, EntityVersion version) -> Entity {
 	return (static_cast<Entity>(index) << 32) | static_cast<Entity>(version);
 }
 
-EntityIndex get_entity_index(Entity entity) {
+auto get_entity_index(Entity entity) -> EntityIndex {
 	return (EntityIndex)(entity >> 32);
 }
 
-EntityVersion get_entity_version(Entity entity) {
+auto get_entity_version(Entity entity) -> EntityVersion {
 	return (EntityVersion)(entity);
 }
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS

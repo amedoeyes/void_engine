@@ -1,15 +1,15 @@
 #include "void_engine/renderer/shader.hpp"
 
+#include "void_engine/logger.hpp"
+
 #include <fstream>
 #include <glm/gtc/type_ptr.hpp>
-#include <string_view>
 #include <vector>
-
-#include "void_engine/logger.hpp"
 
 namespace void_engine::renderer {
 
-Shader::Shader() : _id(glCreateProgram()) {}
+Shader::Shader() : _id(glCreateProgram()) {
+}
 Shader::~Shader() {
 	glDeleteProgram(_id);
 }
@@ -35,18 +35,20 @@ void Shader::compile() {
 	}
 	glLinkProgram(_id);
 
-	for (const auto shader : shaders) {
+	for (auto shader : shaders) {
 		glDeleteShader(shader);
 	}
 
 	int uniform_count;
 	glGetProgramiv(_id, GL_ACTIVE_UNIFORMS, &uniform_count);
 	for (int i = 0; i < uniform_count; i++) {
-		char name[128];
-		glGetActiveUniform(_id, i, 128, nullptr, nullptr, nullptr, name);
-		int location = glGetUniformLocation(_id, name);
+		std::array<char, 128> name;
+		glGetActiveUniform(
+			_id, i, name.size(), nullptr, nullptr, nullptr, name.data()
+		);
+		int location = glGetUniformLocation(_id, name.data());
 		if (location == -1) continue;
-		_uniforms[name] = location;
+		_uniforms[name.data()] = location;
 	}
 }
 
@@ -99,7 +101,8 @@ void Shader::set_uniform(const char* name, glm::mat4 value) const {
 	glUniformMatrix4fv(it->second, 1, GL_FALSE, glm::value_ptr(value));
 }
 
-unsigned int Shader::compile_shader(const char* path, ShaderType type) const {
+auto Shader::compile_shader(const char* path, ShaderType type) const
+	-> unsigned int {
 	std::ifstream file(path);
 	if (!file.is_open()) {
 		Logger::error("Failed to open shader file: {}", path);
@@ -118,4 +121,4 @@ unsigned int Shader::compile_shader(const char* path, ShaderType type) const {
 	return shader;
 }
 
-}  // namespace void_engine::renderer
+} // namespace void_engine::renderer

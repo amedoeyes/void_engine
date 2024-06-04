@@ -2,7 +2,7 @@
 
 namespace void_engine::ECS {
 
-Entity Scene::create() {
+auto Scene::create() -> Entity {
 	return _entities.create();
 }
 
@@ -12,4 +12,4 @@ void Scene::destroy(Entity entity) {
 	_entities.destroy(entity);
 }
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS

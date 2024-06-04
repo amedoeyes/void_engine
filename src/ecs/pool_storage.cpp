@@ -16,7 +16,7 @@ void PoolStorage::destroy(Entity entity) {
 	}
 }
 
-const std::vector<Entity> PoolStorage::get_entities() const {
+auto PoolStorage::get_entities() const -> const std::vector<Entity> {
 	size_t size = 0;
 
 	for (auto& [_, pool] : _pools) {

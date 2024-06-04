@@ -10,12 +10,12 @@ Window::Window(const char* title, int width, int height) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
-	_window = glfwCreateWindow(width, height, title, NULL, NULL);
+	_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
 	if (_window == nullptr) Logger::error("Failed to create window");
 
 	glfwMakeContextCurrent(_window);
 
-	glfwSetErrorCallback([]([[maybe_unused]] int, const char* description) {
+	glfwSetErrorCallback([](int, const char* description) {
 		Logger::error("GLFW Error: {}", description);
 	});
 
@@ -27,7 +27,7 @@ Window::~Window() {
 	glfwDestroyWindow(_window);
 }
 
-GLFWwindow* Window::get_window() const {
+auto Window::get_window() const -> GLFWwindow* {
 	return _window;
 }
 
@@ -39,7 +39,7 @@ void Window::swap_buffers() const {
 	glfwSwapBuffers(_window);
 }
 
-bool Window::should_close() const {
+auto Window::should_close() const -> bool {
 	return glfwWindowShouldClose(_window);
 }
 
@@ -47,20 +47,20 @@ void Window::close() const {
 	glfwSetWindowShouldClose(_window, true);
 }
 
-InputHandler* Window::get_input_handler() const {
+auto Window::get_input_handler() const -> InputHandler* {
 	return _input_handler;
 }
 
-float Window::get_time() const {
-	return glfwGetTime();
+auto Window::get_time() const -> float {
+	return static_cast<float>(glfwGetTime());
 }
 
-float Window::get_delta_time() const {
+auto Window::get_delta_time() const -> float {
 	static float last_frame_time = 0.0f;
-	float current_time = glfwGetTime();
+	auto current_time = static_cast<float>(glfwGetTime());
 	float delta_time = current_time - last_frame_time;
 	last_frame_time = current_time;
 	return delta_time;
 }
 
-}  // namespace void_engine::window
+} // namespace void_engine::window

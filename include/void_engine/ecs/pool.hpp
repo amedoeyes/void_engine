@@ -1,23 +1,23 @@
 #ifndef VOID_ENGINE_ECS_POOL_HPP
 #define VOID_ENGINE_ECS_POOL_HPP
 
-#include <vector>
-
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/pool_base.hpp"
+
+#include <vector>
 
 namespace void_engine::ECS {
 
 template <typename T>
 class Pool : public PoolBase {
-	public:
-	~Pool() {
+public:
+	~Pool() override {
 		for (auto& ptr : _data) delete ptr;
 	}
 
-	public:
+public:
 	template <typename... Args>
-	T* create(Entity entity, Args&&... args) {
+	auto create(Entity entity, Args&&... args) -> T* {
 		EntityIndex index = get_entity_index(entity);
 
 		if (index >= _sparse.size()) {
@@ -36,7 +36,7 @@ class Pool : public PoolBase {
 		return _data.back();
 	}
 
-	void destroy(Entity entity) {
+	void destroy(Entity entity) override {
 		if (!contains(entity)) return;
 
 		EntityIndex index = get_entity_index(entity);
@@ -61,27 +61,28 @@ class Pool : public PoolBase {
 		_data.clear();
 	}
 
-	T* get(Entity entity) {
+	auto get(Entity entity) -> T* {
 		if (!contains(entity)) return nullptr;
 		return _data[_sparse[get_entity_index(entity)]];
 	}
 
-	bool contains(Entity entity) const {
+	[[nodiscard]] auto contains(Entity entity) const -> bool {
 		EntityIndex index = get_entity_index(entity);
 		if (index >= _sparse.size()) return false;
 		return _sparse[index] != INVALID_ENTITY;
 	}
 
-	const std::vector<Entity>& get_entities() const {
+	[[nodiscard]] auto get_entities() const
+		-> const std::vector<Entity>& override {
 		return _packed;
 	}
 
-	public:
+private:
 	std::vector<size_t> _sparse;
 	std::vector<Entity> _packed;
 	std::vector<T*> _data;
 };
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
 
-#endif	// !VOID_ENGINE_ECS_POOL_HPP
+#endif // !VOID_ENGINE_ECS_POOL_HPP

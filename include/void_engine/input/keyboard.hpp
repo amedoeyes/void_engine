@@ -2,7 +2,6 @@
 #define VOID_ENGINE_INPUT_KEYBOARD_HPP
 
 #include <GLFW/glfw3.h>
-
 #include <unordered_map>
 
 namespace void_engine::input {
@@ -100,29 +99,27 @@ enum class KeyboardKey {
 };
 
 class Keyboard {
-	public:
+public:
 	void update();
 
-	bool is_down(KeyboardKey key) const;
-	bool is_up(KeyboardKey key) const;
-	bool is_pressed(const KeyboardKey key) const;
+	auto is_down(KeyboardKey key) const -> bool;
+	auto is_up(KeyboardKey key) const -> bool;
+	auto is_pressed(KeyboardKey key) const -> bool;
 
-	bool get_state(KeyboardKey key) const;
+	auto get_state(KeyboardKey key) const -> bool;
 	void set_state(KeyboardKey key, bool state);
 
-	bool get_prev_state(KeyboardKey key) const;
+	auto get_prev_state(KeyboardKey key) const -> bool;
 	void set_prev_state(KeyboardKey key, bool state);
 
-	static void callback(
-		GLFWwindow* window, int key, [[maybe_unused]] int scancode, int action,
-		[[maybe_unused]] int mods
-	);
+	static void
+	callback(GLFWwindow* window, int key, int scancode, int action, int mods);
 
-	private:
+private:
 	std::unordered_map<KeyboardKey, bool> _states;
 	std::unordered_map<KeyboardKey, bool> _prev_states;
 };
 
-}  // namespace void_engine::input
+} // namespace void_engine::input
 
-#endif	// !VOID_ENGINE_INPUT_KEYBOARD_HPP
+#endif // !VOID_ENGINE_INPUT_KEYBOARD_HPP

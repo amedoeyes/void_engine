@@ -25,8 +25,7 @@ void VertexArray::set_vertex_buffer(
 }
 
 void VertexArray::add_buffer(
-	int size, DataType type, bool normalized, unsigned int stride,
-	unsigned int offset
+	int size, DataType type, bool normalized, int stride, unsigned int offset
 ) {
 	glVertexArrayVertexBuffer(
 		_id, _index, _vertex_buffer.get_id(), offset, stride
@@ -39,4 +38,4 @@ void VertexArray::add_buffer(
 	_index++;
 }
 
-}  // namespace void_engine::renderer
+} // namespace void_engine::renderer

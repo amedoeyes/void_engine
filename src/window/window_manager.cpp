@@ -1,11 +1,9 @@
 #include "void_engine/window/window_manager.hpp"
 
-#include <GLFW/glfw3.h>
-
-#include <algorithm>
-#include <cassert>
-
 #include "void_engine/logger.hpp"
+
+#include <GLFW/glfw3.h>
+#include <cassert>
 
 namespace void_engine::window {
 
@@ -19,11 +17,12 @@ void WindowManager::init() {
 }
 
 void WindowManager::terminate() {
-	for (auto window : _windows) delete window;
+	for (auto* window : _windows) delete window;
 	glfwTerminate();
 }
 
-Window* WindowManager::create(const char* title, int width, int height) {
+auto WindowManager::create(const char* title, int width, int height)
+	-> Window* {
 	_windows.emplace_back(new Window(title, width, height));
 	return _windows.back();
 }
@@ -37,8 +36,8 @@ void WindowManager::destroy(Window* window) {
 }
 
 void WindowManager::poll_events() {
-	for (auto window : _windows) window->get_input_handler()->update();
+	for (auto* window : _windows) window->get_input_handler()->update();
 	glfwPollEvents();
 }
 
-}  // namespace void_engine::window
+} // namespace void_engine::window

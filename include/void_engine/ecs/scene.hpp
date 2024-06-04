@@ -1,28 +1,28 @@
 #ifndef VOID_ENGINE_ECS_SCENE_HPP
 #define VOID_ENGINE_ECS_SCENE_HPP
 
-#include <tuple>
-
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/entity_storage.hpp"
 #include "void_engine/ecs/pool_storage.hpp"
 #include "void_engine/ecs/view.hpp"
 
+#include <tuple>
+
 namespace void_engine::ECS {
 
 class Scene {
-	public:
-	Entity create();
+public:
+	auto create() -> Entity;
 	void destroy(Entity entity);
 
 	template <typename Component, typename... Args>
-	Component* attach(Entity entity, Args&&... args) {
+	auto attach(Entity entity, Args&&... args) -> Component* {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.create<Component>(entity, std::forward<Args>(args)...);
 	}
 
 	template <typename... Components>
-	std::tuple<Components*...> attach_all(Entity entity) {
+	auto attach_all(Entity entity) -> std::tuple<Components*...> {
 		return std::make_tuple(attach<Components>(entity)...);
 	}
 
@@ -38,37 +38,37 @@ class Scene {
 	}
 
 	template <typename Component>
-	Component* fetch(Entity entity) {
+	auto fetch(Entity entity) -> Component* {
 		if (!_entities.contains(entity)) return nullptr;
 		return _pools.get_component<Component>(entity);
 	}
 
 	template <typename... Components>
-	std::tuple<Components*...> fetch_all(Entity entity) {
+	auto fetch_all(Entity entity) -> std::tuple<Components*...> {
 		return std::make_tuple(fetch<Components>(entity)...);
 	}
 
-	template <typename... Components>
-	View<Components...> view() {
-		return View<Components...>(_pools);
-	}
-
 	template <typename Component>
-	bool has(Entity entity) {
+	auto has(Entity entity) -> bool {
 		if (!_entities.contains(entity)) return false;
 		return _pools.contains<Component>(entity);
 	}
 
 	template <typename... Components>
-	bool has_all(Entity entity) {
+	auto has_all(Entity entity) -> bool {
 		return (has<Components>(entity) && ...);
 	}
 
-	private:
+	template <typename... Components>
+	auto view() -> View<Components...> {
+		return View<Components...>(_pools);
+	}
+
+private:
 	EntityStorage _entities;
 	PoolStorage _pools;
 };
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
 
-#endif	//! VOID_ENGINE_ECS_SCENE_HPP
+#endif //! VOID_ENGINE_ECS_SCENE_HPP

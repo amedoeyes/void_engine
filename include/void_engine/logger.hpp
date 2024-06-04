@@ -8,20 +8,19 @@
 
 namespace void_engine {
 
-class Logger {
-	public:
-	enum class LogLevel {
-		none,
-		debug,
-		info,
-		warning,
-		error
-	};
+enum class LogLevel {
+	none,
+	debug,
+	info,
+	warning,
+	error
+};
 
-	public:
+class Logger {
+public:
 	Logger(LogLevel log_level = LogLevel::info);
 
-	public:
+public:
 	static void set_log_level(LogLevel log_level);
 
 	template <typename... Args>
@@ -44,15 +43,14 @@ class Logger {
 		log(LogLevel::error, fmt, args...);
 	}
 
-	private:
+private:
 	static LogLevel _log_level;
 	static std::unordered_map<LogLevel, std::string_view> _log_level_map;
 
-	private:
+private:
 	template <typename... Args>
-	static void log(
-		LogLevel level, const std::string_view fmt, const Args&... args
-	) {
+	static void
+	log(LogLevel level, const std::string_view fmt, const Args&... args) {
 		if (level < _log_level || _log_level == LogLevel::none) return;
 
 		std::string format_str =
@@ -68,6 +66,6 @@ class Logger {
 	}
 };
 
-}  // namespace void_engine
+} // namespace void_engine
 
-#endif	// !VOID_ENGINE_LOGGER_HPP
+#endif // !VOID_ENGINE_LOGGER_HPP

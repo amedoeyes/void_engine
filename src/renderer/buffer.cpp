@@ -2,8 +2,8 @@
 
 namespace void_engine::renderer {
 
-Buffer::Buffer(BufferTarget target)
-	: _target(static_cast<unsigned int>(target)) {
+Buffer::Buffer(BufferTarget target) :
+	_target(static_cast<unsigned int>(target)) {
 	glGenBuffers(1, &_id);
 }
 
@@ -31,11 +31,11 @@ void Buffer::set_sub_data(
 	glBufferSubData(_target, offset, size, data);
 }
 
-unsigned int Buffer::get_id() const {
+auto Buffer::get_id() const -> unsigned int {
 	return _id;
 }
 
-unsigned int Buffer::get_count() const {
+auto Buffer::get_count() const -> unsigned int {
 	return _count;
 }
 
@@ -43,4 +43,4 @@ void Buffer::set_count(unsigned int count) {
 	_count = count;
 }
 
-}  // namespace void_engine::renderer
+} // namespace void_engine::renderer

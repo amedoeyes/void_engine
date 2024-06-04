@@ -1,10 +1,31 @@
-BasedOnStyle: google
 UseTab: Always
 TabWidth: 4
 IndentWidth: 4
-AccessModifierOffset: 0
-AllowShortIfStatementsOnASingleLine: AllIfsAndElse
-AllowShortFunctionsOnASingleLine: Empty
-AllowShortLambdasOnASingleLine: Empty
-AllowShortEnumsOnASingleLine: false
+
+AccessModifierOffset: -4
+
 AlignAfterOpenBracket: BlockIndent
+AlignEscapedNewlines: Right
+AlignOperands: AlignAfterOperator
+
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: true
+AllowShortEnumsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: None
+AllowShortIfStatementsOnASingleLine: AllIfsAndElse
+AllowShortLambdasOnASingleLine: None
+AllowShortLoopsOnASingleLine: true
+
+AlwaysBreakTemplateDeclarations: true
+BreakConstructorInitializers: AfterColon
+
+IndentCaseLabels: true
+
+PointerAlignment: Left
+QualifierAlignment: Left
+ReferenceAlignment: Pointer
+
+IncludeBlocks: Regroup
+
+RemoveParentheses: MultipleParentheses
+RemoveSemicolon: true

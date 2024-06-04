@@ -1,24 +1,24 @@
 #ifndef VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
 #define VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
 
-#include <vector>
-
 #include "void_engine/ecs/common.hpp"
+
+#include <vector>
 
 namespace void_engine::ECS {
 
 class EntityStorage {
-	public:
-	Entity create();
+public:
+	auto create() -> Entity;
 	void destroy(Entity id);
-	Entity get(EntityIndex index) const;
-	bool contains(Entity id) const;
+	[[nodiscard]] auto get(EntityIndex index) const -> Entity;
+	[[nodiscard]] auto contains(Entity id) const -> bool;
 
-	private:
+private:
 	std::vector<Entity> _data;
 	std::vector<EntityIndex> _free;
 };
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
 
-#endif	// !VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
+#endif // !VOID_ENGINE_ECS_ENTITY_STORAGE_HPP

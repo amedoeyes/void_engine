@@ -1,8 +1,8 @@
 #include "void_engine/input/input_handler.hpp"
 
-#include <GLFW/glfw3.h>
-
 #include "void_engine/input/keyboard.hpp"
+
+#include <GLFW/glfw3.h>
 
 namespace void_engine::input {
 
@@ -28,12 +28,12 @@ void InputHandler::update() {
 	_mouse.update();
 }
 
-Keyboard* InputHandler::get_keyboard() {
+auto InputHandler::get_keyboard() -> Keyboard* {
 	return &_keyboard;
 }
 
-Mouse* InputHandler::get_mouse() {
+auto InputHandler::get_mouse() -> Mouse* {
 	return &_mouse;
 }
 
-}  // namespace void_engine::input
+} // namespace void_engine::input

@@ -4,7 +4,7 @@
 
 namespace void_engine::ECS {
 
-Entity EntityStorage::create() {
+auto EntityStorage::create() -> Entity {
 	if (!_free.empty()) {
 		Entity free_index = _free.back();
 		_free.pop_back();
@@ -26,13 +26,13 @@ void EntityStorage::destroy(Entity entity) {
 	_free.push_back(entity);
 }
 
-Entity EntityStorage::get(EntityIndex index) const {
+auto EntityStorage::get(EntityIndex index) const -> Entity {
 	if (index >= _data.size()) return INVALID_ENTITY;
 	return _data[index];
 }
 
-bool EntityStorage::contains(Entity entity) const {
+auto EntityStorage::contains(Entity entity) const -> bool {
 	return _data[get_entity_index(entity)] == entity;
 }
 
-}  // namespace void_engine::ECS
+} // namespace void_engine::ECS
