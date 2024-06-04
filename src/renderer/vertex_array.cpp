@@ -24,15 +24,11 @@ void VertexArray::set_vertex_buffer(
 	_vertex_buffer.set_data(size, data, usage);
 }
 
-void VertexArray::add_buffer(
-	int size, DataType type, bool normalized, int stride, unsigned int offset
-) {
+void VertexArray::add_buffer(int size, int stride, unsigned int offset) {
 	glVertexArrayVertexBuffer(
 		_id, _index, _vertex_buffer.get_id(), offset, stride
 	);
-	glVertexArrayAttribFormat(
-		_id, _index, size, static_cast<unsigned int>(type), normalized, 0
-	);
+	glVertexArrayAttribFormat(_id, _index, size, GL_FLOAT, false, 0);
 	glVertexArrayAttribBinding(_id, _index, _index);
 	glEnableVertexArrayAttrib(_id, _index);
 	_index++;

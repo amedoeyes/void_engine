@@ -15,9 +15,8 @@ public:
 
 	static void clear();
 	static void draw_arrays(PrimitiveType type, int first, int count);
-	static void draw_elements(
-		PrimitiveType type, int count, DataType indices_type, void* indices
-	);
+	static void
+	draw_elements(PrimitiveType type, unsigned int count, void* indices);
 
 	static void set_clear_color(glm::vec4 color);
 	static void set_viewport(glm::vec<2, int> pos, glm::vec<2, int> size);

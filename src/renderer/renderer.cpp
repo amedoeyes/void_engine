@@ -2,6 +2,7 @@
 
 #include "GLFW/glfw3.h"
 #include "void_engine/logger.hpp"
+#include "void_engine/renderer/common.hpp"
 
 #include <cassert>
 
@@ -42,11 +43,11 @@ void Renderer::draw_arrays(PrimitiveType type, int first, int count) {
 }
 
 void Renderer::draw_elements(
-	PrimitiveType type, int count, DataType indices_type, void* indices
+	PrimitiveType type, unsigned int count, void* indices
 ) {
 	glDrawElements(
-		static_cast<unsigned int>(type), count,
-		static_cast<unsigned int>(indices_type), indices
+		static_cast<unsigned int>(type), static_cast<int>(count),
+		GL_UNSIGNED_INT, indices
 	);
 }
 
@@ -137,10 +138,8 @@ void Renderer::set_polygon_mode(PolygonMode mode) {
 	glPolygonMode(GL_FRONT_AND_BACK, static_cast<unsigned int>(mode));
 }
 
-void Renderer::debug_message_callback(
-	unsigned int source, unsigned int type, unsigned int id, // NOLINT
-	unsigned int severity, int, const char* message, const void* 
-) {
+void Renderer::
+	debug_message_callback(unsigned int source, unsigned int type, unsigned int id, unsigned int severity, int, const char* message, const void*) {
 	if (id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
 
 	std::string source_str;

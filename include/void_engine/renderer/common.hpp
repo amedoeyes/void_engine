@@ -5,18 +5,6 @@
 
 namespace void_engine::renderer {
 
-enum class DataType {
-	boolean = GL_BOOL,
-	byte = GL_BYTE,
-	unsigned_byte = GL_UNSIGNED_BYTE,
-	short_ = GL_SHORT,
-	unsigned_short = GL_UNSIGNED_SHORT,
-	int_ = GL_INT,
-	unsigned_int = GL_UNSIGNED_INT,
-	float_ = GL_FLOAT,
-	double_ = GL_DOUBLE
-};
-
 enum class PrimitiveType {
 	points = GL_POINTS,
 	line_strip = GL_LINE_STRIP,

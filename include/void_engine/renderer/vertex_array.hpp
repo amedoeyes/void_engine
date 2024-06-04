@@ -17,10 +17,7 @@ public:
 
 	void
 	set_vertex_buffer(unsigned int size, const void* data, BufferUsage usage);
-	void add_buffer(
-		int size, DataType type, bool normalized, int stride,
-		unsigned int offset
-	);
+	void add_buffer(int size, int stride, unsigned int offset);
 
 private:
 	unsigned int _id;

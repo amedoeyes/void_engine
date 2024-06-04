@@ -58,7 +58,6 @@ void Mouse::set_scroll(float x, float y) {
 	_scroll = {x, y};
 }
 
-// NOLINTNEXTLINE
 void Mouse::button_callback(GLFWwindow* window, int button, int action, int) {
 	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
 	auto* mouse = ih->get_mouse();
