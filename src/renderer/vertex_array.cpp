@@ -1,5 +1,7 @@
 #include "void_engine/renderer/vertex_array.hpp"
 
+#include "void_engine/renderer/common.hpp"
+
 namespace void_engine::renderer {
 
 VertexArray::VertexArray() : _vertex_buffer(BufferTarget::array) {

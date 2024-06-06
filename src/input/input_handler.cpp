@@ -1,6 +1,7 @@
 #include "void_engine/input/input_handler.hpp"
 
 #include "void_engine/input/keyboard.hpp"
+#include "void_engine/input/mouse.hpp"
 
 #include <GLFW/glfw3.h>
 

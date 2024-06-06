@@ -1,9 +1,12 @@
 #include "void_engine/window/window_manager.hpp"
 
 #include "void_engine/utils/logger.hpp"
+#include "void_engine/window/window.hpp"
 
 #include <GLFW/glfw3.h>
+#include <algorithm>
 #include <cassert>
+#include <vector>
 
 namespace void_engine::window {
 

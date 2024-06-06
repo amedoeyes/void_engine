@@ -3,8 +3,6 @@
 
 #include "common.hpp"
 
-#include <glad/gl.h>
-
 namespace void_engine::renderer {
 
 class Buffer {

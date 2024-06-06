@@ -1,9 +1,17 @@
 #include "void_engine/renderer/shader.hpp"
 
+#include "void_engine/renderer/common.hpp"
 #include "void_engine/utils/logger.hpp"
 
+#include <array>
 #include <fstream>
+#include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float3.hpp>
+#include <glm/ext/vector_float4.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <iterator>
+#include <string>
 #include <vector>
 
 namespace void_engine::renderer {
@@ -29,7 +37,7 @@ void Shader::add(const char* path, ShaderType type) {
 void Shader::compile() {
 	std::vector<unsigned int> shaders;
 	for (const auto& [type, path] : _paths) {
-		unsigned int shader = compile_shader(path, type);
+		const unsigned int shader = compile_shader(path, type);
 		glAttachShader(_id, shader);
 		shaders.push_back(shader);
 	}
@@ -46,7 +54,7 @@ void Shader::compile() {
 		glGetActiveUniform(
 			_id, i, name.size(), nullptr, nullptr, nullptr, name.data()
 		);
-		int location = glGetUniformLocation(_id, name.data());
+		const int location = glGetUniformLocation(_id, name.data());
 		if (location == -1) continue;
 		_uniforms[name.data()] = location;
 	}
@@ -108,12 +116,12 @@ auto Shader::compile_shader(const char* path, ShaderType type) const
 		utils::Logger::error("Failed to open shader file: {}", path);
 		return 0;
 	}
-	std::string source(
+	const std::string source(
 		(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()
 	);
 	file.close();
 
-	unsigned int shader = glCreateShader(static_cast<unsigned int>(type));
+	const unsigned int shader = glCreateShader(static_cast<unsigned int>(type));
 	const char* source_c = source.c_str();
 	glShaderSource(shader, 1, &source_c, nullptr);
 	glCompileShader(shader);

@@ -1,10 +1,13 @@
 #include "void_engine/renderer/renderer.hpp"
 
-#include "GLFW/glfw3.h"
 #include "void_engine/renderer/common.hpp"
 #include "void_engine/utils/logger.hpp"
 
+#include <GLFW/glfw3.h>
 #include <cassert>
+#include <glm/detail/type_vec2.hpp>
+#include <glm/ext/vector_float4.hpp>
+#include <string>
 
 namespace void_engine::renderer {
 
@@ -152,6 +155,7 @@ void Renderer::
 		case GL_DEBUG_SOURCE_THIRD_PARTY: source_str = "Third Party"; break;
 		case GL_DEBUG_SOURCE_APPLICATION: source_str = "Application"; break;
 		case GL_DEBUG_SOURCE_OTHER: source_str = "Other"; break;
+		default:;
 	}
 
 	std::string type_str;
@@ -169,6 +173,7 @@ void Renderer::
 		case GL_DEBUG_TYPE_PUSH_GROUP: type_str = "Push Group"; break;
 		case GL_DEBUG_TYPE_POP_GROUP: type_str = "Pop Group"; break;
 		case GL_DEBUG_TYPE_OTHER: type_str = "Other"; break;
+		default:;
 	}
 
 	std::string severity_str;
@@ -179,6 +184,7 @@ void Renderer::
 		case GL_DEBUG_SEVERITY_NOTIFICATION:
 			severity_str = "notification";
 			break;
+		default:;
 	}
 
 	if (severity == GL_DEBUG_SEVERITY_NOTIFICATION) {

@@ -6,6 +6,7 @@
 #include "void_engine/ecs/pool_base.hpp"
 
 #include <unordered_map>
+#include <vector>
 
 namespace void_engine::ECS {
 

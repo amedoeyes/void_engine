@@ -2,7 +2,8 @@
 
 #include "void_engine/input/input_handler.hpp"
 
-#include <cstdio>
+#include <GLFW/glfw3.h>
+#include <glm/ext/vector_float2.hpp>
 
 namespace void_engine::input {
 

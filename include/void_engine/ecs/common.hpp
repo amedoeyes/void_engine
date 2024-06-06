@@ -25,7 +25,7 @@ inline auto component_counter() -> ComponentID {
 
 template <typename T>
 auto get_component_id() -> ComponentID {
-	static ComponentID id = component_counter();
+	static const ComponentID id = component_counter();
 	return id;
 }
 

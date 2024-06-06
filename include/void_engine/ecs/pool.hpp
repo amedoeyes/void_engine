@@ -4,6 +4,7 @@
 #include "void_engine/ecs/common.hpp"
 #include "void_engine/ecs/pool_base.hpp"
 
+#include <cstddef>
 #include <vector>
 
 namespace void_engine::ECS {
@@ -18,7 +19,7 @@ public:
 public:
 	template <typename... Args>
 	auto create(Entity entity, Args&&... args) -> T* {
-		EntityIndex index = get_entity_index(entity);
+		const EntityIndex index = get_entity_index(entity);
 
 		if (index >= _sparse.size()) {
 			_sparse.resize(index + 1, INVALID_ENTITY);
@@ -39,8 +40,8 @@ public:
 	void destroy(Entity entity) override {
 		if (!contains(entity)) return;
 
-		EntityIndex index = get_entity_index(entity);
-		size_t remove_index = _sparse[index];
+		const EntityIndex index = get_entity_index(entity);
+		const size_t remove_index = _sparse[index];
 		Entity replacement = _packed.back();
 
 		delete _data[remove_index];
@@ -67,7 +68,7 @@ public:
 	}
 
 	[[nodiscard]] auto contains(Entity entity) const -> bool {
-		EntityIndex index = get_entity_index(entity);
+		const EntityIndex index = get_entity_index(entity);
 		if (index >= _sparse.size()) return false;
 		return _sparse[index] != INVALID_ENTITY;
 	}

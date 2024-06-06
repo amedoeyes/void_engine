@@ -2,7 +2,7 @@
 #define VOID_ENGINE_INPUT_MOUSE_HPP
 
 #include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
+#include <glm/ext/vector_float2.hpp>
 #include <unordered_map>
 
 namespace void_engine::input {

@@ -4,8 +4,8 @@
 #include "common.hpp"
 
 #include <GLFW/glfw3.h>
-#include <glad/gl.h>
-#include <glm/glm.hpp>
+#include <glm/detail/qualifier.hpp>
+#include <glm/ext/vector_float4.hpp>
 
 namespace void_engine::renderer {
 

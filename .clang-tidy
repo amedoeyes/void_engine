@@ -2,10 +2,8 @@ Checks:
   -*,
   bugprone-*,
   -bugprone-easily-swappable-parameters,
-  llvm-*,
+  clang-analyzer-*,
   misc-*,
   modernize-*,
   performance-*,
   portability-*,
-
-WarningsAsErrors: ''

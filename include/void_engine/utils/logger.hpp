@@ -3,6 +3,7 @@
 
 #include <format>
 #include <iostream>
+#include <string>
 #include <string_view>
 
 namespace void_engine::utils {
@@ -61,7 +62,8 @@ private:
 			case LogLevel::error: level_str = "[ERROR]"; break;
 			default:;
 		}
-		std::string message = std::format("{}: {}\n", level_str, format_str);
+		const std::string message =
+			std::format("{}: {}\n", level_str, format_str);
 
 		if (level >= LogLevel::warning) {
 			std::cerr << message;

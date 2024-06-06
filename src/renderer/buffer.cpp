@@ -1,5 +1,7 @@
 #include "void_engine/renderer/buffer.hpp"
 
+#include "void_engine/renderer/common.hpp"
+
 namespace void_engine::renderer {
 
 Buffer::Buffer(BufferTarget target) :

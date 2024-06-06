@@ -6,16 +6,16 @@ namespace void_engine::ECS {
 
 auto EntityStorage::create() -> Entity {
 	if (!_free.empty()) {
-		Entity free_index = _free.back();
+		const Entity free_index = _free.back();
 		_free.pop_back();
-		Entity entity = create_entity(
+		const Entity entity = create_entity(
 			free_index, get_entity_version(_data[free_index]) + 1
 		);
 		_data[free_index] = entity;
 		return entity;
 	}
 
-	Entity entity = create_entity(_data.size(), 0);
+	const Entity entity = create_entity(_data.size(), 0);
 	_data.push_back(entity);
 	return entity;
 }

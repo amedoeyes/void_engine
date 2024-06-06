@@ -2,6 +2,8 @@
 
 #include "void_engine/input/input_handler.hpp"
 
+#include <GLFW/glfw3.h>
+
 namespace void_engine::input {
 
 void Keyboard::update() {

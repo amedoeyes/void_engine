@@ -5,6 +5,8 @@
 #include "void_engine/ecs/pool_storage.hpp"
 
 #include <algorithm>
+#include <tuple>
+#include <vector>
 
 namespace void_engine::ECS {
 

@@ -1,6 +1,9 @@
 #include "void_engine/window/window.hpp"
 
+#include "void_engine/input/input_handler.hpp"
 #include "void_engine/utils/logger.hpp"
+
+#include <GLFW/glfw3.h>
 
 namespace void_engine::window {
 
@@ -58,7 +61,7 @@ auto Window::get_time() const -> float {
 auto Window::get_delta_time() const -> float {
 	static float last_frame_time = 0.0f;
 	auto current_time = static_cast<float>(glfwGetTime());
-	float delta_time = current_time - last_frame_time;
+	const float delta_time = current_time - last_frame_time;
 	last_frame_time = current_time;
 	return delta_time;
 }

@@ -1,6 +1,10 @@
 #include "void_engine/ecs/pool_storage.hpp"
 
+#include "void_engine/ecs/common.hpp"
+
 #include <algorithm>
+#include <cstddef>
+#include <vector>
 
 namespace void_engine::ECS {
 
