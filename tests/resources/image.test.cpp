@@ -1,17 +1,23 @@
 #include "void_engine/resources/image.hpp"
 
 #include <catch2/catch_test_macros.hpp>
+#include <filesystem>
 
 using namespace void_engine::resources;
+namespace fs = std::filesystem;
 
 TEST_CASE("Image", "[resources][image]") {
+	fs::path image_path = fs::relative("../tests/resources/cat.png");
+
 	SECTION("Read non-existent image") {
-		const auto* image = read_image("non-existent.png");
+
+		const Image* image = read_image("non-existent.png");
 		REQUIRE(image == nullptr);
+		delete image;
 	}
 
 	SECTION("Read image") {
-		const auto* image = read_image("tests/resources/cat.png");
+		const Image* image = read_image(image_path.string());
 		REQUIRE(image != nullptr);
 		REQUIRE(image->width == 1024);
 		REQUIRE(image->height == 933);
@@ -21,21 +27,24 @@ TEST_CASE("Image", "[resources][image]") {
 		REQUIRE(image->compression_type == ImageCompressionType::base);
 		REQUIRE(image->filter_method == ImageFilterMethod::base);
 		REQUIRE(image->bytes.size() == static_cast<size_t>(1024 * 933 * 3));
+		delete image;
 	}
 
 	SECTION("Read image with flip") {
-		const auto* image = read_image("tests/resources/cat.png");
-		const auto* image_flip = read_image("tests/resources/cat.png", true);
+		const Image* image = read_image(image_path.string());
+		const Image* image_flip = read_image(image_path.string(), true);
 		REQUIRE(image != nullptr);
 		REQUIRE(image_flip != nullptr);
 		REQUIRE(image->bytes != image_flip->bytes);
+		delete image;
+		delete image_flip;
 	}
 
 	SECTION("Write image") {
-		const auto* image = read_image("tests/resources/cat.png");
+		const Image* image = read_image(image_path.string());
 		REQUIRE(image != nullptr);
-		write_image("tests/resources/cat_copy.png", image);
-		const auto* image_copy = read_image("tests/resources/cat_copy.png");
+		write_image("cat_copy.png", image);
+		const Image* image_copy = read_image("cat_copy.png");
 		REQUIRE(image_copy != nullptr);
 		REQUIRE(image_copy->width == image->width);
 		REQUIRE(image_copy->height == image->height);
@@ -45,5 +54,7 @@ TEST_CASE("Image", "[resources][image]") {
 		REQUIRE(image_copy->compression_type == image->compression_type);
 		REQUIRE(image_copy->filter_method == image->filter_method);
 		REQUIRE(image_copy->bytes == image->bytes);
+		delete image;
+		delete image_copy;
 	}
 }
