@@ -6,6 +6,7 @@ test_sources = files(
   './ecs/scene.test.cpp',
   './ecs/view.test.cpp',
   './resources/image.test.cpp',
+  './resources/texture_manager.test.cpp',
   './utils/logger.test.cpp',
   './window/window.test.cpp',
   './window/window_manager.test.cpp',
