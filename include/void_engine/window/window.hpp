@@ -4,12 +4,13 @@
 #include "void_engine/input/input_handler.hpp"
 
 #include <GLFW/glfw3.h>
+#include <string_view>
 
 namespace void_engine::window {
 
 class Window {
 public:
-	Window(const char* title, int width, int height);
+	Window(const std::string_view title, int width, int height);
 	~Window();
 
 public:

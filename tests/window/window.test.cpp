@@ -1,5 +1,7 @@
 #include "void_engine/window/window.hpp"
 
+#include "GLFW/glfw3.h"
+
 #include <catch2/catch_test_macros.hpp>
 
 using namespace void_engine::window;
@@ -7,7 +9,7 @@ using namespace void_engine::window;
 TEST_CASE("Window", "[window][window]") {
 	glfwInit();
 
-	Window window("Test", 800, 600);
+	const Window window("Test", 800, 600);
 
 	SECTION("Window open") {
 		REQUIRE(window.get_window() != nullptr);
@@ -24,11 +26,16 @@ TEST_CASE("Window", "[window][window]") {
 	}
 
 	SECTION("Get time") {
-		auto time = window.get_time();
+		const float time = window.get_time();
 		while (window.get_time() - time < 1.0f) {
 		}
-		auto time2 = window.get_time();
+		const float time2 = window.get_time();
 		REQUIRE(time2 - time >= 1.0f);
+	}
+
+	SECTION("Get delta time") {
+		const float delta_time = window.get_delta_time();
+		REQUIRE(delta_time >= 0.0f);
 	}
 
 	SECTION("Close window") {

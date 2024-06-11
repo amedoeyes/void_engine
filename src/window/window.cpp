@@ -4,16 +4,17 @@
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
+#include <string_view>
 
 namespace void_engine::window {
 
-Window::Window(const char* title, int width, int height) {
+Window::Window(const std::string_view title, int width, int height) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 
-	_window = glfwCreateWindow(width, height, title, nullptr, nullptr);
+	_window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
 	if (_window == nullptr) utils::Logger::error("Failed to create window");
 
 	glfwMakeContextCurrent(_window);
