@@ -1,20 +1,20 @@
 #include "void_engine/ecs/entity_storage.hpp"
 
-#include <catch2/catch_test_macros.hpp>
-
 #include "void_engine/ecs/common.hpp"
+
+#include <catch2/catch_test_macros.hpp>
 
 using namespace void_engine::ECS;
 
 TEST_CASE("EntityStorage", "[ecs][entity_storage]") {
 	EntityStorage storage;
 
-	SECTION("Entity creation") {
-		Entity e = storage.create();
+	SECTION("Create entity") {
+		const Entity e = storage.create();
 		REQUIRE(storage.contains(e));
 	}
 
-	SECTION("Entity destruction") {
+	SECTION("Destroy entity") {
 		Entity e = storage.create();
 		storage.destroy(e);
 		REQUIRE_FALSE(storage.contains(e));
@@ -22,13 +22,13 @@ TEST_CASE("EntityStorage", "[ecs][entity_storage]") {
 		REQUIRE(get_entity_version(e) == 1);
 	}
 
-	SECTION("Entity retrieval") {
-		Entity e = storage.create();
+	SECTION("Retrieve entity") {
+		const Entity e = storage.create();
 		REQUIRE(storage.get(get_entity_index(e)) == e);
 	}
 
-	SECTION("Entity containment") {
-		Entity e = storage.create();
+	SECTION("Check entity existence") {
+		const Entity e = storage.create();
 		REQUIRE(storage.contains(e));
 		storage.destroy(e);
 		REQUIRE_FALSE(storage.contains(e));

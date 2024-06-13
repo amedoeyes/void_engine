@@ -11,7 +11,7 @@ TEST_CASE("Window", "[window][window]") {
 
 	const Window window("Test", 800, 600);
 
-	SECTION("Window open") {
+	SECTION("Window is open") {
 		REQUIRE(window.get_window() != nullptr);
 		REQUIRE_FALSE(window.should_close());
 	}
@@ -21,11 +21,11 @@ TEST_CASE("Window", "[window][window]") {
 		REQUIRE(glfwGetCurrentContext() == window.get_window());
 	}
 
-	SECTION("Get InputHandler") {
+	SECTION("Retrieve input handler") {
 		REQUIRE(window.get_input_handler() != nullptr);
 	}
 
-	SECTION("Get time") {
+	SECTION("Retrieve time") {
 		const float time = window.get_time();
 		while (window.get_time() - time < 1.0f) {
 		}
@@ -33,7 +33,7 @@ TEST_CASE("Window", "[window][window]") {
 		REQUIRE(time2 - time >= 1.0f);
 	}
 
-	SECTION("Get delta time") {
+	SECTION("Retrieve delta time") {
 		const float delta_time = window.get_delta_time();
 		REQUIRE(delta_time >= 0.0f);
 	}
@@ -42,4 +42,6 @@ TEST_CASE("Window", "[window][window]") {
 		window.close();
 		REQUIRE(window.should_close());
 	}
+
+	glfwTerminate();
 }
