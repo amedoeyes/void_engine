@@ -1,10 +1,10 @@
-#include "void_engine/renderer/shader.hpp"
+#include "void_engine/resources/shader.hpp"
 
-#include "void_engine/renderer/common.hpp"
 #include "void_engine/utils/logger.hpp"
 
 #include <array>
 #include <fstream>
+#include <glad/gl.h>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float3.hpp>
@@ -14,35 +14,40 @@
 #include <string>
 #include <vector>
 
-namespace void_engine::renderer {
+namespace void_engine::resources {
 
-Shader::Shader() : _id(glCreateProgram()) {
-}
 Shader::~Shader() {
 	glDeleteProgram(_id);
 }
 
-void Shader::bind() const {
+auto Shader::bind() const -> const Shader* {
 	glUseProgram(_id);
+	return this;
 }
 
 void Shader::unbind() const {
 	glUseProgram(0);
 }
 
-void Shader::add(const char* path, ShaderType type) {
+auto Shader::add(ShaderType type, const std::string& path) -> Shader* {
 	_paths[type] = path;
+	return this;
 }
 
 void Shader::compile() {
+	if (_id != 0) {
+		glDeleteProgram(_id);
+		_uniforms.clear();
+	}
+
+	_id = glCreateProgram();
 	std::vector<unsigned int> shaders;
 	for (const auto& [type, path] : _paths) {
-		const unsigned int shader = compile_shader(path, type);
+		const unsigned int shader = compile_source(type, path);
 		glAttachShader(_id, shader);
 		shaders.push_back(shader);
 	}
 	glLinkProgram(_id);
-
 	for (auto shader : shaders) {
 		glDeleteShader(shader);
 	}
@@ -60,56 +65,60 @@ void Shader::compile() {
 	}
 }
 
-void Shader::recompile() {
-	glDeleteProgram(_id);
-	_uniforms.clear();
-	_id = glCreateProgram();
-	compile();
-}
-
-void Shader::set_uniform(const char* name, int value) const {
+auto Shader::set_uniform(const std::string& name, int value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform1i(it->second, value);
+	if (it != _uniforms.end()) glUniform1i(it->second, value);
+	return this;
 }
 
-void Shader::set_uniform(const char* name, unsigned int value) const {
+auto Shader::set_uniform(const std::string& name, unsigned int value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform1ui(it->second, value);
+	if (it != _uniforms.end()) glUniform1ui(it->second, value);
+	return this;
 }
 
-void Shader::set_uniform(const char* name, float value) const {
+auto Shader::set_uniform(const std::string& name, float value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform1f(it->second, value);
+	if (it != _uniforms.end()) glUniform1f(it->second, value);
+	return this;
 }
 
-void Shader::set_uniform(const char* name, glm::vec2 value) const {
+auto Shader::set_uniform(const std::string& name, glm::vec2 value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform2fv(it->second, 1, glm::value_ptr(value));
+	if (it != _uniforms.end())
+		glUniform2fv(it->second, 1, glm::value_ptr(value));
+	return this;
 }
 
-void Shader::set_uniform(const char* name, glm::vec3 value) const {
+auto Shader::set_uniform(const std::string& name, glm::vec3 value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform3fv(it->second, 1, glm::value_ptr(value));
+	if (it != _uniforms.end())
+		glUniform3fv(it->second, 1, glm::value_ptr(value));
+	return this;
 }
 
-void Shader::set_uniform(const char* name, glm::vec4 value) const {
+auto Shader::set_uniform(const std::string& name, glm::vec4 value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniform4fv(it->second, 1, glm::value_ptr(value));
+	if (it != _uniforms.end())
+		glUniform4fv(it->second, 1, glm::value_ptr(value));
+	return this;
 }
 
-void Shader::set_uniform(const char* name, glm::mat4 value) const {
+auto Shader::set_uniform(const std::string& name, glm::mat4 value) const
+	-> const Shader* {
 	auto it = _uniforms.find(name);
-	if (it == _uniforms.end()) return;
-	glUniformMatrix4fv(it->second, 1, GL_FALSE, glm::value_ptr(value));
+	if (it != _uniforms.end())
+		glUniformMatrix4fv(it->second, 1, GL_FALSE, glm::value_ptr(value));
+	return this;
 }
 
-auto Shader::compile_shader(const char* path, ShaderType type) const
+auto Shader::compile_source(ShaderType type, const std::string& path) const
 	-> unsigned int {
 	std::ifstream file(path);
 	if (!file.is_open()) {
@@ -129,4 +138,4 @@ auto Shader::compile_shader(const char* path, ShaderType type) const
 	return shader;
 }
 
-} // namespace void_engine::renderer
+} // namespace void_engine::resources

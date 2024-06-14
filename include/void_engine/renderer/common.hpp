@@ -130,15 +130,6 @@ enum class BufferUsage {
 	dynamic_copy = GL_DYNAMIC_COPY
 };
 
-enum class ShaderType {
-	compute = GL_COMPUTE_SHADER,
-	vertex = GL_VERTEX_SHADER,
-	tess_control = GL_TESS_CONTROL_SHADER,
-	tess_evaluation = GL_TESS_EVALUATION_SHADER,
-	geometry = GL_GEOMETRY_SHADER,
-	fragment = GL_FRAGMENT_SHADER
-};
+} // namespace void_engine::renderer
 
-}  // namespace void_engine::renderer
-
-#endif	// !VOID_ENGINE_RENDERER_COMMON_HPP
+#endif // !VOID_ENGINE_RENDERER_COMMON_HPP
