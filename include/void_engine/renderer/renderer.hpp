@@ -1,7 +1,8 @@
 #ifndef VOID_ENGINE_RENDERER_RENDERER_HPP
 #define VOID_ENGINE_RENDERER_RENDERER_HPP
 
-#include "common.hpp"
+#include "void_engine/renderer/camera/camera.hpp"
+#include "void_engine/renderer/common.hpp"
 
 #include <GLFW/glfw3.h>
 #include <glm/detail/qualifier.hpp>
@@ -35,10 +36,14 @@ public:
 	static void set_front_face(FrontFace face);
 	static void set_polygon_mode(PolygonMode mode);
 
+	static void set_camera(camera::Camera* camera);
+	static auto get_camera() -> camera::Camera*;
+
 private:
 	static bool _depth_test;
 	static bool _blend;
 	static bool _stencil;
+	static camera::Camera* _camera;
 
 private:
 	static APIENTRY void debug_message_callback(

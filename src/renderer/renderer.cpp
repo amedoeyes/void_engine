@@ -1,6 +1,6 @@
 #include "void_engine/renderer/renderer.hpp"
 
-#include "void_engine/renderer/common.hpp"
+#include "void_engine/renderer/camera/camera.hpp"
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
@@ -14,6 +14,7 @@ namespace void_engine::renderer {
 bool Renderer::_depth_test = false;
 bool Renderer::_blend = false;
 bool Renderer::_stencil = false;
+camera::Camera* Renderer::_camera = nullptr;
 
 void Renderer::init() {
 	if (!gladLoadGL(glfwGetProcAddress)) {
@@ -139,6 +140,13 @@ void Renderer::set_front_face(FrontFace face) {
 
 void Renderer::set_polygon_mode(PolygonMode mode) {
 	glPolygonMode(GL_FRONT_AND_BACK, static_cast<unsigned int>(mode));
+}
+
+void Renderer::set_camera(camera::Camera* camera) {
+	_camera = camera;
+}
+auto Renderer::get_camera() -> camera::Camera* {
+	return _camera;
 }
 
 void Renderer::

@@ -19,6 +19,8 @@ sources = files(
   './src/input/keyboard.cpp',
   './src/input/mouse.cpp',
   './src/renderer/buffer.cpp',
+  './src/renderer/camera/free_camera_3d.cpp',
+  './src/renderer/camera/free_camera_2d.cpp',
   './src/renderer/renderer.cpp',
   './src/renderer/vertex_array.cpp',
   './src/resources/image.cpp',
