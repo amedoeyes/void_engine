@@ -19,8 +19,8 @@ sources = files(
   './src/input/keyboard.cpp',
   './src/input/mouse.cpp',
   './src/renderer/buffer.cpp',
-  './src/renderer/camera/free_camera_3d.cpp',
   './src/renderer/camera/free_camera_2d.cpp',
+  './src/renderer/camera/free_camera_3d.cpp',
   './src/renderer/renderer.cpp',
   './src/renderer/vertex_array.cpp',
   './src/resources/image.cpp',
@@ -41,6 +41,10 @@ dependencies = [
 ]
 
 add_project_arguments('-DGLFW_INCLUDE_NONE', language: 'cpp')
+
+if get_option('buildtype').startswith('debug')
+  add_project_arguments('-DDEBUG', language: 'cpp')
+endif
 
 void_engine = library(
   'void_engine',
