@@ -4,6 +4,7 @@
 #include "void_engine/input/input_handler.hpp"
 
 #include <GLFW/glfw3.h>
+#include <functional>
 #include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
@@ -26,9 +27,16 @@ public:
 	[[nodiscard]] auto get_delta_time() const -> float;
 	[[nodiscard]] auto get_size() const -> glm::vec2;
 
+	void on_resize(const std::function<void(glm::vec2)>& callback);
+	void resize_callback(glm::vec2 size) const;
+
 private:
 	GLFWwindow* _window;
 	void_engine::input::InputHandler* _input_handler;
+	std::function<void(glm::vec2)> _resize_callback;
+
+private:
+	static void resize_callback(GLFWwindow* window, int width, int height);
 };
 
 } // namespace void_engine::window

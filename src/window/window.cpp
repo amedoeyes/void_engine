@@ -4,6 +4,7 @@
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
+#include <functional>
 #include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
@@ -16,7 +17,6 @@ Window::Window(const std::string_view title, int width, int height) {
 #ifdef DEBUG
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 #endif
-
 	_window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
 	if (_window == nullptr) utils::Logger::error("Failed to create window");
 
@@ -29,6 +29,7 @@ Window::Window(const std::string_view title, int width, int height) {
 	_input_handler = new input::InputHandler(_window);
 
 	glfwSetWindowUserPointer(_window, this);
+	glfwSetWindowSizeCallback(_window, resize_callback);
 }
 
 Window::~Window() {
@@ -76,6 +77,20 @@ auto Window::get_size() const -> glm::vec2 {
 	int width, height;
 	glfwGetWindowSize(_window, &width, &height);
 	return {width, height};
+}
+
+void Window::on_resize(const std::function<void(glm::vec2)>& callback) {
+	_resize_callback = callback;
+}
+
+void Window::resize_callback(glm::vec2 size) const {
+	if (_resize_callback == nullptr) return;
+	_resize_callback(size);
+}
+
+void Window::resize_callback(GLFWwindow* window, int width, int height) {
+	auto self = static_cast<Window*>(glfwGetWindowUserPointer(window));
+	self->resize_callback({width, height});
 }
 
 } // namespace void_engine::window
