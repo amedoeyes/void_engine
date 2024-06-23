@@ -2,7 +2,6 @@
 #define VOID_ENGINE_RENDERER_VERTEX_ARRAY_HPP
 
 #include "buffer.hpp"
-#include "common.hpp"
 
 namespace void_engine::renderer {
 

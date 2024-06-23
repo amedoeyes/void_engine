@@ -1,6 +1,8 @@
 #include "void_engine/renderer/vertex_array.hpp"
 
-#include "void_engine/renderer/common.hpp"
+#include "void_engine/renderer/buffer.hpp"
+
+#include <glad/gl.h>
 
 namespace void_engine::renderer {
 
