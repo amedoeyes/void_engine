@@ -4,7 +4,8 @@
 #include "void_engine/renderer/camera/camera.hpp"
 
 #include <GLFW/glfw3.h>
-#include <glm/detail/qualifier.hpp>
+#include <glad/gl.h>
+#include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 
 namespace void_engine::renderer {
@@ -109,13 +110,22 @@ class Renderer {
 public:
 	static void init();
 
+public:
 	static void clear();
 	static void draw_arrays(PrimitiveType type, int first, int count);
-	static void
-	draw_elements(PrimitiveType type, unsigned int count, void* indices);
+	static void draw_elements(
+		PrimitiveType type, unsigned int count, void* indices
+	);
 
 	static void set_clear_color(glm::vec4 color);
-	static void set_viewport(glm::vec<2, int> pos, glm::vec<2, int> size);
+	static auto get_clear_color() -> glm::vec4;
+
+	static void set_viewport(glm::vec2 pos, glm::vec2 size);
+	static void set_viewport_pos(glm::vec2 pos);
+	static void set_viewport_size(glm::vec2 size);
+	static auto get_viewport_size() -> glm::vec2;
+	static auto get_viewport_pos() -> glm::vec2;
+
 	static void set_depth_test(bool enabled);
 	static void set_depth_func(DepthFunc func);
 	static void set_blend(bool enabled);
@@ -124,8 +134,9 @@ public:
 	static void set_stencil(bool enabled);
 	static void set_stencil_mask(unsigned int mask);
 	static void set_stencil_func(StencilFunc func, int ref, unsigned int mask);
-	static void
-	set_stencil_op(StencilOp sfail, StencilOp dpfail, StencilOp dppass);
+	static void set_stencil_op(
+		StencilOp sfail, StencilOp dpfail, StencilOp dppass
+	);
 	static void set_cull_face(bool enabled);
 	static void set_cull_face(CullFace face);
 	static void set_front_face(FrontFace face);
@@ -135,6 +146,9 @@ public:
 	static auto get_camera() -> camera::Camera*;
 
 private:
+	static glm::vec4 _clear_color;
+	static glm::vec2 _viewport_pos;
+	static glm::vec2 _viewport_size;
 	static bool _depth_test;
 	static bool _blend;
 	static bool _stencil;

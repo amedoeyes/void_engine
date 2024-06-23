@@ -5,7 +5,8 @@
 
 #include <GLFW/glfw3.h>
 #include <cassert>
-#include <glm/detail/type_vec2.hpp>
+#include <glad/gl.h>
+#include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <string>
 
@@ -14,6 +15,9 @@ namespace void_engine::renderer {
 bool Renderer::_depth_test = false;
 bool Renderer::_blend = false;
 bool Renderer::_stencil = false;
+glm::vec4 Renderer::_clear_color = glm::vec4(0.f);
+glm::vec2 Renderer::_viewport_pos = glm::vec2(0.f);
+glm::vec2 Renderer::_viewport_size = glm::vec2(0.f);
 camera::Camera* Renderer::_camera = nullptr;
 
 void Renderer::init() {
@@ -57,10 +61,38 @@ void Renderer::draw_elements(
 
 void Renderer::set_clear_color(glm::vec4 color) {
 	glClearColor(color.r, color.g, color.b, color.a);
+	_clear_color = color;
 }
 
-void Renderer::set_viewport(glm::vec<2, int> pos, glm::vec<2, int> size) {
-	glViewport(pos.x, pos.y, size.x, size.y);
+auto Renderer::get_clear_color() -> glm::vec4 {
+	return _clear_color;
+}
+
+void Renderer::set_viewport(glm::vec2 pos, glm::vec2 size) {
+	glViewport(
+		static_cast<int>(pos.x), static_cast<int>(pos.y),
+		static_cast<int>(size.x), static_cast<int>(size.y)
+	);
+	_viewport_pos = pos;
+	_viewport_size = size;
+}
+
+void Renderer::set_viewport_pos(glm::vec2 pos) {
+	set_viewport(pos, _viewport_size);
+	_viewport_pos = pos;
+}
+
+void Renderer::set_viewport_size(glm::vec2 size) {
+	set_viewport(_viewport_pos, size);
+	_viewport_size = size;
+}
+
+auto Renderer::get_viewport_pos() -> glm::vec2 {
+	return _viewport_pos;
+}
+
+auto Renderer::get_viewport_size() -> glm::vec2 {
+	return _viewport_size;
 }
 
 void Renderer::set_depth_test(bool enabled) {
