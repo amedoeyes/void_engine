@@ -8,10 +8,7 @@
 namespace void_engine::input {
 
 InputHandler::InputHandler(GLFWwindow* window) : _window(window) {
-	glfwSetWindowUserPointer(_window, static_cast<void*>(this));
-
 	glfwSetKeyCallback(_window, _keyboard.callback);
-
 	glfwSetMouseButtonCallback(_window, _mouse.button_callback);
 	glfwSetCursorPosCallback(_window, _mouse.position_callback);
 	glfwSetScrollCallback(_window, _mouse.scroll_callback);

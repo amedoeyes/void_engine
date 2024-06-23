@@ -26,6 +26,8 @@ Window::Window(const std::string_view title, int width, int height) {
 	});
 
 	_input_handler = new input::InputHandler(_window);
+
+	glfwSetWindowUserPointer(_window, this);
 }
 
 Window::~Window() {

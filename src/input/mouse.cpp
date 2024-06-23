@@ -1,6 +1,7 @@
 #include "void_engine/input/mouse.hpp"
 
 #include "void_engine/input/input_handler.hpp"
+#include "void_engine/window/window.hpp"
 
 #include <GLFW/glfw3.h>
 #include <glm/ext/vector_float2.hpp>
@@ -60,9 +61,9 @@ void Mouse::set_scroll(float x, float y) {
 }
 
 void Mouse::button_callback(GLFWwindow* window, int button, int action, int) {
-	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* win = static_cast<window::Window*>(glfwGetWindowUserPointer(window));
+	auto* ih = win->get_input_handler();
 	auto* mouse = ih->get_mouse();
-
 	if (action == GLFW_PRESS) {
 		mouse->set_state(static_cast<MouseButton>(button), true);
 	} else if (action == GLFW_RELEASE) {
@@ -71,18 +72,18 @@ void Mouse::button_callback(GLFWwindow* window, int button, int action, int) {
 }
 
 void Mouse::position_callback(GLFWwindow* window, double xpos, double ypos) {
-	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* win = static_cast<window::Window*>(glfwGetWindowUserPointer(window));
+	auto* ih = win->get_input_handler();
 	auto* mouse = ih->get_mouse();
-
 	mouse->set_position(static_cast<float>(xpos), static_cast<float>(ypos));
 }
 
 void Mouse::scroll_callback(
 	GLFWwindow* window, double xoffset, double yoffset
 ) {
-	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* win = static_cast<window::Window*>(glfwGetWindowUserPointer(window));
+	auto* ih = win->get_input_handler();
 	auto* mouse = ih->get_mouse();
-
 	mouse->set_scroll(static_cast<float>(xoffset), static_cast<float>(yoffset));
 }
 

@@ -1,6 +1,7 @@
 #include "void_engine/input/keyboard.hpp"
 
 #include "void_engine/input/input_handler.hpp"
+#include "void_engine/window/window.hpp"
 
 #include <GLFW/glfw3.h>
 
@@ -42,9 +43,9 @@ void Keyboard::set_prev_state(KeyboardKey key, bool state) {
 }
 
 void Keyboard::callback(GLFWwindow* window, int key, int, int action, int) {
-	auto* ih = static_cast<InputHandler*>(glfwGetWindowUserPointer(window));
+	auto* win = static_cast<window::Window*>(glfwGetWindowUserPointer(window));
+	auto* ih = win->get_input_handler();
 	auto* kb = ih->get_keyboard();
-
 	if (action == GLFW_PRESS) {
 		kb->set_state(static_cast<KeyboardKey>(key), true);
 	} else if (action == GLFW_RELEASE) {
