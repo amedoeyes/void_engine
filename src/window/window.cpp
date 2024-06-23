@@ -4,6 +4,7 @@
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
+#include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
 namespace void_engine::window {
@@ -69,6 +70,12 @@ auto Window::get_delta_time() const -> float {
 	const float delta_time = current_time - last_frame_time;
 	last_frame_time = current_time;
 	return delta_time;
+}
+
+auto Window::get_size() const -> glm::vec2 {
+	int width, height;
+	glfwGetWindowSize(_window, &width, &height);
+	return {width, height};
 }
 
 } // namespace void_engine::window

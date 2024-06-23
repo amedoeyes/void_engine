@@ -4,6 +4,7 @@
 #include "void_engine/input/input_handler.hpp"
 
 #include <GLFW/glfw3.h>
+#include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
 namespace void_engine::window {
@@ -23,6 +24,7 @@ public:
 		-> void_engine::input::InputHandler*;
 	[[nodiscard]] auto get_time() const -> float;
 	[[nodiscard]] auto get_delta_time() const -> float;
+	[[nodiscard]] auto get_size() const -> glm::vec2;
 
 private:
 	GLFWwindow* _window;
