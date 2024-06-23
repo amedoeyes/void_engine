@@ -118,14 +118,9 @@ public:
 	);
 
 	static void set_clear_color(glm::vec4 color);
-	static auto get_clear_color() -> glm::vec4;
-
 	static void set_viewport(glm::vec2 pos, glm::vec2 size);
 	static void set_viewport_pos(glm::vec2 pos);
 	static void set_viewport_size(glm::vec2 size);
-	static auto get_viewport_size() -> glm::vec2;
-	static auto get_viewport_pos() -> glm::vec2;
-
 	static void set_depth_test(bool enabled);
 	static void set_depth_func(DepthFunc func);
 	static void set_blend(bool enabled);
@@ -141,8 +136,11 @@ public:
 	static void set_cull_face(CullFace face);
 	static void set_front_face(FrontFace face);
 	static void set_polygon_mode(PolygonMode mode);
-
 	static void set_camera(camera::Camera* camera);
+
+	static auto get_clear_color() -> glm::vec4;
+	static auto get_viewport_size() -> glm::vec2;
+	static auto get_viewport_pos() -> glm::vec2;
 	static auto get_camera() -> camera::Camera*;
 
 private:

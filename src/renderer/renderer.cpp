@@ -87,12 +87,8 @@ void Renderer::set_viewport_size(glm::vec2 size) {
 	_viewport_size = size;
 }
 
-auto Renderer::get_viewport_pos() -> glm::vec2 {
-	return _viewport_pos;
-}
-
-auto Renderer::get_viewport_size() -> glm::vec2 {
-	return _viewport_size;
+void Renderer::set_camera(camera::Camera* camera) {
+	_camera = camera;
 }
 
 void Renderer::set_depth_test(bool enabled) {
@@ -174,9 +170,14 @@ void Renderer::set_polygon_mode(PolygonMode mode) {
 	glPolygonMode(GL_FRONT_AND_BACK, static_cast<unsigned int>(mode));
 }
 
-void Renderer::set_camera(camera::Camera* camera) {
-	_camera = camera;
+auto Renderer::get_viewport_pos() -> glm::vec2 {
+	return _viewport_pos;
 }
+
+auto Renderer::get_viewport_size() -> glm::vec2 {
+	return _viewport_size;
+}
+
 auto Renderer::get_camera() -> camera::Camera* {
 	return _camera;
 }
