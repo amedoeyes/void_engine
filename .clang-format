@@ -5,6 +5,8 @@ IndentWidth: 4
 AccessModifierOffset: -4
 
 AlignAfterOpenBracket: BlockIndent
+PenaltyReturnTypeOnItsOwnLine: 1000
+
 AlignEscapedNewlines: Right
 AlignOperands: AlignAfterOperator
 
