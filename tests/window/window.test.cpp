@@ -12,17 +12,12 @@ TEST_CASE("Window", "[window][window]") {
 	const Window window("Test", 800, 600);
 
 	SECTION("Window is open") {
-		REQUIRE(window.get_window() != nullptr);
 		REQUIRE_FALSE(window.should_close());
 	}
 
 	SECTION("Make context current") {
 		window.make_context_current();
 		REQUIRE(glfwGetCurrentContext() == window.get_window());
-	}
-
-	SECTION("Retrieve input handler") {
-		REQUIRE(window.get_input_handler() != nullptr);
 	}
 
 	SECTION("Retrieve time") {

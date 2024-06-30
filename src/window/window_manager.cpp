@@ -57,7 +57,7 @@ void WindowManager::destroy(const std::string& name) {
 void WindowManager::poll_events() {
 	glfwPollEvents();
 	for (const auto& [_, window] : _windows) {
-		window->get_input_handler()->update();
+		window->input_handler()->update();
 		window->event_handler()->poll();
 	}
 }

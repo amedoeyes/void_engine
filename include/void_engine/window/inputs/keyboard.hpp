@@ -1,10 +1,15 @@
-#ifndef VOID_ENGINE_INPUT_KEYBOARD_HPP
-#define VOID_ENGINE_INPUT_KEYBOARD_HPP
+#ifndef VOID_ENGINE_WINDOW_INPUTS_KEYBOARD_HPP
+#define VOID_ENGINE_WINDOW_INPUTS_KEYBOARD_HPP
 
-#include <GLFW/glfw3.h>
+#include "void_engine/window/inputs/input_state.hpp"
+
 #include <unordered_map>
 
-namespace void_engine::input {
+namespace void_engine::window {
+
+class WindowInputHandler;
+
+namespace inputs {
 
 enum class KeyboardKey {
 	unknown = 0,
@@ -99,27 +104,22 @@ enum class KeyboardKey {
 };
 
 class Keyboard {
+	friend class void_engine::window::WindowInputHandler;
+
 public:
-	void update();
-
-	auto is_down(KeyboardKey key) const -> bool;
-	auto is_up(KeyboardKey key) const -> bool;
-	auto is_pressed(KeyboardKey key) const -> bool;
-
-	auto get_state(KeyboardKey key) const -> bool;
-	void set_state(KeyboardKey key, bool state);
-
-	auto get_prev_state(KeyboardKey key) const -> bool;
-	void set_prev_state(KeyboardKey key, bool state);
-
-	static void
-	callback(GLFWwindow* window, int key, int scancode, int action, int mods);
+	[[nodiscard]] auto is_down(KeyboardKey key) const -> bool;
+	[[nodiscard]] auto is_up(KeyboardKey key) const -> bool;
+	[[nodiscard]] auto is_pressed(KeyboardKey key) const -> bool;
 
 private:
-	std::unordered_map<KeyboardKey, bool> _states;
-	std::unordered_map<KeyboardKey, bool> _prev_states;
+	std::unordered_map<KeyboardKey, InputState<bool>> _keys;
+
+	void update();
+	void set_key(KeyboardKey key, bool state);
 };
 
-} // namespace void_engine::input
+} // namespace inputs
 
-#endif // !VOID_ENGINE_INPUT_KEYBOARD_HPP
+} // namespace void_engine::window
+
+#endif // !VOID_ENGINE_WINDOW_INPUTS_KEYBOARD_HPP

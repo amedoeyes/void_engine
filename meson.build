@@ -15,9 +15,6 @@ sources = files(
   './src/ecs/entity_storage.cpp',
   './src/ecs/pool_storage.cpp',
   './src/ecs/scene.cpp',
-  './src/input/input_handler.cpp',
-  './src/input/keyboard.cpp',
-  './src/input/mouse.cpp',
   './src/renderer/buffer.cpp',
   './src/renderer/camera/free_camera_2d.cpp',
   './src/renderer/camera/free_camera_3d.cpp',
@@ -29,7 +26,11 @@ sources = files(
   './src/resources/texture.cpp',
   './src/resources/texture_manager.cpp',
   './src/utils/logger.cpp',
+  './src/window/inputs/keyboard.cpp',
+  './src/window/inputs/mouse.cpp',
   './src/window/window.cpp',
+  './src/window/window_event_handler.cpp',
+  './src/window/window_input_handler.cpp',
   './src/window/window_manager.cpp',
 )
 include = include_directories('./include')

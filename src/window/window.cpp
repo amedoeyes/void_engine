@@ -1,6 +1,5 @@
 #include "void_engine/window/window.hpp"
 
-#include "void_engine/input/input_handler.hpp"
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
@@ -22,10 +21,11 @@ Window::Window(const std::string_view title, int width, int height) {
 	glfwMakeContextCurrent(_window);
 
 
-	_input_handler = new input::InputHandler(_window);
 
 	glfwSetWindowUserPointer(_window, this);
+
 	_event_handler = new WindowEventHandler(this);
+	_input_handler = new WindowInputHandler(this);
 }
 
 Window::~Window() {
@@ -50,12 +50,12 @@ void Window::close() const {
 	glfwSetWindowShouldClose(_window, true);
 }
 
-auto Window::get_input_handler() const -> input::InputHandler* {
-	return _input_handler;
-}
-
 auto Window::event_handler() -> WindowEventHandler* {
 	return _event_handler;
+}
+
+auto Window::input_handler() -> WindowInputHandler* {
+	return _input_handler;
 }
 
 auto Window::get_time() const -> float {
