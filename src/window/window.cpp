@@ -4,7 +4,6 @@
 #include "void_engine/utils/logger.hpp"
 
 #include <GLFW/glfw3.h>
-#include <functional>
 #include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
@@ -22,23 +21,17 @@ Window::Window(const std::string_view title, int width, int height) {
 
 	glfwMakeContextCurrent(_window);
 
-	glfwSetErrorCallback([](int, const char* description) {
-		utils::Logger::error("GLFW Error: {}", description);
-	});
 
 	_input_handler = new input::InputHandler(_window);
 
 	glfwSetWindowUserPointer(_window, this);
-	glfwSetWindowSizeCallback(_window, resize_callback);
+	_event_handler = new WindowEventHandler(this);
 }
 
 Window::~Window() {
 	delete _input_handler;
+	delete _event_handler;
 	glfwDestroyWindow(_window);
-}
-
-auto Window::get_window() const -> GLFWwindow* {
-	return _window;
 }
 
 void Window::make_context_current() const {
@@ -61,6 +54,10 @@ auto Window::get_input_handler() const -> input::InputHandler* {
 	return _input_handler;
 }
 
+auto Window::event_handler() -> WindowEventHandler* {
+	return _event_handler;
+}
+
 auto Window::get_time() const -> float {
 	return static_cast<float>(glfwGetTime());
 }
@@ -79,18 +76,12 @@ auto Window::get_size() const -> glm::vec2 {
 	return {width, height};
 }
 
-void Window::on_resize(const std::function<void(glm::vec2)>& callback) {
-	_resize_callback = callback;
 }
 
-void Window::resize_callback(glm::vec2 size) const {
-	if (_resize_callback == nullptr) return;
-	_resize_callback(size);
 }
 
-void Window::resize_callback(GLFWwindow* window, int width, int height) {
-	auto self = static_cast<Window*>(glfwGetWindowUserPointer(window));
-	self->resize_callback({width, height});
+auto Window::get_glfw_window() -> GLFWwindow* {
+	return _window;
 }
 
 } // namespace void_engine::window

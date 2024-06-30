@@ -19,10 +19,15 @@ void WindowManager::init() {
 		utils::Logger::error("Failed to initialize GLFW");
 		assert(false);
 	}
+
+	glfwSetErrorCallback([](int, const char* description) {
+		utils::Logger::error("GLFW Error: {}", description);
+	});
 }
 
 void WindowManager::terminate() {
 	for (const auto& [_, window] : _windows) delete window;
+	glfwSetErrorCallback(nullptr);
 	glfwTerminate();
 }
 
@@ -50,8 +55,11 @@ void WindowManager::destroy(const std::string& name) {
 }
 
 void WindowManager::poll_events() {
-	for (auto& [_, window] : _windows) window->get_input_handler()->update();
 	glfwPollEvents();
+	for (const auto& [_, window] : _windows) {
+		window->get_input_handler()->update();
+		window->event_handler()->poll();
+	}
 }
 
 } // namespace void_engine::window
