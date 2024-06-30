@@ -1,10 +1,9 @@
 #include "void_engine/window/window_manager.hpp"
 
 #include "void_engine/utils/logger.hpp"
-#include "void_engine/window/window.hpp"
 
 #include <GLFW/glfw3.h>
-#include <cassert>
+#include <glm/ext/vector_float2.hpp>
 #include <stdexcept>
 #include <string>
 #include <string_view>
@@ -16,8 +15,7 @@ std::unordered_map<std::string, Window*> WindowManager::_windows;
 
 void WindowManager::init() {
 	if (!glfwInit()) {
-		utils::Logger::error("Failed to initialize GLFW");
-		assert(false);
+		throw std::runtime_error("Failed to initialize GLFW");
 	}
 
 	glfwSetErrorCallback([](int, const char* description) {
@@ -26,30 +24,34 @@ void WindowManager::init() {
 }
 
 void WindowManager::terminate() {
-	for (const auto& [_, window] : _windows) delete window;
+	for (const auto& [_, window] : _windows) {
+		delete window;
+	}
 	glfwSetErrorCallback(nullptr);
 	glfwTerminate();
 }
 
 auto WindowManager::create(
-	const std::string& name, const std::string_view title, int width, int height
+	const std::string& name, const std::string_view title, const glm::vec2& size
 ) -> Window* {
-	auto* window = new Window(title, width, height);
+	auto* window = new Window(title, size);
 	_windows[name] = window;
 	return window;
 }
 
 auto WindowManager::get(const std::string& name) -> Window* {
-	auto it = _windows.find(name);
-	if (it == _windows.end())
+	const auto it = _windows.find(name);
+	if (it == _windows.end()) {
 		throw std::runtime_error("Window not found: " + name);
+	}
 	return it->second;
 }
 
 void WindowManager::destroy(const std::string& name) {
-	auto it = _windows.find(name);
-	if (it == _windows.end())
+	const auto it = _windows.find(name);
+	if (it == _windows.end()) {
 		throw std::runtime_error("Window not found: " + name);
+	}
 	delete it->second;
 	_windows.erase(it);
 }

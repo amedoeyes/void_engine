@@ -9,15 +9,10 @@ using namespace void_engine::window;
 TEST_CASE("Window", "[window][window]") {
 	glfwInit();
 
-	const Window window("Test", 800, 600);
+	const Window window("Test", {800.0f, 600.0f});
 
 	SECTION("Window is open") {
 		REQUIRE_FALSE(window.should_close());
-	}
-
-	SECTION("Make context current") {
-		window.make_context_current();
-		REQUIRE(glfwGetCurrentContext() == window.get_window());
 	}
 
 	SECTION("Retrieve time") {

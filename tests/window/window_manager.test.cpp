@@ -13,7 +13,8 @@ TEST_CASE("Window_manager", "[window][window_manager]") {
 	}
 
 	SECTION("Window creation") {
-		const Window* window = WindowManager::create("test", "Test", 800, 600);
+		const Window* window =
+			WindowManager::create("test", "Test", {800, 600});
 		REQUIRE(window != nullptr);
 	}
 

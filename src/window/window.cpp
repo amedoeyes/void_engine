@@ -8,20 +8,23 @@
 
 namespace void_engine::window {
 
-Window::Window(const std::string_view title, int width, int height) {
+Window::Window(const std::string_view title, const glm::vec2& size) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
 #endif
-	_window = glfwCreateWindow(width, height, title.data(), nullptr, nullptr);
-	if (_window == nullptr) utils::Logger::error("Failed to create window");
+
+	_window = glfwCreateWindow(
+		static_cast<int>(size.x), static_cast<int>(size.y), title.data(),
+		nullptr, nullptr
+	);
+	if (_window == nullptr) {
+		utils::Logger::error("Failed to create window");
+	}
 
 	glfwMakeContextCurrent(_window);
-
-
-
 	glfwSetWindowUserPointer(_window, this);
 
 	_event_handler = new WindowEventHandler(this);
@@ -42,10 +45,6 @@ void Window::swap_buffers() const {
 	glfwSwapBuffers(_window);
 }
 
-auto Window::should_close() const -> bool {
-	return glfwWindowShouldClose(_window);
-}
-
 void Window::close() const {
 	glfwSetWindowShouldClose(_window, true);
 }
@@ -58,16 +57,8 @@ auto Window::input_handler() -> WindowInputHandler* {
 	return _input_handler;
 }
 
-auto Window::get_time() const -> float {
-	return static_cast<float>(glfwGetTime());
-}
-
-auto Window::get_delta_time() const -> float {
-	static float last_frame_time = 0.0f;
-	auto current_time = static_cast<float>(glfwGetTime());
-	const float delta_time = current_time - last_frame_time;
-	last_frame_time = current_time;
-	return delta_time;
+auto Window::should_close() const -> bool {
+	return glfwWindowShouldClose(_window);
 }
 
 auto Window::get_size() const -> glm::vec2 {
@@ -76,8 +67,16 @@ auto Window::get_size() const -> glm::vec2 {
 	return {width, height};
 }
 
+auto Window::get_time() const -> float {
+	return static_cast<float>(glfwGetTime());
 }
 
+auto Window::get_delta_time() const -> float {
+	static float last_frame_time = 0.0f;
+	const auto current_time = static_cast<float>(glfwGetTime());
+	const float delta_time = current_time - last_frame_time;
+	last_frame_time = current_time;
+	return delta_time;
 }
 
 auto Window::get_glfw_window() -> GLFWwindow* {

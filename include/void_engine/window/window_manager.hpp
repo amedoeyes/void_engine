@@ -3,6 +3,7 @@
 
 #include "void_engine/window/window.hpp"
 
+#include <glm/ext/vector_float2.hpp>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -15,8 +16,8 @@ public:
 	static void terminate();
 
 	static auto create(
-		const std::string& name, const std::string_view title, int width,
-		int height
+		const std::string& name, const std::string_view title,
+		const glm::vec2& size
 	) -> Window*;
 	static void destroy(const std::string& name);
 	static auto get(const std::string& name) -> Window*;
