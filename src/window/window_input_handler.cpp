@@ -13,15 +13,13 @@
 
 namespace void_engine::window {
 
-WindowInputHandler::WindowInputHandler(Window* window) :
-	_window(window), _keyboard(new inputs::Keyboard()),
-	_mouse(new inputs::Mouse()) {
+WindowInputHandler::WindowInputHandler(Window* window) : _window(window) {
 	WindowEventHandler* event_handler = window->event_handler();
 
 	_keyboard_key_listener =
 		event_handler->add_listener<events::KeyboardKeyEvent>(
 			[this](const events::KeyboardKeyEvent& event) {
-				_keyboard->set_key(
+				_keyboard.set_key(
 					static_cast<inputs::KeyboardKey>(event.key),
 					event.action > 0
 				);
@@ -31,7 +29,7 @@ WindowInputHandler::WindowInputHandler(Window* window) :
 	_mouse_button_listener =
 		event_handler->add_listener<events::MouseButtonEvent>(
 			[this](const events::MouseButtonEvent& event) {
-				_mouse->set_button(
+				_mouse.set_button(
 					static_cast<inputs::MouseButton>(event.button),
 					event.action == 1
 				);
@@ -41,14 +39,14 @@ WindowInputHandler::WindowInputHandler(Window* window) :
 	_mouse_position_listener =
 		event_handler->add_listener<events::MousePositionEvent>(
 			[this](const events::MousePositionEvent& event) {
-				_mouse->set_position(event.position);
+				_mouse.set_position(event.position);
 			}
 		);
 
 	_mouse_scroll_listener =
 		event_handler->add_listener<events::MouseScrollEvent>(
 			[this](const events::MouseScrollEvent& event) {
-				_mouse->set_scroll(event.offset);
+				_mouse.set_scroll(event.offset);
 			}
 		);
 }
@@ -70,15 +68,15 @@ WindowInputHandler::~WindowInputHandler() {
 }
 
 void WindowInputHandler::update() {
-	_keyboard->update();
-	_mouse->update();
+	_keyboard.update();
+	_mouse.update();
 }
 
-auto WindowInputHandler::get_keyboard() const -> const inputs::Keyboard* {
+auto WindowInputHandler::get_keyboard() const -> const inputs::Keyboard& {
 	return _keyboard;
 }
 
-auto WindowInputHandler::get_mouse() const -> const inputs::Mouse* {
+auto WindowInputHandler::get_mouse() const -> const inputs::Mouse& {
 	return _mouse;
 }
 
