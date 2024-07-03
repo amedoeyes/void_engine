@@ -12,9 +12,9 @@ using namespace void_engine::window;
 
 namespace fs = std::filesystem;
 
-TEST_CASE("Image", "[resources][texture_manager]") {
+TEST_CASE("Texture Manager", "[resources][texture_manager]") {
 	WindowManager::init();
-	WindowManager::create("test", "test", 800, 600);
+	WindowManager::create("test", "test", {800, 600});
 	Renderer::init();
 	fs::path image_path = fs::relative("../tests/resources/cat.png");
 
