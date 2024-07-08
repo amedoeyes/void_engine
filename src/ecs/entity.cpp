@@ -1,4 +1,4 @@
-#include "void_engine/ecs/common.hpp"
+#include "void_engine/ecs/entity.hpp"
 
 namespace void_engine::ECS {
 
