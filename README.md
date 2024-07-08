@@ -1,6 +1,6 @@
 # Void Engine
 
-OpenGL game engine. This project is a work in progress and is not yet fully functional.
+Cross-platform composition-based OpenGL 4.6 game engine. This project is still a work in progress and is not yet fully functional.
 
 ## Building
 
