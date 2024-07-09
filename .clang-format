@@ -1,16 +1,12 @@
+BasedOnStyle: LLVM
+Language: Cpp
+Standard: c++20
 UseTab: Always
 TabWidth: 4
 IndentWidth: 4
-
+ColumnLimit: 100
 AccessModifierOffset: -4
 
-AlignAfterOpenBracket: BlockIndent
-PenaltyReturnTypeOnItsOwnLine: 1000
-
-AlignEscapedNewlines: Right
-AlignOperands: AlignAfterOperator
-
-AllowShortBlocksOnASingleLine: Never
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: None
@@ -18,16 +14,13 @@ AllowShortIfStatementsOnASingleLine: AllIfsAndElse
 AllowShortLambdasOnASingleLine: None
 AllowShortLoopsOnASingleLine: true
 
-AlwaysBreakTemplateDeclarations: true
-BreakConstructorInitializers: AfterColon
-
-IndentCaseLabels: true
-
-PointerAlignment: Left
+AlignAfterOpenBracket: BlockIndent
+AlignEscapedNewlines: Right
 QualifierAlignment: Left
+PointerAlignment: Left
 ReferenceAlignment: Pointer
 
-IncludeBlocks: Regroup
+PenaltyReturnTypeOnItsOwnLine: 1000
+AlwaysBreakTemplateDeclarations: true
 
-RemoveParentheses: MultipleParentheses
-RemoveSemicolon: true
+IndentCaseLabels: true
