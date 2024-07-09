@@ -34,7 +34,7 @@ include = include_directories('./include')
 dependencies = [
   subproject('glm').get_variable('glm_dep'),
   subproject('glfw').get_variable('glfw_dep'),
-  subproject('glad').get_variable('glad_dep'),
+  subproject('glad', default_options: ['api=gl:core=4.6', 'reproducible=true']).get_variable('glad_dep'),
   subproject('libpng').get_variable('libpng_dep'),
 ]
 

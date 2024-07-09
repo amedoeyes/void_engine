@@ -14,7 +14,7 @@ test_sources = files(
   './window/window_manager.test.cpp',
 )
 test_dependencies = [
-  subproject('catch2').get_variable('catch2_with_main_dep'),
+  subproject('catch2', default_options: ['tests=false']).get_variable('catch2_with_main_dep'),
 ]
 
 void_engine_test_exec = executable(
