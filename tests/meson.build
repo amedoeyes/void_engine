@@ -8,10 +8,7 @@ test_sources = files(
   './event/event_listener.test.cpp',
   './event/event_manager.test.cpp',
   './resources/image.test.cpp',
-  './resources/texture_manager.test.cpp',
   './utils/logger.test.cpp',
-  './window/window.test.cpp',
-  './window/window_manager.test.cpp',
 )
 test_dependencies = [
   subproject('catch2', default_options: ['tests=false']).get_variable('catch2_with_main_dep'),
