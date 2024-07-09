@@ -7,8 +7,8 @@
 #include "void_engine/event/types.hpp"
 
 #include <algorithm>
+#include <cassert>
 #include <queue>
-#include <stdexcept>
 #include <unordered_map>
 #include <utility>
 #include <vector>
@@ -38,15 +38,11 @@ public:
 	void remove_listener(const EventListener<EventType>* listener) {
 		const EventID id = get_event_id<EventType>();
 		const auto listeners_it = _listeners.find(id);
-		if (listeners_it == _listeners.end()) {
-			throw std::runtime_error("Could not find listeners");
-		}
+		assert(listeners_it != _listeners.end() && "Event does not exist");
 		auto& listeners = listeners_it->second;
 		const auto listener_it =
 			std::find(listeners.begin(), listeners.end(), listener);
-		if (listener_it == listeners.end()) {
-			throw std::runtime_error("Could not find listener");
-		}
+		assert(listener_it != listeners.end() && "Listener does not exist");
 		listeners.erase(listener_it);
 		delete listener;
 	}
