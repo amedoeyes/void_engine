@@ -33,9 +33,9 @@ public:
 	~WindowEventHandler();
 
 	template <typename EventType>
-	auto add_listener(const event::Callback<EventType>& callback)
+	auto add_listener(event::EventListener<EventType>::Callback&& callback)
 		-> event::EventListener<EventType>* {
-		return _event_manager.add_listener<EventType>(callback);
+		return _event_manager.add_listener<EventType>(std::move(callback));
 	}
 
 	template <typename EventType>
