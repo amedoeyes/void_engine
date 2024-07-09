@@ -26,10 +26,10 @@ public:
 	}
 
 	template <typename EventType>
-	auto add_listener(const Callback<EventType>& callback)
+	auto add_listener(Callback<EventType>&& callback)
 		-> EventListener<EventType>* {
 		const EventID id = get_event_id<EventType>();
-		auto* listener = new EventListener<EventType>(callback);
+		auto* listener = new EventListener(std::move(callback));
 		_listeners[id].push_back(listener);
 		return listener;
 	}

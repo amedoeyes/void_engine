@@ -11,7 +11,8 @@ namespace void_engine::event {
 template <typename EventType>
 class EventListener : public EventListenerBase {
 public:
-	EventListener(const Callback<EventType>& callback) : _callback(callback) {
+	EventListener(Callback<EventType>&& callback) :
+		_callback(std::move(callback)) {
 	}
 
 	void emit(const EventBase* event) const override {
