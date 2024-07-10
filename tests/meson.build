@@ -11,7 +11,7 @@ test_sources = files(
   './utils/logger.test.cpp',
 )
 test_dependencies = [
-  subproject('catch2', default_options: ['tests=false']).get_variable('catch2_with_main_dep'),
+  subproject('catch2', default_options: ['tests=false']).get_variable('catch2_with_main_dep').as_system(),
 ]
 
 void_engine_test_exec = executable(

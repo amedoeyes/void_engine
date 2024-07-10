@@ -32,10 +32,10 @@ sources = files(
 )
 include = include_directories('./include')
 dependencies = [
-  subproject('glm').get_variable('glm_dep'),
-  subproject('glfw').get_variable('glfw_dep'),
-  subproject('glad', default_options: ['api=gl:core=4.6', 'reproducible=true']).get_variable('glad_dep'),
-  subproject('libpng').get_variable('libpng_dep'),
+  subproject('glm').get_variable('glm_dep').as_system(),
+  subproject('glfw').get_variable('glfw_dep').as_system(),
+  subproject('glad', default_options: ['api=gl:core=4.6', 'reproducible=true']).get_variable('glad_dep').as_system(),
+  subproject('libpng').get_variable('libpng_dep').as_system(),
 ]
 
 add_project_arguments('-DGLFW_INCLUDE_NONE', language: 'cpp')
