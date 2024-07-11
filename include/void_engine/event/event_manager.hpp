@@ -1,6 +1,7 @@
 #ifndef VOID_ENGINE_EVENT_EVENT_MANAGER_HPP
 #define VOID_ENGINE_EVENT_EVENT_MANAGER_HPP
 
+#include "void_engine/event/event.hpp"
 #include "void_engine/event/event_base.hpp"
 #include "void_engine/event/event_listener.hpp"
 #include "void_engine/event/event_listener_base.hpp"
