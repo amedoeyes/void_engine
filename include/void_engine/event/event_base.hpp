@@ -5,6 +5,11 @@ namespace void_engine::event {
 
 class EventBase {
 public:
+	EventBase(const EventBase&) = delete;
+	EventBase(EventBase&&) = delete;
+	auto operator=(const EventBase&) -> EventBase& = delete;
+	auto operator=(EventBase&&) -> EventBase& = delete;
+	EventBase() = default;
 	virtual ~EventBase() = default;
 };
 

@@ -19,6 +19,11 @@ using EventID = uint32_t;
 
 class EventManager {
 public:
+	EventManager(const EventManager&) = default;
+	EventManager(EventManager&&) = delete;
+	auto operator=(const EventManager&) -> EventManager& = default;
+	auto operator=(EventManager&&) -> EventManager& = delete;
+	EventManager() = default;
 	~EventManager() {
 		for (const auto& [_, listeners] : _listeners) {
 			for (const auto& listener : listeners) {
@@ -28,8 +33,7 @@ public:
 	}
 
 	template <typename EventType>
-	auto add_listener(EventListener<EventType>::Callback&& callback)
-		-> EventListener<EventType>* {
+	auto add_listener(EventListener<EventType>::Callback&& callback) -> EventListener<EventType>* {
 		const EventID id = get_event_id<EventType>();
 		auto* listener = new EventListener(std::move(callback));
 		_listeners[id].push_back(listener);
@@ -39,14 +43,10 @@ public:
 	template <typename EventType>
 	void remove_listener(const EventListener<EventType>* listener) {
 		const EventID id = get_event_id<EventType>();
-		assert(_listeners.find(id) != _listeners.end() &&
-			   "Event does not exist");
-		assert(std::find(_listeners[id].begin(), _listeners[id].end(),
-						 listener) != _listeners[id].end() &&
-			   "Listener does not exist");
-		_listeners[id].erase(
-			std::remove(_listeners[id].begin(), _listeners[id].end(), listener),
-			_listeners[id].end());
+		assert(_listeners.find(id) != _listeners.end() && "Event does not exist");
+		const auto it = std::find(_listeners[id].begin(), _listeners[id].end(), listener);
+		assert(it != _listeners[id].end() && "Listener does not exist");
+		_listeners[id].erase(it);
 		delete listener;
 	}
 
@@ -67,8 +67,7 @@ public:
 	template <typename EventType>
 	void remove() {
 		const EventID id = get_event_id<EventType>();
-		assert(_listeners.find(id) != _listeners.end() &&
-			   "Event does not exist");
+		assert(_listeners.find(id) != _listeners.end() && "Event does not exist");
 		for (const auto& listener : _listeners[id]) {
 			delete listener;
 		}
@@ -90,7 +89,7 @@ private:
 	std::unordered_map<EventID, std::vector<EventListenerBase*>> _listeners;
 	std::queue<std::pair<EventID, const EventBase*>> _queue;
 
-	[[nodiscard]] auto event_counter() const -> EventID {
+	[[nodiscard]] static auto event_counter() -> EventID {
 		static EventID counter = 0;
 		return counter++;
 	}

@@ -7,6 +7,11 @@ namespace void_engine::event {
 
 class EventListenerBase {
 public:
+	EventListenerBase(const EventListenerBase&) = default;
+	EventListenerBase(EventListenerBase&&) = delete;
+	auto operator=(const EventListenerBase&) -> EventListenerBase& = default;
+	auto operator=(EventListenerBase&&) -> EventListenerBase& = delete;
+	EventListenerBase() = default;
 	virtual ~EventListenerBase() = default;
 	virtual void emit(const EventBase* event) const = 0;
 };

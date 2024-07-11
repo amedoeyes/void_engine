@@ -14,11 +14,18 @@ class EventListener : public EventListenerBase {
 public:
 	using Callback = std::function<void(const EventType&)>;
 
-	EventListener(Callback&& callback) : _callback(std::move(callback)) {
+	EventListener(const EventListener&) = delete;
+	EventListener(EventListener&&) = delete;
+	auto operator=(const EventListener&) -> EventListener& = delete;
+	auto operator=(EventListener&&) -> EventListener& = delete;
+	explicit EventListener(Callback&& callback) : _callback(std::move(callback)) {
 	}
+	~EventListener() override = default;
 
 	void emit(const EventBase* event) const override {
-		if (_callback == nullptr) return;
+		if (_callback == nullptr) {
+			return;
+		}
 		_callback(static_cast<const Event<EventType>*>(event)->get_data());
 	}
 
