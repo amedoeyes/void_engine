@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 using Entity = uint64_t;
 using EntityIndex = uint32_t;
@@ -13,6 +13,6 @@ auto create_entity(EntityIndex index, EntityVersion version) -> Entity;
 auto get_entity_index(Entity entity) -> EntityIndex;
 auto get_entity_version(Entity entity) -> EntityVersion;
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif // !VOID_ENGINE_ECS_TYPES_HPP

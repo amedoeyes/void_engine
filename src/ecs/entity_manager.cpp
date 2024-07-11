@@ -2,7 +2,7 @@
 
 #include "void_engine/ecs/entity.hpp"
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 auto EntityManager::create() -> Entity {
 	if (!_free.empty()) {
@@ -25,4 +25,4 @@ auto EntityManager::contains(Entity entity) const -> bool {
 	return _data[get_entity_index(entity)] == entity;
 }
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs

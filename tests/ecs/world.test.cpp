@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace void_engine::ECS;
+using namespace void_engine::ecs;
 
 struct Position {
 	int x;

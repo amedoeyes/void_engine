@@ -8,7 +8,7 @@
 #include <cstddef>
 #include <vector>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 constexpr auto invalid_index = size_t(-1);
 
@@ -98,6 +98,6 @@ private:
 	std::vector<Component*> _data;
 };
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif // !VOID_ENGINE_ECS_COMPONENT_POOL_HPP

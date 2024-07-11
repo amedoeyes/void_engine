@@ -5,7 +5,7 @@
 
 #include <vector>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 class ComponentPoolBase {
 public:
@@ -15,6 +15,6 @@ public:
 		-> const std::vector<Entity>& = 0;
 };
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif // !VOID_ENGINE_ECS_COMPONENT_POOL_BASE_HPP

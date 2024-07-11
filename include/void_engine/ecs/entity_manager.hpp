@@ -6,7 +6,7 @@
 #include <queue>
 #include <vector>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 class EntityManager {
 public:
@@ -19,6 +19,6 @@ private:
 	std::queue<EntityIndex> _free;
 };
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif // !VOID_ENGINE_ECS_ENTITY_STORAGE_HPP

@@ -9,7 +9,7 @@
 #include <tuple>
 #include <vector>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 class World {
 public:
@@ -127,6 +127,6 @@ private:
 	ComponentPoolManager _pools;
 };
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif //! VOID_ENGINE_ECS_WORLD_HPP

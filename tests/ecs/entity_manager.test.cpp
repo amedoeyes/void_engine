@@ -4,7 +4,7 @@
 
 #include <catch2/catch_test_macros.hpp>
 
-using namespace void_engine::ECS;
+using namespace void_engine::ecs;
 
 TEST_CASE("Entity Manager", "[ecs][entity_manager]") {
 	EntityManager entites;

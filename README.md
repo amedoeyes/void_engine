@@ -15,7 +15,7 @@ This project uses XMake as its build system. To build the project, simply run `x
 To start using the ECS, you need to create a new `World` object. The `World` object is the main container for all entities and components.
 
 ```c++
-using namespace void_engine::ECS;
+using namespace void_engine::ecs;
 
 World world;
 ```

@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-namespace void_engine::ECS {
+namespace void_engine::ecs {
 
 using ComponentID = uint16_t;
 
@@ -152,6 +152,6 @@ private:
 	}
 };
 
-} // namespace void_engine::ECS
+} // namespace void_engine::ecs
 
 #endif // !VOID_ENGINE_ECS_COMPONENT_POOL_MANAGER_HPP
