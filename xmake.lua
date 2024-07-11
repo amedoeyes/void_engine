@@ -12,8 +12,6 @@ if is_mode("debug") then
 	add_defines("DEBUG")
 end
 
-add_repositories("repo ./repo")
-
 add_requireconfs("*", { system = false })
 add_requires("glm ^1.0.1", "glfw ^3.4", "glad 0.1.36", "libpng ^1.6.43")
 add_requireconfs("glad", { configs = { profile = "core" } })
