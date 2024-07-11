@@ -1,7 +1,0 @@
-[wrap-git]
-url = https://github.com/amedoeyes/glad.git
-revision = head
-depth = 1
-
-[provide]
-glad = glad_dep
