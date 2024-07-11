@@ -24,3 +24,5 @@ PenaltyReturnTypeOnItsOwnLine: 1000
 AlwaysBreakTemplateDeclarations: true
 
 IndentCaseLabels: true
+
+IncludeBlocks: Regroup
