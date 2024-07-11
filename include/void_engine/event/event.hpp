@@ -15,7 +15,7 @@ public:
 	auto operator=(const Event&) -> Event& = delete;
 	auto operator=(Event&&) -> Event& = delete;
 	Event() = default;
-	explicit Event(EventType&& data) : _data(std::forward<EventType>(data)) {
+	explicit Event(EventType&& data) : _data(std::move(data)) {
 	}
 	~Event() override = default;
 
