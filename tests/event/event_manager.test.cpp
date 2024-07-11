@@ -15,7 +15,7 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 		events.add_listener<TestEvent>([](const TestEvent& event) {
 			REQUIRE(event.data == 10);
 		});
-		events.emit<TestEvent>(10);
+		events.emit(TestEvent{10});
 		events.poll();
 	}
 
@@ -25,8 +25,8 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 			REQUIRE(event.data == 10 + count * 10);
 			count++;
 		});
-		events.emit<TestEvent>(10);
-		events.emit<TestEvent>(20);
+		events.emit(TestEvent{10});
+		events.emit(TestEvent{20});
 		events.poll();
 	}
 
@@ -37,7 +37,7 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 		events.add_listener<TestEvent>([&](const TestEvent& event) {
 			REQUIRE(event.data == 10);
 		});
-		events.emit<TestEvent>(10);
+		events.emit(TestEvent{10});
 		events.poll();
 	}
 
@@ -52,19 +52,18 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 			REQUIRE(event.data == 10 + count * 10);
 			count++;
 		});
-		events.emit<TestEvent>(10);
-		events.emit<TestEvent>(20);
+		events.emit(TestEvent{10});
+		events.emit(TestEvent{20});
 		events.poll();
 	}
 
 	SECTION("Remove listener") {
 		int data = 0;
-		auto listener =
-			events.add_listener<TestEvent>([&](const TestEvent& event) {
-				data = event.data;
-			});
+		auto* listener = events.add_listener<TestEvent>([&](const TestEvent& event) {
+			data = event.data;
+		});
 		events.remove_listener<TestEvent>(listener);
-		events.emit<TestEvent>(10);
+		events.emit(TestEvent{10});
 		events.poll();
 		REQUIRE(data == 0);
 	}
@@ -74,7 +73,7 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 		events.add_listener<TestEvent>([&](const TestEvent& event) {
 			data = event.data;
 		});
-		events.emit<TestEvent>(10);
+		events.emit(TestEvent{10});
 		events.remove<TestEvent>();
 		events.poll();
 		REQUIRE(data == 0);

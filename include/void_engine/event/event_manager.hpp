@@ -50,10 +50,17 @@ public:
 		delete listener;
 	}
 
-	template <typename EventType, typename... Args>
-	void emit(Args&&... args) {
+	template <typename EventType>
+	void emit(EventType&& data) {
 		const EventID id = get_event_id<EventType>();
-		const auto* event = new Event<EventType>({std::forward<Args>(args)...});
+		auto* event = new Event<EventType>(std::forward<EventType>(data));
+		_queue.push({id, event});
+	}
+
+	template <typename EventType>
+	void emit() {
+		const EventID id = get_event_id<EventType>();
+		auto* event = new Event<EventType>();
 		_queue.push({id, event});
 	}
 

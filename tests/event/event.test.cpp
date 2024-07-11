@@ -9,7 +9,6 @@ struct TestEvent {
 };
 
 TEST_CASE("Event", "[event][event]") {
-	const TestEvent test_event{10};
-	Event<TestEvent> event(test_event);
-	REQUIRE(event.get_data().data == test_event.data);
+	Event<TestEvent> event(TestEvent{10});
+	REQUIRE(event.get_data().data == 10);
 }

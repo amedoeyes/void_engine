@@ -8,7 +8,7 @@ namespace void_engine::event {
 template <typename EventType>
 class Event : public EventBase {
 public:
-	Event(const EventType& data) : _data(data) {
+	explicit Event(EventType&& data) : _data(std::forward<EventType>(data)) {
 	}
 
 	auto get_data() const -> const EventType& {
