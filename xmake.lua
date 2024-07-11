@@ -33,5 +33,13 @@ option("tests", {
 })
 
 if has_config("tests") then
-	includes("tests")
+	add_requires("catch2 ^3.6.0")
+
+	target("tests", {
+		kind = "binary",
+		files = "tests/**.cpp",
+		includedirs = "include",
+		deps = "void_engine",
+		packages = "catch2",
+	})
 end
