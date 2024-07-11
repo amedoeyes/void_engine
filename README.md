@@ -8,12 +8,7 @@ Cross-platform composition-based OpenGL 4.6 game engine. This project is still a
 
 ## Building
 
-This project uses Meson as its build system. To build the project, run the following commands:
-
-```bash
-meson setup build --buildtype=debugoptimized
-meson compile -C build
-```
+This project uses XMake as its build system. To build the project, simply run `xmake` in the root directory of the project.
 
 ## Entity Component System
 

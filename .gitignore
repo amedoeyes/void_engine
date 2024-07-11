@@ -1,7 +1,2 @@
-.cache
 build
-subprojects/*
-!subprojects/catch2.wrap
-!subprojects/glad.wrap
-!subprojects/glfw.wrap
-!subprojects/glm.wrap
+.xmake
