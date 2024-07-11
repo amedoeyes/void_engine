@@ -1,3 +1,4 @@
+#include "void_engine/event/event.hpp"
 #include "void_engine/event/event_listener.hpp"
 
 #include <catch2/catch_test_macros.hpp>
@@ -9,7 +10,7 @@ struct TestEvent {
 };
 
 TEST_CASE("Event Listener", "[event][event_listener]") {
-	EventListener<TestEvent> event_listener([](const TestEvent& event) {
+	const EventListener<TestEvent> event_listener([](const TestEvent& event) {
 		REQUIRE(event.data == 10);
 	});
 	Event<TestEvent> event(TestEvent{10});

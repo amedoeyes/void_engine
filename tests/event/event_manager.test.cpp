@@ -8,6 +8,7 @@ struct TestEvent {
 	int data;
 };
 
+// NOLINTBEGIN(readability-function-cognitive-complexity)
 TEST_CASE("Event Manager", "[event][event_manager]") {
 	EventManager events;
 
@@ -79,3 +80,4 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 		REQUIRE(data == 0);
 	}
 }
+// NOLINTEND(readability-function-cognitive-complexity)
