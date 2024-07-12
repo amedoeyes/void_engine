@@ -13,6 +13,13 @@ namespace void_engine::ecs {
 
 class World {
 public:
+	World(const World&) = default;
+	World(World&&) = delete;
+	auto operator=(const World&) -> World& = default;
+	auto operator=(World&&) -> World& = delete;
+	World() = default;
+	~World() = default;
+
 	auto create() -> Entity {
 		return _entities.create();
 	}
@@ -62,8 +69,7 @@ public:
 
 	template <typename... Components>
 		requires(sizeof...(Components) > 1)
-	auto attach(Entity entity, Components&&... components)
-		-> std::tuple<Components&...> {
+	auto attach(Entity entity, Components&&... components) -> std::tuple<Components&...> {
 		assert(contains(entity) && "Entity does not exist");
 		return {_pools.create(entity, std::forward<Components>(components))...};
 	}

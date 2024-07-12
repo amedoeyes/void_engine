@@ -10,8 +10,15 @@ namespace void_engine::ecs {
 
 class EntityManager {
 public:
-	auto create() -> Entity;
-	void destroy(Entity id);
+	EntityManager(const EntityManager&) = default;
+	EntityManager(EntityManager&&) noexcept = default;
+	auto operator=(const EntityManager&) -> EntityManager& = default;
+	auto operator=(EntityManager&&) -> EntityManager& = default;
+	EntityManager() = default;
+	~EntityManager() = default;
+
+	[[nodiscard]] auto create() -> Entity;
+	void destroy(Entity entity);
 	[[nodiscard]] auto contains(Entity entity) const -> bool;
 
 private:

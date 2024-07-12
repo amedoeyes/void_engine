@@ -2,6 +2,7 @@
 
 #include "void_engine/ecs/entity.hpp"
 
+#include <algorithm>
 #include <catch2/catch_test_macros.hpp>
 
 using namespace void_engine::ecs;
@@ -146,12 +147,8 @@ TEST_CASE("World", "[ecs][world]") {
 		const Entity e2 = world.create<Velocity>();
 		const auto& entities = world.query();
 		REQUIRE(entities.size() == 2);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e1) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e2) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e1) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e2) != entities.end());
 	}
 
 	SECTION("Query entities with component") {
@@ -159,9 +156,7 @@ TEST_CASE("World", "[ecs][world]") {
 		world.create<Velocity>();
 		const auto& entities = world.query<Position>();
 		REQUIRE(entities.size() == 1);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e) != entities.end());
 	}
 
 	SECTION("Query entities with multiple components") {
@@ -169,8 +164,6 @@ TEST_CASE("World", "[ecs][world]") {
 		world.create<Position>();
 		const auto& entities = world.query<Position, Velocity>();
 		REQUIRE(entities.size() == 1);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e) != entities.end());
 	}
 }

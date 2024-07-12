@@ -15,6 +15,11 @@ constexpr auto invalid_index = size_t(-1);
 template <typename Component>
 class ComponentPool : public ComponentPoolBase {
 public:
+	ComponentPool(const ComponentPool&) = delete;
+	ComponentPool(ComponentPool&&) = delete;
+	auto operator=(const ComponentPool&) -> ComponentPool& = delete;
+	auto operator=(ComponentPool&&) -> ComponentPool& = delete;
+	ComponentPool() = default;
 	~ComponentPool() override {
 		for (const auto* component : _data) {
 			delete component;
@@ -83,12 +88,13 @@ public:
 
 	[[nodiscard]] auto contains(Entity entity) const -> bool {
 		const EntityIndex index = get_entity_index(entity);
-		if (index >= _sparse.size()) return false;
+		if (index >= _sparse.size()) {
+			return false;
+		}
 		return _sparse[index] != invalid_index;
 	}
 
-	[[nodiscard]] auto get_entities() const
-		-> const std::vector<Entity>& override {
+	[[nodiscard]] auto get_entities() const -> const std::vector<Entity>& override {
 		return _packed;
 	}
 

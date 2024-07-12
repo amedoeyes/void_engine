@@ -6,6 +6,7 @@
 #include "void_engine/ecs/entity.hpp"
 
 #include <algorithm>
+#include <array>
 #include <cassert>
 #include <cstdint>
 #include <iterator>
@@ -20,6 +21,11 @@ using ComponentID = uint16_t;
 
 class ComponentPoolManager {
 public:
+	ComponentPoolManager(const ComponentPoolManager&) = default;
+	ComponentPoolManager(ComponentPoolManager&&) = delete;
+	auto operator=(const ComponentPoolManager&) -> ComponentPoolManager& = default;
+	auto operator=(ComponentPoolManager&&) -> ComponentPoolManager& = delete;
+	ComponentPoolManager() = default;
 	~ComponentPoolManager() {
 		for (auto& [_, pool] : _pools) {
 			delete pool;
@@ -68,7 +74,9 @@ public:
 	template <typename Component>
 	[[nodiscard]] auto contains(Entity entity) const -> bool {
 		auto* pool = get_pool<Component>();
-		if (pool == nullptr) return false;
+		if (pool == nullptr) {
+			return false;
+		}
 		return pool->contains(entity);
 	}
 
@@ -94,14 +102,16 @@ public:
 	[[nodiscard]] auto query() const -> const std::vector<Entity>& {
 		static const std::vector<Entity> empty;
 		auto* pool = get_pool<Component>();
-		if (pool == nullptr) return empty;
+		if (pool == nullptr) {
+			return empty;
+		}
 		return pool->get_entities();
 	}
 
 	template <typename... Components>
 		requires(sizeof...(Components) > 1)
 	[[nodiscard]] auto query() const -> std::vector<Entity> {
-		const std::vector<const std::vector<Entity>*> pools = {
+		const std::array<const std::vector<Entity>*, sizeof...(Components)> pools = {
 			&query<Components>()...
 		};
 		const std::vector<Entity>* smallest_pool = pools[0];
@@ -123,7 +133,7 @@ public:
 private:
 	std::unordered_map<ComponentID, ComponentPoolBase*> _pools;
 
-	[[nodiscard]] auto component_counter() const -> ComponentID {
+	[[nodiscard]] static auto component_counter() -> ComponentID {
 		static ComponentID counter = 0;
 		return counter++;
 	}
@@ -147,7 +157,9 @@ private:
 	template <typename Component>
 	[[nodiscard]] auto get_pool() const -> ComponentPool<Component>* {
 		const auto it = _pools.find(get_component_id<Component>());
-		if (it == _pools.end()) return nullptr;
+		if (it == _pools.end()) {
+			return nullptr;
+		}
 		return static_cast<ComponentPool<Component>*>(it->second);
 	}
 };

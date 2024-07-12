@@ -3,7 +3,9 @@
 #include "void_engine/ecs/entity.hpp"
 #include "void_engine/ecs/entity_manager.hpp"
 
+#include <algorithm>
 #include <catch2/catch_test_macros.hpp>
+#include <vector>
 
 using namespace void_engine::ecs;
 
@@ -136,18 +138,10 @@ TEST_CASE("Component Pool Manager", "[ecs][component_pool_manager]") {
 		pools.create<Velocity>(e4);
 		const std::vector<Entity> entities = pools.query();
 		REQUIRE(entities.size() == 4);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e1) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e2) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e3) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e4) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e1) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e2) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e3) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e4) != entities.end());
 	}
 
 	SECTION("Get entities with component") {
@@ -163,15 +157,9 @@ TEST_CASE("Component Pool Manager", "[ecs][component_pool_manager]") {
 		pools.create<Position>(e4);
 		const std::vector<Entity>& entities = pools.query<Position>();
 		REQUIRE(entities.size() == 3);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e1) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e2) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e4) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e1) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e2) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e4) != entities.end());
 	}
 
 	SECTION("Get entities with multiple components") {
@@ -188,14 +176,8 @@ TEST_CASE("Component Pool Manager", "[ecs][component_pool_manager]") {
 		pools.create<Position>(e4);
 		const std::vector<Entity>& entities = pools.query<Position, Velocity>();
 		REQUIRE(entities.size() == 3);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e1) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e2) != entities.end()
-		);
-		REQUIRE(
-			std::find(entities.begin(), entities.end(), e3) != entities.end()
-		);
+		REQUIRE(std::find(entities.begin(), entities.end(), e1) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e2) != entities.end());
+		REQUIRE(std::find(entities.begin(), entities.end(), e3) != entities.end());
 	}
 }

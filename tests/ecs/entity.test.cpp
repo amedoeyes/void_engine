@@ -10,10 +10,7 @@ TEST_CASE("Entity", "[ecs][entity]") {
 	const Entity entity = create_entity(index, version);
 
 	SECTION("Create entity") {
-		REQUIRE(
-			entity ==
-			((static_cast<Entity>(index) << 32) | static_cast<Entity>(version))
-		);
+		REQUIRE(entity == ((static_cast<Entity>(index) << 32u) | static_cast<Entity>(version)));
 	}
 
 	SECTION("Get entity index") {

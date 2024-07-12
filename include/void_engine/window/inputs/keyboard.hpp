@@ -3,6 +3,7 @@
 
 #include "void_engine/window/inputs/input_state.hpp"
 
+#include <cstdint>
 #include <unordered_map>
 
 namespace void_engine::window {
@@ -11,7 +12,7 @@ class WindowInputHandler;
 
 namespace inputs {
 
-enum class KeyboardKey {
+enum class KeyboardKey : std::uint16_t {
 	unknown = 0,
 	space = 32,
 	apostrophe = 39,

@@ -3,6 +3,7 @@
 
 #include "void_engine/window/inputs/input_state.hpp"
 
+#include <cstdint>
 #include <glm/ext/vector_float2.hpp>
 #include <unordered_map>
 
@@ -12,7 +13,7 @@ class WindowInputHandler;
 
 namespace inputs {
 
-enum class MouseButton {
+enum class MouseButton : std::uint8_t {
 	left = 0,
 	right = 1,
 	middle = 2
