@@ -35,6 +35,12 @@ void WindowManager::terminate() {
 auto WindowManager::create(std::string_view name, std::string_view title, const glm::vec2& size)
 	-> Window& {
 	assert(_windows.find(std::string(name)) == _windows.end() && "Window already exists");
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+#ifdef DEBUG
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
+#endif
 	auto [it, _] = _windows.emplace(name, new Window(title, size));
 	return *it->second;
 }

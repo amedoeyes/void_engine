@@ -11,21 +11,12 @@
 namespace void_engine::window {
 
 Window::Window(std::string_view title, const glm::vec2& size) {
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-#ifdef DEBUG
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
-#endif
-
 	_window = glfwCreateWindow(
 		static_cast<int>(size.x), static_cast<int>(size.y), title.data(), nullptr, nullptr
 	);
 	assert(_window != nullptr && "Failed to create window");
-
 	glfwMakeContextCurrent(_window);
 	glfwSetWindowUserPointer(_window, this);
-
 	_event_handler = new WindowEventHandler(*this);
 	_input_handler = new WindowInputHandler(*this);
 }
