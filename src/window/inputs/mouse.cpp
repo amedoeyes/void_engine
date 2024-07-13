@@ -25,19 +25,25 @@ void Mouse::set_scroll(const glm::vec2& scroll) {
 
 auto Mouse::is_down(MouseButton button) const -> bool {
 	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) return false;
+	if (it == _buttons.end()) {
+		return false;
+	}
 	return it->second.current;
 }
 
 auto Mouse::is_up(MouseButton button) const -> bool {
 	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) return false;
+	if (it == _buttons.end()) {
+		return false;
+	}
 	return !it->second.current;
 }
 
 auto Mouse::is_pressed(MouseButton button) const -> bool {
 	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) return false;
+	if (it == _buttons.end()) {
+		return false;
+	}
 	return it->second.current && !it->second.previous;
 }
 

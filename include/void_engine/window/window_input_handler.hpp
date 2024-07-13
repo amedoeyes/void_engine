@@ -24,19 +24,23 @@ class Window;
 
 class WindowInputHandler {
 public:
-	WindowInputHandler(Window* window);
+	WindowInputHandler(const WindowInputHandler&) = default;
+	WindowInputHandler(WindowInputHandler&&) = delete;
+	auto operator=(const WindowInputHandler&) -> WindowInputHandler& = default;
+	auto operator=(WindowInputHandler&&) -> WindowInputHandler& = delete;
+	explicit WindowInputHandler(Window& window);
 	~WindowInputHandler();
 
 	void update();
 
-	[[nodiscard]] auto get_keyboard() const -> const inputs::Keyboard*;
-	[[nodiscard]] auto get_mouse() const -> const inputs::Mouse*;
+	[[nodiscard]] auto get_keyboard() const -> const inputs::Keyboard&;
+	[[nodiscard]] auto get_mouse() const -> const inputs::Mouse&;
 
 private:
 	Window* _window;
 
-	inputs::Keyboard* _keyboard;
-	inputs::Mouse* _mouse;
+	inputs::Keyboard _keyboard;
+	inputs::Mouse _mouse;
 
 	event::EventListener<events::KeyboardKeyEvent>* _keyboard_key_listener;
 	event::EventListener<events::MouseButtonEvent>* _mouse_button_listener;

@@ -1,193 +1,154 @@
 #include "void_engine/window/window_event_handler.hpp"
 
+#include "void_engine/window/events/drop_event.hpp"
+#include "void_engine/window/events/framebuffer_size_event.hpp"
+#include "void_engine/window/events/keyboard_char_event.hpp"
+#include "void_engine/window/events/keyboard_char_mods_event.hpp"
+#include "void_engine/window/events/keyboard_key_event.hpp"
+#include "void_engine/window/events/mouse_button_event.hpp"
+#include "void_engine/window/events/mouse_enter_event.hpp"
+#include "void_engine/window/events/mouse_position_event.hpp"
+#include "void_engine/window/events/mouse_scroll_event.hpp"
+#include "void_engine/window/events/window_close_event.hpp"
+#include "void_engine/window/events/window_content_scale_event.hpp"
+#include "void_engine/window/events/window_focus_event.hpp"
+#include "void_engine/window/events/window_iconify_event.hpp"
+#include "void_engine/window/events/window_maximize_event.hpp"
+#include "void_engine/window/events/window_position_event.hpp"
+#include "void_engine/window/events/window_refresh_event.hpp"
+#include "void_engine/window/events/window_size_event.hpp"
 #include "void_engine/window/window.hpp"
 
 #include <GLFW/glfw3.h>
 #include <filesystem>
+#include <vector>
 
 namespace void_engine::window {
 
-WindowEventHandler::WindowEventHandler(Window* window) : _window(window) {
-	GLFWwindow* glfw_window = _window->get_glfw_window();
-
-	glfwSetDropCallback(
-		glfw_window,
-		[](GLFWwindow* window, int count, const char** paths) {
-			std::vector<std::filesystem::path> paths_vector;
-			paths_vector.reserve(count);
-			for (int i = 0; i < count; ++i) {
-				paths_vector.emplace_back(paths[i]);
-			}
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::DropEvent>(paths_vector);
+WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
+	using namespace events;
+	glfwSetDropCallback(_window->_window, [](GLFWwindow* window, int count, const char** paths) {
+		std::vector<std::filesystem::path> paths_vector;
+		paths_vector.reserve(count);
+		for (int i = 0; i < count; ++i) {
+			paths_vector.emplace_back(paths[i]);
 		}
-	);
-
-	glfwSetFramebufferSizeCallback(
-		glfw_window,
-		[](GLFWwindow* window, int width, int height) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::FramebufferSizeEvent>(glm::vec2(width, height));
-		}
-	);
-
-	glfwSetCharCallback(
-		glfw_window,
-		[](GLFWwindow* window, unsigned int codepoint) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::KeyboardCharEvent>(codepoint);
-		}
-	);
-
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(DropEvent{paths_vector});
+	});
+	glfwSetFramebufferSizeCallback(_window->_window, [](GLFWwindow* window, int width, int height) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(FramebufferSizeEvent{glm::vec2(width, height)});
+	});
+	glfwSetCharCallback(_window->_window, [](GLFWwindow* window, unsigned int codepoint) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(KeyboardCharEvent{codepoint});
+	});
 	glfwSetCharModsCallback(
-		glfw_window,
+		_window->_window,
 		[](GLFWwindow* window, unsigned int codepoint, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->event_handler()
-				->emit<events::KeyboardCharModsEvent>(codepoint, mods);
+				.emit(KeyboardCharModsEvent{codepoint, mods});
 		}
 	);
-
 	glfwSetKeyCallback(
-		glfw_window,
+		_window->_window,
 		[](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->event_handler()
-				->emit<events::KeyboardKeyEvent>(key, scancode, action, mods);
+				.emit(KeyboardKeyEvent{key, scancode, action, mods});
 		}
 	);
-
 	glfwSetMouseButtonCallback(
-		glfw_window,
+		_window->_window,
 		[](GLFWwindow* window, int button, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->event_handler()
-				->emit<events::MouseButtonEvent>(button, action, mods);
+				.emit(MouseButtonEvent{button, action, mods});
 		}
 	);
-
-	glfwSetCursorEnterCallback(
-		glfw_window,
-		[](GLFWwindow* window, int entered) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::MouseEnterEvent>(entered == 1);
-		}
-	);
-
-	glfwSetCursorPosCallback(
-		glfw_window,
-		[](GLFWwindow* window, double xpos, double ypos) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::MousePositionEvent>(glm::vec2(xpos, ypos));
-		}
-	);
-
-	glfwSetScrollCallback(
-		glfw_window,
-		[](GLFWwindow* window, double xoffset, double yoffset) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::MouseScrollEvent>(glm::vec2(xoffset, yoffset));
-		}
-	);
-
-	glfwSetWindowCloseCallback(glfw_window, [](GLFWwindow* window) {
+	glfwSetCursorEnterCallback(_window->_window, [](GLFWwindow* window, int entered) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->event_handler()
-			->emit<events::WindowCloseEvent>();
+			.emit(MouseEnterEvent{entered == 1});
 	});
-
+	glfwSetCursorPosCallback(_window->_window, [](GLFWwindow* window, double xpos, double ypos) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(MousePositionEvent{glm::vec2(xpos, ypos)});
+	});
+	glfwSetScrollCallback(_window->_window, [](GLFWwindow* window, double xoffset, double yoffset) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(MouseScrollEvent{glm::vec2(xoffset, yoffset)});
+	});
+	glfwSetWindowCloseCallback(_window->_window, [](GLFWwindow* window) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit<WindowCloseEvent>();
+	});
 	glfwSetWindowContentScaleCallback(
-		glfw_window,
+		_window->_window,
 		[](GLFWwindow* window, float xscale, float yscale) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->event_handler()
-				->emit<events::WindowContentScaleEvent>(
-					glm::vec2(xscale, yscale)
-				);
+				.emit(WindowContentScaleEvent{glm::vec2(xscale, yscale)});
 		}
 	);
-
-	glfwSetWindowFocusCallback(
-		glfw_window,
-		[](GLFWwindow* window, int focused) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::WindowFocusEvent>(focused == 1);
-		}
-	);
-
-	glfwSetWindowIconifyCallback(
-		glfw_window,
-		[](GLFWwindow* window, int iconified) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::WindowIconifyEvent>(iconified == 1);
-		}
-	);
-
-	glfwSetWindowMaximizeCallback(
-		glfw_window,
-		[](GLFWwindow* window, int maximized) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::WindowMaximizeEvent>(maximized == 1);
-		}
-	);
-
-	glfwSetWindowPosCallback(
-		glfw_window,
-		[](GLFWwindow* window, int xpos, int ypos) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::WindowPositionEvent>(glm::vec2(xpos, ypos));
-		}
-	);
-
-	glfwSetWindowRefreshCallback(glfw_window, [](GLFWwindow* window) {
+	glfwSetWindowFocusCallback(_window->_window, [](GLFWwindow* window, int focused) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->event_handler()
-			->emit<events::WindowRefreshEvent>();
+			.emit(WindowFocusEvent{focused == 1});
 	});
-
-	glfwSetWindowSizeCallback(
-		glfw_window,
-		[](GLFWwindow* window, int width, int height) {
-			static_cast<Window*>(glfwGetWindowUserPointer(window))
-				->event_handler()
-				->emit<events::WindowSizeEvent>(glm::vec2(width, height));
-		}
-	);
+	glfwSetWindowIconifyCallback(_window->_window, [](GLFWwindow* window, int iconified) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(WindowIconifyEvent{iconified == 1});
+	});
+	glfwSetWindowMaximizeCallback(_window->_window, [](GLFWwindow* window, int maximized) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(WindowMaximizeEvent{maximized == 1});
+	});
+	glfwSetWindowPosCallback(_window->_window, [](GLFWwindow* window, int xpos, int ypos) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(WindowPositionEvent{glm::vec2(xpos, ypos)});
+	});
+	glfwSetWindowRefreshCallback(_window->_window, [](GLFWwindow* window) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit<WindowRefreshEvent>();
+	});
+	glfwSetWindowSizeCallback(_window->_window, [](GLFWwindow* window, int width, int height) {
+		static_cast<Window*>(glfwGetWindowUserPointer(window))
+			->event_handler()
+			.emit(WindowSizeEvent{glm::vec2(width, height)});
+	});
 }
 
 WindowEventHandler::~WindowEventHandler() {
-	GLFWwindow* glfw_window = _window->get_glfw_window();
-	glfwSetCharCallback(glfw_window, nullptr);
-	glfwSetCharModsCallback(glfw_window, nullptr);
-	glfwSetCursorEnterCallback(glfw_window, nullptr);
-	glfwSetCursorPosCallback(glfw_window, nullptr);
-	glfwSetDropCallback(glfw_window, nullptr);
-	glfwSetFramebufferSizeCallback(glfw_window, nullptr);
-	glfwSetKeyCallback(glfw_window, nullptr);
-	glfwSetMouseButtonCallback(glfw_window, nullptr);
-	glfwSetScrollCallback(glfw_window, nullptr);
-	glfwSetWindowCloseCallback(glfw_window, nullptr);
-	glfwSetWindowContentScaleCallback(glfw_window, nullptr);
-	glfwSetWindowFocusCallback(glfw_window, nullptr);
-	glfwSetWindowIconifyCallback(glfw_window, nullptr);
-	glfwSetWindowMaximizeCallback(glfw_window, nullptr);
-	glfwSetWindowPosCallback(glfw_window, nullptr);
-	glfwSetWindowRefreshCallback(glfw_window, nullptr);
-	glfwSetWindowSizeCallback(glfw_window, nullptr);
-}
-
-void WindowEventHandler::poll() {
-	_event_manager.poll();
+	glfwSetCharCallback(_window->_window, nullptr);
+	glfwSetCharModsCallback(_window->_window, nullptr);
+	glfwSetCursorEnterCallback(_window->_window, nullptr);
+	glfwSetCursorPosCallback(_window->_window, nullptr);
+	glfwSetDropCallback(_window->_window, nullptr);
+	glfwSetFramebufferSizeCallback(_window->_window, nullptr);
+	glfwSetKeyCallback(_window->_window, nullptr);
+	glfwSetMouseButtonCallback(_window->_window, nullptr);
+	glfwSetScrollCallback(_window->_window, nullptr);
+	glfwSetWindowCloseCallback(_window->_window, nullptr);
+	glfwSetWindowContentScaleCallback(_window->_window, nullptr);
+	glfwSetWindowFocusCallback(_window->_window, nullptr);
+	glfwSetWindowIconifyCallback(_window->_window, nullptr);
+	glfwSetWindowMaximizeCallback(_window->_window, nullptr);
+	glfwSetWindowPosCallback(_window->_window, nullptr);
+	glfwSetWindowRefreshCallback(_window->_window, nullptr);
+	glfwSetWindowSizeCallback(_window->_window, nullptr);
 }
 
 } // namespace void_engine::window

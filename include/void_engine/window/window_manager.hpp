@@ -15,14 +15,12 @@ public:
 	static void init();
 	static void terminate();
 
-	static auto create(
-		const std::string& name, const std::string_view title,
-		const glm::vec2& size
-	) -> Window*;
-	static void destroy(const std::string& name);
-	static auto get(const std::string& name) -> Window*;
+	static auto create(std::string_view name, std::string_view title, const glm::vec2& size)
+		-> Window&;
+	static void destroy(std::string_view name);
+	static auto get(std::string_view name) -> Window&;
 
-	static void poll_events();
+	static void update();
 
 private:
 	static std::unordered_map<std::string, Window*> _windows;

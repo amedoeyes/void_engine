@@ -1,34 +1,33 @@
 #include "void_engine/window/window.hpp"
 
-#include "void_engine/utils/logger.hpp"
+#include "void_engine/window/window_event_handler.hpp"
+#include "void_engine/window/window_input_handler.hpp"
 
 #include <GLFW/glfw3.h>
+#include <cassert>
 #include <glm/ext/vector_float2.hpp>
 #include <string_view>
 
 namespace void_engine::window {
 
-Window::Window(const std::string_view title, const glm::vec2& size) {
+Window::Window(std::string_view title, const glm::vec2& size) {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, true);
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 #endif
 
 	_window = glfwCreateWindow(
-		static_cast<int>(size.x), static_cast<int>(size.y), title.data(),
-		nullptr, nullptr
+		static_cast<int>(size.x), static_cast<int>(size.y), title.data(), nullptr, nullptr
 	);
-	if (_window == nullptr) {
-		utils::Logger::error("Failed to create window");
-	}
+	assert(_window != nullptr && "Failed to create window");
 
 	glfwMakeContextCurrent(_window);
 	glfwSetWindowUserPointer(_window, this);
 
-	_event_handler = new WindowEventHandler(this);
-	_input_handler = new WindowInputHandler(this);
+	_event_handler = new WindowEventHandler(*this);
+	_input_handler = new WindowInputHandler(*this);
 }
 
 Window::~Window() {
@@ -46,41 +45,32 @@ void Window::swap_buffers() const {
 }
 
 void Window::close() const {
-	glfwSetWindowShouldClose(_window, true);
+	glfwSetWindowShouldClose(_window, 1);
 }
 
-auto Window::event_handler() -> WindowEventHandler* {
-	return _event_handler;
+void Window::update() {
+	_input_handler->update();
+	_event_handler->poll();
+	swap_buffers();
 }
 
-auto Window::input_handler() -> WindowInputHandler* {
-	return _input_handler;
+auto Window::event_handler() -> WindowEventHandler& {
+	return *_event_handler;
+}
+
+auto Window::input_handler() -> WindowInputHandler& {
+	return *_input_handler;
 }
 
 auto Window::should_close() const -> bool {
-	return glfwWindowShouldClose(_window);
+	return glfwWindowShouldClose(_window) != 0;
 }
 
 auto Window::get_size() const -> glm::vec2 {
-	int width, height;
+	int width = 0;
+	int height = 0;
 	glfwGetWindowSize(_window, &width, &height);
 	return {width, height};
-}
-
-auto Window::get_time() const -> float {
-	return static_cast<float>(glfwGetTime());
-}
-
-auto Window::get_delta_time() const -> float {
-	static float last_frame_time = 0.0f;
-	const auto current_time = static_cast<float>(glfwGetTime());
-	const float delta_time = current_time - last_frame_time;
-	last_frame_time = current_time;
-	return delta_time;
-}
-
-auto Window::get_glfw_window() -> GLFWwindow* {
-	return _window;
 }
 
 } // namespace void_engine::window

@@ -4,19 +4,25 @@ namespace void_engine::window::inputs {
 
 auto Keyboard::is_down(KeyboardKey key) const -> bool {
 	const auto it = _keys.find(key);
-	if (it == _keys.end()) return false;
+	if (it == _keys.end()) {
+		return false;
+	}
 	return it->second.current;
 }
 
 auto Keyboard::is_up(KeyboardKey key) const -> bool {
 	const auto it = _keys.find(key);
-	if (it == _keys.end()) return true;
+	if (it == _keys.end()) {
+		return true;
+	}
 	return !it->second.current;
 }
 
 auto Keyboard::is_pressed(KeyboardKey key) const -> bool {
 	const auto it = _keys.find(key);
-	if (it == _keys.end()) return false;
+	if (it == _keys.end()) {
+		return false;
+	}
 	return it->second.current && !it->second.previous;
 }
 

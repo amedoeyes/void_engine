@@ -9,62 +9,36 @@
 #include "void_engine/window/window.hpp"
 #include "void_engine/window/window_event_handler.hpp"
 
-#include <GLFW/glfw3.h>
-
 namespace void_engine::window {
 
-WindowInputHandler::WindowInputHandler(Window* window) : _window(window) {
-	WindowEventHandler* event_handler = window->event_handler();
-
+WindowInputHandler::WindowInputHandler(Window& window) : _window(&window) {
+	using namespace events;
+	using namespace inputs;
+	WindowEventHandler& events = _window->event_handler();
 	_keyboard_key_listener =
-		event_handler->add_listener<events::KeyboardKeyEvent>(
-			[this](const events::KeyboardKeyEvent& event) {
-				_keyboard.set_key(
-					static_cast<inputs::KeyboardKey>(event.key),
-					event.action > 0
-				);
-			}
-		);
-
+		events.add_listener<KeyboardKeyEvent>([this](const KeyboardKeyEvent& event) {
+			_keyboard.set_key(static_cast<KeyboardKey>(event.key), event.action > 0);
+		});
 	_mouse_button_listener =
-		event_handler->add_listener<events::MouseButtonEvent>(
-			[this](const events::MouseButtonEvent& event) {
-				_mouse.set_button(
-					static_cast<inputs::MouseButton>(event.button),
-					event.action == 1
-				);
-			}
-		);
-
+		events.add_listener<MouseButtonEvent>([this](const MouseButtonEvent& event) {
+			_mouse.set_button(static_cast<MouseButton>(event.button), event.action == 1);
+		});
 	_mouse_position_listener =
-		event_handler->add_listener<events::MousePositionEvent>(
-			[this](const events::MousePositionEvent& event) {
-				_mouse.set_position(event.position);
-			}
-		);
-
+		events.add_listener<MousePositionEvent>([this](const MousePositionEvent& event) {
+			_mouse.set_position(event.position);
+		});
 	_mouse_scroll_listener =
-		event_handler->add_listener<events::MouseScrollEvent>(
-			[this](const events::MouseScrollEvent& event) {
-				_mouse.set_scroll(event.offset);
-			}
-		);
+		events.add_listener<MouseScrollEvent>([this](const MouseScrollEvent& event) {
+			_mouse.set_scroll(event.offset);
+		});
 }
 
 WindowInputHandler::~WindowInputHandler() {
-	WindowEventHandler* event_handler = _window->event_handler();
-	event_handler->remove_listener<events::KeyboardKeyEvent>(
-		_keyboard_key_listener
-	);
-	event_handler->remove_listener<events::MouseButtonEvent>(
-		_mouse_button_listener
-	);
-	event_handler->remove_listener<events::MousePositionEvent>(
-		_mouse_position_listener
-	);
-	event_handler->remove_listener<events::MouseScrollEvent>(
-		_mouse_scroll_listener
-	);
+	WindowEventHandler& events = _window->event_handler();
+	events.remove_listener(_keyboard_key_listener);
+	events.remove_listener(_mouse_button_listener);
+	events.remove_listener(_mouse_position_listener);
+	events.remove_listener(_mouse_scroll_listener);
 }
 
 void WindowInputHandler::update() {

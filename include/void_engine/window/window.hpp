@@ -16,27 +16,27 @@ class Window {
 	friend class WindowInputHandler;
 
 public:
-	Window(const std::string_view title, const glm::vec2& size);
+	Window(const Window&) = default;
+	Window(Window&&) = delete;
+	auto operator=(const Window&) -> Window& = default;
+	auto operator=(Window&&) -> Window& = delete;
+	Window(std::string_view title, const glm::vec2& size);
 	~Window();
 
 	void make_context_current() const;
 	void swap_buffers() const;
 	void close() const;
+	void update();
 
-	[[nodiscard]] auto event_handler() -> WindowEventHandler*;
-	[[nodiscard]] auto input_handler() -> WindowInputHandler*;
-
+	[[nodiscard]] auto event_handler() -> WindowEventHandler&;
+	[[nodiscard]] auto input_handler() -> WindowInputHandler&;
 	[[nodiscard]] auto should_close() const -> bool;
 	[[nodiscard]] auto get_size() const -> glm::vec2;
-	[[nodiscard]] auto get_time() const -> float;
-	[[nodiscard]] auto get_delta_time() const -> float;
 
 private:
 	GLFWwindow* _window;
 	WindowEventHandler* _event_handler;
 	WindowInputHandler* _input_handler;
-
-	[[nodiscard]] auto get_glfw_window() -> GLFWwindow*;
 };
 
 } // namespace void_engine::window
