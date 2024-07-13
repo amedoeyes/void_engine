@@ -26,3 +26,5 @@ AlwaysBreakTemplateDeclarations: true
 IndentCaseLabels: true
 
 IncludeBlocks: Regroup
+
+BinPackArguments: false
