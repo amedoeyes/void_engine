@@ -1,5 +1,6 @@
-#include "void_engine/event/event.hpp"
 #include "void_engine/event/event_listener.hpp"
+
+#include "void_engine/event/event.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 

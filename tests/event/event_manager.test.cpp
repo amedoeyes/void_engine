@@ -63,7 +63,7 @@ TEST_CASE("Event Manager", "[event][event_manager]") {
 		auto* listener = events.add_listener<TestEvent>([&](const TestEvent& event) {
 			data = event.data;
 		});
-		events.remove_listener<TestEvent>(listener);
+		events.remove_listener(listener);
 		events.emit(TestEvent{10});
 		events.poll();
 		REQUIRE(data == 0);
