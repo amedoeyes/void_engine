@@ -8,9 +8,12 @@
 
 #include <GLFW/glfw3.h>
 #include <cassert>
+#include <cstddef>
 #include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float4.hpp>
 #include <string>
 #include <string_view>
+#include <vector>
 
 namespace void_engine::display::window {
 
@@ -160,7 +163,7 @@ void Window::set_icon(std::string_view path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
 	auto* const image = resources::read_image(utils::get_exec_path().parent_path() / path);
 	assert(image != nullptr && "Failed to read image");
-	GLFWimage glfw_image = {
+	const GLFWimage glfw_image = {
 		static_cast<int>(image->width),
 		static_cast<int>(image->height),
 		image->bytes.data(),
@@ -170,7 +173,7 @@ void Window::set_icon(std::string_view path) {
 }
 
 void Window::set_icons(std::vector<std::string_view> paths) {
-	std::vector<resources::Image*> images(paths.size());
+	const std::vector<resources::Image*> images(paths.size());
 	std::vector<GLFWimage> glfw_images(paths.size());
 	for (size_t i = 0; i < paths.size(); ++i) {
 		resources::Image* image =

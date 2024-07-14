@@ -6,6 +6,7 @@
 
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
+#include <string>
 #include <string_view>
 #include <vector>
 

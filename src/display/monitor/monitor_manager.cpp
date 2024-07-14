@@ -1,7 +1,11 @@
 #include "void_engine/display/monitor/monitor_manager.hpp"
 
+#include "void_engine/display/monitor/monitor.hpp"
+
 #include <GLFW/glfw3.h>
 #include <algorithm>
+#include <string_view>
+#include <vector>
 
 namespace void_engine::display::monitor {
 

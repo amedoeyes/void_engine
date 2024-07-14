@@ -1,6 +1,9 @@
 #include "void_engine/display/monitor/monitor.hpp"
 
 #include <GLFW/glfw3.h>
+#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float4.hpp>
+#include <vector>
 
 namespace void_engine::display::monitor {
 
@@ -30,7 +33,7 @@ auto Monitor::get_physical_size() const -> glm::vec2 {
 }
 
 auto Monitor::get_video_mode() const -> MonitorVideoMode {
-	GLFWvidmode mode = *glfwGetVideoMode(_monitor);
+	const GLFWvidmode mode = *glfwGetVideoMode(_monitor);
 	return {mode.width, mode.height, mode.redBits, mode.greenBits, mode.blueBits, mode.refreshRate};
 }
 

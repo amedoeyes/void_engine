@@ -5,8 +5,8 @@ namespace void_engine::display::window::inputs {
 
 template <typename T>
 struct InputState {
-	T current;
-	T previous;
+	T current{};
+	T previous{};
 };
 
 } // namespace void_engine::display::window::inputs

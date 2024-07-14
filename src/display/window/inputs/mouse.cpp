@@ -4,6 +4,7 @@
 #include "void_engine/utils/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
+#include <cassert>
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
 
@@ -41,7 +42,7 @@ void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_sp
 	}
 	resources::Image* image = resources::read_image(utils::get_exec_path().parent_path() / path);
 	assert(image != nullptr && "Failed to read image");
-	GLFWimage glfw_image = {
+	const GLFWimage glfw_image = {
 		static_cast<int>(image->width),
 		static_cast<int>(image->height),
 		image->bytes.data(),
