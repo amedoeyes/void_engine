@@ -7,7 +7,7 @@ namespace void_engine::display::window {
 
 class Window;
 
-class WindowEventHandler final : public event::EventManager {
+class WindowEventHandler final : public ::void_engine::event::EventManager {
 public:
 	WindowEventHandler(const WindowEventHandler&) = default;
 	WindowEventHandler(WindowEventHandler&&) = delete;

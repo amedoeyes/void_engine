@@ -1,11 +1,11 @@
 #include "void_engine/display/window/window_input_handler.hpp"
 
-#include "void_engine/display/window/events/keyboard_key_event.hpp"
-#include "void_engine/display/window/events/mouse_button_event.hpp"
-#include "void_engine/display/window/events/mouse_position_event.hpp"
-#include "void_engine/display/window/events/mouse_scroll_event.hpp"
-#include "void_engine/display/window/inputs/keyboard.hpp"
-#include "void_engine/display/window/inputs/mouse.hpp"
+#include "void_engine/display/window/event/keyboard_key_event.hpp"
+#include "void_engine/display/window/event/mouse_button_event.hpp"
+#include "void_engine/display/window/event/mouse_position_event.hpp"
+#include "void_engine/display/window/event/mouse_scroll_event.hpp"
+#include "void_engine/display/window/input/keyboard.hpp"
+#include "void_engine/display/window/input/mouse.hpp"
 #include "void_engine/display/window/window.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
 
@@ -13,10 +13,10 @@ namespace void_engine::display::window {
 
 WindowInputHandler::WindowInputHandler(Window& window) :
 	_window(&window),
-	_keyboard(new inputs::Keyboard),
-	_mouse(new inputs::Mouse(*window._window)) {
-	using namespace events;
-	using namespace inputs;
+	_keyboard(new input::Keyboard),
+	_mouse(new input::Mouse(*window._window)) {
+	using namespace event;
+	using namespace input;
 	WindowEventHandler& events = _window->event_handler();
 	_keyboard_key_listener =
 		events.add_listener<KeyboardKeyEvent>([this](const KeyboardKeyEvent& event) {
@@ -51,11 +51,11 @@ void WindowInputHandler::update() {
 	_mouse->update();
 }
 
-auto WindowInputHandler::get_keyboard() -> inputs::Keyboard& {
+auto WindowInputHandler::get_keyboard() -> input::Keyboard& {
 	return *_keyboard;
 }
 
-auto WindowInputHandler::get_mouse() -> inputs::Mouse& {
+auto WindowInputHandler::get_mouse() -> input::Mouse& {
 	return *_mouse;
 }
 

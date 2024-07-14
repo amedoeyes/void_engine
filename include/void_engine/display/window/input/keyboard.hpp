@@ -1,7 +1,7 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUTS_KEYBOARD_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUTS_KEYBOARD_HPP
+#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
+#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
 
-#include "void_engine/display/window/inputs/input_state.hpp"
+#include "void_engine/display/window/input/input_state.hpp"
 
 #include <cstdint>
 #include <unordered_map>
@@ -10,7 +10,7 @@ namespace void_engine::display::window {
 
 class WindowInputHandler;
 
-namespace inputs {
+namespace input {
 
 enum class KeyboardKey : std::uint16_t {
 	unknown = 0,
@@ -126,8 +126,8 @@ private:
 	void set_key(KeyboardKey key, bool state);
 };
 
-} // namespace inputs
+} // namespace input
 
 } // namespace void_engine::display::window
 
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUTS_KEYBOARD_HPP
+#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP

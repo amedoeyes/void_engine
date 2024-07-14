@@ -1,7 +1,7 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUTS_MOUSE_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUTS_MOUSE_HPP
+#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
+#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
 
-#include "void_engine/display/window/inputs/input_state.hpp"
+#include "void_engine/display/window/input/input_state.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -16,7 +16,7 @@ namespace void_engine::display::window {
 class WindowInputHandler;
 class Window;
 
-namespace inputs {
+namespace input {
 
 enum class MouseButton : std::uint8_t {
 	left = 0,
@@ -79,8 +79,8 @@ private:
 	void set_scroll(const glm::vec2& scroll);
 };
 
-} // namespace inputs
+} // namespace input
 
 } // namespace void_engine::display::window
 
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUTS_MOUSE_HPP
+#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP

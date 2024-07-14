@@ -1,22 +1,22 @@
 #include "void_engine/display/window/window_event_handler.hpp"
 
-#include "void_engine/display/window/events/drop_event.hpp"
-#include "void_engine/display/window/events/framebuffer_size_event.hpp"
-#include "void_engine/display/window/events/keyboard_char_event.hpp"
-#include "void_engine/display/window/events/keyboard_char_mods_event.hpp"
-#include "void_engine/display/window/events/keyboard_key_event.hpp"
-#include "void_engine/display/window/events/mouse_button_event.hpp"
-#include "void_engine/display/window/events/mouse_enter_event.hpp"
-#include "void_engine/display/window/events/mouse_position_event.hpp"
-#include "void_engine/display/window/events/mouse_scroll_event.hpp"
-#include "void_engine/display/window/events/window_close_event.hpp"
-#include "void_engine/display/window/events/window_content_scale_event.hpp"
-#include "void_engine/display/window/events/window_focus_event.hpp"
-#include "void_engine/display/window/events/window_iconify_event.hpp"
-#include "void_engine/display/window/events/window_maximize_event.hpp"
-#include "void_engine/display/window/events/window_position_event.hpp"
-#include "void_engine/display/window/events/window_refresh_event.hpp"
-#include "void_engine/display/window/events/window_size_event.hpp"
+#include "void_engine/display/window/event/drop_event.hpp"
+#include "void_engine/display/window/event/framebuffer_size_event.hpp"
+#include "void_engine/display/window/event/keyboard_char_event.hpp"
+#include "void_engine/display/window/event/keyboard_char_mods_event.hpp"
+#include "void_engine/display/window/event/keyboard_key_event.hpp"
+#include "void_engine/display/window/event/mouse_button_event.hpp"
+#include "void_engine/display/window/event/mouse_enter_event.hpp"
+#include "void_engine/display/window/event/mouse_position_event.hpp"
+#include "void_engine/display/window/event/mouse_scroll_event.hpp"
+#include "void_engine/display/window/event/window_close_event.hpp"
+#include "void_engine/display/window/event/window_content_scale_event.hpp"
+#include "void_engine/display/window/event/window_focus_event.hpp"
+#include "void_engine/display/window/event/window_iconify_event.hpp"
+#include "void_engine/display/window/event/window_maximize_event.hpp"
+#include "void_engine/display/window/event/window_position_event.hpp"
+#include "void_engine/display/window/event/window_refresh_event.hpp"
+#include "void_engine/display/window/event/window_size_event.hpp"
 #include "void_engine/display/window/window.hpp"
 
 #include <GLFW/glfw3.h>
@@ -26,7 +26,7 @@
 namespace void_engine::display::window {
 
 WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
-	using namespace events;
+	using namespace event;
 	glfwSetDropCallback(_window->_window, [](GLFWwindow* window, int count, const char** paths) {
 		std::vector<std::filesystem::path> paths_vector;
 		paths_vector.reserve(count);

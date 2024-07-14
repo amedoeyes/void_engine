@@ -1,6 +1,6 @@
-#include "void_engine/display/window/inputs/keyboard.hpp"
+#include "void_engine/display/window/input/keyboard.hpp"
 
-namespace void_engine::display::window::inputs {
+namespace void_engine::display::window::input {
 
 auto Keyboard::is_down(KeyboardKey key) const -> bool {
 	const auto it = _keys.find(key);
@@ -36,4 +36,4 @@ void Keyboard::set_key(KeyboardKey key, bool state) {
 	_keys[key].current = state;
 }
 
-} // namespace void_engine::display::window::inputs
+} // namespace void_engine::display::window::input

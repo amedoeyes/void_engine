@@ -1,4 +1,4 @@
-#include "void_engine/display/window/inputs/mouse.hpp"
+#include "void_engine/display/window/input/mouse.hpp"
 
 #include "void_engine/resources/image.hpp"
 #include "void_engine/utils/get_exec_path.hpp"
@@ -8,7 +8,7 @@
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
 
-namespace void_engine::display::window::inputs {
+namespace void_engine::display::window::input {
 
 Mouse::Mouse(GLFWwindow& window) : _window(&window) {
 }
@@ -108,4 +108,4 @@ void Mouse::set_scroll(const glm::vec2& scroll) {
 	_scroll = scroll;
 }
 
-} // namespace void_engine::display::window::inputs
+} // namespace void_engine::display::window::input
