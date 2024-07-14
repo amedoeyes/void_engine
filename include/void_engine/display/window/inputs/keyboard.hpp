@@ -105,9 +105,16 @@ enum class KeyboardKey : std::uint16_t {
 };
 
 class Keyboard {
-	friend class void_engine::display::window::WindowInputHandler;
+	friend class window::WindowInputHandler;
 
 public:
+	Keyboard(const Keyboard&) = default;
+	Keyboard(Keyboard&&) = default;
+	auto operator=(const Keyboard&) -> Keyboard& = default;
+	auto operator=(Keyboard&&) -> Keyboard& = default;
+	Keyboard() = default;
+	~Keyboard() = default;
+
 	[[nodiscard]] auto is_down(KeyboardKey key) const -> bool;
 	[[nodiscard]] auto is_up(KeyboardKey key) const -> bool;
 	[[nodiscard]] auto is_pressed(KeyboardKey key) const -> bool;
