@@ -3,20 +3,22 @@
 
 #include "void_engine/monitor/monitor.hpp"
 
+#include <string_view>
 #include <vector>
 
 namespace void_engine::monitor {
 
 class MonitorManager {
 public:
-	static void init();
-	static void terminate();
-
-	static auto get_monitors() -> const std::vector<Monitor*>&;
-	static auto get_primary_monitor() -> Monitor&;
+	static auto get(std::string_view name) -> Monitor&;
+	static auto get_all() -> const std::vector<Monitor*>&;
+	static auto get_primary() -> Monitor&;
 
 private:
 	static std::vector<Monitor*> _monitor;
+
+	static void init();
+	static void terminate();
 };
 
 } // namespace void_engine::monitor

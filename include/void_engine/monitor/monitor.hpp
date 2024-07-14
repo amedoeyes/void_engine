@@ -1,13 +1,15 @@
 #ifndef VOID_ENGINE_MONITOR_MONITOR_HPP
 #define VOID_ENGINE_MONITOR_MONITOR_HPP
 
-#include "void_engine/window/window.hpp"
-
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <vector>
 
 struct GLFWmonitor;
+
+namespace void_engine::window {
+class Window;
+}
 
 namespace void_engine::monitor {
 
