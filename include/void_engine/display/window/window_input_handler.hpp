@@ -33,15 +33,13 @@ public:
 
 	void update();
 
-	[[nodiscard]] auto get_keyboard() const -> const inputs::Keyboard&;
-	[[nodiscard]] auto get_mouse() const -> const inputs::Mouse&;
+	[[nodiscard]] auto get_keyboard() -> inputs::Keyboard&;
+	[[nodiscard]] auto get_mouse() -> inputs::Mouse&;
 
 private:
 	Window* _window;
-
-	inputs::Keyboard _keyboard;
-	inputs::Mouse _mouse;
-
+	inputs::Keyboard* _keyboard;
+	inputs::Mouse* _mouse;
 	event::EventListener<events::KeyboardKeyEvent>* _keyboard_key_listener;
 	event::EventListener<events::MouseButtonEvent>* _mouse_button_listener;
 	event::EventListener<events::MousePositionEvent>* _mouse_position_listener;
