@@ -3,6 +3,8 @@
 #include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
+#include "void_engine/resources/image.hpp"
+#include "void_engine/utils/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -152,6 +154,38 @@ void Window::set_size_limits(const glm::vec2& min, const glm::vec2& max) {
 
 void Window::set_title(std::string_view title) {
 	glfwSetWindowTitle(_window, title.data());
+}
+
+void Window::set_icon(std::string_view path) {
+	glfwSetWindowIcon(_window, 0, nullptr);
+	auto* const image = resources::read_image(utils::get_exec_path().parent_path() / path);
+	assert(image != nullptr && "Failed to read image");
+	GLFWimage glfw_image = {
+		static_cast<int>(image->width),
+		static_cast<int>(image->height),
+		image->bytes.data(),
+	};
+	glfwSetWindowIcon(_window, 1, &glfw_image);
+	delete image;
+}
+
+void Window::set_icons(std::vector<std::string_view> paths) {
+	std::vector<resources::Image*> images(paths.size());
+	std::vector<GLFWimage> glfw_images(paths.size());
+	for (size_t i = 0; i < paths.size(); ++i) {
+		resources::Image* image =
+			resources::read_image(utils::get_exec_path().parent_path() / paths[i]);
+		assert(image != nullptr && "Failed to read image");
+		glfw_images[i] = {
+			static_cast<int>(image->width),
+			static_cast<int>(image->height),
+			image->bytes.data(),
+		};
+	}
+	glfwSetWindowIcon(_window, static_cast<int>(glfw_images.size()), glfw_images.data());
+	for (auto* image : images) {
+		delete image;
+	}
 }
 
 auto Window::get_content_scale() const -> glm::vec2 {

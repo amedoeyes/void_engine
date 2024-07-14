@@ -7,6 +7,7 @@
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <string_view>
+#include <vector>
 
 struct GLFWwindow;
 
@@ -55,6 +56,8 @@ public:
 	void set_decorated(bool value);
 	void set_floating(bool value);
 	void set_focus_on_show(bool value);
+	void set_icon(std::string_view path);
+	void set_icons(std::vector<std::string_view> paths);
 	void set_opacity(float opacity);
 	void set_position(const glm::vec2& position);
 	void set_resizable(bool value);
