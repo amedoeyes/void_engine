@@ -121,7 +121,6 @@ public:
 			}
 		}
 		std::vector<Entity> entities;
-		entities.reserve(smallest_pool->size());
 		for (const auto& entity : *smallest_pool) {
 			if (contains<Components...>(entity)) {
 				entities.push_back(entity);
