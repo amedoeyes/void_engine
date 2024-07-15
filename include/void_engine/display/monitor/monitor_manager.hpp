@@ -21,7 +21,7 @@ public:
 	static auto get_primary() -> Monitor&;
 
 private:
-	static std::vector<Monitor*> _monitor;
+	static std::vector<Monitor*> _monitors;
 
 	static void init();
 	static void terminate();
