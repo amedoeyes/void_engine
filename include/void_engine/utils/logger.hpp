@@ -1,6 +1,7 @@
 #ifndef VOID_ENGINE_UTILS_LOGGER_HPP
 #define VOID_ENGINE_UTILS_LOGGER_HPP
 
+#include <cstdint>
 #include <format>
 #include <iostream>
 #include <string>
@@ -8,7 +9,7 @@
 
 namespace void_engine::utils {
 
-enum class LogLevel {
+enum class LogLevel : std::uint8_t {
 	debug,
 	info,
 	warning,
@@ -17,9 +18,6 @@ enum class LogLevel {
 };
 
 class Logger {
-public:
-	Logger(LogLevel log_level = LogLevel::info);
-
 public:
 	static void set_log_level(LogLevel log_level);
 
@@ -46,14 +44,13 @@ public:
 private:
 	static LogLevel _log_level;
 
-private:
 	template <typename... Args>
-	static void
-	log(LogLevel level, const std::string_view fmt, const Args&... args) {
-		if (level < _log_level) return;
+	static void log(LogLevel level, const std::string_view fmt, const Args&... args) {
+		if (level < _log_level) {
+			return;
+		}
 
-		std::string format_str =
-			std::vformat(fmt, std::make_format_args(args...));
+		std::string format_str = std::vformat(fmt, std::make_format_args(args...));
 		std::string_view level_str;
 		switch (level) {
 			case LogLevel::debug: level_str = "[DEBUG]"; break;
@@ -62,8 +59,7 @@ private:
 			case LogLevel::error: level_str = "[ERROR]"; break;
 			default:;
 		}
-		const std::string message =
-			std::format("{}: {}\n", level_str, format_str);
+		const std::string message = std::format("{}: {}\n", level_str, format_str);
 
 		if (level >= LogLevel::warning) {
 			std::cerr << message;
