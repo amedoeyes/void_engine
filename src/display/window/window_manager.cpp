@@ -18,8 +18,6 @@ void WindowManager::terminate() {
 		delete window;
 	}
 	_windows.clear();
-	glfwSetErrorCallback(nullptr);
-	glfwTerminate();
 }
 
 auto WindowManager::create(std::string_view name, std::string_view title, const glm::vec2& size)
