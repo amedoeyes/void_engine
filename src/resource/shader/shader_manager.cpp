@@ -3,6 +3,8 @@
 #include "void_engine/resource/shader/shader.hpp"
 
 #include <cassert>
+#include <filesystem>
+#include <string_view>
 #include <unordered_map>
 #include <utility>
 

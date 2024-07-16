@@ -6,6 +6,7 @@
 #include <cassert>
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
+#include <string_view>
 #include <unordered_map>
 #include <utility>
 
