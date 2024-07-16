@@ -1,4 +1,4 @@
-#include "void_engine/utils/get_exec_path.hpp"
+#include "void_engine/utility/get_exec_path.hpp"
 
 #include <array>
 #include <filesystem>
@@ -14,7 +14,7 @@
 #include <unistd.h>
 #endif
 
-namespace void_engine::utils {
+namespace void_engine::utility {
 
 auto get_exec_path() -> std::filesystem::path {
 #if defined(_WIN32)
@@ -39,4 +39,4 @@ auto get_exec_path() -> std::filesystem::path {
 #endif
 }
 
-} // namespace void_engine::utils
+} // namespace void_engine::utility

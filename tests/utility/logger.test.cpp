@@ -1,12 +1,12 @@
-#include "void_engine/utils/logger.hpp"
+#include "void_engine/utility/logger.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 #include <iostream>
 #include <sstream>
 
-using namespace void_engine::utils;
+using namespace void_engine::utility;
 
-TEST_CASE("Logger", "[utils][logger]") {
+TEST_CASE("Logger", "[utility][logger]") {
 	const std::ostringstream oss_out;
 	const std::ostringstream oss_err;
 	auto* const old_cout = std::cout.rdbuf(oss_out.rdbuf());

@@ -2,7 +2,7 @@
 
 #include "void_engine/display/monitor/monitor_manager.hpp"
 #include "void_engine/display/window/window_manager.hpp"
-#include "void_engine/utils/logger.hpp"
+#include "void_engine/utility/logger.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -14,7 +14,7 @@ void DisplayManager::init() {
 		assert(false && "Failed to initialize GLFW");
 	}
 	glfwSetErrorCallback([](int, const char* description) {
-		utils::Logger::error("GLFW: {}", description);
+		utility::Logger::error("GLFW: {}", description);
 	});
 	monitor::MonitorManager::init();
 }

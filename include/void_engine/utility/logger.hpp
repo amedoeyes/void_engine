@@ -1,5 +1,5 @@
-#ifndef VOID_ENGINE_UTILS_LOGGER_HPP
-#define VOID_ENGINE_UTILS_LOGGER_HPP
+#ifndef VOID_ENGINE_UTILITY_LOGGER_HPP
+#define VOID_ENGINE_UTILITY_LOGGER_HPP
 
 #include <cstdint>
 #include <format>
@@ -7,7 +7,7 @@
 #include <string>
 #include <string_view>
 
-namespace void_engine::utils {
+namespace void_engine::utility {
 
 enum class LogLevel : std::uint8_t {
 	debug,
@@ -69,6 +69,6 @@ private:
 	}
 };
 
-} // namespace void_engine::utils
+} // namespace void_engine::utility
 
-#endif // !VOID_ENGINE_UTILS_LOGGER_HPP
+#endif // !VOID_ENGINE_UTILITY_LOGGER_HPP

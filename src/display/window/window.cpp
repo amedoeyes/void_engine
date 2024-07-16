@@ -4,7 +4,7 @@
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
 #include "void_engine/resource/image.hpp"
-#include "void_engine/utils/get_exec_path.hpp"
+#include "void_engine/utility/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -161,7 +161,7 @@ void Window::set_title(std::string_view title) {
 
 void Window::set_icon(std::string_view path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
-	auto* const image = resource::read_image(utils::get_exec_path().parent_path() / path);
+	auto* const image = resource::read_image(utility::get_exec_path().parent_path() / path);
 	assert(image != nullptr && "Failed to read image");
 	const GLFWimage glfw_image = {
 		static_cast<int>(image->width),
@@ -177,7 +177,7 @@ void Window::set_icons(std::vector<std::string_view> paths) {
 	std::vector<GLFWimage> glfw_images(paths.size());
 	for (size_t i = 0; i < paths.size(); ++i) {
 		resource::Image* image =
-			resource::read_image(utils::get_exec_path().parent_path() / paths[i]);
+			resource::read_image(utility::get_exec_path().parent_path() / paths[i]);
 		assert(image != nullptr && "Failed to read image");
 		glfw_images[i] = {
 			static_cast<int>(image->width),

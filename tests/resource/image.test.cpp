@@ -1,13 +1,13 @@
 #include "void_engine/resource/image.hpp"
 
-#include "void_engine/utils/get_exec_path.hpp"
+#include "void_engine/utility/get_exec_path.hpp"
 
 #include <catch2/catch_test_macros.hpp>
 #include <cstddef>
 #include <filesystem>
 
 using namespace void_engine::resource;
-using namespace void_engine::utils;
+using namespace void_engine::utility;
 
 TEST_CASE("Image", "[resources][image]") {
 	const std::filesystem::path image_path =
