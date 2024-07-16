@@ -11,11 +11,16 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iterator>
 #include <string>
+#include <utility>
 #include <vector>
 
 namespace void_engine::resources {
 
 Shader::Shader() : _id(glCreateProgram()) {
+}
+
+Shader::Shader(std::filesystem::path root_path) : Shader() {
+	_root_path = std::move(root_path);
 }
 
 Shader::~Shader() {
@@ -34,7 +39,7 @@ void Shader::unbind() {
 }
 
 void Shader::add_source(ShaderType type, const std::filesystem::path& path) {
-	_sources[type] = path;
+	_sources[type] = _root_path / path;
 }
 
 void Shader::compile() {
@@ -72,6 +77,10 @@ void Shader::compile() {
 		}
 		delete[] name;
 	}
+}
+
+void Shader::set_root_path(const std::filesystem::path& root_path) {
+	_root_path = root_path;
 }
 
 void Shader::set_uniform(const std::string& name, int value) const {

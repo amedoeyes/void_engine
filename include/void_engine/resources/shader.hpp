@@ -28,6 +28,7 @@ public:
 	auto operator=(const Shader&) -> Shader& = default;
 	auto operator=(Shader&&) -> Shader& = delete;
 	Shader();
+	explicit Shader(std::filesystem::path root_path);
 	~Shader();
 
 	void bind() const;
@@ -35,6 +36,8 @@ public:
 
 	void add_source(ShaderType type, const std::filesystem::path& path);
 	void compile();
+
+	void set_root_path(const std::filesystem::path& root_path);
 
 	void set_uniform(const std::string& name, int value) const;
 	void set_uniform(const std::string& name, unsigned int value) const;
@@ -46,6 +49,7 @@ public:
 
 private:
 	unsigned int _id = 0;
+	std::filesystem::path _root_path;
 	std::unordered_map<ShaderType, std::string> _sources;
 	std::vector<unsigned int> _shaders;
 	std::unordered_map<std::string, int> _uniforms;
