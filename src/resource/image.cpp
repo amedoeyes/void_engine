@@ -1,4 +1,4 @@
-#include "void_engine/resources/image.hpp"
+#include "void_engine/resource/image.hpp"
 
 #include <csetjmp>
 #include <cstddef>
@@ -7,7 +7,7 @@
 #include <png.h>
 #include <vector>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 namespace {
 
@@ -122,4 +122,4 @@ void write_image(const std::filesystem::path& path, Image* image) {
 	close_file(fp);
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource

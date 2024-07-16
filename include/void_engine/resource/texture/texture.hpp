@@ -1,10 +1,10 @@
-#ifndef VOID_ENGINE_RESOURCES_TEXTURE_HPP
-#define VOID_ENGINE_RESOURCES_TEXTURE_HPP
+#ifndef VOID_ENGINE_RESOURCE_TEXTURE_HPP
+#define VOID_ENGINE_RESOURCE_TEXTURE_HPP
 
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 enum class TextureTarget {
 	texture_1d = 0x0DE0,
@@ -211,6 +211,6 @@ private:
 	glm::vec2 _size = glm::vec2(0.0f);
 };
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
 
-#endif // !VOID_ENGINE_RESOURCES_TEXTURE_HPP
+#endif // !VOID_ENGINE_RESOURCE_TEXTURE_HPP

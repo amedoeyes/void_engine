@@ -1,11 +1,11 @@
-#include "void_engine/resources/resource_manager.hpp"
-#include "void_engine/resources/shader_manager.hpp"
-#include "void_engine/resources/texture_manager.hpp"
+#include "void_engine/resource/resource_manager.hpp"
+#include "void_engine/resource/shader/shader_manager.hpp"
+#include "void_engine/resource/texture/texture_manager.hpp"
 #include "void_engine/utils/get_exec_path.hpp"
 
 #include <filesystem>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 ResourceManager::ResourceManager() {
 	_textures = new TextureManager();
@@ -32,4 +32,4 @@ auto ResourceManager::shaders() -> ShaderManager& {
 	return *_shaders;
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource

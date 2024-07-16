@@ -1,11 +1,11 @@
-#include "void_engine/resources/texture.hpp"
+#include "void_engine/resource/texture/texture.hpp"
 
 #include <glad/glad.h>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 Texture::Texture(TextureTarget target) : _target(target) {
 	glCreateTextures(static_cast<int>(_target), 1, &_id);
@@ -137,4 +137,4 @@ auto Texture::get_size() const -> const glm::vec2& {
 	return _size;
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource

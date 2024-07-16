@@ -1,10 +1,10 @@
-#ifndef VOID_ENGINE_RESOURCES_RESOURCE_MANAGER_HPP
-#define VOID_ENGINE_RESOURCES_RESOURCE_MANAGER_HPP
+#ifndef VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
+#define VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
 
-#include "void_engine/resources/shader_manager.hpp"
-#include "void_engine/resources/texture_manager.hpp"
+#include "void_engine/resource/shader/shader_manager.hpp"
+#include "void_engine/resource/texture/texture_manager.hpp"
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 class ResourceManager {
 public:
@@ -24,6 +24,6 @@ private:
 	ShaderManager* _shaders;
 };
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
 
-#endif // !VOID_ENGINE_RESOURCES_RESOURCE_MANAGER_HPP
+#endif // !VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP

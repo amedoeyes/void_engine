@@ -3,7 +3,7 @@
 #include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
-#include "void_engine/resources/image.hpp"
+#include "void_engine/resource/image.hpp"
 #include "void_engine/utils/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
@@ -161,7 +161,7 @@ void Window::set_title(std::string_view title) {
 
 void Window::set_icon(std::string_view path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
-	auto* const image = resources::read_image(utils::get_exec_path().parent_path() / path);
+	auto* const image = resource::read_image(utils::get_exec_path().parent_path() / path);
 	assert(image != nullptr && "Failed to read image");
 	const GLFWimage glfw_image = {
 		static_cast<int>(image->width),
@@ -173,11 +173,11 @@ void Window::set_icon(std::string_view path) {
 }
 
 void Window::set_icons(std::vector<std::string_view> paths) {
-	const std::vector<resources::Image*> images(paths.size());
+	const std::vector<resource::Image*> images(paths.size());
 	std::vector<GLFWimage> glfw_images(paths.size());
 	for (size_t i = 0; i < paths.size(); ++i) {
-		resources::Image* image =
-			resources::read_image(utils::get_exec_path().parent_path() / paths[i]);
+		resource::Image* image =
+			resource::read_image(utils::get_exec_path().parent_path() / paths[i]);
 		assert(image != nullptr && "Failed to read image");
 		glfw_images[i] = {
 			static_cast<int>(image->width),

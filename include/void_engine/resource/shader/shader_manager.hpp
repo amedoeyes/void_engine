@@ -1,13 +1,13 @@
-#ifndef VOID_ENGINE_RESOURCES_SHADER_MANAGER_HPP
-#define VOID_ENGINE_RESOURCES_SHADER_MANAGER_HPP
+#ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP
+#define VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP
 
-#include "void_engine/resources/shader.hpp"
+#include "void_engine/resource/shader/shader.hpp"
 
 #include <filesystem>
 #include <string>
 #include <unordered_map>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 class ShaderManager {
 public:
@@ -30,6 +30,6 @@ private:
 	std::filesystem::path _root_path;
 };
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
 
-#endif // !VOID_ENGINE_RESOURCES_SHADER_MANAGER_HPP
+#endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP

@@ -1,11 +1,11 @@
-#ifndef VOID_ENGINE_RESOURCES_IMAGE_HPP
-#define VOID_ENGINE_RESOURCES_IMAGE_HPP
+#ifndef VOID_ENGINE_RESOURCE_IMAGE_HPP
+#define VOID_ENGINE_RESOURCE_IMAGE_HPP
 
 #include <cstdint>
 #include <filesystem>
 #include <vector>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 enum class ImageColorType : uint8_t {
 	gray = 0,
@@ -26,6 +26,6 @@ struct Image {
 auto read_image(const std::filesystem::path& path, bool flip = false) -> Image*;
 void write_image(const std::filesystem::path& path, Image* image);
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
 
-#endif // !VOID_ENGINE_RESOURCES_IMAGE_HPP
+#endif // !VOID_ENGINE_RESOURCE_IMAGE_HPP

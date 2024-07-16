@@ -1,7 +1,7 @@
-#include "void_engine/resources/texture_manager.hpp"
+#include "void_engine/resource/texture/texture_manager.hpp"
 
-#include "void_engine/resources/image.hpp"
-#include "void_engine/resources/texture.hpp"
+#include "void_engine/resource/image.hpp"
+#include "void_engine/resource/texture/texture.hpp"
 
 #include <cassert>
 #include <filesystem>
@@ -9,7 +9,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 TextureManager::TextureManager(std::filesystem::path root_path) : _root_path(std::move(root_path)) {
 }
@@ -66,4 +66,4 @@ void TextureManager::set_root_path(const std::filesystem::path& root_path) {
 	_root_path = root_path;
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource

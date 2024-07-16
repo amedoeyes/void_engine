@@ -1,5 +1,5 @@
-#ifndef VOID_ENGINE_RESOURCES_SHADER_HPP
-#define VOID_ENGINE_RESOURCES_SHADER_HPP
+#ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
+#define VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
 
 #include <filesystem>
 #include <glm/ext/matrix_float4x4.hpp>
@@ -10,7 +10,7 @@
 #include <unordered_map>
 #include <vector>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 enum class ShaderType {
 	compute = 0x91B9,
@@ -57,6 +57,6 @@ private:
 	static auto compile_source(ShaderType type, const std::filesystem::path& path) -> unsigned int;
 };
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
 
-#endif // !VOID_ENGINE_RESOURCES_SHADER_HPP
+#endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP

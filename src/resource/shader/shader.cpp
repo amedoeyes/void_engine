@@ -1,4 +1,4 @@
-#include "void_engine/resources/shader.hpp"
+#include "void_engine/resource/shader/shader.hpp"
 
 #include <cassert>
 #include <filesystem>
@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 Shader::Shader() : _id(glCreateProgram()) {
 }
@@ -155,4 +155,4 @@ auto Shader::compile_source(ShaderType type, const std::filesystem::path& path) 
 	return shader;
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource

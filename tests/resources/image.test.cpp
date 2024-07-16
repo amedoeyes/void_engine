@@ -1,4 +1,4 @@
-#include "void_engine/resources/image.hpp"
+#include "void_engine/resource/image.hpp"
 
 #include "void_engine/utils/get_exec_path.hpp"
 
@@ -6,7 +6,7 @@
 #include <cstddef>
 #include <filesystem>
 
-using namespace void_engine::resources;
+using namespace void_engine::resource;
 using namespace void_engine::utils;
 
 TEST_CASE("Image", "[resources][image]") {

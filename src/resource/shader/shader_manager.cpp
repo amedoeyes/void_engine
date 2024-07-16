@@ -1,12 +1,12 @@
-#include "void_engine/resources/shader_manager.hpp"
+#include "void_engine/resource/shader/shader_manager.hpp"
 
-#include "void_engine/resources/shader.hpp"
+#include "void_engine/resource/shader/shader.hpp"
 
 #include <cassert>
 #include <unordered_map>
 #include <utility>
 
-namespace void_engine::resources {
+namespace void_engine::resource {
 
 ShaderManager::ShaderManager(std::filesystem::path root_path) : _root_path(std::move(root_path)) {
 }
@@ -43,4 +43,4 @@ void ShaderManager::set_root_path(const std::filesystem::path& root_path) {
 	}
 }
 
-} // namespace void_engine::resources
+} // namespace void_engine::resource
