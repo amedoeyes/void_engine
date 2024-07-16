@@ -22,7 +22,7 @@ void WindowManager::terminate() {
 
 auto WindowManager::create(std::string_view name, std::string_view title, const glm::vec2& size)
 	-> Window& {
-	assert(_windows.find(std::string(name)) == _windows.end() && "Window already exists");
+	assert(_windows.find(name.data()) == _windows.end() && "Window already exists");
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
@@ -30,20 +30,20 @@ auto WindowManager::create(std::string_view name, std::string_view title, const 
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 #endif
 	auto [it, _] = _windows.emplace(name, new Window(title, size));
-	return *it->second;
+	return *(it->second);
 }
 
 void WindowManager::destroy(std::string_view name) {
-	const auto it = _windows.find(std::string(name));
+	const auto it = _windows.find(name.data());
 	assert(it != _windows.end() && "Window does not exist");
 	delete it->second;
 	_windows.erase(it);
 }
 
 auto WindowManager::get(std::string_view name) -> Window& {
-	auto it = _windows.find(std::string(name));
+	auto it = _windows.find(name.data());
 	assert(it != _windows.end() && "Window does not exist");
-	return *it->second;
+	return *(it->second);
 }
 
 void WindowManager::update() {

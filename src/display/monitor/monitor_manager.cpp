@@ -43,6 +43,7 @@ auto MonitorManager::get(std::string_view name) -> Monitor& {
 	const auto it = std::find_if(_monitors.begin(), _monitors.end(), [name](Monitor* monitor) {
 		return monitor->get_name() == name;
 	});
+	assert(it != _monitors.end() && "Monitor does not exist");
 	return **it;
 }
 
