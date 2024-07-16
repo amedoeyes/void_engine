@@ -11,6 +11,9 @@
 
 namespace void_engine::resources {
 
+TextureManager::TextureManager(std::filesystem::path root_path) : _root_path(std::move(root_path)) {
+}
+
 TextureManager::~TextureManager() {
 	for (const auto& [_, texture] : _textures) {
 		delete texture;
@@ -21,7 +24,7 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 	-> Texture& {
 	assert(_textures.find(name.data()) == _textures.end() && "Texture already exists");
 
-	const Image* image = read_image(path, true);
+	const Image* image = read_image(_root_path / path, true);
 	assert(image != nullptr && "Failed to read image");
 
 	const glm::vec2 image_size = {image->width, image->height};
@@ -57,6 +60,10 @@ auto TextureManager::get(std::string_view name) -> Texture& {
 	auto it = _textures.find(name.data());
 	assert(it != _textures.end() && "Texture does not exist");
 	return *(it->second);
+}
+
+void TextureManager::set_root_path(const std::filesystem::path& root_path) {
+	_root_path = root_path;
 }
 
 } // namespace void_engine::resources
