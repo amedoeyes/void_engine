@@ -45,7 +45,20 @@ public:
 	void unbind() const;
 
 	void set_data(unsigned int size, const void* data, BufferUsage usage) const;
+
+	template <typename T>
+	void set_data(const T& data, BufferUsage usage) {
+		set_data(sizeof(T), &data, usage);
+	}
+
 	void set_sub_data(unsigned int offset, unsigned int size, const void* data) const;
+
+	template <typename T>
+	void set_sub_data(unsigned int offset, const T& data) {
+		set_sub_data(offset, sizeof(T), &data);
+	}
+
+	void bind_buffer_range(unsigned int index, unsigned int offset, unsigned int size) const;
 
 	[[nodiscard]] auto get_id() const -> unsigned int;
 

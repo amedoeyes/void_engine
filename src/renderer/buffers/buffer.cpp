@@ -28,6 +28,10 @@ void Buffer::set_sub_data(unsigned int offset, unsigned int size, const void* da
 	glNamedBufferSubData(_id, offset, size, data);
 }
 
+void Buffer::bind_buffer_range(unsigned int index, unsigned int offset, unsigned int size) const {
+	glBindBufferRange(_target, index, _id, offset, size);
+}
+
 auto Buffer::get_id() const -> unsigned int {
 	return _id;
 }
