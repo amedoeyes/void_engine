@@ -1,7 +1,7 @@
 #ifndef VOID_ENGINE_RESOURCES_SHADER_MANAGER_HPP
 #define VOID_ENGINE_RESOURCES_SHADER_MANAGER_HPP
 
-#include "shader.hpp"
+#include "void_engine/resources/shader.hpp"
 
 #include <string>
 #include <unordered_map>
@@ -10,15 +10,19 @@ namespace void_engine::resources {
 
 class ShaderManager {
 public:
-	static void terminate();
+	ShaderManager(const ShaderManager&) = default;
+	ShaderManager(ShaderManager&&) = delete;
+	auto operator=(const ShaderManager&) -> ShaderManager& = default;
+	auto operator=(ShaderManager&&) -> ShaderManager& = delete;
+	ShaderManager() = default;
+	~ShaderManager();
 
-public:
-	static auto create(const std::string& name) -> Shader*;
-	static void destroy(const std::string& name);
-	static auto get(const std::string& name) -> Shader*;
+	auto create(std::string_view name) -> Shader&;
+	void destroy(std::string_view name);
+	auto get(std::string_view name) -> Shader&;
 
 private:
-	static std::unordered_map<std::string, Shader*> _shaders;
+	std::unordered_map<std::string, Shader*> _shaders;
 };
 
 } // namespace void_engine::resources
