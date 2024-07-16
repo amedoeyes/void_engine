@@ -1,8 +1,9 @@
 #ifndef VOID_ENGINE_RESOURCES_TEXTURE_MANAGER_HPP
 #define VOID_ENGINE_RESOURCES_TEXTURE_MANAGER_HPP
 
-#include "texture.hpp"
+#include "void_engine/resources/texture.hpp"
 
+#include <filesystem>
 #include <string>
 #include <unordered_map>
 
@@ -10,16 +11,21 @@ namespace void_engine::resources {
 
 class TextureManager {
 public:
-	static auto create_2d(const std::string& name, const std::string& path)
-		-> Texture*;
-	static void destroy(const std::string& name);
-	static auto get(const std::string& name) -> Texture*;
-	static void terminate();
+	TextureManager(const TextureManager&) = default;
+	TextureManager(TextureManager&&) = delete;
+	auto operator=(const TextureManager&) -> TextureManager& = default;
+	auto operator=(TextureManager&&) -> TextureManager& = delete;
+	TextureManager() = default;
+	~TextureManager();
+
+	auto create_2d(std::string_view name, const std::filesystem::path& path) -> Texture&;
+	void destroy(std::string_view name);
+	auto get(std::string_view name) -> Texture&;
 
 private:
-	static std::unordered_map<std::string, Texture*> _textures;
+	std::unordered_map<std::string, Texture*> _textures;
 };
 
 } // namespace void_engine::resources
 
-#endif // !#ifndef VOID_ENGINE_RESOURCES_TEXTURE_MANAGER_HPP
+#endif // !VOID_ENGINE_RESOURCES_TEXTURE_MANAGER_HPP
