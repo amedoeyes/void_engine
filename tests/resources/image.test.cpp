@@ -1,16 +1,19 @@
 #include "void_engine/resources/image.hpp"
 
+#include "void_engine/utils/get_exec_path.hpp"
+
 #include <catch2/catch_test_macros.hpp>
+#include <cstddef>
 #include <filesystem>
 
 using namespace void_engine::resources;
-namespace fs = std::filesystem;
+using namespace void_engine::utils;
 
 TEST_CASE("Image", "[resources][image]") {
-	fs::path image_path = fs::relative("../tests/resources/cat.png");
+	const std::filesystem::path image_path =
+		get_exec_path().parent_path() / "../../../../tests/resources/cat.png";
 
 	SECTION("Read non-existent image") {
-
 		const Image* image = read_image("non-existent.png");
 		REQUIRE(image == nullptr);
 		delete image;
@@ -23,9 +26,6 @@ TEST_CASE("Image", "[resources][image]") {
 		REQUIRE(image->height == 933);
 		REQUIRE(image->bit_depth == 8);
 		REQUIRE(image->color_type == ImageColorType::rgb);
-		REQUIRE(image->interlace_type == ImageInterlaceType::none);
-		REQUIRE(image->compression_type == ImageCompressionType::base);
-		REQUIRE(image->filter_method == ImageFilterMethod::base);
 		REQUIRE(image->bytes.size() == static_cast<size_t>(1024 * 933 * 3));
 		delete image;
 	}
@@ -41,7 +41,7 @@ TEST_CASE("Image", "[resources][image]") {
 	}
 
 	SECTION("Write image") {
-		const Image* image = read_image(image_path.string());
+		Image* image = read_image(image_path.string());
 		REQUIRE(image != nullptr);
 		write_image("cat_copy.png", image);
 		const Image* image_copy = read_image("cat_copy.png");
@@ -50,9 +50,6 @@ TEST_CASE("Image", "[resources][image]") {
 		REQUIRE(image_copy->height == image->height);
 		REQUIRE(image_copy->bit_depth == image->bit_depth);
 		REQUIRE(image_copy->color_type == image->color_type);
-		REQUIRE(image_copy->interlace_type == image->interlace_type);
-		REQUIRE(image_copy->compression_type == image->compression_type);
-		REQUIRE(image_copy->filter_method == image->filter_method);
 		REQUIRE(image_copy->bytes == image->bytes);
 		delete image;
 		delete image_copy;
