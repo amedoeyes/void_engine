@@ -13,7 +13,7 @@ ResourceManager::ResourceManager() {
 }
 
 ResourceManager::ResourceManager(const std::filesystem::path& resources_path) {
-	std::filesystem::path path =
+	const std::filesystem::path path =
 		std::filesystem::canonical(utility::get_exec_path().parent_path() / resources_path);
 	_textures = new TextureManager(path);
 	_shaders = new ShaderManager(path);

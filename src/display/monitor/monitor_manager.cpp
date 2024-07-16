@@ -4,6 +4,7 @@
 
 #include <GLFW/glfw3.h>
 #include <algorithm>
+#include <cassert>
 #include <string_view>
 #include <vector>
 
