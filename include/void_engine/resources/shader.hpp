@@ -1,58 +1,56 @@
 #ifndef VOID_ENGINE_RESOURCES_SHADER_HPP
 #define VOID_ENGINE_RESOURCES_SHADER_HPP
 
-#include <glad/gl.h>
+#include <filesystem>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <string>
 #include <unordered_map>
+#include <vector>
 
 namespace void_engine::resources {
 
 enum class ShaderType {
-	compute = GL_COMPUTE_SHADER,
-	vertex = GL_VERTEX_SHADER,
-	tess_control = GL_TESS_CONTROL_SHADER,
-	tess_evaluation = GL_TESS_EVALUATION_SHADER,
-	geometry = GL_GEOMETRY_SHADER,
-	fragment = GL_FRAGMENT_SHADER
+	compute = 0x91B9,
+	vertex = 0x8B31,
+	tess_control = 0x8E88,
+	tess_evaluation = 0x8E87,
+	geometry = 0x8DD9,
+	fragment = 0x8B30
 };
 
 class Shader {
 public:
+	Shader(const Shader&) = default;
+	Shader(Shader&&) = delete;
+	auto operator=(const Shader&) -> Shader& = default;
+	auto operator=(Shader&&) -> Shader& = delete;
+	Shader();
 	~Shader();
 
-public:
-	auto bind() const -> const Shader*;
-	void unbind() const;
+	void bind() const;
+	static void unbind();
 
-	auto add(ShaderType type, const std::string& path) -> Shader*;
+	void add_source(ShaderType type, const std::filesystem::path& path);
 	void compile();
 
-	auto set_uniform(const std::string& name, int value) const -> const Shader*;
-	auto set_uniform(const std::string& name, unsigned int value) const
-		-> const Shader*;
-	auto set_uniform(const std::string& name, float value) const
-		-> const Shader*;
-	auto set_uniform(const std::string& name, glm::vec2 value) const
-		-> const Shader*;
-	auto set_uniform(const std::string& name, glm::vec3 value) const
-		-> const Shader*;
-	auto set_uniform(const std::string& name, glm::vec4 value) const
-		-> const Shader*;
-	auto set_uniform(const std::string& name, glm::mat4 value) const
-		-> const Shader*;
+	void set_uniform(const std::string& name, int value) const;
+	void set_uniform(const std::string& name, unsigned int value) const;
+	void set_uniform(const std::string& name, float value) const;
+	void set_uniform(const std::string& name, const glm::vec2& value) const;
+	void set_uniform(const std::string& name, const glm::vec3& value) const;
+	void set_uniform(const std::string& name, const glm::vec4& value) const;
+	void set_uniform(const std::string& name, const glm::mat4& value) const;
 
 private:
 	unsigned int _id = 0;
+	std::unordered_map<ShaderType, std::string> _sources;
+	std::vector<unsigned int> _shaders;
 	std::unordered_map<std::string, int> _uniforms;
-	std::unordered_map<ShaderType, std::string> _paths;
 
-private:
-	auto compile_source(ShaderType type, const std::string& path) const
-		-> unsigned int;
+	static auto compile_source(ShaderType type, const std::filesystem::path& path) -> unsigned int;
 };
 
 } // namespace void_engine::resources
