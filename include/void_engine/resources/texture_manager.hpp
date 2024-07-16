@@ -15,6 +15,7 @@ public:
 	TextureManager(TextureManager&&) = delete;
 	auto operator=(const TextureManager&) -> TextureManager& = default;
 	auto operator=(TextureManager&&) -> TextureManager& = delete;
+	TextureManager() = default;
 	explicit TextureManager(std::filesystem::path root_path);
 	~TextureManager();
 
