@@ -1,7 +1,7 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
 
-#include "void_engine/display/window/input/input_state.hpp"
+#include "void_engine/utility/state.hpp"
 
 #include <cstdint>
 #include <filesystem>
@@ -69,8 +69,8 @@ public:
 private:
 	GLFWwindow* _window;
 	GLFWcursor* _cursor = nullptr;
-	std::unordered_map<MouseButton, InputState<bool>> _buttons;
-	InputState<glm::vec2> _position;
+	std::unordered_map<MouseButton, utility::State<bool>> _buttons;
+	utility::State<glm::vec2> _position;
 	glm::vec2 _scroll = glm::vec2(0.f);
 
 	void update();

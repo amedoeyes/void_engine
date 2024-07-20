@@ -1,7 +1,7 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
 
-#include "void_engine/display/window/input/input_state.hpp"
+#include "void_engine/utility/state.hpp"
 
 #include <cstdint>
 #include <unordered_map>
@@ -120,7 +120,7 @@ public:
 	[[nodiscard]] auto is_pressed(KeyboardKey key) const -> bool;
 
 private:
-	std::unordered_map<KeyboardKey, InputState<bool>> _keys;
+	std::unordered_map<KeyboardKey, utility::State<bool>> _keys;
 
 	void update();
 	void set_key(KeyboardKey key, bool state);

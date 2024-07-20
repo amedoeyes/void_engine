@@ -58,7 +58,7 @@ auto Mouse::is_down(MouseButton button) const -> bool {
 	if (it == _buttons.end()) {
 		return false;
 	}
-	return it->second.current;
+	return it->second.get();
 }
 
 auto Mouse::is_up(MouseButton button) const -> bool {
@@ -66,7 +66,7 @@ auto Mouse::is_up(MouseButton button) const -> bool {
 	if (it == _buttons.end()) {
 		return false;
 	}
-	return !it->second.current;
+	return !it->second.get();
 }
 
 auto Mouse::is_pressed(MouseButton button) const -> bool {
@@ -74,15 +74,15 @@ auto Mouse::is_pressed(MouseButton button) const -> bool {
 	if (it == _buttons.end()) {
 		return false;
 	}
-	return it->second.current && !it->second.previous;
+	return it->second.entered(true);
 }
 
 auto Mouse::get_position() const -> glm::vec2 {
-	return _position.current;
+	return _position.get();
 }
 
 auto Mouse::get_delta_position() const -> glm::vec2 {
-	return _position.current - _position.previous;
+	return _position.get() - _position.get_previous();
 }
 
 auto Mouse::get_scroll() const -> glm::vec2 {
@@ -91,17 +91,17 @@ auto Mouse::get_scroll() const -> glm::vec2 {
 
 void Mouse::update() {
 	for (auto& [_, button] : _buttons) {
-		button.previous = button.current;
+		button.set_previous(button.get());
 	}
-	_position.previous = _position.current;
+	_position.set_previous(_position.get());
 }
 
 void Mouse::set_button(MouseButton button, bool state) {
-	_buttons[button].current = state;
+	_buttons[button].set_current(state);
 }
 
 void Mouse::set_position(const glm::vec2& position) {
-	_position.current = position;
+	_position.set_current(position);
 }
 
 void Mouse::set_scroll(const glm::vec2& scroll) {
