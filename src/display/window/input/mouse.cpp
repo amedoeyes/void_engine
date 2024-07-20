@@ -77,6 +77,14 @@ auto Mouse::is_pressed(MouseButton button) const -> bool {
 	return it->second.entered(true);
 }
 
+auto Mouse::is_released(MouseButton button) const -> bool {
+	const auto it = _buttons.find(button);
+	if (it == _buttons.end()) {
+		return false;
+	}
+	return it->second.exited(true);
+}
+
 auto Mouse::get_position() const -> glm::vec2 {
 	return _position.get();
 }

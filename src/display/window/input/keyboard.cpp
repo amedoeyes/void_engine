@@ -26,6 +26,14 @@ auto Keyboard::is_pressed(KeyboardKey key) const -> bool {
 	return it->second.entered(true);
 }
 
+auto Keyboard::is_released(KeyboardKey key) const -> bool {
+	const auto it = _keys.find(key);
+	if (it == _keys.end()) {
+		return false;
+	}
+	return it->second.exited(true);
+}
+
 void Keyboard::update() {
 	for (auto& [_, key] : _keys) {
 		key.set_previous(key.get());

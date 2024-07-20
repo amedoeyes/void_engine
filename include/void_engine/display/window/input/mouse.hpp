@@ -62,6 +62,7 @@ public:
 	[[nodiscard]] auto is_down(MouseButton button) const -> bool;
 	[[nodiscard]] auto is_up(MouseButton button) const -> bool;
 	[[nodiscard]] auto is_pressed(MouseButton button) const -> bool;
+	[[nodiscard]] auto is_released(MouseButton button) const -> bool;
 	[[nodiscard]] auto get_position() const -> glm::vec2;
 	[[nodiscard]] auto get_delta_position() const -> glm::vec2;
 	[[nodiscard]] auto get_scroll() const -> glm::vec2;

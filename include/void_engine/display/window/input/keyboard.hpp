@@ -118,6 +118,7 @@ public:
 	[[nodiscard]] auto is_down(KeyboardKey key) const -> bool;
 	[[nodiscard]] auto is_up(KeyboardKey key) const -> bool;
 	[[nodiscard]] auto is_pressed(KeyboardKey key) const -> bool;
+	[[nodiscard]] auto is_released(KeyboardKey key) const -> bool;
 
 private:
 	std::unordered_map<KeyboardKey, utility::State<bool>> _keys;
