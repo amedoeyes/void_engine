@@ -1,9 +1,10 @@
 #ifndef VOID_ENGINE_RENDERER_BUFFER_HPP
 #define VOID_ENGINE_RENDERER_BUFFER_HPP
 
-namespace void_engine::renderer::buffers {
+#include <cstdint>
+namespace void_engine::renderer::buffer {
 
-enum class BufferTarget {
+enum class BufferTarget : uint16_t {
 	array = 0x8892,
 	atomic_counter = 0x92C0,
 	copy_read = 0x8F36,
@@ -20,7 +21,7 @@ enum class BufferTarget {
 	uniform = 0x8A11
 };
 
-enum class BufferUsage {
+enum class BufferUsage : uint16_t {
 	stream_draw = 0x88E0,
 	stream_read = 0x88E1,
 	stream_copy = 0x88E2,
@@ -67,6 +68,6 @@ private:
 	unsigned int _target;
 };
 
-} // namespace void_engine::renderer::buffers
+} // namespace void_engine::renderer::buffer
 
 #endif // !VOID_ENGINE_RENDERER_BUFFER_HPP

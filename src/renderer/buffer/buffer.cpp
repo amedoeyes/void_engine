@@ -1,8 +1,8 @@
-#include "void_engine/renderer/buffers/buffer.hpp"
+#include "void_engine/renderer/buffer/buffer.hpp"
 
 #include <glad/glad.h>
 
-namespace void_engine::renderer::buffers {
+namespace void_engine::renderer::buffer {
 
 Buffer::Buffer(BufferTarget target) : _target(static_cast<unsigned int>(target)) {
 	glCreateBuffers(1, &_id);
@@ -36,4 +36,4 @@ auto Buffer::get_id() const -> unsigned int {
 	return _id;
 }
 
-} // namespace void_engine::renderer::buffers
+} // namespace void_engine::renderer::buffer
