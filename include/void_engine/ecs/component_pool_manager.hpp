@@ -53,7 +53,9 @@ public:
 
 	void destroy(Entity entity) {
 		for (const auto& [_, pool] : _pools) {
-			pool->destroy(entity);
+			if (pool->contains(entity)) {
+				pool->destroy(entity);
+			}
 		}
 	}
 

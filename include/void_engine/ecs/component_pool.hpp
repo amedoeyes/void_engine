@@ -86,7 +86,7 @@ public:
 		return *(_data[_sparse[get_entity_index(entity)]]);
 	}
 
-	[[nodiscard]] auto contains(Entity entity) const -> bool {
+	[[nodiscard]] auto contains(Entity entity) const -> bool override {
 		const EntityIndex index = get_entity_index(entity);
 		if (index >= _sparse.size()) {
 			return false;
