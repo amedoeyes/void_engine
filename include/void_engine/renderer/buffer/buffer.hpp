@@ -2,6 +2,7 @@
 #define VOID_ENGINE_RENDERER_BUFFER_HPP
 
 #include <cstdint>
+
 namespace void_engine::renderer::buffer {
 
 enum class BufferTarget : uint16_t {
@@ -35,10 +36,10 @@ enum class BufferUsage : uint16_t {
 
 class Buffer {
 public:
-	Buffer(const Buffer&) = default;
-	Buffer(Buffer&&) = delete;
-	auto operator=(const Buffer&) -> Buffer& = default;
-	auto operator=(Buffer&&) -> Buffer& = delete;
+	Buffer(const Buffer& other);
+	Buffer(Buffer&& other) noexcept;
+	auto operator=(const Buffer& other) -> Buffer&;
+	auto operator=(Buffer&& other) noexcept -> Buffer&;
 	explicit Buffer(BufferTarget target);
 	~Buffer();
 
