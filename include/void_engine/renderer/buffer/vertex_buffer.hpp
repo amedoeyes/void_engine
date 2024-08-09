@@ -13,7 +13,10 @@ public:
 	}
 
 	template <typename VertexType>
-	VertexBuffer(const std::vector<VertexType>& vertices, BufferUsage usage) : VertexBuffer() {
+	explicit VertexBuffer(
+		const std::vector<VertexType>& vertices, BufferUsage usage = BufferUsage::static_draw
+	) :
+		VertexBuffer() {
 		set_data(vertices, usage);
 	}
 

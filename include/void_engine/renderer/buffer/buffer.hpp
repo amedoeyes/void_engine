@@ -46,10 +46,12 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void set_data(unsigned int size, const void* data, BufferUsage usage) const;
+	void set_data(
+		unsigned int size, const void* data, BufferUsage usage = BufferUsage::static_draw //
+	) const;
 
 	template <typename T>
-	void set_data(const T& data, BufferUsage usage) {
+	void set_data(const T& data, BufferUsage usage = BufferUsage::static_draw) const {
 		set_data(sizeof(T), &data, usage);
 	}
 

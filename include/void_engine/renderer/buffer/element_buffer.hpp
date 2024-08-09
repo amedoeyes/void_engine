@@ -10,9 +10,13 @@ namespace void_engine::renderer::buffer {
 class ElementBuffer final : public Buffer {
 public:
 	ElementBuffer();
-	ElementBuffer(const std::vector<unsigned int>& indices, BufferUsage usage);
+	explicit ElementBuffer(
+		const std::vector<unsigned int>& indices, BufferUsage usage = BufferUsage::static_draw
+	);
 
-	void set_data(const std::vector<unsigned int>& indices, BufferUsage usage);
+	void set_data(
+		const std::vector<unsigned int>& indices, BufferUsage usage = BufferUsage::static_draw
+	);
 
 	[[nodiscard]] auto get_count() const -> unsigned int;
 
