@@ -7,7 +7,8 @@
 namespace void_engine::renderer {
 
 Mesh::Mesh(
-	VertexArray vao, buffer::VertexBuffer vbo, buffer::ElementBuffer ebo, PrimitiveType type
+	vertex_array::VertexArray vao, buffer::VertexBuffer vbo, buffer::ElementBuffer ebo,
+	PrimitiveType type
 ) :
 	_vao(std::move(vao)),
 	_vbo(std::move(vbo)),
