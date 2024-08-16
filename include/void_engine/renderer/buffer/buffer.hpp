@@ -62,7 +62,7 @@ public:
 		set_sub_data(offset, sizeof(T), &data);
 	}
 
-	void bind_buffer_range(unsigned int index, unsigned int offset, unsigned int size) const;
+	void bind_range(unsigned int index, unsigned int offset, unsigned int size) const;
 
 	[[nodiscard]] auto get_id() const -> unsigned int;
 

@@ -11,7 +11,7 @@ public:
 	UniformBuffer(unsigned int index, const UniformType& data, BufferUsage usage) :
 		Buffer(BufferTarget::uniform) {
 		set_data(data, usage);
-		Buffer::bind_buffer_range(index, 0, sizeof(UniformType));
+		Buffer::bind_range(index, 0, sizeof(UniformType));
 	}
 
 	void set_data(const UniformType& data, BufferUsage usage) {
