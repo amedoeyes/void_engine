@@ -49,6 +49,7 @@ public:
 	void allocate(unsigned int size, BufferUsage usage);
 	void set_data(unsigned int size, const void* data, BufferUsage usage);
 	void set_sub_data(unsigned int offset, unsigned int size, const void* data) const;
+	void update_data(const void* data) const;
 
 	template <typename T>
 	void set_data(const T& data, BufferUsage usage) {

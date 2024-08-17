@@ -80,6 +80,10 @@ void Buffer::set_sub_data(unsigned int offset, unsigned int size, const void* da
 	glNamedBufferSubData(_id, offset, size, data);
 }
 
+void Buffer::update_data(const void* data) const {
+	glNamedBufferSubData(_id, 0, _allocated_size, data);
+}
+
 void Buffer::bind_range(unsigned int index, unsigned int offset, unsigned int size) const {
 	glBindBufferRange(static_cast<GLenum>(_target), index, _id, offset, size);
 }
