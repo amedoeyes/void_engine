@@ -10,7 +10,7 @@ namespace void_engine::renderer::buffer {
 class VertexBuffer final : public Buffer {
 public:
 	VertexBuffer();
-
+	explicit VertexBuffer(unsigned int size, BufferUsage usage = BufferUsage::static_draw);
 	template <typename VertexType>
 	explicit VertexBuffer(
 		const std::vector<VertexType>& vertices, BufferUsage usage = BufferUsage::static_draw
@@ -24,6 +24,12 @@ public:
 		const std::vector<VertexType>& vertices, BufferUsage usage = BufferUsage::static_draw
 	) {
 		Buffer::set_data(vertices.size() * sizeof(VertexType), vertices.data(), usage);
+		_size = sizeof(VertexType);
+	}
+
+	template <typename VertexType>
+	void update_data(const std::vector<VertexType>& vertices) {
+		Buffer::update_data(vertices.data());
 		_size = sizeof(VertexType);
 	}
 
