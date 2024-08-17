@@ -18,13 +18,8 @@ public:
 		Buffer::set_data<UniformType>(data, usage);
 	}
 
-	void set_data(const UniformType& data) {
-		Buffer::set_sub_data<UniformType>(0, data);
-	}
-
-	template <typename T>
-	void set_sub_data(unsigned int offset, const T& data) {
-		Buffer::set_sub_data<T>(offset, data);
+	void update_data(const UniformType& data) {
+		Buffer::update_data(&data);
 	}
 };
 
