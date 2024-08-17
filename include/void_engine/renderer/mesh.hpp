@@ -3,31 +3,17 @@
 
 #include "void_engine/renderer/buffer/element_buffer.hpp"
 #include "void_engine/renderer/buffer/vertex_buffer.hpp"
-#include "void_engine/renderer/renderer.hpp"
 #include "void_engine/renderer/vertex_array/vertex_array.hpp"
 
 namespace void_engine::renderer {
 
-class Mesh {
-public:
-	Mesh(const Mesh&) = default;
-	Mesh(Mesh&&) = default;
-	auto operator=(const Mesh&) -> Mesh& = default;
-	auto operator=(Mesh&&) -> Mesh& = default;
-	Mesh() = delete;
-	Mesh(
-		vertex_array::VertexArray vao, buffer::VertexBuffer vbo, buffer::ElementBuffer ebo,
-		PrimitiveType type
-	);
-	~Mesh() = default;
+enum class PrimitiveType;
 
-	void draw();
-
-private:
-	vertex_array::VertexArray _vao;
-	buffer::VertexBuffer _vbo;
-	buffer::ElementBuffer _ebo;
-	PrimitiveType _type;
+struct Mesh {
+	vertex_array::VertexArray vao;
+	buffer::VertexBuffer vbo;
+	buffer::ElementBuffer ebo;
+	PrimitiveType type;
 };
 
 } // namespace void_engine::renderer
