@@ -50,7 +50,7 @@ auto Buffer::operator=(Buffer&& other) noexcept -> Buffer& {
 	return *this;
 }
 
-Buffer::Buffer(BufferTarget target) : _target(static_cast<unsigned int>(target)) {
+Buffer::Buffer(BufferTarget target) : _target(target) {
 	glCreateBuffers(1, &_id);
 }
 
@@ -59,11 +59,11 @@ Buffer::~Buffer() {
 }
 
 void Buffer::bind() const {
-	glBindBuffer(_target, _id);
+	glBindBuffer(static_cast<GLenum>(_target), _id);
 }
 
 void Buffer::unbind() const {
-	glBindBuffer(_target, 0);
+	glBindBuffer(static_cast<GLenum>(_target), 0);
 }
 
 void Buffer::allocate(unsigned int size, BufferUsage usage) {
@@ -80,8 +80,8 @@ void Buffer::set_sub_data(unsigned int offset, unsigned int size, const void* da
 	glNamedBufferSubData(_id, offset, size, data);
 }
 
-void Buffer::bind_buffer_range(unsigned int index, unsigned int offset, unsigned int size) const {
-	glBindBufferRange(_target, index, _id, offset, size);
+void Buffer::bind_range(unsigned int index, unsigned int offset, unsigned int size) const {
+	glBindBufferRange(static_cast<GLenum>(_target), index, _id, offset, size);
 }
 
 auto Buffer::get_id() const -> unsigned int {

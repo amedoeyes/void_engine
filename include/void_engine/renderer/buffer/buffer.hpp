@@ -47,19 +47,16 @@ public:
 	void unbind() const;
 
 	void allocate(unsigned int size, BufferUsage usage);
-	void set_data(
-		unsigned int size, const void* data, BufferUsage usage = BufferUsage::static_draw //
-	);
-
-	template <typename T>
-	void set_data(const T& data, BufferUsage usage = BufferUsage::static_draw) const {
-		set_data(sizeof(T), &data, usage);
-	}
-
+	void set_data(unsigned int size, const void* data, BufferUsage usage);
 	void set_sub_data(unsigned int offset, unsigned int size, const void* data) const;
 
 	template <typename T>
-	void set_sub_data(unsigned int offset, const T& data) {
+	void set_data(const T& data, BufferUsage usage) {
+		set_data(sizeof(T), &data, usage);
+	}
+
+	template <typename T>
+	void set_sub_data(unsigned int offset, const T& data) const {
 		set_sub_data(offset, sizeof(T), &data);
 	}
 
@@ -69,7 +66,7 @@ public:
 
 private:
 	unsigned int _id = 0;
-	unsigned int _target;
+	BufferTarget _target;
 	unsigned int _allocated_size = 0;
 };
 
