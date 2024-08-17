@@ -66,8 +66,14 @@ void Buffer::unbind() const {
 	glBindBuffer(_target, 0);
 }
 
-void Buffer::set_data(unsigned int size, const void* data, BufferUsage usage) const {
-	glNamedBufferData(_id, size, data, static_cast<unsigned int>(usage));
+void Buffer::allocate(unsigned int size, BufferUsage usage) {
+	glNamedBufferData(_id, size, nullptr, static_cast<GLenum>(usage));
+	_allocated_size = size;
+}
+
+void Buffer::set_data(unsigned int size, const void* data, BufferUsage usage) {
+	glNamedBufferData(_id, size, data, static_cast<GLenum>(usage));
+	_allocated_size = size;
 }
 
 void Buffer::set_sub_data(unsigned int offset, unsigned int size, const void* data) const {

@@ -46,9 +46,10 @@ public:
 	void bind() const;
 	void unbind() const;
 
+	void allocate(unsigned int size, BufferUsage usage);
 	void set_data(
 		unsigned int size, const void* data, BufferUsage usage = BufferUsage::static_draw //
-	) const;
+	);
 
 	template <typename T>
 	void set_data(const T& data, BufferUsage usage = BufferUsage::static_draw) const {
@@ -69,6 +70,7 @@ public:
 private:
 	unsigned int _id = 0;
 	unsigned int _target;
+	unsigned int _allocated_size = 0;
 };
 
 } // namespace void_engine::renderer::buffer
