@@ -31,12 +31,14 @@ public:
 	[[nodiscard]] auto get_position() const -> const glm::vec3&;
 	[[nodiscard]] auto get_rotation() const -> glm::vec3;
 	[[nodiscard]] auto get_scale() const -> const glm::vec3&;
-	[[nodiscard]] auto get_model() const -> glm::mat4;
+	[[nodiscard]] auto get_model() const -> const glm::mat4&;
 
 private:
 	glm::vec3 _position{0.0f};
 	glm::quat _rotation{1.0f, 0.0f, 0.0f, 0.0f};
 	glm::vec3 _scale{1.0f};
+	mutable glm::mat4 _model{1.0f};
+	mutable bool _is_dirty{true};
 };
 
 } // namespace void_engine::utility
