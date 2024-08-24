@@ -2,7 +2,9 @@
 #define VOID_ENGINE_UTILITY_TRANSFORM_HPP
 
 #include <glm/ext/matrix_float4x4.hpp>
+#include <glm/ext/quaternion_float.hpp>
 #include <glm/ext/vector_float3.hpp>
+#include <glm/fwd.hpp>
 
 namespace void_engine::utility {
 
@@ -17,21 +19,23 @@ public:
 	~Transform() = default;
 
 	void translate(const glm::vec3& translation);
+	void rotate(float angle, const glm::vec3& axis);
 	void rotate(const glm::vec3& rotation);
 	void scale(const glm::vec3& scale);
 
 	void set_position(const glm::vec3& position);
+	void set_rotation(float angle, const glm::vec3& axis);
 	void set_rotation(const glm::vec3& rotation);
 	void set_scale(const glm::vec3& scale);
 
 	[[nodiscard]] auto get_position() const -> const glm::vec3&;
-	[[nodiscard]] auto get_rotation() const -> const glm::vec3&;
+	[[nodiscard]] auto get_rotation() const -> glm::vec3;
 	[[nodiscard]] auto get_scale() const -> const glm::vec3&;
 	[[nodiscard]] auto get_model() const -> glm::mat4;
 
 private:
 	glm::vec3 _position{0.0f};
-	glm::vec3 _rotation{0.0f};
+	glm::quat _rotation{1.0f, 0.0f, 0.0f, 0.0f};
 	glm::vec3 _scale{1.0f};
 };
 
