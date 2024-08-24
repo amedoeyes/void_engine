@@ -25,10 +25,10 @@ enum class ShaderType : std::uint16_t {
 
 class Shader {
 public:
-	Shader(const Shader&) = default;
-	Shader(Shader&&) = delete;
-	auto operator=(const Shader&) -> Shader& = default;
-	auto operator=(Shader&&) -> Shader& = delete;
+	Shader(const Shader& other);
+	Shader(Shader&& other) noexcept;
+	auto operator=(const Shader& other) -> Shader&;
+	auto operator=(Shader&& other) noexcept -> Shader&;
 	Shader();
 	explicit Shader(std::filesystem::path root_path);
 	~Shader();

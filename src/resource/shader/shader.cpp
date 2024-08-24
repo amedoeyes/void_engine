@@ -17,6 +17,42 @@
 
 namespace void_engine::resource {
 
+Shader::Shader(const Shader& other) :
+	_id(glCreateProgram()),
+	_root_path(other._root_path),
+	_sources(other._sources) {
+	compile();
+}
+
+Shader::Shader(Shader&& other) noexcept :
+	_id(other._id),
+	_root_path(std::move(other._root_path)),
+	_sources(std::move(other._sources)),
+	_shaders(std::move(other._shaders)),
+	_uniforms(std::move(other._uniforms)) {
+	other._id = 0;
+}
+
+auto Shader::operator=(const Shader& other) -> Shader& {
+	if (this == &other) {
+		return *this;
+	}
+	_root_path = other._root_path;
+	_sources = other._sources;
+	compile();
+	return *this;
+}
+
+auto Shader::operator=(Shader&& other) noexcept -> Shader& {
+	_id = other._id;
+	_root_path = std::move(other._root_path);
+	_sources = std::move(other._sources);
+	_shaders = std::move(other._shaders);
+	_uniforms = std::move(other._uniforms);
+	other._id = 0;
+	return *this;
+}
+
 Shader::Shader() : _id(glCreateProgram()) {
 }
 
