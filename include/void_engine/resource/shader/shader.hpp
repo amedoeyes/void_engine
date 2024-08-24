@@ -1,6 +1,7 @@
 #ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
 #define VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
 
+#include <cstdint>
 #include <filesystem>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -8,11 +9,12 @@
 #include <glm/ext/vector_float4.hpp>
 #include <string>
 #include <unordered_map>
+#include <variant>
 #include <vector>
 
 namespace void_engine::resource {
 
-enum class ShaderType {
+enum class ShaderType : std::uint16_t {
 	compute = 0x91B9,
 	vertex = 0x8B31,
 	tess_control = 0x8E88,
@@ -35,10 +37,10 @@ public:
 	static void unbind();
 
 	void add_source(ShaderType type, const std::filesystem::path& path);
+	void add_source(ShaderType type, const std::string& source);
 	void compile();
 
 	void set_root_path(const std::filesystem::path& root_path);
-
 	void set_uniform(const std::string& name, int value) const;
 	void set_uniform(const std::string& name, unsigned int value) const;
 	void set_uniform(const std::string& name, float value) const;
@@ -50,11 +52,12 @@ public:
 private:
 	unsigned int _id = 0;
 	std::filesystem::path _root_path;
-	std::unordered_map<ShaderType, std::string> _sources;
+	std::unordered_map<ShaderType, std::variant<std::filesystem::path, std::string>> _sources;
 	std::vector<unsigned int> _shaders;
 	std::unordered_map<std::string, int> _uniforms;
 
 	static auto compile_source(ShaderType type, const std::filesystem::path& path) -> unsigned int;
+	static auto compile_source(ShaderType type, const std::string& source) -> unsigned int;
 };
 
 } // namespace void_engine::resource

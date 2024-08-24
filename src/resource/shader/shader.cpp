@@ -12,6 +12,7 @@
 #include <iterator>
 #include <string>
 #include <utility>
+#include <variant>
 #include <vector>
 
 namespace void_engine::resource {
@@ -42,6 +43,10 @@ void Shader::add_source(ShaderType type, const std::filesystem::path& path) {
 	_sources[type] = _root_path / path;
 }
 
+void Shader::add_source(ShaderType type, const std::string& source) {
+	_sources[type] = source;
+}
+
 void Shader::compile() {
 	assert(!_sources.empty() && "No sources to compile");
 
@@ -53,11 +58,17 @@ void Shader::compile() {
 		_shaders.clear();
 	}
 
-	for (const auto& [type, path] : _sources) {
-		const unsigned int shader = compile_source(type, path);
+	for (const auto& [type, source] : _sources) {
+		unsigned int shader = 0;
+		if (std::holds_alternative<std::filesystem::path>(source)) {
+			shader = compile_source(type, std::get<std::filesystem::path>(source));
+		} else {
+			shader = compile_source(type, std::get<std::string>(source));
+		}
 		glAttachShader(_id, shader);
 		_shaders.push_back(shader);
 	}
+
 	glLinkProgram(_id);
 
 	if (!_uniforms.empty()) {
@@ -146,12 +157,14 @@ auto Shader::compile_source(ShaderType type, const std::filesystem::path& path) 
 		(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()
 	);
 	file.close();
+	return compile_source(type, source);
+}
 
+auto Shader::compile_source(ShaderType type, const std::string& source) -> unsigned int {
 	const unsigned int shader = glCreateShader(static_cast<unsigned int>(type));
 	const char* source_c = source.c_str();
 	glShaderSource(shader, 1, &source_c, nullptr);
 	glCompileShader(shader);
-
 	return shader;
 }
 
