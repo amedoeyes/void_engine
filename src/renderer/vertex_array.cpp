@@ -1,12 +1,10 @@
-#include "void_engine/renderer/vertex_array/vertex_array.hpp"
+#include "void_engine/renderer/vertex_array.hpp"
 
 #include "void_engine/renderer/buffer/element_buffer.hpp"
-#include "void_engine/renderer/vertex_array/vertex_array_layout.hpp"
 
-#include <cstddef>
 #include <glad/glad.h>
 
-namespace void_engine::renderer::vertex_array {
+namespace void_engine::renderer {
 
 VertexArray::VertexArray(const VertexArray& other) {
 	glCreateVertexArrays(1, &_id);
@@ -135,19 +133,6 @@ VertexArray::VertexArray() {
 	glCreateVertexArrays(1, &_id);
 }
 
-VertexArray::VertexArray(const VertexArrayLayout& layout) : VertexArray() {
-	set_layout(layout);
-}
-
-VertexArray::VertexArray(
-	const VertexArrayLayout& layout, const buffer::VertexBuffer& vertex_buffer,
-	const buffer::ElementBuffer& element_buffer
-) :
-	VertexArray(layout) {
-	set_vertex_buffer(vertex_buffer);
-	set_element_buffer(element_buffer);
-}
-
 VertexArray::~VertexArray() {
 	glDeleteVertexArrays(1, &_id);
 }
@@ -161,13 +146,12 @@ void VertexArray::unbind() {
 }
 
 void VertexArray::add_vertex_buffer(
-	const buffer::VertexBuffer& buffer, unsigned int index, unsigned int offset, unsigned int stride
-) const {
-	glVertexArrayVertexBuffer(_id, index, buffer.get_id(), offset, static_cast<GLsizei>(stride));
-}
-
-void VertexArray::set_vertex_buffer(const buffer::VertexBuffer& buffer) const {
-	add_vertex_buffer(buffer, 0, 0, buffer.get_size());
+	const buffer::Buffer& buffer, unsigned int offset, unsigned int stride
+) {
+	glVertexArrayVertexBuffer(
+		_id, _buffer_index, buffer.get_id(), offset, static_cast<GLsizei>(stride)
+	);
+	_buffer_index++;
 }
 
 void VertexArray::set_element_buffer(const buffer::ElementBuffer& buffer) const {
@@ -175,21 +159,14 @@ void VertexArray::set_element_buffer(const buffer::ElementBuffer& buffer) const 
 }
 
 void VertexArray::add_attribute(
-	unsigned int index, unsigned int count, unsigned int offset, unsigned int type, bool normalized
-) const {
-	glEnableVertexArrayAttrib(_id, index);
+	unsigned int type, unsigned int count, unsigned int offset, bool normalized
+) {
+	glEnableVertexArrayAttrib(_id, _index);
 	glVertexArrayAttribFormat(
-		_id, index, static_cast<GLint>(count), type, static_cast<GLboolean>(normalized), offset
+		_id, _index, static_cast<GLint>(count), type, static_cast<GLboolean>(normalized), offset
 	);
-	glVertexArrayAttribBinding(_id, index, 0);
+	glVertexArrayAttribBinding(_id, _index, _buffer_index);
+	_index++;
 }
 
-void VertexArray::set_layout(const VertexArrayLayout& layout) const {
-	const auto& attributes = layout.get_attributes();
-	for (size_t i = 0; i < attributes.size(); ++i) {
-		const auto& attribute = attributes[i];
-		add_attribute(i, attribute.count, attribute.stride, attribute.type, attribute.normalized);
-	}
-}
-
-} // namespace void_engine::renderer::vertex_array
+} // namespace void_engine::renderer
