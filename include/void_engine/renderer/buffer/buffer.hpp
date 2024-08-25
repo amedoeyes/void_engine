@@ -50,6 +50,7 @@ public:
 	void set_data(unsigned int size, const void* data, BufferUsage usage);
 	void set_sub_data(unsigned int offset, unsigned int size, const void* data) const;
 	void update_data(const void* data) const;
+	void bind_range(unsigned int index, unsigned int offset, unsigned int size) const;
 
 	template <typename T>
 	void set_data(const T& data, BufferUsage usage) {
@@ -61,7 +62,15 @@ public:
 		set_sub_data(offset, sizeof(T), &data);
 	}
 
-	void bind_range(unsigned int index, unsigned int offset, unsigned int size) const;
+	template <typename T>
+	void update_data(const T& data) {
+		update_data(&data);
+	}
+
+	template <typename T>
+	void bind_range(unsigned int index, unsigned int offset) const {
+		bind_range(index, offset, sizeof(T));
+	}
 
 	[[nodiscard]] auto get_id() const -> unsigned int;
 
