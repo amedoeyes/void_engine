@@ -5,21 +5,26 @@
 
 namespace void_engine::renderer::buffer {
 
-template <typename UniformType>
+template <typename T>
 class UniformBuffer final : public Buffer {
 public:
-	UniformBuffer(unsigned int index, const UniformType& data, BufferUsage usage) :
-		Buffer(BufferTarget::uniform) {
-		set_data(data, usage);
-		Buffer::bind_range(index, 0, sizeof(UniformType));
+	UniformBuffer() : Buffer(BufferTarget::uniform) {
 	}
 
-	void set_data(const UniformType& data, BufferUsage usage) {
-		Buffer::set_data<UniformType>(data, usage);
+	void set_data(const T& data, BufferUsage usage = BufferUsage::dynamic_draw) {
+		Buffer::set_data(data, usage);
 	}
 
-	void update_data(const UniformType& data) {
-		Buffer::update_data(&data);
+	void set_sub_data(unsigned int offset, const T& data) const {
+		Buffer::set_sub_data(offset, data);
+	}
+
+	void bind_range(unsigned int index, unsigned int offset = 0) const {
+		Buffer::bind_range<T>(index, offset);
+	}
+
+	void update_data(const T& data) {
+		Buffer::update_data(data);
 	}
 };
 
