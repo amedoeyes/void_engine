@@ -6,6 +6,7 @@ namespace void_engine::renderer::buffer {
 
 Buffer::Buffer(const Buffer& other) {
 	_target = other._target;
+	_allocated_size = other._allocated_size;
 	GLint size = 0;
 	GLint usage = 0;
 	glGetNamedBufferParameteriv(other._id, GL_BUFFER_SIZE, &size);
@@ -15,8 +16,12 @@ Buffer::Buffer(const Buffer& other) {
 	glCopyNamedBufferSubData(other._id, _id, 0, 0, size);
 }
 
-Buffer::Buffer(Buffer&& other) noexcept : _id(other._id), _target(other._target) {
+Buffer::Buffer(Buffer&& other) noexcept :
+	_id(other._id),
+	_target(other._target),
+	_allocated_size(other._allocated_size) {
 	other._id = 0;
+	other._allocated_size = 0;
 }
 
 auto Buffer::operator=(const Buffer& other) -> Buffer& {
@@ -27,6 +32,7 @@ auto Buffer::operator=(const Buffer& other) -> Buffer& {
 		glDeleteBuffers(1, &_id);
 	}
 	_target = other._target;
+	_allocated_size = other._allocated_size;
 	GLint size = 0;
 	GLint usage = 0;
 	glGetNamedBufferParameteriv(other._id, GL_BUFFER_SIZE, &size);
@@ -38,15 +44,14 @@ auto Buffer::operator=(const Buffer& other) -> Buffer& {
 }
 
 auto Buffer::operator=(Buffer&& other) noexcept -> Buffer& {
-	if (this == &other) {
-		return *this;
-	}
 	if (_id != 0) {
 		glDeleteBuffers(1, &_id);
 	}
 	_id = other._id;
 	_target = other._target;
+	_allocated_size = other._allocated_size;
 	other._id = 0;
+	other._allocated_size = 0;
 	return *this;
 }
 
@@ -55,6 +60,9 @@ Buffer::Buffer(BufferTarget target) : _target(target) {
 }
 
 Buffer::~Buffer() {
+	if (_id == 0) {
+		return;
+	}
 	glDeleteBuffers(1, &_id);
 }
 
