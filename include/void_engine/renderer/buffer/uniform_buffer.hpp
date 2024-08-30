@@ -15,7 +15,8 @@ public:
 		Buffer::set_data(data, usage);
 	}
 
-	void set_sub_data(unsigned int offset, const T& data) const {
+	template <typename U>
+	void set_sub_data(unsigned int offset, const U& data) {
 		Buffer::set_sub_data(offset, data);
 	}
 
