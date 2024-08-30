@@ -2,18 +2,68 @@
 #define VOID_ENGINE_RENDERER_MESH_HPP
 
 #include "void_engine/renderer/buffer/element_buffer.hpp"
-#include "void_engine/renderer/buffer/vertex_buffer.hpp"
-#include "void_engine/renderer/vertex_array/vertex_array.hpp"
+#include "void_engine/renderer/renderer.hpp"
+#include "void_engine/renderer/vertex_array.hpp"
+
+#include <vector>
 
 namespace void_engine::renderer {
 
-enum class PrimitiveType;
+class Mesh {
+public:
+	Mesh(const Mesh& other);
+	Mesh(Mesh&& other) noexcept;
+	auto operator=(const Mesh& other) -> Mesh&;
+	auto operator=(Mesh&& other) noexcept -> Mesh&;
+	Mesh() = default;
+	explicit Mesh(PrimitiveType primitive_type);
+	~Mesh();
 
-struct Mesh {
-	vertex_array::VertexArray vao;
-	buffer::VertexBuffer vbo;
-	buffer::ElementBuffer ebo;
-	PrimitiveType type;
+	void bind() const;
+	static void unbind();
+
+	template <typename T>
+	void add_attribute(unsigned int count, unsigned int offset = 0, bool normalized = false) {
+		_vertex_array->add_attribute<T>(count, offset, normalized);
+	}
+
+	template <typename T>
+	void add_vertex_buffer(
+		const std::vector<T>& data, buffer::BufferUsage usage = buffer::BufferUsage::static_draw
+	) {
+		auto* buffer = new buffer::ArrayBuffer(data, usage);
+		_vertex_array->add_vertex_buffer(*buffer);
+		_vertex_buffers.push_back(buffer);
+	}
+
+	void set_divisor(unsigned int divisor) const;
+	void set_indices(
+		const std::vector<unsigned int>& data,
+		buffer::BufferUsage usage = buffer::BufferUsage::static_draw
+	);
+	void set_primitive_type(PrimitiveType primitive);
+
+	[[nodiscard]] auto get_vertex_array() -> VertexArray&;
+	[[nodiscard]] auto get_vertex_array() const -> const VertexArray&;
+	[[nodiscard]] auto get_element_buffer() -> buffer::ElementBuffer&;
+	[[nodiscard]] auto get_element_buffer() const -> const buffer::ElementBuffer&;
+	[[nodiscard]] auto get_primitive_type() const -> PrimitiveType;
+	[[nodiscard]] auto get_count() const -> unsigned int;
+
+	template <typename T>
+	[[nodiscard]] auto get_vertex_buffer(unsigned int index) -> buffer::ArrayBuffer<T>& {
+		return *static_cast<buffer::ArrayBuffer<T>*>(_vertex_buffers[index]);
+	}
+	template <typename T>
+	[[nodiscard]] auto get_vertex_buffer(unsigned int index) const -> const buffer::ArrayBuffer<T>& {
+		return *static_cast<buffer::ArrayBuffer<T>*>(_vertex_buffers[index]);
+	}
+
+private:
+	VertexArray* _vertex_array = nullptr;
+	std::vector<buffer::Buffer*> _vertex_buffers;
+	buffer::ElementBuffer* _element_buffer = nullptr;
+	PrimitiveType _primitive_type = PrimitiveType::triangles;
 };
 
 } // namespace void_engine::renderer
