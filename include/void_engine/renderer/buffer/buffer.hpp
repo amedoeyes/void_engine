@@ -63,8 +63,8 @@ public:
 	}
 
 	template <typename T>
-	void update_data(const T& data) {
-		update_data(&data);
+	void update_data(const T& data) const {
+		update_data(static_cast<const void*>(&data));
 	}
 
 	template <typename T>
