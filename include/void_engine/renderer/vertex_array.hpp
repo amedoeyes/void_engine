@@ -29,6 +29,7 @@ public:
 		add_vertex_buffer(buffer, 0, sizeof(T));
 	}
 
+	void set_divisor(unsigned int divisor) const;
 	void set_element_buffer(const buffer::ElementBuffer& buffer) const;
 
 private:

@@ -145,13 +145,9 @@ void VertexArray::unbind() {
 	glBindVertexArray(0);
 }
 
-void VertexArray::add_vertex_buffer(
-	const buffer::Buffer& buffer, unsigned int offset, unsigned int stride
-) {
-	glVertexArrayVertexBuffer(
-		_id, _buffer_index, buffer.get_id(), offset, static_cast<GLsizei>(stride)
-	);
-	_buffer_index++;
+void VertexArray::set_divisor(unsigned int divisor) const {
+	assert(_index > 0 && "No attributes added");
+	glVertexArrayBindingDivisor(_id, _index - 1, divisor);
 }
 
 void VertexArray::set_element_buffer(const buffer::ElementBuffer& buffer) const {
@@ -167,6 +163,15 @@ void VertexArray::add_attribute(
 	);
 	glVertexArrayAttribBinding(_id, _index, _buffer_index);
 	_index++;
+}
+
+void VertexArray::add_vertex_buffer(
+	const buffer::Buffer& buffer, unsigned int offset, unsigned int stride
+) {
+	glVertexArrayVertexBuffer(
+		_id, _buffer_index, buffer.get_id(), offset, static_cast<GLsizei>(stride)
+	);
+	_buffer_index++;
 }
 
 } // namespace void_engine::renderer
