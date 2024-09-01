@@ -30,6 +30,7 @@ public:
 	void move(const glm::vec3& movement);
 	void rotate(glm::vec3 rotation);
 
+	[[nodiscard]] auto is_in_frustum(const glm::vec3& point) const -> bool;
 	[[nodiscard]] auto get_near_plane() const -> float;
 	[[nodiscard]] auto get_far_plane() const -> float;
 	[[nodiscard]] auto get_position() const -> const glm::vec3&;

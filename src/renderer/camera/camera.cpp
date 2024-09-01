@@ -41,6 +41,20 @@ void Camera::rotate(glm::vec3 rotation) {
 	update_view();
 }
 
+auto Camera::is_in_frustum(const glm::vec3& point) const -> bool {
+	const glm::vec4 clip = _view_projection * glm::vec4(point, 1.0f);
+	if (clip.x < -clip.w || clip.x > clip.w) {
+		return false;
+	}
+	if (clip.y < -clip.w || clip.y > clip.w) {
+		return false;
+	}
+	if (clip.z < -clip.w || clip.z > clip.w) {
+		return false;
+	}
+	return true;
+}
+
 auto Camera::get_near_plane() const -> float {
 	return _near_plane;
 }
