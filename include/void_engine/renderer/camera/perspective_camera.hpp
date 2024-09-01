@@ -3,17 +3,25 @@
 
 #include "void_engine/renderer/camera/camera.hpp"
 
+#include <glm/ext/vector_float2.hpp>
+#include <glm/gtc/constants.hpp>
+
 namespace void_engine::renderer::camera {
 
 class PerspectiveCamera : public Camera {
 public:
-	virtual void set_fov(float fov) = 0;
-	virtual void set_aspect(float aspect) = 0;
-	[[nodiscard]] virtual auto get_fov() const -> float = 0;
-	[[nodiscard]] virtual auto get_aspect() const -> float = 0;
-	[[nodiscard]] auto get_type() const -> CameraType override {
-		return CameraType::perspective;
-	}
+	void set_fov(float fov);
+	void set_aspect(float aspect);
+	void set_aspect(const glm::vec2& size);
+	[[nodiscard]] auto get_fov() const -> float;
+	[[nodiscard]] auto get_aspect() const -> float;
+	[[nodiscard]] auto get_type() const -> CameraType override;
+
+protected:
+	float _fov = glm::quarter_pi<float>();
+	float _aspect = 0.0f;
+
+	void update_projection() override;
 };
 
 } // namespace void_engine::renderer::camera

@@ -1,31 +1,37 @@
 #ifndef VOID_ENGINE_RENDERER_CAMERA_ORTHOGRAPHIC_CAMERA_HPP
 #define VOID_ENGINE_RENDERER_CAMERA_ORTHOGRAPHIC_CAMERA_HPP
 
-#include "glm/ext/vector_float2.hpp"
 #include "void_engine/renderer/camera/camera.hpp"
+
+#include <glm/ext/vector_float2.hpp>
 
 namespace void_engine::renderer::camera {
 
 class OrthographicCamera : public Camera {
 public:
-	virtual void set_left(float left) = 0;
-	virtual void set_right(float right) = 0;
-	virtual void set_bottom(float bottom) = 0;
-	virtual void set_top(float top) = 0;
-	virtual void set_dimensions(
-		float left, float right, float bottom, float top
-	) = 0;
-	virtual void set_dimensions(glm::vec2 dimensions) = 0;
-	virtual void set_zoom(float zoom) = 0;
-	virtual void zoom(float zoom) = 0;
-	[[nodiscard]] virtual auto get_left() const -> float = 0;
-	[[nodiscard]] virtual auto get_right() const -> float = 0;
-	[[nodiscard]] virtual auto get_bottom() const -> float = 0;
-	[[nodiscard]] virtual auto get_top() const -> float = 0;
-	[[nodiscard]] virtual auto get_zoom() const -> float = 0;
-	[[nodiscard]] auto get_type() const -> CameraType override {
-		return CameraType::orthographic;
-	}
+	void set_left(float left);
+	void set_right(float right);
+	void set_bottom(float bottom);
+	void set_top(float top);
+	void set_dimensions(float left, float right, float bottom, float top);
+	void set_dimensions(const glm::vec2& dimensions);
+	void set_zoom(float zoom);
+	void zoom(float zoom);
+	[[nodiscard]] auto get_left() const -> float;
+	[[nodiscard]] auto get_right() const -> float;
+	[[nodiscard]] auto get_bottom() const -> float;
+	[[nodiscard]] auto get_top() const -> float;
+	[[nodiscard]] auto get_zoom() const -> float;
+	[[nodiscard]] auto get_type() const -> CameraType override;
+
+protected:
+	float _zoom = 1.0f;
+	float _left = 0.0f;
+	float _right = 0.0f;
+	float _bottom = 0.0f;
+	float _top = 0.0f;
+
+	void update_projection() override;
 };
 
 } // namespace void_engine::renderer::camera
