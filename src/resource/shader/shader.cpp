@@ -11,6 +11,7 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <iterator>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <variant>
 #include <vector>
@@ -77,6 +78,10 @@ void Shader::unbind() {
 
 void Shader::add_source(ShaderType type, const std::filesystem::path& path) {
 	_sources[type] = _root_path / path;
+}
+
+void Shader::add_source(ShaderType type, std::string_view source) {
+	_sources[type] = std::string(source);
 }
 
 void Shader::add_source(ShaderType type, const std::string& source) {
