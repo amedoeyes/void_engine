@@ -5,9 +5,10 @@
 #include "void_engine/display/window/window_input_handler.hpp"
 
 #include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float4.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 struct GLFWwindow;
@@ -29,7 +30,7 @@ public:
 	Window(Window&&) = delete;
 	auto operator=(const Window&) -> Window& = default;
 	auto operator=(Window&&) -> Window& = delete;
-	Window(std::string_view title, const glm::vec2& size);
+	Window(std::string_view title, const glm::ivec2& size);
 	~Window();
 
 	[[nodiscard]] auto event_handler() -> WindowEventHandler&;
@@ -50,7 +51,7 @@ public:
 
 	void fullscreen() const;
 	void fullscreen(const monitor::Monitor& monitor) const;
-	void windowed(const glm::vec2& position, const glm::vec2& size) const;
+	void windowed(const glm::ivec2& position, const glm::ivec2& size) const;
 
 	void set_aspect_ratio(int numerator, int denominator);
 	void set_auto_iconify(bool value);
@@ -60,19 +61,19 @@ public:
 	void set_icon(std::string_view path);
 	void set_icons(std::vector<std::string_view> paths);
 	void set_opacity(float opacity);
-	void set_position(const glm::vec2& position);
+	void set_position(const glm::ivec2& position);
 	void set_resizable(bool value);
-	void set_size(const glm::vec2& size);
-	void set_size_limits(const glm::vec2& min, const glm::vec2& max);
+	void set_size(const glm::ivec2& size);
+	void set_size_limits(const glm::ivec2& min, const glm::ivec2& max);
 	void set_title(std::string_view title);
 
 	[[nodiscard]] auto get_content_scale() const -> glm::vec2;
-	[[nodiscard]] auto get_frame_size() const -> glm::vec4;
-	[[nodiscard]] auto get_framebuffer_position() const -> glm::vec2;
-	[[nodiscard]] auto get_framebuffer_size() const -> glm::vec2;
+	[[nodiscard]] auto get_frame_size() const -> std::tuple<int, int, int, int>;
+	[[nodiscard]] auto get_framebuffer_position() const -> glm::ivec2;
+	[[nodiscard]] auto get_framebuffer_size() const -> glm::ivec2;
 	[[nodiscard]] auto get_opacity() const -> float;
-	[[nodiscard]] auto get_position() const -> glm::vec2;
-	[[nodiscard]] auto get_size() const -> glm::vec2;
+	[[nodiscard]] auto get_position() const -> glm::ivec2;
+	[[nodiscard]] auto get_size() const -> glm::ivec2;
 	[[nodiscard]] auto get_title() const -> std::string;
 
 	[[nodiscard]] auto is_auto_iconified() const -> bool;

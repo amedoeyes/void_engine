@@ -3,7 +3,7 @@
 
 #include "void_engine/display/window/window.hpp"
 
-#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -18,7 +18,7 @@ class WindowManager {
 	friend class display::DisplayManager;
 
 public:
-	static auto create(std::string_view name, std::string_view title, const glm::vec2& size)
+	static auto create(std::string_view name, std::string_view title, const glm::ivec2& size)
 		-> Window&;
 	static void destroy(std::string_view name);
 	static auto get(std::string_view name) -> Window&;

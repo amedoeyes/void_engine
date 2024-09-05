@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 #include <cassert>
-#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <string>
 #include <string_view>
 #include <unordered_map>
@@ -20,7 +20,7 @@ void WindowManager::terminate() {
 	_windows.clear();
 }
 
-auto WindowManager::create(std::string_view name, std::string_view title, const glm::vec2& size)
+auto WindowManager::create(std::string_view name, std::string_view title, const glm::ivec2& size)
 	-> Window& {
 	assert(_windows.find(name.data()) == _windows.end() && "Window already exists");
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);

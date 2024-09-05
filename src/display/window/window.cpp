@@ -10,17 +10,16 @@
 #include <cassert>
 #include <cstddef>
 #include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float4.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <vector>
 
 namespace void_engine::display::window {
 
-Window::Window(std::string_view title, const glm::vec2& size) {
-	_window = glfwCreateWindow(
-		static_cast<int>(size.x), static_cast<int>(size.y), title.data(), nullptr, nullptr
-	);
+Window::Window(std::string_view title, const glm::ivec2& size) {
+	_window = glfwCreateWindow(size.x, size.y, title.data(), nullptr, nullptr);
 	assert(_window != nullptr && "Failed to create window");
 	glfwMakeContextCurrent(_window);
 	glfwSetWindowUserPointer(_window, this);
@@ -97,16 +96,8 @@ void Window::fullscreen(const monitor::Monitor& monitor) const {
 	);
 }
 
-void Window::windowed(const glm::vec2& position, const glm::vec2& size) const {
-	glfwSetWindowMonitor(
-		_window,
-		nullptr,
-		static_cast<int>(position.x),
-		static_cast<int>(position.y),
-		static_cast<int>(size.x),
-		static_cast<int>(size.y),
-		GLFW_DONT_CARE
-	);
+void Window::windowed(const glm::ivec2& position, const glm::ivec2& size) const {
+	glfwSetWindowMonitor(_window, nullptr, position.x, position.y, size.x, size.y, GLFW_DONT_CARE);
 }
 
 void Window::set_aspect_ratio(int numerator, int denominator) {
@@ -133,26 +124,20 @@ void Window::set_opacity(float opacity) {
 	glfwSetWindowOpacity(_window, opacity);
 }
 
-void Window::set_position(const glm::vec2& position) {
-	glfwSetWindowPos(_window, static_cast<int>(position.x), static_cast<int>(position.y));
+void Window::set_position(const glm::ivec2& position) {
+	glfwSetWindowPos(_window, position.x, position.y);
 }
 
 void Window::set_resizable(bool value) {
 	glfwSetWindowAttrib(_window, GLFW_RESIZABLE, static_cast<int>(value));
 }
 
-void Window::set_size(const glm::vec2& size) {
-	glfwSetWindowSize(_window, static_cast<int>(size.x), static_cast<int>(size.y));
+void Window::set_size(const glm::ivec2& size) {
+	glfwSetWindowSize(_window, size.x, size.y);
 }
 
-void Window::set_size_limits(const glm::vec2& min, const glm::vec2& max) {
-	glfwSetWindowSizeLimits(
-		_window,
-		static_cast<int>(min.x),
-		static_cast<int>(min.y),
-		static_cast<int>(max.x),
-		static_cast<int>(max.y)
-	);
+void Window::set_size_limits(const glm::ivec2& min, const glm::ivec2& max) {
+	glfwSetWindowSizeLimits(_window, min.x, min.y, max.x, max.y);
 }
 
 void Window::set_title(std::string_view title) {
@@ -198,7 +183,7 @@ auto Window::get_content_scale() const -> glm::vec2 {
 	return {x, y};
 }
 
-auto Window::get_frame_size() const -> glm::vec4 {
+auto Window::get_frame_size() const -> std::tuple<int, int, int, int> {
 	int left = 0;
 	int top = 0;
 	int right = 0;
@@ -207,14 +192,14 @@ auto Window::get_frame_size() const -> glm::vec4 {
 	return {left, top, right, bottom};
 }
 
-auto Window::get_framebuffer_position() const -> glm::vec2 {
+auto Window::get_framebuffer_position() const -> glm::ivec2 {
 	int x = 0;
 	int y = 0;
 	glfwGetWindowPos(_window, &x, &y);
 	return {x, y};
 }
 
-auto Window::get_framebuffer_size() const -> glm::vec2 {
+auto Window::get_framebuffer_size() const -> glm::ivec2 {
 	int width = 0;
 	int height = 0;
 	glfwGetFramebufferSize(_window, &width, &height);
@@ -225,14 +210,14 @@ auto Window::get_opacity() const -> float {
 	return glfwGetWindowOpacity(_window);
 }
 
-auto Window::get_position() const -> glm::vec2 {
+auto Window::get_position() const -> glm::ivec2 {
 	int x = 0;
 	int y = 0;
 	glfwGetWindowPos(_window, &x, &y);
 	return {x, y};
 }
 
-auto Window::get_size() const -> glm::vec2 {
+auto Window::get_size() const -> glm::ivec2 {
 	int width = 0;
 	int height = 0;
 	glfwGetWindowSize(_window, &width, &height);
