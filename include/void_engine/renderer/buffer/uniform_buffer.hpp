@@ -3,6 +3,8 @@
 
 #include "void_engine/renderer/buffer/buffer.hpp"
 
+#include <bit>
+#include <cstddef>
 #include <cstring>
 
 namespace void_engine::renderer::buffer {
@@ -21,7 +23,7 @@ public:
 	template <typename U>
 	void set_sub_data(unsigned int offset, const U& data) {
 		Buffer::set_sub_data(offset, data);
-		std::memcpy(static_cast<char*>(static_cast<void*>(&_data)) + offset, &data, sizeof(U));
+		std::memcpy(std::bit_cast<std::byte*>(&_data) + offset, &data, sizeof(U));
 	}
 
 	void bind_range(unsigned int index, unsigned int offset = 0) const {

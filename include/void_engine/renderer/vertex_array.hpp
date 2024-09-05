@@ -2,6 +2,7 @@
 #define VOID_ENGINE_RENDERER_VERTEX_ARRAY_HPP
 
 #include "void_engine/renderer/buffer/array_buffer.hpp"
+#include "void_engine/renderer/buffer/buffer.hpp"
 #include "void_engine/renderer/buffer/element_buffer.hpp"
 #include "void_engine/utility/get_gl_type.hpp"
 

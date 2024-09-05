@@ -1,6 +1,10 @@
 #include "void_engine/renderer/geometry/line.hpp"
 
 #include "void_engine/renderer/geometry/attributes.hpp"
+#include "void_engine/renderer/mesh.hpp"
+#include "void_engine/renderer/renderer/enums.hpp"
+
+#include <vector>
 
 namespace void_engine::renderer::geometry {
 

@@ -3,6 +3,7 @@
 
 #include "void_engine/resource/shader/shader_manager.hpp"
 #include "void_engine/resource/texture/texture_manager.hpp"
+#include <filesystem>
 
 namespace void_engine::resource {
 

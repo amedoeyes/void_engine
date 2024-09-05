@@ -23,7 +23,7 @@ void MonitorManager::init() {
 		if (event == GLFW_CONNECTED) {
 			_monitors.push_back(new Monitor(monitor));
 		} else if (event == GLFW_DISCONNECTED) {
-			const auto it = std::find_if(_monitors.begin(), _monitors.end(), [monitor](Monitor* m) {
+			const auto it = std::ranges::find_if(_monitors, [monitor](Monitor* m) {
 				return m->_monitor == monitor;
 			});
 			delete *it;
@@ -41,7 +41,7 @@ void MonitorManager::terminate() {
 }
 
 auto MonitorManager::get(std::string_view name) -> Monitor& {
-	const auto it = std::find_if(_monitors.begin(), _monitors.end(), [name](Monitor* monitor) {
+	const auto it = std::ranges::find_if(_monitors, [name](Monitor* monitor) {
 		return monitor->get_name() == name;
 	});
 	assert(it != _monitors.end() && "Monitor does not exist");

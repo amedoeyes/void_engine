@@ -1,7 +1,9 @@
 #include "void_engine/renderer/vertex_array.hpp"
 
+#include "void_engine/renderer/buffer/buffer.hpp"
 #include "void_engine/renderer/buffer/element_buffer.hpp"
 
+#include <cassert>
 #include <glad/glad.h>
 
 namespace void_engine::renderer {

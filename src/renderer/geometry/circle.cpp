@@ -1,17 +1,24 @@
 #include "void_engine/renderer/geometry/circle.hpp"
 
 #include "void_engine/renderer/geometry/attributes.hpp"
+#include "void_engine/renderer/mesh.hpp"
+#include "void_engine/renderer/renderer/enums.hpp"
 
+#include <cmath>
+#include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float3.hpp>
+#include <glm/gtc/constants.hpp>
 #include <vector>
 
 namespace void_engine::renderer::geometry {
 
-static auto generate_circle_attributes(unsigned int segments) -> Attributes {
+namespace {
+
+auto generate_circle_attributes(unsigned int segments) -> Attributes {
 	const float step = glm::two_pi<float>() / static_cast<float>(segments);
 	std::vector<glm::vec3> positions = {{0.0f, 0.0f, 0.0f}};
 	std::vector<glm::vec3> normals = {{0.0f, 0.0f, 1.0f}};
 	std::vector<glm::vec2> uvs = {{0.5f, 0.5f}};
-	std::vector<unsigned int> indices;
 	for (unsigned int i = 0; i < segments; ++i) {
 		const float angle = static_cast<float>(i) * step;
 		const float x = std::cos(angle);
@@ -23,15 +30,17 @@ static auto generate_circle_attributes(unsigned int segments) -> Attributes {
 	return {positions, normals, uvs};
 }
 
+} // namespace
+
 auto create_circle_mesh(unsigned int segments) -> Mesh {
 	std::vector<unsigned int> indices;
 	for (unsigned int i = 0; i < segments; ++i) {
 		indices.push_back(0);
 		indices.push_back(i + 1);
-		indices.push_back((i + 1) % segments + 1);
+		indices.push_back(((i + 1) % segments) + 1);
 	}
-	Attributes attributes = generate_circle_attributes(segments);
-	Mesh mesh(PrimitiveType::triangles);
+	const Attributes attributes = generate_circle_attributes(segments);
+	Mesh mesh;
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);
@@ -43,9 +52,9 @@ auto create_circle_outline_mesh(unsigned int segments) -> Mesh {
 	std::vector<unsigned int> indices;
 	for (unsigned int i = 0; i < segments; ++i) {
 		indices.push_back(i + 1);
-		indices.push_back((i + 1) % segments + 1);
+		indices.push_back(((i + 1) % segments) + 1);
 	}
-	Attributes attributes = generate_circle_attributes(segments);
+	const Attributes attributes = generate_circle_attributes(segments);
 	Mesh mesh(PrimitiveType::lines);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);

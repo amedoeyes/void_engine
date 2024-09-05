@@ -96,7 +96,7 @@ public:
 		}
 		std::vector<Entity> entities;
 		entities.reserve(unique.size());
-		std::move(unique.begin(), unique.end(), std::back_inserter(entities));
+		std::ranges::move(unique, std::back_inserter(entities));
 		return entities;
 	}
 

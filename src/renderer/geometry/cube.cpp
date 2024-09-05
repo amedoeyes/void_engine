@@ -1,6 +1,10 @@
 #include "void_engine/renderer/geometry/cube.hpp"
 
 #include "void_engine/renderer/geometry/attributes.hpp"
+#include "void_engine/renderer/mesh.hpp"
+#include "void_engine/renderer/renderer/enums.hpp"
+
+#include <vector>
 
 namespace void_engine::renderer::geometry {
 
@@ -37,7 +41,7 @@ auto create_cube_mesh() -> Mesh {
 		0,	1,	2,	0,	2,	3,	4,	5,	6,	4,	6,	7,	8,	9,	10, 8,	10, 11,
 		12, 13, 14, 12, 14, 15, 16, 17, 18, 16, 18, 19, 20, 21, 22, 20, 22, 23,
 	};
-	Mesh mesh(PrimitiveType::triangles);
+	Mesh mesh;
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);

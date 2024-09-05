@@ -8,6 +8,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <string>
+#include <string_view>
 #include <unordered_map>
 #include <variant>
 #include <vector>
@@ -37,6 +38,7 @@ public:
 	static void unbind();
 
 	void add_source(ShaderType type, const std::filesystem::path& path);
+	void add_source(ShaderType type, std::string_view source);
 	void add_source(ShaderType type, const std::string& source);
 	void compile();
 

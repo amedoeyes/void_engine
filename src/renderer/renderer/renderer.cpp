@@ -18,8 +18,10 @@
 #include "void_engine/utility/transform.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <cstddef>
 #include <glad/glad.h>
+#include <glm/common.hpp>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/scalar_constants.hpp>
@@ -28,7 +30,6 @@
 #include <glm/ext/vector_int2.hpp>
 #include <glm/geometric.hpp>
 #include <glm/gtx/rotate_vector.hpp>
-#include <glm/gtx/string_cast.hpp>
 #include <glm/gtx/vector_angle.hpp>
 #include <string>
 #include <string_view>
@@ -173,7 +174,7 @@ void Renderer::draw_line(
 	const glm::vec3 direction = end - start;
 	const glm::vec3 normal = glm::normalize(direction);
 	const glm::vec3 reference(1.0f, 0.0f, 0.0f);
-	float cos_theta = glm::dot(reference, normal);
+	const float cos_theta = glm::dot(reference, normal);
 	glm::vec3 axis;
 	float angle = 0;
 	if (cos_theta > 0.9999f) {
