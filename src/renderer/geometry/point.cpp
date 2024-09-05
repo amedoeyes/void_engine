@@ -21,7 +21,7 @@ static const Attributes attributes = {
 
 auto create_point_mesh() -> Mesh {
 	const std::vector<unsigned int> indices = {0};
-	Mesh mesh(PrimitiveType::lines);
+	Mesh mesh(PrimitiveType::points);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);
