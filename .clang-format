@@ -1,11 +1,15 @@
 BasedOnStyle: LLVM
 Language: Cpp
 Standard: c++20
-UseTab: Always
-TabWidth: 4
-IndentWidth: 4
+
 ColumnLimit: 100
-AccessModifierOffset: -4
+UseTab: Always
+TabWidth: 2
+IndentWidth: 2
+BracedInitializerIndentWidth: 2
+ConstructorInitializerIndentWidth: 2
+ContinuationIndentWidth: 2
+AccessModifierOffset: -2
 
 AllowShortCaseLabelsOnASingleLine: true
 AllowShortEnumsOnASingleLine: false
