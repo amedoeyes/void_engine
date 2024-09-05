@@ -1,6 +1,12 @@
 #include "void_engine/renderer/mesh.hpp"
 
+#include "void_engine/renderer/buffer/buffer.hpp"
 #include "void_engine/renderer/buffer/element_buffer.hpp"
+#include "void_engine/renderer/renderer/enums.hpp"
+#include "void_engine/renderer/vertex_array.hpp"
+
+#include <utility>
+#include <vector>
 
 namespace void_engine::renderer {
 
@@ -56,6 +62,13 @@ auto Mesh::operator=(Mesh&& other) noexcept -> Mesh& {
 	other._vertex_array = nullptr;
 	other._element_buffer = nullptr;
 	return *this;
+}
+
+Mesh::Mesh() :
+	_vertex_array(new VertexArray()),
+	_element_buffer(new buffer::ElementBuffer()),
+	_primitive_type(PrimitiveType::triangles) {
+	_vertex_array->set_element_buffer(*_element_buffer);
 }
 
 Mesh::Mesh(PrimitiveType primitive_type) :

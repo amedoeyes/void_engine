@@ -1,8 +1,10 @@
 #ifndef VOID_ENGINE_RENDERER_MESH_HPP
 #define VOID_ENGINE_RENDERER_MESH_HPP
 
+#include "void_engine/renderer/buffer/array_buffer.hpp"
+#include "void_engine/renderer/buffer/buffer.hpp"
 #include "void_engine/renderer/buffer/element_buffer.hpp"
-#include "void_engine/renderer/renderer.hpp"
+#include "void_engine/renderer/renderer/enums.hpp"
 #include "void_engine/renderer/vertex_array.hpp"
 
 #include <vector>
@@ -15,7 +17,7 @@ public:
 	Mesh(Mesh&& other) noexcept;
 	auto operator=(const Mesh& other) -> Mesh&;
 	auto operator=(Mesh&& other) noexcept -> Mesh&;
-	Mesh() = default;
+	Mesh();
 	explicit Mesh(PrimitiveType primitive_type);
 	~Mesh();
 
@@ -60,10 +62,10 @@ public:
 	}
 
 private:
-	VertexArray* _vertex_array = nullptr;
+	VertexArray* _vertex_array;
 	std::vector<buffer::Buffer*> _vertex_buffers;
-	buffer::ElementBuffer* _element_buffer = nullptr;
-	PrimitiveType _primitive_type = PrimitiveType::triangles;
+	buffer::ElementBuffer* _element_buffer;
+	PrimitiveType _primitive_type;
 };
 
 } // namespace void_engine::renderer
