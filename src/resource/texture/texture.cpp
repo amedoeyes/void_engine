@@ -10,7 +10,7 @@
 namespace void_engine::resource {
 
 Texture::Texture(TextureTarget target) : _target(target) {
-	glCreateTextures(static_cast<int>(_target), 1, &_id);
+	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 }
 
 Texture::~Texture() {
@@ -18,11 +18,11 @@ Texture::~Texture() {
 }
 
 void Texture::bind() const {
-	glBindTexture(static_cast<int>(_target), _id);
+	glBindTexture(static_cast<GLenum>(_target), _id);
 }
 
 void Texture::unbind() const {
-	glBindTexture(static_cast<int>(_target), 0);
+	glBindTexture(static_cast<GLenum>(_target), 0);
 }
 
 void Texture::bind_unit(unsigned int unit) const {
@@ -60,7 +60,7 @@ void Texture::generate_mipmap() const {
 }
 
 void Texture::set_depth_stencil_mode(TextureDepthStencilMode mode) const {
-	glTextureParameteri(_id, GL_DEPTH_STENCIL_TEXTURE_MODE, static_cast<int>(mode));
+	glTextureParameteri(_id, GL_DEPTH_STENCIL_TEXTURE_MODE, static_cast<GLint>(mode));
 }
 
 void Texture::set_base_level(int level) const {
@@ -76,19 +76,19 @@ void Texture::set_border_color(const glm::vec4& color) const {
 }
 
 void Texture::set_compare_func(TextureCompareFunc func) const {
-	glTextureParameteri(_id, GL_TEXTURE_COMPARE_FUNC, static_cast<int>(func));
+	glTextureParameteri(_id, GL_TEXTURE_COMPARE_FUNC, static_cast<GLint>(func));
 }
 
 void Texture::set_compare_mode(TextureCompareMode mode) const {
-	glTextureParameteri(_id, GL_TEXTURE_COMPARE_MODE, static_cast<int>(mode));
+	glTextureParameteri(_id, GL_TEXTURE_COMPARE_MODE, static_cast<GLint>(mode));
 }
 
 void Texture::set_min_filter(TextureMinFilter filter) const {
-	glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, static_cast<int>(filter));
+	glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(filter));
 }
 
 void Texture::set_mag_filter(TextureMagFilter filter) const {
-	glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, static_cast<int>(filter));
+	glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(filter));
 }
 
 void Texture::set_min_lod(float lod) const {
@@ -104,31 +104,31 @@ void Texture::set_lod_bias(float bias) const {
 }
 
 void Texture::set_swizzle_r(TextureSwizzle swizzle) const {
-	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_R, static_cast<int>(swizzle));
+	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_R, static_cast<GLint>(swizzle));
 }
 
 void Texture::set_swizzle_g(TextureSwizzle swizzle) const {
-	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_G, static_cast<int>(swizzle));
+	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_G, static_cast<GLint>(swizzle));
 }
 
 void Texture::set_swizzle_b(TextureSwizzle swizzle) const {
-	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_B, static_cast<int>(swizzle));
+	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_B, static_cast<GLint>(swizzle));
 }
 
 void Texture::set_swizzle_a(TextureSwizzle swizzle) const {
-	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_A, static_cast<int>(swizzle));
+	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_A, static_cast<GLint>(swizzle));
 }
 
 void Texture::set_wrap_s(TextureWrap wrap) const {
-	glTextureParameteri(_id, GL_TEXTURE_WRAP_S, static_cast<int>(wrap));
+	glTextureParameteri(_id, GL_TEXTURE_WRAP_S, static_cast<GLint>(wrap));
 }
 
 void Texture::set_wrap_t(TextureWrap wrap) const {
-	glTextureParameteri(_id, GL_TEXTURE_WRAP_T, static_cast<int>(wrap));
+	glTextureParameteri(_id, GL_TEXTURE_WRAP_T, static_cast<GLint>(wrap));
 }
 
 void Texture::set_wrap_r(TextureWrap wrap) const {
-	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<int>(wrap));
+	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<GLint>(wrap));
 }
 
 auto Texture::get_size() const -> const glm::ivec2& {
