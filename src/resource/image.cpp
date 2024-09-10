@@ -12,15 +12,15 @@ namespace void_engine::resource {
 namespace {
 
 void close_file(FILE* fp) {
-	if (fclose(fp) != 0) {
-		perror("fclose");
+	if (std::fclose(fp) != 0) {
+		std::perror("fclose");
 	}
 }
 
 } // namespace
 
 auto read_image(const std::filesystem::path& path, bool flip) -> Image* {
-	FILE* fp = fopen(path.c_str(), "rb");
+	std::FILE* fp = std::fopen(path.string().c_str(), "rb");
 	if (fp == nullptr) {
 		return nullptr;
 	}
@@ -76,7 +76,7 @@ auto read_image(const std::filesystem::path& path, bool flip) -> Image* {
 }
 
 void write_image(const std::filesystem::path& path, Image* image) {
-	FILE* fp = fopen(path.c_str(), "wb");
+	std::FILE* fp = std::fopen(path.string().c_str(), "wb");
 	if (fp == nullptr) {
 		return;
 	}
