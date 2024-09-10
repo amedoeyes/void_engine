@@ -41,7 +41,7 @@ public:
 	auto operator=(const Buffer& other) -> Buffer&;
 	auto operator=(Buffer&& other) noexcept -> Buffer&;
 	explicit Buffer(BufferTarget target);
-	~Buffer();
+	virtual ~Buffer();
 
 	void bind() const;
 	void unbind() const;
