@@ -28,7 +28,7 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 	const Image* image = read_image(_root_path / path, true);
 	assert(image != nullptr && "Failed to read image");
 
-	const glm::vec2 image_size = {image->width, image->height};
+	const glm::ivec2 image_size = {image->width, image->height};
 
 	auto* texture = new Texture(TextureTarget::texture_2d);
 	texture->set_texture_storage_2d(1, TextureInternalFormat::rgba8, image_size);

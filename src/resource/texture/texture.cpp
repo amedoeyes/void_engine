@@ -1,8 +1,8 @@
 #include "void_engine/resource/texture/texture.hpp"
 
 #include <glad/glad.h>
-#include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
+#include <glm/ext/vector_int2.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
 namespace void_engine::resource {
@@ -28,30 +28,26 @@ void Texture::bind_unit(unsigned int unit) const {
 }
 
 void Texture::set_texture_storage_2d(
-	unsigned int levels, TextureInternalFormat internal_format, const glm::vec2& size
+	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
 ) {
 	glTextureStorage2D(
-		_id,
-		static_cast<int>(levels),
-		static_cast<int>(internal_format),
-		static_cast<int>(size.x),
-		static_cast<int>(size.y)
+		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y
 	);
 	_size = size;
 }
 
 void Texture::set_sub_image_2d(
-	unsigned int level, const glm::vec2& offset, const glm::vec2& size, TextureFormat format,
+	unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, TextureFormat format,
 	const void* pixels
 ) const {
 	glTextureSubImage2D(
 		_id,
-		static_cast<int>(level),
-		static_cast<int>(offset.x),
-		static_cast<int>(offset.y),
-		static_cast<int>(size.x),
-		static_cast<int>(size.y),
-		static_cast<int>(format),
+		static_cast<GLint>(level),
+		offset.x,
+		offset.y,
+		size.x,
+		size.y,
+		static_cast<GLenum>(format),
 		GL_UNSIGNED_BYTE,
 		pixels
 	);
@@ -133,7 +129,7 @@ void Texture::set_wrap_r(TextureWrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<int>(wrap));
 }
 
-auto Texture::get_size() const -> const glm::vec2& {
+auto Texture::get_size() const -> const glm::ivec2& {
 	return _size;
 }
 

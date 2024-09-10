@@ -2,8 +2,8 @@
 #define VOID_ENGINE_RESOURCE_TEXTURE_HPP
 
 #include <cstdint>
-#include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_float4.hpp>
+#include <glm/ext/vector_int2.hpp>
 
 namespace void_engine::resource {
 
@@ -168,11 +168,11 @@ public:
 	void bind_unit(unsigned int unit = 0) const;
 
 	void set_texture_storage_2d(
-		unsigned int levels, TextureInternalFormat internal_format, const glm::vec2& size
+		unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
 	);
 
 	void set_sub_image_2d(
-		unsigned int level, const glm::vec2& offset, const glm::vec2& size, TextureFormat format,
+		unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, TextureFormat format,
 		const void* pixels
 	) const;
 
@@ -204,12 +204,12 @@ public:
 	void set_wrap_t(TextureWrap wrap) const;
 	void set_wrap_r(TextureWrap wrap) const;
 
-	[[nodiscard]] auto get_size() const -> const glm::vec2&;
+	[[nodiscard]] auto get_size() const -> const glm::ivec2&;
 
 private:
 	TextureTarget _target;
 	unsigned int _id = 0;
-	glm::vec2 _size = glm::vec2(0.0f);
+	glm::ivec2 _size = glm::ivec2(0);
 };
 
 } // namespace void_engine::resource
