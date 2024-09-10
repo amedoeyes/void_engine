@@ -14,6 +14,10 @@ Texture::Texture(const Texture& other) : _target(other._target), _size(other._si
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
 		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		case TextureTarget::texture_3d:
+		case TextureTarget::texture_2d_array:
+			set_texture_storage_3d(1, other._internal_format, _size);
+			break;
 		default: assert(false && "Not implemented");
 	}
 	glCopyImageSubData(
@@ -52,6 +56,10 @@ auto Texture::operator=(const Texture& other) -> Texture& {
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
 		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		case TextureTarget::texture_3d:
+		case TextureTarget::texture_2d_array:
+			set_texture_storage_3d(1, other._internal_format, _size);
+			break;
 		default: assert(false && "Not implemented");
 	}
 	glCopyImageSubData(
@@ -116,6 +124,16 @@ void Texture::set_texture_storage_2d(
 	glTextureStorage2D(
 		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y
 	);
+	_size = glm::ivec3(size, 1.0f);
+	_internal_format = internal_format;
+}
+
+void Texture::set_texture_storage_3d(
+	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec3& size
+) {
+	glTextureStorage3D(
+		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y, size.z
+	);
 	_size = size;
 	_internal_format = internal_format;
 }
@@ -131,6 +149,25 @@ void Texture::set_sub_image_2d(
 		offset.y,
 		size.x,
 		size.y,
+		static_cast<GLenum>(format),
+		GL_UNSIGNED_BYTE,
+		pixels
+	);
+}
+
+void Texture::set_sub_image_3d(
+	unsigned int level, const glm::ivec3& offset, const glm::ivec3& size, TextureFormat format,
+	const void* pixels
+) const {
+	glTextureSubImage3D(
+		_id,
+		static_cast<GLint>(level),
+		offset.x,
+		offset.y,
+		offset.z,
+		size.x,
+		size.y,
+		size.z,
 		static_cast<GLenum>(format),
 		GL_UNSIGNED_BYTE,
 		pixels
@@ -213,7 +250,7 @@ void Texture::set_wrap_r(TextureWrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<GLint>(wrap));
 }
 
-auto Texture::get_size() const -> const glm::ivec2& {
+auto Texture::get_size() const -> const glm::ivec3& {
 	return _size;
 }
 

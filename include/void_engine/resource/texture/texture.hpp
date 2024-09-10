@@ -5,6 +5,7 @@
 
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
+#include <glm/ext/vector_int3.hpp>
 
 namespace void_engine::resource {
 
@@ -26,8 +27,17 @@ public:
 		unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
 	);
 
+	void set_texture_storage_3d(
+		unsigned int levels, TextureInternalFormat internal_format, const glm::ivec3& size
+	);
+
 	void set_sub_image_2d(
 		unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, TextureFormat format,
+		const void* pixels
+	) const;
+
+	void set_sub_image_3d(
+		unsigned int level, const glm::ivec3& offset, const glm::ivec3& size, TextureFormat format,
 		const void* pixels
 	) const;
 
@@ -59,12 +69,12 @@ public:
 	void set_wrap_t(TextureWrap wrap) const;
 	void set_wrap_r(TextureWrap wrap) const;
 
-	[[nodiscard]] auto get_size() const -> const glm::ivec2&;
+	[[nodiscard]] auto get_size() const -> const glm::ivec3&;
 
 private:
 	unsigned int _id = 0;
 	TextureTarget _target;
-	glm::ivec2 _size = glm::ivec2(0);
+	glm::ivec3 _size = glm::ivec3(0);
 	TextureInternalFormat _internal_format = TextureInternalFormat::none;
 };
 
