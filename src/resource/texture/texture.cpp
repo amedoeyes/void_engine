@@ -1,5 +1,7 @@
 #include "void_engine/resource/texture/texture.hpp"
 
+#include "void_engine/resource/texture/enums.hpp"
+
 #include <glad/glad.h>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
