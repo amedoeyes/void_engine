@@ -25,6 +25,7 @@ enum class TextureTarget : uint16_t {
 };
 
 enum class TextureInternalFormat : uint16_t {
+	none = 0,
 	r8 = 0x8229,
 	r8_snorm = 0x8F94,
 	r16 = 0x822A,

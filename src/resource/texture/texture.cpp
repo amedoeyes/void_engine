@@ -2,6 +2,7 @@
 
 #include "void_engine/resource/texture/enums.hpp"
 
+#include <cassert>
 #include <glad/glad.h>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
@@ -9,11 +10,90 @@
 
 namespace void_engine::resource {
 
+Texture::Texture(const Texture& other) : _target(other._target), _size(other._size) {
+	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
+	switch (other._target) {
+		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		default: assert(false && "Not implemented");
+	}
+	glCopyImageSubData(
+		other._id,
+		static_cast<GLenum>(other._target),
+		0,
+		0,
+		0,
+		0,
+		_id,
+		static_cast<GLenum>(_target),
+		0,
+		0,
+		0,
+		0,
+		other._size.x,
+		other._size.y,
+		1
+	);
+}
+
+Texture::Texture(Texture&& other) noexcept :
+	_id(other._id),
+	_target(other._target),
+	_size(other._size),
+	_internal_format(other._internal_format) {
+	other._id = 0;
+}
+
+auto Texture::operator=(const Texture& other) -> Texture& {
+	if (this == &other) {
+		return *this;
+	}
+	_target = other._target;
+	_size = other._size;
+	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
+	switch (other._target) {
+		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		default: assert(false && "Not implemented");
+	}
+	glCopyImageSubData(
+		other._id,
+		static_cast<GLenum>(other._target),
+		0,
+		0,
+		0,
+		0,
+		_id,
+		static_cast<GLenum>(_target),
+		0,
+		0,
+		0,
+		0,
+		other._size.x,
+		other._size.y,
+		1
+	);
+	return *this;
+}
+
+auto Texture::operator=(Texture&& other) noexcept -> Texture& {
+	if (this == &other) {
+		return *this;
+	}
+	_id = other._id;
+	_target = other._target;
+	_size = other._size;
+	_internal_format = other._internal_format;
+	other._id = 0;
+	return *this;
+}
+
 Texture::Texture(TextureTarget target) : _target(target) {
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 }
 
 Texture::~Texture() {
+	if (_id == 0) {
+		return;
+	}
 	glDeleteTextures(1, &_id);
 }
 
@@ -36,6 +116,7 @@ void Texture::set_texture_storage_2d(
 		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y
 	);
 	_size = size;
+	_internal_format = internal_format;
 }
 
 void Texture::set_sub_image_2d(

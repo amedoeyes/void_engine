@@ -10,10 +10,10 @@ namespace void_engine::resource {
 
 class Texture {
 public:
-	Texture(const Texture&) = default;
-	Texture(Texture&&) = delete;
-	auto operator=(const Texture&) -> Texture& = default;
-	auto operator=(Texture&&) -> Texture& = delete;
+	Texture(const Texture& other);
+	Texture(Texture&& other) noexcept;
+	auto operator=(const Texture& other) -> Texture&;
+	auto operator=(Texture&& other) noexcept -> Texture&;
 	explicit Texture(TextureTarget target);
 	~Texture();
 
@@ -62,9 +62,10 @@ public:
 	[[nodiscard]] auto get_size() const -> const glm::ivec2&;
 
 private:
-	TextureTarget _target;
 	unsigned int _id = 0;
+	TextureTarget _target;
 	glm::ivec2 _size = glm::ivec2(0);
+	TextureInternalFormat _internal_format = TextureInternalFormat::none;
 };
 
 } // namespace void_engine::resource
