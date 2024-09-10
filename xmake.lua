@@ -2,12 +2,11 @@
 
 set_project("void_engine")
 set_version("0.1.0")
-set_toolchains("clang")
 set_languages("c++20")
 set_warnings("allextra", "pedantic", "error")
 
+add_rules("mode.debug", "mode.release", "mode.releasedbg", "mode.check", "mode.profile")
 add_rules("plugin.compile_commands.autoupdate", { lsp = "clangd", outputdir = "build" })
-add_rules("mode.release", "mode.debug")
 
 if is_mode("debug") then
 	add_defines("DEBUG")
@@ -39,6 +38,26 @@ option("tests", {
 	default = false,
 	type = "boolean",
 })
+
+option("examples", {
+	description = "Build the examples",
+	showmenu = true,
+	default = false,
+	type = "boolean",
+})
+
+if has_config("examples") then
+	for _, example in ipairs(os.files("examples/*.cpp")) do
+		local name = path.basename(example)
+		target(name, {
+			kind = "binary",
+			files = example,
+			includedirs = "include",
+			deps = "void_engine",
+			packages = { "glfw", "glm", "glad", "libpng" },
+		})
+	end
+end
 
 if has_config("tests") then
 	add_requires("catch2 ^3.6.0")
