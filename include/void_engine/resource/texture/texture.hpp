@@ -20,7 +20,7 @@ public:
 	void bind() const;
 	void unbind() const;
 
-	void bind_unit(unsigned int unit = 0) const;
+	[[nodiscard]] auto bind_unit(unsigned int unit) const -> int;
 
 	void set_texture_storage_2d(
 		unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
