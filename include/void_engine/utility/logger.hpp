@@ -4,7 +4,7 @@
 #include <cstdint>
 #include <format>
 #include <iostream>
-#include <string>
+#include <print>
 #include <string_view>
 
 namespace void_engine::utility {
@@ -19,52 +19,59 @@ enum class LogLevel : std::uint8_t {
 
 class Logger {
 public:
-	static void set_log_level(LogLevel log_level);
-
 	template <typename... Args>
-	static void debug(const std::string_view fmt, const Args&... args) {
-		log(LogLevel::debug, fmt, args...);
+	static void debug(std::string_view fmt, Args&&... args) {
+		log(LogLevel::debug, fmt, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	static void info(const std::string_view fmt, const Args&... args) {
-		log(LogLevel::info, fmt, args...);
+	static void info(std::string_view fmt, Args&&... args) {
+		log(LogLevel::info, fmt, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	static void warning(const std::string_view fmt, const Args&... args) {
-		log(LogLevel::warning, fmt, args...);
+	static void warning(std::string_view fmt, Args&&... args) {
+		log(LogLevel::warning, fmt, std::forward<Args>(args)...);
 	}
 
 	template <typename... Args>
-	static void error(const std::string_view fmt, const Args&... args) {
-		log(LogLevel::error, fmt, args...);
+	static void error(std::string_view fmt, Args&&... args) {
+		log(LogLevel::error, fmt, std::forward<Args>(args)...);
+	}
+
+	static void set_log_level(LogLevel log_level) {
+		_log_level = log_level;
 	}
 
 private:
-	static LogLevel _log_level;
+	static inline LogLevel _log_level = LogLevel::info;
 
 	template <typename... Args>
-	static void log(LogLevel level, const std::string_view fmt, const Args&... args) {
+	static void log(LogLevel level, std::string_view fmt, Args&&... args) {
 		if (level < _log_level) {
 			return;
 		}
-
-		std::string format_str = std::vformat(fmt, std::make_format_args(args...));
-		std::string_view level_str;
+		std::string_view prefix;
 		switch (level) {
-			case LogLevel::debug: level_str = "[DEBUG]"; break;
-			case LogLevel::info: level_str = "[INFO]"; break;
-			case LogLevel::warning: level_str = "[WARNING]"; break;
-			case LogLevel::error: level_str = "[ERROR]"; break;
+			using enum LogLevel;
+			case debug: prefix = "[DEBUG]"; break;
+			case info: prefix = "[INFO]"; break;
+			case warning: prefix = "[WARNING]"; break;
+			case error: prefix = "[ERROR]"; break;
 			default:;
 		}
-		const std::string message = std::format("{}: {}\n", level_str, format_str);
-
 		if (level >= LogLevel::warning) {
-			std::cerr << message;
+			std::println(
+				std::cerr,
+				std::runtime_format(std::format("{}: {}", prefix, fmt)),
+				std::forward<Args>(args)...
+			);
 		} else {
-			std::cout << message;
+			std::println(
+				std::cout,
+				std::runtime_format(std::format("{}: {}", prefix, fmt)),
+				std::forward<Args>(args)...
+			);
 		}
 	}
 };
