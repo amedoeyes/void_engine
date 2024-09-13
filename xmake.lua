@@ -16,10 +16,10 @@ add_defines("GLM_ENABLE_EXPERIMENTAL")
 
 add_requireconfs("*", { system = false })
 add_requires({
-	"glm ^1.0.1",
 	"glfw ^3.4",
 	"glad ^0.1.36",
-	"libpng ^1.6.43",
+	"glm ^1.0.1",
+	"stb ^2024.06.01",
 })
 add_requireconfs("glad", {
 	configs = { profile = "core" },
@@ -34,7 +34,7 @@ target("void_engine", function()
 		"resources/shaders/**.frag",
 	})
 	add_includedirs("include")
-	add_packages({ "glfw", "glm", "glad", "libpng" })
+	add_packages({ "glfw", "glad", "glm", "stb" })
 end)
 
 option("tests", {
@@ -59,7 +59,7 @@ if has_config("examples") then
 			files = example,
 			includedirs = "include",
 			deps = "void_engine",
-			packages = { "glfw", "glm", "glad", "libpng" },
+			packages = { "glm" },
 		})
 	end
 end
