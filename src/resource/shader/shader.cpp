@@ -76,16 +76,20 @@ void Shader::unbind() {
 	glUseProgram(0);
 }
 
-void Shader::add_source(ShaderType type, const std::filesystem::path& path) {
-	_sources[type] = _root_path / path;
+void Shader::add_source_path(
+	ShaderType type, const std::filesystem::path& path, ShaderFormat format
+) {
+	_sources.push_back({type, format, _root_path / path});
 }
 
-void Shader::add_source(ShaderType type, std::string_view source) {
-	_sources[type] = std::string(source);
+void Shader::add_source(ShaderType type, std::string_view source, ShaderFormat format) {
+	_sources.push_back({type, format, std::string(source)});
 }
 
-void Shader::add_source(ShaderType type, const std::string& source) {
-	_sources[type] = source;
+void Shader::add_source(
+	ShaderType type, std::span<const unsigned char> source, ShaderFormat format
+) {
+	add_source(type, {std::bit_cast<const char*>(source.data()), source.size()}, format);
 }
 
 void Shader::compile() {
@@ -99,13 +103,8 @@ void Shader::compile() {
 		_shaders.clear();
 	}
 
-	for (const auto& [type, source] : _sources) {
-		unsigned int shader = 0;
-		if (std::holds_alternative<std::filesystem::path>(source)) {
-			shader = compile_source(type, std::get<std::filesystem::path>(source));
-		} else {
-			shader = compile_source(type, std::get<std::string>(source));
-		}
+	for (const auto& source : _sources) {
+		unsigned int shader = compile_source(source);
 		glAttachShader(_id, shader);
 		_shaders.push_back(shader);
 	}
@@ -135,12 +134,40 @@ void Shader::set_root_path(const std::filesystem::path& root_path) {
 	_root_path = root_path;
 }
 
+void Shader::set_uniform(unsigned int index, int value) const {
+	glProgramUniform1i(_id, static_cast<GLint>(index), value);
+}
+
+void Shader::set_uniform(unsigned int index, unsigned int value) const {
+	glProgramUniform1ui(_id, static_cast<GLint>(index), value);
+}
+
+void Shader::set_uniform(unsigned int index, float value) const {
+	glProgramUniform1f(_id, static_cast<GLint>(index), value);
+}
+
+void Shader::set_uniform(unsigned int index, const glm::vec2& value) const {
+	glProgramUniform2fv(_id, static_cast<GLint>(index), 1, glm::value_ptr(value));
+}
+
+void Shader::set_uniform(unsigned int index, const glm::vec3& value) const {
+	glProgramUniform3fv(_id, static_cast<GLint>(index), 1, glm::value_ptr(value));
+}
+
+void Shader::set_uniform(unsigned int index, const glm::vec4& value) const {
+	glProgramUniform4fv(_id, static_cast<GLint>(index), 1, glm::value_ptr(value));
+}
+
+void Shader::set_uniform(unsigned int index, const glm::mat4& value) const {
+	glProgramUniformMatrix4fv(_id, static_cast<GLint>(index), 1, 0u, glm::value_ptr(value));
+}
+
 void Shader::set_uniform(const std::string& name, int value) const {
 	auto it = _uniforms.find(name);
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform1i(_id, it->second, value);
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, unsigned int value) const {
@@ -148,7 +175,7 @@ void Shader::set_uniform(const std::string& name, unsigned int value) const {
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform1ui(_id, it->second, value);
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, float value) const {
@@ -156,7 +183,7 @@ void Shader::set_uniform(const std::string& name, float value) const {
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform1f(_id, it->second, value);
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, const glm::vec2& value) const {
@@ -164,7 +191,7 @@ void Shader::set_uniform(const std::string& name, const glm::vec2& value) const 
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform2fv(_id, it->second, 1, glm::value_ptr(value));
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, const glm::vec3& value) const {
@@ -172,7 +199,7 @@ void Shader::set_uniform(const std::string& name, const glm::vec3& value) const 
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform3fv(_id, it->second, 1, glm::value_ptr(value));
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, const glm::vec4& value) const {
@@ -180,7 +207,7 @@ void Shader::set_uniform(const std::string& name, const glm::vec4& value) const 
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniform4fv(_id, it->second, 1, glm::value_ptr(value));
+	set_uniform(it->second, value);
 }
 
 void Shader::set_uniform(const std::string& name, const glm::mat4& value) const {
@@ -188,25 +215,56 @@ void Shader::set_uniform(const std::string& name, const glm::mat4& value) const 
 	if (it == _uniforms.end()) {
 		return;
 	}
-	glProgramUniformMatrix4fv(_id, it->second, 1, 0u, glm::value_ptr(value));
+	set_uniform(it->second, value);
 }
 
-auto Shader::compile_source(ShaderType type, const std::filesystem::path& path) -> unsigned int {
-	std::ifstream file(path);
-	assert(file.is_open() && "Failed to open file");
-	const std::string source(
-		(std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>()
-	);
-	file.close();
-	return compile_source(type, source);
-}
-
-auto Shader::compile_source(ShaderType type, const std::string& source) -> unsigned int {
-	const unsigned int shader = glCreateShader(static_cast<unsigned int>(type));
-	const char* source_c = source.c_str();
-	glShaderSource(shader, 1, &source_c, nullptr);
+auto Shader::compile_source_glsl(const ShaderSource& source) -> unsigned int {
+	std::string source_code;
+	if (std::holds_alternative<std::filesystem::path>(source.data)) {
+		std::ifstream file(std::get<std::filesystem::path>(source.data));
+		assert(file.is_open() && "Failed to open file");
+		source_code =
+			std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
+		file.close();
+	} else {
+		source_code = std::get<std::string>(source.data);
+	}
+	const char* source_code_c = source_code.c_str();
+	const unsigned int shader = glCreateShader(static_cast<GLenum>(source.type));
+	glShaderSource(shader, 1, &source_code_c, nullptr);
 	glCompileShader(shader);
 	return shader;
+}
+
+auto Shader::compile_source_spirv(const ShaderSource& source) -> unsigned int {
+	std::string buffer;
+	if (std::holds_alternative<std::filesystem::path>(source.data)) {
+		std::ifstream file(
+			std::get<std::filesystem::path>(source.data), std::ios::binary | std::ios::ate
+		);
+		assert(file.is_open() && "Failed to open SPIR-V binary file");
+		const std::streamsize size = file.tellg();
+		file.seekg(0, std::ios::beg);
+		buffer.resize(static_cast<std::size_t>(size));
+		file.read(buffer.data(), size);
+		file.close();
+	} else {
+		buffer = std::get<std::string>(source.data);
+	}
+	const unsigned int shader = glCreateShader(static_cast<GLenum>(source.type));
+	glShaderBinary(
+		1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, buffer.data(), static_cast<GLsizei>(buffer.size())
+	);
+	glSpecializeShader(shader, "main", 0, nullptr, nullptr);
+	return shader;
+}
+
+auto Shader::compile_source(const ShaderSource& source) -> unsigned int {
+	switch (source.format) {
+		case ShaderFormat::glsl: return compile_source_glsl(source);
+		case ShaderFormat::spirv: return compile_source_spirv(source);
+		default: std::unreachable();
+	}
 }
 
 } // namespace void_engine::resource
