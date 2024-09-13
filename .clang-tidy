@@ -15,6 +15,7 @@ Checks:
   -cppcoreguidelines-non-private-member-variables-in-classes,
   hicpp-*,
   -hicpp-uppercase-literal-suffix,
+  -hicpp-avoid-c-arrays
   misc-*,
   -misc-non-private-member-variables-in-classes,
   modernize-*,

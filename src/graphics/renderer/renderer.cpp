@@ -80,28 +80,13 @@ APIENTRY void debug_message_callback(
 	}
 }
 
-constexpr std::string_view shape_vertex_shader = R"glsl(
-#version 460 core
-layout(location = 0) in vec3 i_position;
-layout(binding = 0) uniform Camera {
-	mat4 projection;
-	mat4 view;
-	mat4 view_projection;
-} u_camera;
-uniform mat4 u_model;
-void main() {
-	gl_Position = u_camera.view_projection *  u_model * vec4(i_position, 1.0);
-}
-)glsl";
+constexpr unsigned char shape_shader_vert[] = {
+#include "shape.vert.spv.h"
+};
 
-constexpr std::string_view shape_fragment_shader = R"glsl(
-#version 460 core
-uniform vec4 u_color;
-out vec4 o_color;
-void main() {
-	o_color = u_color;
-}
-)glsl";
+constexpr unsigned char shape_shader_frag[] = {
+#include "shape.frag.spv.h"
+};
 
 } // namespace
 
@@ -128,8 +113,12 @@ void Renderer::init() {
 	_camera_uniform->allocate(sizeof(CameraUniform), buffer::BufferUsage::dynamic_draw);
 
 	_shape_shader = new resource::Shader();
-	_shape_shader->add_source(resource::ShaderType::vertex, shape_vertex_shader);
-	_shape_shader->add_source(resource::ShaderType::fragment, shape_fragment_shader);
+	_shape_shader->add_source(
+		resource::ShaderType::vertex, shape_shader_vert, resource::ShaderFormat::spirv
+	);
+	_shape_shader->add_source(
+		resource::ShaderType::fragment, shape_shader_frag, resource::ShaderFormat::spirv
+	);
 	_shape_shader->compile();
 }
 
@@ -160,8 +149,8 @@ void Renderer::draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
 
 void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 	static const Mesh point = geometry::create_point_mesh();
-	_shape_shader->set_uniform("u_model", glm::translate(glm::mat4(1.0f), position));
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, glm::translate(glm::mat4(1.0f), position));
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	set_point_size(size);
 	draw_mesh(point);
@@ -191,8 +180,8 @@ void Renderer::draw_line(
 	transform.set_position(start + direction * 0.5f);
 	transform.set_rotation(angle, axis);
 	transform.set_scale({glm::length(direction) * 0.5f, 1.0f, 1.0f});
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	set_line_width(width);
 	draw_mesh(line);
@@ -200,8 +189,8 @@ void Renderer::draw_line(
 
 void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh quad = geometry::create_quad_mesh();
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	draw_mesh(quad);
 }
@@ -210,8 +199,8 @@ void Renderer::draw_quad_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
 	static const Mesh quad_outline = geometry::create_quad_outline_mesh();
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	set_line_width(width);
 	draw_mesh(quad_outline);
@@ -219,8 +208,8 @@ void Renderer::draw_quad_outline(
 
 void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh circle = geometry::create_circle_mesh(100);
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	draw_mesh(circle);
 }
@@ -229,8 +218,8 @@ void Renderer::draw_circle_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
 	static const Mesh circle_outline = geometry::create_circle_outline_mesh(100);
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	set_line_width(width);
 	draw_mesh(circle_outline);
@@ -238,8 +227,8 @@ void Renderer::draw_circle_outline(
 
 void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh cube = geometry::create_cube_mesh();
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	draw_mesh(cube);
 }
@@ -248,8 +237,8 @@ void Renderer::draw_cube_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
 	static const Mesh cube_outline = geometry::create_cube_outline_mesh();
-	_shape_shader->set_uniform("u_model", transform.get_model());
-	_shape_shader->set_uniform("u_color", color);
+	_shape_shader->set_uniform(0, transform.get_model());
+	_shape_shader->set_uniform(1, color);
 	_shape_shader->bind();
 	set_line_width(width);
 	draw_mesh(cube_outline);
