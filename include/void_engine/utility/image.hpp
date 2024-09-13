@@ -5,6 +5,7 @@
 #include <cstdint>
 #include <filesystem>
 #include <glm/ext/vector_int2.hpp>
+#include <optional>
 #include <vector>
 
 namespace void_engine::utility {

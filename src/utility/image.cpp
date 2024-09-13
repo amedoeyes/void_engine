@@ -3,9 +3,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
+#include <bit>
 #include <cassert>
+#include <cstddef>
 #include <cstdio>
 #include <cstring>
+#include <filesystem>
+#include <optional>
 #include <stb_image.h>
 #include <stb_image_write.h>
 #include <vector>
@@ -21,7 +25,7 @@ auto read_image(const std::filesystem::path& path, bool flip) -> std::optional<I
 	if (data == nullptr) {
 		return std::nullopt;
 	}
-	unsigned int size = width * height * channels;
+	const unsigned int size = width * height * channels;
 	Image image;
 	image.size = {width, height};
 	image.color_type = static_cast<ImageColorType>(channels);
@@ -48,7 +52,7 @@ auto read_image(const std::vector<std::byte>& data, bool flip) -> std::optional<
 	if (image_data == nullptr) {
 		return std::nullopt;
 	}
-	unsigned int size = width * height * channels;
+	const unsigned int size = width * height * channels;
 	Image image;
 	image.size = {width, height};
 	image.color_type = static_cast<ImageColorType>(channels);
@@ -59,7 +63,7 @@ auto read_image(const std::vector<std::byte>& data, bool flip) -> std::optional<
 }
 
 void write_image(const std::filesystem::path& path, const Image& image) {
-	int result = stbi_write_png(
+	const int result = stbi_write_png(
 		path.string().c_str(),
 		image.size.x,
 		image.size.y,
