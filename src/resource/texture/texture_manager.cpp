@@ -25,13 +25,14 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 	-> Texture& {
 	assert(_textures.find(name.data()) == _textures.end() && "Texture already exists");
 
-	const utility::Image image = utility::read_image(_root_path / path, true);
+	const auto image = utility::read_image(_root_path / path, true);
+	assert(image.has_value() && "Failed to read image");
 
 	auto* texture = new Texture(TextureTarget::texture_2d);
-	texture->set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.size);
+	texture->set_texture_storage_2d(1, TextureInternalFormat::rgba8, image->size);
 
 	TextureFormat format = TextureFormat::none;
-	switch (image.color_type) {
+	switch (image->color_type) {
 		using enum utility::ImageColorType;
 		case gray: format = TextureFormat::red; break;
 		case gray_alpha: format = TextureFormat::rg; break;
@@ -40,7 +41,7 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 		default: std::unreachable();
 	}
 
-	texture->set_sub_image_2d(0, {0, 0}, image.size, format, image.data.data());
+	texture->set_sub_image_2d(0, {0, 0}, image->size, format, image->data.data());
 
 	const auto [it, _] = _textures.emplace(name.data(), texture);
 	return *(it->second);

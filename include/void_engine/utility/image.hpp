@@ -22,8 +22,8 @@ struct Image {
 	std::vector<std::byte> data;
 };
 
-auto read_image(const std::filesystem::path& path, bool flip = false) -> Image;
-auto read_image(const std::vector<std::byte>& data, bool flip = false) -> Image;
+auto read_image(const std::filesystem::path& path, bool flip = false) -> std::optional<Image>;
+auto read_image(const std::vector<std::byte>& data, bool flip = false) -> std::optional<Image>;
 void write_image(const std::filesystem::path& path, const Image& image);
 
 } // namespace void_engine::utility

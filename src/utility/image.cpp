@@ -12,13 +12,15 @@
 
 namespace void_engine::utility {
 
-auto read_image(const std::filesystem::path& path, bool flip) -> Image {
+auto read_image(const std::filesystem::path& path, bool flip) -> std::optional<Image> {
 	int width = 0;
 	int height = 0;
 	int channels = 0;
 	stbi_set_flip_vertically_on_load(static_cast<int>(flip));
 	unsigned char* data = stbi_load(path.string().c_str(), &width, &height, &channels, 0);
-	assert(data != nullptr && "Failed to read image");
+	if (data == nullptr) {
+		return std::nullopt;
+	}
 	unsigned int size = width * height * channels;
 	Image image;
 	image.size = {width, height};
@@ -29,7 +31,7 @@ auto read_image(const std::filesystem::path& path, bool flip) -> Image {
 	return image;
 }
 
-auto read_image(const std::vector<std::byte>& data, bool flip) -> Image {
+auto read_image(const std::vector<std::byte>& data, bool flip) -> std::optional<Image> {
 	int width = 0;
 	int height = 0;
 	int channels = 0;
@@ -43,7 +45,9 @@ auto read_image(const std::vector<std::byte>& data, bool flip) -> Image {
 		&channels,
 		0
 	);
-	assert(image_data != nullptr && "Failed to read image");
+	if (image_data == nullptr) {
+		return std::nullopt;
+	}
 	unsigned int size = width * height * channels;
 	Image image;
 	image.size = {width, height};
