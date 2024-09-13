@@ -10,6 +10,7 @@
 #include <glm/ext/vector_float4.hpp>
 #include <glm/gtc/type_ptr.hpp>
 #include <iterator>
+#include <span>
 #include <string>
 #include <string_view>
 #include <utility>
