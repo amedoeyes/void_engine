@@ -1,6 +1,8 @@
 #include "void_engine/resource/shader/shader.hpp"
 
+#include <bit>
 #include <cassert>
+#include <cstddef>
 #include <filesystem>
 #include <fstream>
 #include <glad/glad.h>
@@ -9,6 +11,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <ios>
 #include <iterator>
 #include <span>
 #include <string>
@@ -105,7 +108,7 @@ void Shader::compile() {
 	}
 
 	for (const auto& source : _sources) {
-		unsigned int shader = compile_source(source);
+		unsigned int const shader = compile_source(source);
 		glAttachShader(_id, shader);
 		_shaders.push_back(shader);
 	}
