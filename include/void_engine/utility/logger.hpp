@@ -4,7 +4,6 @@
 #include <cstdint>
 #include <format>
 #include <iostream>
-#include <print>
 #include <string_view>
 
 namespace void_engine::utility {
@@ -61,17 +60,9 @@ private:
 			default:;
 		}
 		if (level >= LogLevel::warning) {
-			std::println(
-				std::cerr,
-				std::runtime_format(std::format("{}: {}", prefix, fmt)),
-				std::forward<Args>(args)...
-			);
+			std::cerr << prefix << ": " << std::vformat(fmt, std::make_format_args(args...)) << std::endl;
 		} else {
-			std::println(
-				std::cout,
-				std::runtime_format(std::format("{}: {}", prefix, fmt)),
-				std::forward<Args>(args)...
-			);
+			std::cout << prefix << ": " << std::vformat(fmt, std::make_format_args(args...)) << std::endl;
 		}
 	}
 };
