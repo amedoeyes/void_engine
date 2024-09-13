@@ -25,12 +25,17 @@ add_requireconfs("glad", {
 	configs = { profile = "core" },
 })
 
-target("void_engine", {
-	kind = "static",
-	files = "src/**.cpp",
-	includedirs = "include",
-	add_packages = { "glfw", "glm", "glad", "libpng" },
-})
+target("void_engine", function()
+	set_kind("static")
+	add_rules("utils.glsl2spv", { outputdir = "build/shaders", targetenv = "opengl", bin2c = true })
+	add_files({
+		"src/**.cpp",
+		"resources/shaders/**.vert",
+		"resources/shaders/**.frag",
+	})
+	add_includedirs("include")
+	add_packages({ "glfw", "glm", "glad", "libpng" })
+end)
 
 option("tests", {
 	description = "Build the test suite",
