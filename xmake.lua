@@ -2,7 +2,7 @@
 
 set_project("void_engine")
 set_version("0.1.0")
-set_languages("c++26")
+set_languages("c++23")
 set_warnings("allextra", "pedantic", "error")
 
 add_rules("mode.debug", "mode.release", "mode.releasedbg", "mode.check", "mode.profile")
