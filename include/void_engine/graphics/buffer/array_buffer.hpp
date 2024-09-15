@@ -2,6 +2,7 @@
 #define VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP
 
 #include "void_engine/graphics/buffer/buffer.hpp"
+#include "void_engine/utility/logger.hpp"
 
 #include <vector>
 
@@ -32,7 +33,11 @@ public:
 	}
 
 	void update_data(const std::vector<T>& data) {
-		Buffer::set_sub_data(0, data.size() * sizeof(T), data.data());
+		if (_data.size() < data.size()) {
+			set_data(data, _usage);
+		} else {
+			Buffer::set_sub_data(0, data.size() * sizeof(T), data.data());
+		}
 		_data = data;
 	}
 
