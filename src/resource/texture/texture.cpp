@@ -113,9 +113,8 @@ void Texture::unbind() const {
 	glBindTexture(static_cast<GLenum>(_target), 0);
 }
 
-auto Texture::bind_unit(unsigned int unit) const -> int {
+void Texture::bind_unit(unsigned int unit) const {
 	glBindTextureUnit(unit, _id);
-	return static_cast<int>(unit);
 }
 
 void Texture::set_texture_storage_2d(
