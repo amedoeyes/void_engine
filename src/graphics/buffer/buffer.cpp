@@ -4,9 +4,10 @@
 
 namespace void_engine::graphics::buffer {
 
-Buffer::Buffer(const Buffer& other) {
-	_target = other._target;
-	_allocated_size = other._allocated_size;
+Buffer::Buffer(const Buffer& other) :
+	_target(other._target),
+	_usage(other._usage),
+	_allocated_size(other._allocated_size) {
 	GLint size = 0;
 	GLint usage = 0;
 	glGetNamedBufferParameteriv(other._id, GL_BUFFER_SIZE, &size);
@@ -19,6 +20,7 @@ Buffer::Buffer(const Buffer& other) {
 Buffer::Buffer(Buffer&& other) noexcept :
 	_id(other._id),
 	_target(other._target),
+	_usage(other._usage),
 	_allocated_size(other._allocated_size) {
 	other._id = 0;
 	other._allocated_size = 0;
@@ -32,6 +34,7 @@ auto Buffer::operator=(const Buffer& other) -> Buffer& {
 		glDeleteBuffers(1, &_id);
 	}
 	_target = other._target;
+	_usage = other._usage;
 	_allocated_size = other._allocated_size;
 	GLint size = 0;
 	GLint usage = 0;
@@ -49,6 +52,7 @@ auto Buffer::operator=(Buffer&& other) noexcept -> Buffer& {
 	}
 	_id = other._id;
 	_target = other._target;
+	_usage = other._usage;
 	_allocated_size = other._allocated_size;
 	other._id = 0;
 	other._allocated_size = 0;
@@ -77,11 +81,13 @@ void Buffer::unbind() const {
 void Buffer::allocate(unsigned int size, BufferUsage usage) {
 	glNamedBufferData(_id, size, nullptr, static_cast<GLenum>(usage));
 	_allocated_size = size;
+	_usage = usage;
 }
 
 void Buffer::set_data(unsigned int size, const void* data, BufferUsage usage) {
 	glNamedBufferData(_id, size, data, static_cast<GLenum>(usage));
 	_allocated_size = size;
+	_usage = usage;
 }
 
 void Buffer::set_sub_data(unsigned int offset, unsigned int size, const void* data) const {

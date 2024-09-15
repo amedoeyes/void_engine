@@ -6,6 +6,7 @@
 namespace void_engine::graphics::buffer {
 
 enum class BufferTarget : uint16_t {
+	none = 0,
 	array = 0x8892,
 	atomic_counter = 0x92C0,
 	copy_read = 0x8F36,
@@ -23,6 +24,7 @@ enum class BufferTarget : uint16_t {
 };
 
 enum class BufferUsage : uint16_t {
+	none = 0,
 	stream_draw = 0x88E0,
 	stream_read = 0x88E1,
 	stream_copy = 0x88E2,
@@ -74,9 +76,10 @@ public:
 
 	[[nodiscard]] auto get_id() const -> unsigned int;
 
-private:
+protected:
 	unsigned int _id = 0;
-	BufferTarget _target;
+	BufferTarget _target = BufferTarget::none;
+	BufferUsage _usage = BufferUsage::none;
 	unsigned int _allocated_size = 0;
 };
 
