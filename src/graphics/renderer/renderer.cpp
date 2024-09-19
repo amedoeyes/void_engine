@@ -51,7 +51,7 @@ APIENTRY void debug_message_callback(
 		case GL_DEBUG_SOURCE_THIRD_PARTY: source_str = "Third Party"; break;
 		case GL_DEBUG_SOURCE_APPLICATION: source_str = "Application"; break;
 		case GL_DEBUG_SOURCE_OTHER: source_str = "Other"; break;
-		default:;
+		default: std::unreachable();
 	}
 	switch (type) {
 		case GL_DEBUG_TYPE_ERROR: type_str = "Error"; break;
@@ -63,20 +63,20 @@ APIENTRY void debug_message_callback(
 		case GL_DEBUG_TYPE_PUSH_GROUP: type_str = "Push Group"; break;
 		case GL_DEBUG_TYPE_POP_GROUP: type_str = "Pop Group"; break;
 		case GL_DEBUG_TYPE_OTHER: type_str = "Other"; break;
-		default:;
+		default: std::unreachable();
 	}
 	switch (severity) {
 		case GL_DEBUG_SEVERITY_HIGH:
-			utility::Logger::error("OpenGL: {}: {}: {}", source_str, type_str, message);
+			utility::logger::error("OpenGL: {}: {}: {}", source_str, type_str, message);
 			break;
 		case GL_DEBUG_SEVERITY_MEDIUM:
 		case GL_DEBUG_SEVERITY_LOW:
-			utility::Logger::warning("OpenGL: {}: {}: {}", source_str, type_str, message);
+			utility::logger::warning("OpenGL: {}: {}: {}", source_str, type_str, message);
 			break;
 		case GL_DEBUG_SEVERITY_NOTIFICATION:
-			utility::Logger::info("OpenGL: {}: {}: {}", source_str, type_str, message);
+			utility::logger::info("OpenGL: {}: {}: {}", source_str, type_str, message);
 			break;
-		default:;
+		default: std::unreachable();
 	}
 }
 

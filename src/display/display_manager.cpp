@@ -14,7 +14,7 @@ void DisplayManager::init() {
 		assert(false && "Failed to initialize GLFW");
 	}
 	glfwSetErrorCallback([](int, const char* description) {
-		utility::Logger::error("GLFW: {}", description);
+		utility::logger::error("GLFW: {}", description);
 	});
 	monitor::MonitorManager::init();
 }
