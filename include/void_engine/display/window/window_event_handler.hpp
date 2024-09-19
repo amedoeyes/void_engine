@@ -1,13 +1,13 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_EVENT_HANDLER_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_EVENT_HANDLER_HPP
 
-#include "void_engine/event/event_manager.hpp"
+#include "void_engine/utility/event/event_manager.hpp"
 
 namespace void_engine::display::window {
 
 class Window;
 
-class WindowEventHandler final : public ::void_engine::event::EventManager {
+class WindowEventHandler final : public utility::event::EventManager {
 public:
 	WindowEventHandler(const WindowEventHandler&) = default;
 	WindowEventHandler(WindowEventHandler&&) = delete;

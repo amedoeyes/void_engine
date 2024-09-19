@@ -1,7 +1,7 @@
-#ifndef VOID_ENGINE_EVENT_EVENT_BASE_HPP
-#define VOID_ENGINE_EVENT_EVENT_BASE_HPP
+#ifndef VOID_ENGINE_UTILITY_EVENT_EVENT_BASE_HPP
+#define VOID_ENGINE_UTILITY_EVENT_EVENT_BASE_HPP
 
-namespace void_engine::event {
+namespace void_engine::utility::event {
 
 class EventBase {
 public:
@@ -13,6 +13,6 @@ public:
 	virtual ~EventBase() = default;
 };
 
-} // namespace void_engine::event
+} // namespace void_engine::utility::event
 
-#endif // !VOID_ENGINE_EVENT_EVENT_BASE_HPP
+#endif // !VOID_ENGINE_UTILITY_EVENT_EVENT_BASE_HPP

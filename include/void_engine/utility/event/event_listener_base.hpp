@@ -1,9 +1,9 @@
-#ifndef VOID_ENGINE_EVENT_EVENT_LISTENER_BASE_HPP
-#define VOID_ENGINE_EVENT_EVENT_LISTENER_BASE_HPP
+#ifndef VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_BASE_HPP
+#define VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_BASE_HPP
 
-#include "void_engine/event/event_base.hpp"
+#include "void_engine/utility/event/event_base.hpp"
 
-namespace void_engine::event {
+namespace void_engine::utility::event {
 
 class EventListenerBase {
 public:
@@ -16,6 +16,6 @@ public:
 	virtual void emit(const EventBase* event) const = 0;
 };
 
-} // namespace void_engine::event
+} // namespace void_engine::utility::event
 
-#endif // !VOID_ENGINE_EVENT_EVENT_LISTENER_BASE_HPP
+#endif // !VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_BASE_HPP

@@ -1,10 +1,10 @@
-#ifndef VOID_ENGINE_EVENT_EVENT_MANAGER_HPP
-#define VOID_ENGINE_EVENT_EVENT_MANAGER_HPP
+#ifndef VOID_ENGINE_UTILITY_EVENT_EVENT_MANAGER_HPP
+#define VOID_ENGINE_UTILITY_EVENT_EVENT_MANAGER_HPP
 
-#include "void_engine/event/event.hpp"
-#include "void_engine/event/event_base.hpp"
-#include "void_engine/event/event_listener.hpp"
-#include "void_engine/event/event_listener_base.hpp"
+#include "void_engine/utility/event/event.hpp"
+#include "void_engine/utility/event/event_base.hpp"
+#include "void_engine/utility/event/event_listener.hpp"
+#include "void_engine/utility/event/event_listener_base.hpp"
 
 #include <algorithm>
 #include <cassert>
@@ -14,7 +14,7 @@
 #include <utility>
 #include <vector>
 
-namespace void_engine::event {
+namespace void_engine::utility::event {
 
 using EventID = uint32_t;
 
@@ -102,6 +102,6 @@ private:
 	}
 };
 
-} // namespace void_engine::event
+} // namespace void_engine::utility::event
 
-#endif // !VOID_ENGINE_EVENT_EVENT_MANAGER_HPP
+#endif // !VOID_ENGINE_UTILITY_EVENT_EVENT_MANAGER_HPP

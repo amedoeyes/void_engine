@@ -1,13 +1,13 @@
-#ifndef VOID_ENGINE_EVENT_EVENT_LISTENER_HPP
-#define VOID_ENGINE_EVENT_EVENT_LISTENER_HPP
+#ifndef VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_HPP
+#define VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_HPP
 
-#include "void_engine/event/event.hpp"
-#include "void_engine/event/event_base.hpp"
-#include "void_engine/event/event_listener_base.hpp"
+#include "void_engine/utility/event/event.hpp"
+#include "void_engine/utility/event/event_base.hpp"
+#include "void_engine/utility/event/event_listener_base.hpp"
 
 #include <functional>
 
-namespace void_engine::event {
+namespace void_engine::utility::event {
 
 template <typename EventType>
 class EventListener : public EventListenerBase {
@@ -33,6 +33,6 @@ private:
 	Callback _callback;
 };
 
-} // namespace void_engine::event
+} // namespace void_engine::utility::event
 
-#endif // !VOID_ENGINE_EVENT_EVENT_LISTENER_HPP
+#endif // !VOID_ENGINE_UTILITY_EVENT_EVENT_LISTENER_HPP

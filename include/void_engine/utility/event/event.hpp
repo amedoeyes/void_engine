@@ -1,11 +1,11 @@
-#ifndef VOID_ENGINE_EVENT_EVENT_HPP
-#define VOID_ENGINE_EVENT_EVENT_HPP
+#ifndef VOID_ENGINE_UTILITY_EVENT_EVENT_HPP
+#define VOID_ENGINE_UTILITY_EVENT_EVENT_HPP
 
-#include "void_engine/event/event_base.hpp"
+#include "void_engine/utility/event/event_base.hpp"
 
 #include <utility>
 
-namespace void_engine::event {
+namespace void_engine::utility::event {
 
 template <typename EventType>
 class Event : public EventBase {
@@ -27,6 +27,6 @@ private:
 	EventType _data;
 };
 
-} // namespace void_engine::event
+} // namespace void_engine::utility::event
 
-#endif // !VOID_ENGINE_EVENT_EVENT_HPP
+#endif // !VOID_ENGINE_UTILITY_EVENT_EVENT_HPP
