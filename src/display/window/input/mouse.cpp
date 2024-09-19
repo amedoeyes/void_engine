@@ -1,7 +1,7 @@
 #include "void_engine/display/window/input/mouse.hpp"
 
+#include "void_engine/resource/image/image.hpp"
 #include "void_engine/utility/get_exec_path.hpp"
-#include "void_engine/utility/image.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -40,7 +40,7 @@ void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_sp
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
-	const utility::Image image(utility::get_exec_path().parent_path() / path, true);
+	const resource::image::Image image(utility::get_exec_path().parent_path() / path, true);
 	const glm::uvec2 size = image.get_size();
 	const GLFWimage glfw_image = {
 		.width = static_cast<int>(size.x),

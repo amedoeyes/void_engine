@@ -4,7 +4,7 @@
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
 #include "void_engine/utility/get_exec_path.hpp"
-#include "void_engine/utility/image.hpp"
+#include "void_engine/resource/image/image.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
@@ -146,7 +146,7 @@ void Window::set_title(std::string_view title) {
 
 void Window::set_icon(std::string_view path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
-	const utility::Image image(utility::get_exec_path().parent_path() / path, true);
+	const resource::image::Image image(utility::get_exec_path().parent_path() / path, true);
 	const glm::uvec2 size = image.get_size();
 	const GLFWimage glfw_image = {
 		.width = static_cast<int>(size.x),
@@ -157,10 +157,10 @@ void Window::set_icon(std::string_view path) {
 }
 
 void Window::set_icons(std::vector<std::string_view> paths) {
-	const std::vector<utility::Image*> images(paths.size());
+	const std::vector<resource::image::Image*> images(paths.size());
 	std::vector<GLFWimage> glfw_images(paths.size());
 	for (size_t i = 0; i < paths.size(); ++i) {
-		const utility::Image image(utility::get_exec_path().parent_path() / paths[i], true);
+		const resource::image::Image image(utility::get_exec_path().parent_path() / paths[i], true);
 		const glm::uvec2 size = image.get_size();
 		glfw_images[i] = {
 			.width = static_cast<int>(size.x),

@@ -1,4 +1,6 @@
-#include "void_engine/utility/image.hpp"
+#include "void_engine/resource/image/image.hpp"
+
+#include "void_engine/resource/image/enums.hpp"
 
 #include <cassert>
 #include <glm/ext/vector_uint2.hpp>
@@ -16,9 +18,9 @@
 #include <stb_image_write.h>
 #include <vector>
 
-namespace void_engine::utility {
+namespace void_engine::resource::image {
 
-Image::Image(std::span<const std::byte> data, ImageColorType color_type, const glm::uvec2& size) :
+Image::Image(std::span<const std::byte> data, ColorType color_type, const glm::uvec2& size) :
 	_data(data.begin(), data.end()),
 	_color_type(color_type),
 	_size(size) {
@@ -35,7 +37,7 @@ Image::Image(const std::filesystem::path& path, bool flip) {
 	_data.resize(size);
 	std::memcpy(_data.data(), data, size);
 	_size = {width, height};
-	_color_type = static_cast<ImageColorType>(channels);
+	_color_type = static_cast<ColorType>(channels);
 	stbi_image_free(data);
 }
 
@@ -58,7 +60,7 @@ Image::Image(std::span<std::byte> data, bool flip) {
 	_data.resize(size);
 	std::memcpy(_data.data(), image_data, size);
 	_size = {width, height};
-	_color_type = static_cast<ImageColorType>(channels);
+	_color_type = static_cast<ColorType>(channels);
 	stbi_image_free(image_data);
 }
 
@@ -80,7 +82,7 @@ auto Image::get_data() const -> std::span<const std::byte> {
 	return _data;
 }
 
-auto Image::get_color_type() const -> ImageColorType {
+auto Image::get_color_type() const -> ColorType {
 	return _color_type;
 }
 
@@ -88,4 +90,4 @@ auto Image::get_size() const -> const glm::uvec2& {
 	return _size;
 }
 
-} // namespace void_engine::utility
+} // namespace void_engine::resource::image
