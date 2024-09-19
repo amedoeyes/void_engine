@@ -34,7 +34,7 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 	TextureFormat format = TextureFormat::none;
 	switch (image->color_type) {
 		using enum utility::ImageColorType;
-		case gray: format = TextureFormat::red; break;
+		case gray: format = TextureFormat::r; break;
 		case gray_alpha: format = TextureFormat::rg; break;
 		case rgb: format = TextureFormat::rgb; break;
 		case rgba: format = TextureFormat::rgba; break;

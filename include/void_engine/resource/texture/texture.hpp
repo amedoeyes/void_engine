@@ -6,6 +6,7 @@
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
 #include <glm/ext/vector_int3.hpp>
+#include <vector>
 
 namespace void_engine::resource {
 
@@ -68,13 +69,16 @@ public:
 	void set_wrap_t(TextureWrap wrap) const;
 	void set_wrap_r(TextureWrap wrap) const;
 
+	[[nodiscard]] auto get_data(TextureFormat format) const -> std::vector<std::byte>;
 	[[nodiscard]] auto get_size() const -> const glm::ivec3&;
 
 private:
 	unsigned int _id = 0;
 	TextureTarget _target;
-	glm::ivec3 _size = glm::ivec3(0);
+	glm::ivec3 _size = glm::ivec3(1);
 	TextureInternalFormat _internal_format = TextureInternalFormat::none;
+
+	[[nodiscard]] static auto get_bytes_per_pixel(TextureFormat format) -> unsigned int;
 };
 
 } // namespace void_engine::resource

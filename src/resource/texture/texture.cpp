@@ -3,6 +3,7 @@
 #include "void_engine/resource/texture/enums.hpp"
 
 #include <cassert>
+#include <cstddef>
 #include <glad/glad.h>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
@@ -35,7 +36,7 @@ Texture::Texture(const Texture& other) : _target(other._target), _size(other._si
 		0,
 		other._size.x,
 		other._size.y,
-		1
+		other._size.z
 	);
 }
 
@@ -77,7 +78,7 @@ auto Texture::operator=(const Texture& other) -> Texture& {
 		0,
 		other._size.x,
 		other._size.y,
-		1
+		other._size.z
 	);
 	return *this;
 }
@@ -249,8 +250,39 @@ void Texture::set_wrap_r(TextureWrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<GLint>(wrap));
 }
 
+auto Texture::get_data(TextureFormat format) const -> std::vector<std::byte> {
+	std::vector<std::byte> data;
+	data.resize(
+		static_cast<decltype(data)::size_type>(_size.x) * _size.y * _size.z *
+		get_bytes_per_pixel(format)
+	);
+	glGetTextureImage(
+		_id,
+		0,
+		static_cast<GLenum>(format),
+		GL_UNSIGNED_BYTE,
+		static_cast<GLsizei>(data.size()),
+		data.data()
+	);
+	return data;
+}
+
 auto Texture::get_size() const -> const glm::ivec3& {
 	return _size;
+}
+
+auto Texture::get_bytes_per_pixel(TextureFormat format) -> unsigned int {
+	switch (format) {
+		using enum TextureFormat;
+		case r: return 1;
+		case rg: return 2;
+		case rgb:
+		case bgr: return 3;
+		case rgba:
+		case bgra: return 4;
+		default: assert(false && "Not implemented");
+	}
+	return 0;
 }
 
 } // namespace void_engine::resource

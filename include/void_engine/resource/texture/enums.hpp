@@ -89,7 +89,7 @@ enum class TextureInternalFormat : uint16_t {
 
 enum class TextureFormat : uint16_t {
 	none = 0,
-	red = 0x1903,
+	r = 0x1903,
 	rg = 0x8227,
 	rgb = 0x1907,
 	bgr = 0x80E0,
