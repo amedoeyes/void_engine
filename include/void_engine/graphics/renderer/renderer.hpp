@@ -77,6 +77,17 @@ public:
 	static auto get_clear_color() -> const glm::vec4&;
 	static auto get_viewport_size() -> const glm::ivec2&;
 	static auto get_viewport_position() -> const glm::ivec2&;
+	static auto is_blend_enabled() -> bool;
+	static auto get_blend_func() -> std::pair<BlendFunc, BlendFunc>;
+	static auto get_blend_equation() -> BlendEquation;
+	static auto is_stencil_enabled() -> bool;
+	static auto get_stencil_mask() -> unsigned int;
+	static auto get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int>;
+	static auto get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp>;
+	static auto is_cull_face_enabled() -> bool;
+	static auto get_cull_face() -> CullFace;
+	static auto get_front_face() -> FrontFace;
+	static auto get_polygon_mode() -> PolygonMode;
 	static auto get_camera() -> camera::Camera&;
 
 private:

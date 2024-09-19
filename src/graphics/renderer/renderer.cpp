@@ -373,6 +373,78 @@ auto Renderer::get_viewport_size() -> const glm::ivec2& {
 	return _viewport_size;
 }
 
+auto Renderer::is_blend_enabled() -> bool {
+	return glIsEnabled(GL_BLEND) == GL_TRUE;
+}
+
+auto Renderer::get_blend_func() -> std::pair<BlendFunc, BlendFunc> {
+	int src = 0;
+	int dst = 0;
+	glGetIntegerv(GL_BLEND_SRC, &src);
+	glGetIntegerv(GL_BLEND_DST, &dst);
+	return {static_cast<BlendFunc>(src), static_cast<BlendFunc>(dst)};
+}
+
+auto Renderer::get_blend_equation() -> BlendEquation {
+	int eq = 0;
+	glGetIntegerv(GL_BLEND_EQUATION, &eq);
+	return static_cast<BlendEquation>(eq);
+}
+
+auto Renderer::is_stencil_enabled() -> bool {
+	return glIsEnabled(GL_STENCIL_TEST) == GL_TRUE;
+}
+
+auto Renderer::get_stencil_mask() -> unsigned int {
+	int mask = 0;
+	glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
+	return static_cast<unsigned int>(mask);
+}
+
+auto Renderer::get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int> {
+	int func = 0;
+	int ref = 0;
+	int mask = 0;
+	glGetIntegerv(GL_STENCIL_FUNC, &func);
+	glGetIntegerv(GL_STENCIL_REF, &ref);
+	glGetIntegerv(GL_STENCIL_VALUE_MASK, &mask);
+	return {static_cast<StencilFunc>(func), ref, static_cast<unsigned int>(mask)};
+}
+
+auto Renderer::get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp> {
+	int sfail = 0;
+	int dpfail = 0;
+	int dppass = 0;
+	glGetIntegerv(GL_STENCIL_FAIL, &sfail);
+	glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, &dpfail);
+	glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &dppass);
+	return {
+		static_cast<StencilOp>(sfail), static_cast<StencilOp>(dpfail), static_cast<StencilOp>(dppass)
+	};
+}
+
+auto Renderer::is_cull_face_enabled() -> bool {
+	return glIsEnabled(GL_CULL_FACE) == GL_TRUE;
+}
+
+auto Renderer::get_cull_face() -> CullFace {
+	int face = 0;
+	glGetIntegerv(GL_CULL_FACE, &face);
+	return static_cast<CullFace>(face);
+}
+
+auto Renderer::get_front_face() -> FrontFace {
+	int face = 0;
+	glGetIntegerv(GL_FRONT_FACE, &face);
+	return static_cast<FrontFace>(face);
+}
+
+auto Renderer::get_polygon_mode() -> PolygonMode {
+	int mode = 0;
+	glGetIntegerv(GL_POLYGON_MODE, &mode);
+	return static_cast<PolygonMode>(mode);
+}
+
 auto Renderer::get_camera() -> camera::Camera& {
 	return *_camera;
 }
