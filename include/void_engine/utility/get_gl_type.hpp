@@ -8,6 +8,7 @@ namespace void_engine::utility {
 template <typename T>
 auto get_gl_type() -> unsigned int {
 	assert(false && "Unsupported type");
+	return 0;
 }
 
 template <>
