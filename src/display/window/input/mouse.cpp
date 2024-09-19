@@ -40,12 +40,12 @@ void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_sp
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
-	const auto image = utility::read_image(utility::get_exec_path().parent_path() / path);
-	assert(image.has_value() && "Failed to read image");
+	const utility::Image image(utility::get_exec_path().parent_path() / path, true);
+	const glm::uvec2 size = image.get_size();
 	const GLFWimage glfw_image = {
-		image->size.x,
-		image->size.y,
-		std::bit_cast<unsigned char*>(image->data.data()),
+		.width = static_cast<int>(size.x),
+		.height = static_cast<int>(size.y),
+		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
 	};
 	_cursor =
 		glfwCreateCursor(&glfw_image, static_cast<int>(hot_spot.x), static_cast<int>(hot_spot.y));

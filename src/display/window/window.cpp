@@ -146,12 +146,12 @@ void Window::set_title(std::string_view title) {
 
 void Window::set_icon(std::string_view path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
-	const auto image = utility::read_image(utility::get_exec_path().parent_path() / path);
-	assert(image.has_value() && "Failed to read image");
+	const utility::Image image(utility::get_exec_path().parent_path() / path, true);
+	const glm::uvec2 size = image.get_size();
 	const GLFWimage glfw_image = {
-		image->size.x,
-		image->size.y,
-		std::bit_cast<unsigned char*>(image->data.data()),
+		.width = static_cast<int>(size.x),
+		.height = static_cast<int>(size.y),
+		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
 	};
 	glfwSetWindowIcon(_window, 1, &glfw_image);
 }
@@ -160,12 +160,12 @@ void Window::set_icons(std::vector<std::string_view> paths) {
 	const std::vector<utility::Image*> images(paths.size());
 	std::vector<GLFWimage> glfw_images(paths.size());
 	for (size_t i = 0; i < paths.size(); ++i) {
-		const auto image = utility::read_image(utility::get_exec_path().parent_path() / paths[i]);
-		assert(image.has_value() && "Failed to read image");
+		const utility::Image image(utility::get_exec_path().parent_path() / paths[i], true);
+		const glm::uvec2 size = image.get_size();
 		glfw_images[i] = {
-			image->size.x,
-			image->size.y,
-			std::bit_cast<unsigned char*>(image->data.data()),
+			.width = static_cast<int>(size.x),
+			.height = static_cast<int>(size.y),
+			.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
 		};
 	}
 	glfwSetWindowIcon(_window, static_cast<int>(glfw_images.size()), glfw_images.data());

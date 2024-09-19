@@ -4,28 +4,42 @@
 #include <cstddef>
 #include <cstdint>
 #include <filesystem>
-#include <glm/ext/vector_int2.hpp>
-#include <optional>
+#include <glm/ext/vector_uint2.hpp>
+#include <span>
 #include <vector>
 
 namespace void_engine::utility {
 
 enum class ImageColorType : uint8_t {
-	gray = 1,
+	none,
+	gray,
 	gray_alpha,
 	rgb,
 	rgba,
 };
 
-struct Image {
-	glm::ivec2 size;
-	ImageColorType color_type;
-	std::vector<std::byte> data;
-};
+class Image {
+public:
+	Image(const Image&) = default;
+	Image(Image&&) = default;
+	auto operator=(const Image&) -> Image& = default;
+	auto operator=(Image&&) -> Image& = default;
+	Image(std::span<const std::byte> data, ImageColorType color_type, const glm::uvec2& size);
+	explicit Image(const std::filesystem::path& path, bool flip = false);
+	explicit Image(std::span<std::byte> data, bool flip = false);
+	~Image() = default;
 
-auto read_image(const std::filesystem::path& path, bool flip = false) -> std::optional<Image>;
-auto read_image(const std::vector<std::byte>& data, bool flip = false) -> std::optional<Image>;
-auto write_image(const std::filesystem::path& path, const Image& image) -> bool;
+	void write(const std::filesystem::path& path) const;
+
+	[[nodiscard]] auto get_data() const -> std::span<const std::byte>;
+	[[nodiscard]] auto get_color_type() const -> ImageColorType;
+	[[nodiscard]] auto get_size() const -> const glm::uvec2&;
+
+private:
+	std::vector<std::byte> _data;
+	ImageColorType _color_type;
+	glm::uvec2 _size = {0, 0};
+};
 
 } // namespace void_engine::utility
 
