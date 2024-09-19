@@ -4,7 +4,6 @@
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
 #include <bit>
-#include <cassert>
 #include <cstddef>
 #include <cstdio>
 #include <cstring>
@@ -62,7 +61,7 @@ auto read_image(const std::vector<std::byte>& data, bool flip) -> std::optional<
 	return image;
 }
 
-void write_image(const std::filesystem::path& path, const Image& image) {
+auto write_image(const std::filesystem::path& path, const Image& image) -> bool {
 	const int result = stbi_write_png(
 		path.string().c_str(),
 		image.size.x,
@@ -71,7 +70,7 @@ void write_image(const std::filesystem::path& path, const Image& image) {
 		image.data.data(),
 		0
 	);
-	assert(result != 0 && "Failed to write image");
+	return result != 0;
 }
 
 } // namespace void_engine::utility
