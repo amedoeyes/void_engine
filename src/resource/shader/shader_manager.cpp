@@ -8,7 +8,7 @@
 #include <unordered_map>
 #include <utility>
 
-namespace void_engine::resource {
+namespace void_engine::resource::shader {
 
 ShaderManager::ShaderManager(std::filesystem::path root_path) : _root_path(std::move(root_path)) {
 }
@@ -34,7 +34,7 @@ void ShaderManager::destroy(std::string_view name) {
 
 auto ShaderManager::get(std::string_view name) -> Shader& {
 	const auto it = _shaders.find(name.data());
-	assert(it != _shaders.end() && "Texture does not exist");
+	assert(it != _shaders.end() && "Shader does not exist");
 	return *(it->second);
 }
 
@@ -45,4 +45,4 @@ void ShaderManager::set_root_path(const std::filesystem::path& root_path) {
 	}
 }
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::shader

@@ -200,30 +200,43 @@ void init() {
 	context.camera_uniform.bind_range(0);
 	context.camera_uniform.allocate(sizeof(CameraUniform), buffer::BufferUsage::dynamic_draw);
 
-	resource::Shader& shape_shader = context.resource_manager.shaders().create("shape");
+	resource::shader::Shader& shape_shader = context.resource_manager.shaders().create("shape");
 	shape_shader.add_source(
-		resource::ShaderType::vertex, shape_shader_vert, resource::ShaderFormat::spirv
+		resource::shader::Type::vertex,
+		std::as_bytes(std::span(shape_shader_vert)),
+		resource::shader::Format::spirv
 	);
 	shape_shader.add_source(
-		resource::ShaderType::fragment, shape_shader_frag, resource::ShaderFormat::spirv
+		resource::shader::Type::fragment,
+		std::as_bytes(std::span(shape_shader_frag)),
+		resource::shader::Format::spirv
 	);
 	shape_shader.compile();
 
-	resource::Shader& font_shader = context.resource_manager.shaders().create("font");
+	resource::shader::Shader& font_shader = context.resource_manager.shaders().create("font");
 	font_shader.add_source(
-		resource::ShaderType::vertex, font_shader_vert, resource::ShaderFormat::spirv
+		resource::shader::Type::vertex,
+		std::as_bytes(std::span(font_shader_vert)),
+		resource::shader::Format::spirv
 	);
 	font_shader.add_source(
-		resource::ShaderType::fragment, font_shader_frag, resource::ShaderFormat::spirv
+		resource::shader::Type::fragment,
+		std::as_bytes(std::span(font_shader_frag)),
+		resource::shader::Format::spirv
 	);
 	font_shader.compile();
 
-	resource::Shader& font_screen_shader = context.resource_manager.shaders().create("font_screen");
+	resource::shader::Shader& font_screen_shader =
+		context.resource_manager.shaders().create("font_screen");
 	font_screen_shader.add_source(
-		resource::ShaderType::vertex, font_screen_shader_vert, resource::ShaderFormat::spirv
+		resource::shader::Type::vertex,
+		std::as_bytes(std::span(font_screen_shader_vert)),
+		resource::shader::Format::spirv
 	);
 	font_screen_shader.add_source(
-		resource::ShaderType::fragment, font_shader_frag, resource::ShaderFormat::spirv
+		resource::shader::Type::fragment,
+		std::as_bytes(std::span(font_shader_frag)),
+		resource::shader::Format::spirv
 	);
 	font_screen_shader.compile();
 
@@ -262,7 +275,7 @@ void draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
 void draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh point = geometry::create_point_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, glm::translate(glm::mat4(1.0f), position));
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -273,7 +286,7 @@ void draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 void draw_line(const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh line = geometry::create_line_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	const glm::vec3 direction = end - start;
 	const glm::vec3 normal = glm::normalize(direction);
 	const glm::vec3 reference(1.0f, 0.0f, 0.0f);
@@ -304,7 +317,7 @@ void draw_line(const glm::vec3& start, const glm::vec3& end, float width, const 
 void draw_quad(const utility::Transform& transform, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh quad = geometry::create_quad_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -314,7 +327,7 @@ void draw_quad(const utility::Transform& transform, const glm::vec4& color) {
 void draw_quad_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh quad_outline = geometry::create_quad_outline_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -325,7 +338,7 @@ void draw_quad_outline(const utility::Transform& transform, float width, const g
 void draw_circle(const utility::Transform& transform, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh circle = geometry::create_circle_mesh(100);
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -335,7 +348,7 @@ void draw_circle(const utility::Transform& transform, const glm::vec4& color) {
 void draw_circle_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh circle_outline = geometry::create_circle_outline_mesh(100);
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -346,7 +359,7 @@ void draw_circle_outline(const utility::Transform& transform, float width, const
 void draw_cube(const utility::Transform& transform, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh cube = geometry::create_cube_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -356,7 +369,7 @@ void draw_cube(const utility::Transform& transform, const glm::vec4& color) {
 void draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static Context& context = get_context();
 	static const Mesh cube_outline = geometry::create_cube_outline_mesh();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("shape");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -384,7 +397,7 @@ void draw_text(
 	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
 	static Context& context = get_context();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("font");
+	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("font");
 	const bool prev_blend = is_blend_enabled();
 	auto [prev_src, prev_dst] = get_blend_func();
 	set_blend(true);
@@ -408,7 +421,8 @@ void draw_text_screen(
 	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
 	static Context& context = get_context();
-	static const resource::Shader& shader = context.resource_manager.shaders().get("font_screen");
+	static const resource::shader::Shader& shader =
+		context.resource_manager.shaders().get("font_screen");
 	const bool prev_blend = is_blend_enabled();
 	auto [prev_src, prev_dst] = get_blend_func();
 	set_blend(true);

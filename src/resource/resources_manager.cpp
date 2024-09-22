@@ -9,7 +9,7 @@ namespace void_engine::resource {
 
 ResourceManager::ResourceManager() {
 	_textures = new TextureManager();
-	_shaders = new ShaderManager();
+	_shaders = new shader::ShaderManager();
 	_fonts = new font::FontManager();
 }
 
@@ -17,7 +17,7 @@ ResourceManager::ResourceManager(const std::filesystem::path& resources_path) {
 	const std::filesystem::path path =
 		std::filesystem::canonical(utility::get_exec_path().parent_path() / resources_path);
 	_textures = new TextureManager(path);
-	_shaders = new ShaderManager(path);
+	_shaders = new shader::ShaderManager(path);
 	_fonts = new font::FontManager(path);
 }
 
@@ -31,7 +31,7 @@ auto ResourceManager::textures() -> TextureManager& {
 	return *_textures;
 }
 
-auto ResourceManager::shaders() -> ShaderManager& {
+auto ResourceManager::shaders() -> shader::ShaderManager& {
 	return *_shaders;
 }
 

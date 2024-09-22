@@ -20,12 +20,12 @@ public:
 	~ResourceManager();
 
 	auto textures() -> TextureManager&;
-	auto shaders() -> ShaderManager&;
+	auto shaders() -> shader::ShaderManager&;
 	auto fonts() -> font::FontManager&;
 
 private:
 	TextureManager* _textures;
-	ShaderManager* _shaders;
+	shader::ShaderManager* _shaders;
 	font::FontManager* _fonts;
 };
 

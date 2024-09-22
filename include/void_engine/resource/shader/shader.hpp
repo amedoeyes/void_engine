@@ -1,7 +1,10 @@
 #ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
 #define VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
 
-#include <cstdint>
+#include "void_engine/resource/shader/enums.hpp"
+#include "void_engine/resource/shader/shader_source.hpp"
+
+#include <cstddef>
 #include <filesystem>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -11,30 +14,9 @@
 #include <string>
 #include <string_view>
 #include <unordered_map>
-#include <variant>
 #include <vector>
 
-namespace void_engine::resource {
-
-enum class ShaderType : std::uint16_t {
-	compute = 0x91B9,
-	vertex = 0x8B31,
-	tess_control = 0x8E88,
-	tess_evaluation = 0x8E87,
-	geometry = 0x8DD9,
-	fragment = 0x8B30
-};
-
-enum class ShaderFormat : std::uint8_t {
-	glsl,
-	spirv,
-};
-
-struct ShaderSource {
-	ShaderType type;
-	ShaderFormat format;
-	std::variant<std::filesystem::path, std::string> data;
-};
+namespace void_engine::resource::shader {
 
 class Shader {
 public:
@@ -49,15 +31,9 @@ public:
 	void bind() const;
 	static void unbind();
 
-	void add_source_path(
-		ShaderType type, const std::filesystem::path& path, ShaderFormat format = ShaderFormat::glsl
-	);
-	void add_source(
-		ShaderType type, std::string_view source, ShaderFormat format = ShaderFormat::glsl
-	);
-	void add_source(
-		ShaderType type, std::span<const unsigned char> source, ShaderFormat format = ShaderFormat::glsl
-	);
+	void add_source_path(Type type, const std::filesystem::path& path, Format format = Format::glsl);
+	void add_source(Type type, std::string_view source, Format format = Format::glsl);
+	void add_source(Type type, std::span<const std::byte> source, Format format = Format::glsl);
 	void compile();
 
 	void set_uniform(unsigned int index, int value) const;
@@ -88,6 +64,6 @@ private:
 	static auto compile_source_spirv(const ShaderSource& source) -> unsigned int;
 };
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::shader
 
 #endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP

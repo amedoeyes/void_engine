@@ -8,7 +8,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace void_engine::resource {
+namespace void_engine::resource::shader {
 
 class ShaderManager {
 public:
@@ -31,6 +31,6 @@ private:
 	std::filesystem::path _root_path;
 };
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::shader
 
 #endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP

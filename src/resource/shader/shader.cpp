@@ -1,4 +1,6 @@
 #include "void_engine/resource/shader/shader.hpp"
+#include "void_engine/resource/shader/enums.hpp"
+#include "void_engine/resource/shader/shader_source.hpp"
 
 #include <bit>
 #include <cassert>
@@ -20,7 +22,7 @@
 #include <variant>
 #include <vector>
 
-namespace void_engine::resource {
+namespace void_engine::resource::shader {
 
 Shader::Shader(const Shader& other) :
 	_id(glCreateProgram()),
@@ -80,19 +82,15 @@ void Shader::unbind() {
 	glUseProgram(0);
 }
 
-void Shader::add_source_path(
-	ShaderType type, const std::filesystem::path& path, ShaderFormat format
-) {
+void Shader::add_source_path(Type type, const std::filesystem::path& path, Format format) {
 	_sources.push_back({type, format, _root_path / path});
 }
 
-void Shader::add_source(ShaderType type, std::string_view source, ShaderFormat format) {
+void Shader::add_source(Type type, std::string_view source, Format format) {
 	_sources.push_back({type, format, std::string(source)});
 }
 
-void Shader::add_source(
-	ShaderType type, std::span<const unsigned char> source, ShaderFormat format
-) {
+void Shader::add_source(Type type, std::span<const std::byte> source, Format format) {
 	add_source(type, {std::bit_cast<const char*>(source.data()), source.size()}, format);
 }
 
@@ -108,7 +106,7 @@ void Shader::compile() {
 	}
 
 	for (const auto& source : _sources) {
-		unsigned int const shader = compile_source(source);
+		const unsigned int shader = compile_source(source);
 		glAttachShader(_id, shader);
 		_shaders.push_back(shader);
 	}
@@ -265,10 +263,10 @@ auto Shader::compile_source_spirv(const ShaderSource& source) -> unsigned int {
 
 auto Shader::compile_source(const ShaderSource& source) -> unsigned int {
 	switch (source.format) {
-		case ShaderFormat::glsl: return compile_source_glsl(source);
-		case ShaderFormat::spirv: return compile_source_spirv(source);
+		case Format::glsl: return compile_source_glsl(source);
+		case Format::spirv: return compile_source_spirv(source);
 		default: std::unreachable();
 	}
 }
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::shader
