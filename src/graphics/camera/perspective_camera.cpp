@@ -1,6 +1,5 @@
 #include "void_engine/graphics/camera/perspective_camera.hpp"
-
-#include "void_engine/graphics/camera/camera.hpp"
+#include "void_engine/graphics/camera/enums.hpp"
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -30,8 +29,8 @@ auto PerspectiveCamera::get_aspect() const -> float {
 	return _aspect;
 }
 
-auto PerspectiveCamera::get_type() const -> CameraType {
-	return CameraType::perspective;
+auto PerspectiveCamera::get_type() const -> Type {
+	return Type::perspective;
 }
 
 void PerspectiveCamera::update_projection() {

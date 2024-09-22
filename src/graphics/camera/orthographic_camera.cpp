@@ -1,6 +1,5 @@
 #include "void_engine/graphics/camera/orthographic_camera.hpp"
-
-#include "void_engine/graphics/camera/camera.hpp"
+#include "void_engine/graphics/camera/enums.hpp"
 
 #include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/vector_float2.hpp>
@@ -73,8 +72,8 @@ auto OrthographicCamera::get_zoom() const -> float {
 	return _zoom;
 }
 
-auto OrthographicCamera::get_type() const -> CameraType {
-	return CameraType::orthographic;
+auto OrthographicCamera::get_type() const -> Type {
+	return Type::orthographic;
 }
 
 void OrthographicCamera::update_projection() {

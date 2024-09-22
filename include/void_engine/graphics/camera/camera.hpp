@@ -1,17 +1,13 @@
 #ifndef VOID_ENGINE_GRAPHICS_CAMERA_CAMERA_HPP
 #define VOID_ENGINE_GRAPHICS_CAMERA_CAMERA_HPP
 
-#include <cstdint>
+#include "void_engine/graphics/camera/enums.hpp"
+
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/quaternion_float.hpp>
 #include <glm/ext/vector_float3.hpp>
 
 namespace void_engine::graphics::camera {
-
-enum class CameraType : uint8_t {
-	orthographic,
-	perspective
-};
 
 class Camera {
 public:
@@ -38,7 +34,7 @@ public:
 	[[nodiscard]] auto get_view() const -> const glm::mat4&;
 	[[nodiscard]] auto get_projection() const -> const glm::mat4&;
 	[[nodiscard]] auto get_view_projection() const -> const glm::mat4&;
-	[[nodiscard]] virtual auto get_type() const -> CameraType = 0;
+	[[nodiscard]] virtual auto get_type() const -> Type = 0;
 
 protected:
 	glm::vec3 _position = glm::vec3(0.0f);

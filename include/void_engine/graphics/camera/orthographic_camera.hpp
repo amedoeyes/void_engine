@@ -2,6 +2,7 @@
 #define VOID_ENGINE_GRAPHICS_CAMERA_ORTHOGRAPHIC_CAMERA_HPP
 
 #include "void_engine/graphics/camera/camera.hpp"
+#include "void_engine/graphics/camera/enums.hpp"
 
 #include <glm/ext/vector_float2.hpp>
 
@@ -22,7 +23,7 @@ public:
 	[[nodiscard]] auto get_bottom() const -> float;
 	[[nodiscard]] auto get_top() const -> float;
 	[[nodiscard]] auto get_zoom() const -> float;
-	[[nodiscard]] auto get_type() const -> CameraType override;
+	[[nodiscard]] auto get_type() const -> Type override;
 
 protected:
 	float _zoom = 1.0f;

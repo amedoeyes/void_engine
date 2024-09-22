@@ -2,6 +2,7 @@
 #define VOID_ENGINE_GRAPHICS_CAMERA_PERSPECTIVE_CAMERA_HPP
 
 #include "void_engine/graphics/camera/camera.hpp"
+#include "void_engine/graphics/camera/enums.hpp"
 
 #include <glm/ext/vector_float2.hpp>
 #include <glm/gtc/constants.hpp>
@@ -15,7 +16,7 @@ public:
 	void set_aspect(const glm::vec2& size);
 	[[nodiscard]] auto get_fov() const -> float;
 	[[nodiscard]] auto get_aspect() const -> float;
-	[[nodiscard]] auto get_type() const -> CameraType override;
+	[[nodiscard]] auto get_type() const -> Type override;
 
 protected:
 	float _fov = glm::quarter_pi<float>();

@@ -3,6 +3,7 @@
 #include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
+#include "void_engine/graphics/camera/enums.hpp"
 #include "void_engine/graphics/camera/orthographic_camera.hpp"
 #include "void_engine/graphics/camera/perspective_camera.hpp"
 #include "void_engine/graphics/geometry/circle.hpp"
@@ -119,7 +120,7 @@ APIENTRY void debug_message_callback(
 void update_camera_viewport() {
 	static const Context& context = get_context();
 	switch (context.camera->get_type()) {
-		using enum camera::CameraType;
+		using enum camera::Type;
 		case perspective: {
 			auto* camera = dynamic_cast<camera::PerspectiveCamera*>(context.camera);
 			camera->set_aspect(context.viewport.size);
