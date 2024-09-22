@@ -55,7 +55,7 @@ auto create_circle_outline_mesh(unsigned int segments) -> Mesh {
 		indices.push_back(((i + 1) % segments) + 1);
 	}
 	const Attributes attributes = generate_circle_attributes(segments);
-	Mesh mesh(PrimitiveType::lines);
+	Mesh mesh(renderer::PrimitiveType::lines);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);

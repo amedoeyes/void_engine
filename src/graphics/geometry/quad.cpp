@@ -44,7 +44,7 @@ auto create_quad_mesh() -> Mesh {
 
 auto create_quad_outline_mesh() -> Mesh {
 	const std::vector<unsigned int> indices = {0, 1, 1, 2, 2, 3, 3, 0};
-	Mesh mesh(PrimitiveType::lines);
+	Mesh mesh(renderer::PrimitiveType::lines);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);

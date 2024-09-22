@@ -64,7 +64,7 @@ auto create_polygon_outline_mesh(const std::vector<glm::vec2>& vertices) -> Mesh
 		indices.push_back(((i + 1) % vertices.size()) + 1);
 	}
 	const Attributes attributes = generate_polygon_attributes(vertices);
-	Mesh mesh(PrimitiveType::lines);
+	Mesh mesh(renderer::PrimitiveType::lines);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.positions);
 	mesh.add_attribute<float>(3), mesh.add_vertex_buffer(attributes.normals);
 	mesh.add_attribute<float>(2), mesh.add_vertex_buffer(attributes.uvs);

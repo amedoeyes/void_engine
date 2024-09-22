@@ -19,7 +19,7 @@ public:
 	auto operator=(const Mesh& other) -> Mesh&;
 	auto operator=(Mesh&& other) noexcept -> Mesh&;
 	Mesh();
-	explicit Mesh(PrimitiveType primitive_type);
+	explicit Mesh(renderer::PrimitiveType primitive_type);
 	~Mesh();
 
 	void bind() const;
@@ -41,16 +41,15 @@ public:
 
 	void set_divisor(unsigned int divisor) const;
 	void set_indices(
-		const std::vector<unsigned int>& data,
-		buffer::Usage usage = buffer::Usage::static_draw
+		const std::vector<unsigned int>& data, buffer::Usage usage = buffer::Usage::static_draw
 	);
-	void set_primitive_type(PrimitiveType primitive);
+	void set_primitive_type(renderer::PrimitiveType primitive);
 
 	[[nodiscard]] auto get_vertex_array() -> VertexArray&;
 	[[nodiscard]] auto get_vertex_array() const -> const VertexArray&;
 	[[nodiscard]] auto get_element_buffer() -> buffer::ElementBuffer&;
 	[[nodiscard]] auto get_element_buffer() const -> const buffer::ElementBuffer&;
-	[[nodiscard]] auto get_primitive_type() const -> PrimitiveType;
+	[[nodiscard]] auto get_primitive_type() const -> renderer::PrimitiveType;
 	[[nodiscard]] auto get_count() const -> unsigned int;
 
 	template <typename T>
@@ -66,7 +65,7 @@ private:
 	VertexArray* _vertex_array;
 	std::vector<buffer::Buffer*> _vertex_buffers;
 	buffer::ElementBuffer* _element_buffer;
-	PrimitiveType _primitive_type;
+	renderer::PrimitiveType _primitive_type;
 };
 
 } // namespace void_engine::graphics

@@ -68,11 +68,11 @@ auto Mesh::operator=(Mesh&& other) noexcept -> Mesh& {
 Mesh::Mesh() :
 	_vertex_array(new VertexArray()),
 	_element_buffer(new buffer::ElementBuffer()),
-	_primitive_type(PrimitiveType::triangles) {
+	_primitive_type(renderer::PrimitiveType::triangles) {
 	_vertex_array->set_element_buffer(*_element_buffer);
 }
 
-Mesh::Mesh(PrimitiveType primitive_type) :
+Mesh::Mesh(renderer::PrimitiveType primitive_type) :
 	_vertex_array(new VertexArray()),
 	_element_buffer(new buffer::ElementBuffer()),
 	_primitive_type(primitive_type) {
@@ -103,7 +103,7 @@ void Mesh::set_indices(const std::vector<unsigned int>& data, buffer::Usage usag
 	_element_buffer->set_data(data, usage);
 }
 
-void Mesh::set_primitive_type(PrimitiveType primitive) {
+void Mesh::set_primitive_type(renderer::PrimitiveType primitive) {
 	_primitive_type = primitive;
 }
 
@@ -123,7 +123,7 @@ auto Mesh::get_element_buffer() const -> const buffer::ElementBuffer& {
 	return *_element_buffer;
 }
 
-auto Mesh::get_primitive_type() const -> PrimitiveType {
+auto Mesh::get_primitive_type() const -> renderer::PrimitiveType {
 	return _primitive_type;
 }
 

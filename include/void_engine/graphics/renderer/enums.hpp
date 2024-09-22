@@ -3,7 +3,7 @@
 
 #include <cstdint>
 
-namespace void_engine::graphics {
+namespace void_engine::graphics::renderer {
 
 enum class PrimitiveType : uint8_t {
 	points = 0x0000,
@@ -107,6 +107,6 @@ enum class ClearFlags : uint16_t {
 	stencil = 0x00000400,
 };
 
-} // namespace void_engine::graphics
+} // namespace void_engine::graphics::renderer
 
 #endif // VOID_ENGINE_GRAPHICS_RENDERER_ENUMS_HPP
