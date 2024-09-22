@@ -21,28 +21,34 @@ enum class Level : std::uint8_t {
 	error,
 };
 
-// NOLINTBEGIN
-namespace {
-Level _level = Level::info;
-std::ostream* _output = &std::cout;
-std::mutex _mutex;
-} // namespace
-// NOLINTEND
+struct Context {
+	Level level = Level::info;
+	std::ostream* output = &std::cout;
+	std::mutex mutex;
+};
+
+static inline auto get_context() -> Context& {
+	static Context context;
+	return context;
+}
 
 inline void set_level(Level level) {
-	_level = level;
+	static Context& context = get_context();
+	context.level = level;
 }
 
 inline void set_output(std::ostream& output) {
-	_output = &output;
+	static Context& context = get_context();
+	context.output = &output;
 }
 
 template <typename... Args>
 void log(Level level, std::string_view fmt, Args&&... args) {
-	if (_level == Level::none || level < _level) {
+	static Context& context = get_context();
+	if (context.level == Level::none || level < context.level) {
 		return;
 	}
-	const std::lock_guard<std::mutex> lock(_mutex);
+	const std::lock_guard<std::mutex> lock(context.mutex);
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 	auto zt = std::chrono::zoned_time{
@@ -59,7 +65,7 @@ void log(Level level, std::string_view fmt, Args&&... args) {
 		default: std::unreachable();
 	}
 	const std::string message = std::vformat(fmt, std::make_format_args(std::forward<Args>(args)...));
-	*_output << std::format("{}: {}: {}\n", timestamp, prefix, message);
+	*context.output << std::format("{}: {}: {}\n", timestamp, prefix, message);
 }
 
 template <typename... Args>
