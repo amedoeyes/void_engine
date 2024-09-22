@@ -18,42 +18,42 @@ Transform::Transform(const glm::vec3& position, const glm::vec3& rotation, const
 
 void Transform::translate(const glm::vec3& translation) {
 	_position += translation;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::rotate(float angle, const glm::vec3& axis) {
 	_rotation = glm::angleAxis(angle, axis) * _rotation;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::rotate(const glm::vec3& rotation) {
 	_rotation = glm::quat(rotation) * _rotation;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::scale(const glm::vec3& scale) {
 	_scale *= scale;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::set_position(const glm::vec3& position) {
 	_position = position;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::set_rotation(float angle, const glm::vec3& axis) {
 	_rotation = glm::angleAxis(angle, axis);
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::set_rotation(const glm::vec3& rotation) {
 	_rotation = glm::quat(rotation);
-	_is_dirty = true;
+	_dirty = true;
 }
 
 void Transform::set_scale(const glm::vec3& scale) {
 	_scale = scale;
-	_is_dirty = true;
+	_dirty = true;
 }
 
 auto Transform::get_position() const -> const glm::vec3& {
@@ -69,12 +69,12 @@ auto Transform::get_scale() const -> const glm::vec3& {
 }
 
 auto Transform::get_model() const -> const glm::mat4& {
-	if (_is_dirty) {
+	if (_dirty) {
 		_model = glm::mat4(1.0f);
 		_model = glm::translate(_model, _position);
 		_model = _model * glm::mat4_cast(_rotation);
 		_model = glm::scale(_model, _scale);
-		_is_dirty = false;
+		_dirty = false;
 	}
 	return _model;
 }

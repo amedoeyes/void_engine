@@ -38,7 +38,7 @@ private:
 	glm::quat _rotation{1.0f, 0.0f, 0.0f, 0.0f};
 	glm::vec3 _scale{1.0f};
 	mutable glm::mat4 _model{1.0f};
-	mutable bool _is_dirty{true};
+	mutable bool _dirty{true};
 };
 
 } // namespace void_engine::utility
