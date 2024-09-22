@@ -54,7 +54,7 @@ Text::~Text() {
 	delete _mesh;
 }
 
-void Text::set_font(Font& font) {
+void Text::set_font(const Font& font) {
 	_font = &font;
 	_dirty = true;
 }
@@ -91,6 +91,7 @@ auto Text::get_mesh() const -> const graphics::Mesh& {
 }
 
 void Text::update() const {
+	assert(_font != nullptr && "Font is not set");
 	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
 	const std::vector<Glyph> glyphs = _font->get_glyphs(converter.from_bytes(_data));
 	std::vector<glm::vec2> positions;

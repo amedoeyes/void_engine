@@ -16,10 +16,11 @@ public:
 	Text(Text&& other) noexcept;
 	auto operator=(const Text& other) -> Text&;
 	auto operator=(Text&& other) noexcept -> Text&;
+	Text() = default;
 	explicit Text(const Font& font, std::string_view data);
 	~Text();
 
-	void set_font(Font& font);
+	void set_font(const Font& font);
 	void set_data(std::string_view data);
 
 	[[nodiscard]] auto get_font() const -> const Font&;
@@ -28,7 +29,7 @@ public:
 	[[nodiscard]] auto get_mesh() const -> const graphics::Mesh&;
 
 private:
-	const Font* _font;
+	const Font* _font = nullptr;
 	std::string _data;
 	mutable glm::vec2 _size = {0.0f, 0.0f};
 	mutable graphics::Mesh* _mesh = nullptr;
