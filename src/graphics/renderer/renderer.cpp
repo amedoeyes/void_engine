@@ -1,5 +1,6 @@
 #include "void_engine/graphics/renderer/renderer.hpp"
 
+#include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
 #include "void_engine/graphics/camera/orthographic_camera.hpp"
@@ -14,6 +15,7 @@
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/text.hpp"
 #include "void_engine/resource/resource_manager.hpp"
+#include "void_engine/resource/shader/enums.hpp"
 #include "void_engine/resource/shader/shader.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/logger.hpp"
@@ -29,6 +31,7 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/scalar_constants.hpp>
 #include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
 #include <glm/geometric.hpp>
@@ -114,7 +117,7 @@ APIENTRY void debug_message_callback(
 }
 
 void update_camera_viewport() {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	switch (context.camera->get_type()) {
 		using enum camera::CameraType;
 		case perspective: {
@@ -255,12 +258,12 @@ void update() {
 }
 
 void terminate() {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	delete context.default_camera;
 }
 
 void clear() {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	glClear(context.clear_flags.get());
 }
 
@@ -463,12 +466,12 @@ void set_viewport(const glm::ivec2& position, const glm::ivec2& size) {
 }
 
 void set_viewport_position(const glm::ivec2& position) {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	set_viewport(position, context.viewport.size);
 }
 
 void set_viewport_size(const glm::ivec2& size) {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	set_viewport(context.viewport.position, size);
 }
 
@@ -561,12 +564,12 @@ void set_camera(camera::Camera& camera) {
 }
 
 auto get_viewport_position() -> const glm::ivec2& {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	return context.viewport.position;
 }
 
 auto get_viewport_size() -> const glm::ivec2& {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	return context.viewport.size;
 }
 
@@ -643,7 +646,7 @@ auto get_polygon_mode() -> PolygonMode {
 }
 
 auto get_camera() -> camera::Camera& {
-	static Context& context = get_context();
+	static const Context& context = get_context();
 	return *context.camera;
 }
 
