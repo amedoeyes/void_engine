@@ -5,7 +5,8 @@
 #include "void_engine/graphics/camera/camera.hpp"
 #include "void_engine/graphics/mesh.hpp"
 #include "void_engine/graphics/renderer/enums.hpp"
-#include "void_engine/resource/shader/shader.hpp"
+#include "void_engine/resource/font/text.hpp"
+#include "void_engine/resource/resource_manager.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/transform.hpp"
 
@@ -13,6 +14,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
+#include <string_view>
 
 namespace void_engine::graphics::renderer {
 
@@ -51,6 +53,18 @@ public:
 	static void draw_elements(PrimitiveType type, unsigned int count, void* indices);
 	static void draw_elements_instanced(
 		PrimitiveType type, unsigned int count, void* indices, unsigned int instances
+	);
+	static void draw_text(
+		const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+	);
+	static void draw_text(
+		std::string_view text, const utility::Transform& transform, const glm::vec4& color
+	);
+	static void draw_text_screen(
+		const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+	);
+	static void draw_text_screen(
+		std::string_view text, const utility::Transform& transform, const glm::vec4& color
 	);
 
 	static void set_clear_color(const glm::vec4& color);
@@ -94,10 +108,12 @@ private:
 	static inline glm::ivec2 _viewport_position;
 	static inline glm::ivec2 _viewport_size;
 	static inline utility::BitMask<ClearFlags> _clear_flags;
-	static inline camera::Camera* _camera = nullptr;
-	static inline buffer::UniformBuffer<CameraUniform>* _camera_uniform = nullptr;
-	static inline camera::Camera* _default_camera = nullptr;
-	static inline resource::Shader* _shape_shader = nullptr;
+	static inline resource::ResourceManager _resource_manager;
+	static inline buffer::UniformBuffer<CameraUniform>* _camera_uniform;
+	static inline camera::Camera* _camera;
+	static inline camera::Camera* _default_camera;
+	static inline glm::mat4 _screen_projection;
+	static inline resource::font::Text* _text;
 
 	static void update_camera_viewport();
 	static void update_camera_uniform();

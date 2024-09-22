@@ -1,8 +1,10 @@
 #ifndef VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
 #define VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
 
+#include "void_engine/resource/font/font_manager.hpp"
 #include "void_engine/resource/shader/shader_manager.hpp"
 #include "void_engine/resource/texture/texture_manager.hpp"
+
 #include <filesystem>
 
 namespace void_engine::resource {
@@ -19,10 +21,12 @@ public:
 
 	auto textures() -> TextureManager&;
 	auto shaders() -> ShaderManager&;
+	auto fonts() -> font::FontManager&;
 
 private:
 	TextureManager* _textures;
 	ShaderManager* _shaders;
+	font::FontManager* _fonts;
 };
 
 } // namespace void_engine::resource

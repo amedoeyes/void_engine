@@ -20,6 +20,8 @@ add_requires({
 	"glad ^0.1.36",
 	"glm ^1.0.1",
 	"stb ^2024.06.01",
+	"freetype ^2.13.1",
+	"harfbuzz ^9.0.0",
 })
 add_requireconfs("glad", {
 	configs = { profile = "core" },
@@ -27,14 +29,19 @@ add_requireconfs("glad", {
 
 target("void_engine", function()
 	set_kind("static")
-	add_rules("utils.glsl2spv", { outputdir = "build/shaders", targetenv = "opengl", bin2c = true })
+	add_rules(
+		"utils.glsl2spv",
+		{ outputdir = "build/shaders", targetenv = "opengl", client = "opengl100", bin2c = true }
+	)
+	add_rules("utils.bin2c", { extensions = { ".ttf" } })
 	add_files({
 		"src/**.cpp",
 		"resources/shaders/**.vert",
 		"resources/shaders/**.frag",
+		"resources/fonts/**.ttf",
 	})
 	add_includedirs("include")
-	add_packages({ "glfw", "glad", "glm", "stb" })
+	add_packages({ "glfw", "glad", "glm", "stb", "freetype", "harfbuzz" })
 end)
 
 option("tests", {
