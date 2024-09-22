@@ -1,6 +1,5 @@
 #include "void_engine/graphics/renderer/renderer.hpp"
 
-#include "void_engine/graphics/buffer/buffer.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
 #include "void_engine/graphics/camera/orthographic_camera.hpp"
@@ -194,11 +193,14 @@ void init() {
 	}
 
 	Context& context = get_context();
+
 	context.clear_flags.set(ClearFlags::color);
+
 	context.default_camera = new camera::PerspectiveCamera();
 	context.camera = context.default_camera;
+
 	context.camera_uniform.bind_range(0);
-	context.camera_uniform.allocate(sizeof(CameraUniform), buffer::BufferUsage::dynamic_draw);
+	context.camera_uniform.allocate(sizeof(CameraUniform), buffer::Usage::dynamic_draw);
 
 	resource::shader::Shader& shape_shader = context.resource_manager.shaders().create("shape");
 	shape_shader.add_source(

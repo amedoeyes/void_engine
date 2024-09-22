@@ -2,7 +2,6 @@
 #define VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP
 
 #include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/utility/logger.hpp"
 
 #include <vector>
 
@@ -11,18 +10,17 @@ namespace void_engine::graphics::buffer {
 template <typename T>
 class ArrayBuffer final : public Buffer {
 public:
-	ArrayBuffer() : Buffer(BufferTarget::array) {
+	ArrayBuffer() : Buffer(Target::array) {
 	}
-	explicit ArrayBuffer(unsigned int size, BufferUsage usage = BufferUsage::static_draw) :
-		ArrayBuffer() {
+	explicit ArrayBuffer(unsigned int size, Usage usage = Usage::static_draw) : ArrayBuffer() {
 		Buffer::allocate(size, usage);
 	}
-	explicit ArrayBuffer(const std::vector<T>& data, BufferUsage usage = BufferUsage::static_draw) :
+	explicit ArrayBuffer(const std::vector<T>& data, Usage usage = Usage::static_draw) :
 		ArrayBuffer() {
 		set_data(data, usage);
 	}
 
-	void set_data(const std::vector<T>& data, BufferUsage usage = BufferUsage::static_draw) {
+	void set_data(const std::vector<T>& data, Usage usage = Usage::static_draw) {
 		Buffer::set_data(data.size() * sizeof(T), data.data(), usage);
 		_data = data;
 	}

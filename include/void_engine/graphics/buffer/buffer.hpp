@@ -1,40 +1,9 @@
 #ifndef VOID_ENGINE_GRAPHICS_BUFFER_HPP
 #define VOID_ENGINE_GRAPHICS_BUFFER_HPP
 
-#include <cstdint>
+#include "void_engine/graphics/buffer/enums.hpp"
 
 namespace void_engine::graphics::buffer {
-
-enum class BufferTarget : uint16_t {
-	none = 0,
-	array = 0x8892,
-	atomic_counter = 0x92C0,
-	copy_read = 0x8F36,
-	copy_write = 0x8F37,
-	dispatch_indirect = 0x90EE,
-	draw_indirect = 0x8F3F,
-	element_array = 0x8893,
-	pixel_pack = 0x88EB,
-	pixel_unpack = 0x88EC,
-	query = 0x9192,
-	shader_storage = 0x90D2,
-	texture = 0x8C2A,
-	transform_feedback = 0x8C8E,
-	uniform = 0x8A11
-};
-
-enum class BufferUsage : uint16_t {
-	none = 0,
-	stream_draw = 0x88E0,
-	stream_read = 0x88E1,
-	stream_copy = 0x88E2,
-	static_draw = 0x88E4,
-	static_read = 0x88E5,
-	static_copy = 0x88E6,
-	dynamic_draw = 0x88E8,
-	dynamic_read = 0x88E9,
-	dynamic_copy = 0x88EA
-};
 
 class Buffer {
 public:
@@ -42,20 +11,20 @@ public:
 	Buffer(Buffer&& other) noexcept;
 	auto operator=(const Buffer& other) -> Buffer&;
 	auto operator=(Buffer&& other) noexcept -> Buffer&;
-	explicit Buffer(BufferTarget target);
+	explicit Buffer(Target target);
 	virtual ~Buffer();
 
 	void bind() const;
 	void unbind() const;
 
-	void allocate(unsigned int size, BufferUsage usage);
-	void set_data(unsigned int size, const void* data, BufferUsage usage);
+	void allocate(unsigned int size, Usage usage);
+	void set_data(unsigned int size, const void* data, Usage usage);
 	void set_sub_data(unsigned int offset, unsigned int size, const void* data) const;
 	void update_data(const void* data) const;
 	void bind_range(unsigned int index, unsigned int offset, unsigned int size) const;
 
 	template <typename T>
-	void set_data(const T& data, BufferUsage usage) {
+	void set_data(const T& data, Usage usage) {
 		set_data(sizeof(T), &data, usage);
 	}
 
@@ -78,8 +47,8 @@ public:
 
 protected:
 	unsigned int _id = 0;
-	BufferTarget _target = BufferTarget::none;
-	BufferUsage _usage = BufferUsage::none;
+	Target _target = Target::none;
+	Usage _usage = Usage::none;
 	unsigned int _allocated_size = 0;
 };
 

@@ -1,4 +1,5 @@
 #include "void_engine/graphics/buffer/buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 
 #include <glad/glad.h>
 
@@ -59,7 +60,7 @@ auto Buffer::operator=(Buffer&& other) noexcept -> Buffer& {
 	return *this;
 }
 
-Buffer::Buffer(BufferTarget target) : _target(target) {
+Buffer::Buffer(Target target) : _target(target) {
 	glCreateBuffers(1, &_id);
 }
 
@@ -78,13 +79,13 @@ void Buffer::unbind() const {
 	glBindBuffer(static_cast<GLenum>(_target), 0);
 }
 
-void Buffer::allocate(unsigned int size, BufferUsage usage) {
+void Buffer::allocate(unsigned int size, Usage usage) {
 	glNamedBufferData(_id, size, nullptr, static_cast<GLenum>(usage));
 	_allocated_size = size;
 	_usage = usage;
 }
 
-void Buffer::set_data(unsigned int size, const void* data, BufferUsage usage) {
+void Buffer::set_data(unsigned int size, const void* data, Usage usage) {
 	glNamedBufferData(_id, size, data, static_cast<GLenum>(usage));
 	_allocated_size = size;
 	_usage = usage;

@@ -1,12 +1,13 @@
 #include "void_engine/resource/font/text.hpp"
 
-#include "void_engine/graphics/buffer/buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/mesh.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/glyph.hpp"
 
 #include <algorithm>
 #include <array>
+#include <cassert>
 #include <codecvt>
 #include <glm/ext/vector_float2.hpp>
 #include <iterator>
@@ -141,9 +142,9 @@ void Text::update() const {
 	if (_mesh == nullptr) {
 		_mesh = new graphics::Mesh();
 		_mesh->add_attribute<float>(2);
-		_mesh->add_vertex_buffer(positions, graphics::buffer::BufferUsage::dynamic_draw);
+		_mesh->add_vertex_buffer(positions, graphics::buffer::Usage::dynamic_draw);
 		_mesh->add_attribute<float>(2);
-		_mesh->add_vertex_buffer(uvs, graphics::buffer::BufferUsage::dynamic_draw);
+		_mesh->add_vertex_buffer(uvs, graphics::buffer::Usage::dynamic_draw);
 	} else {
 		_mesh->get_vertex_buffer<glm::vec2>(0).update_data(positions);
 		_mesh->get_vertex_buffer<glm::vec2>(1).update_data(uvs);

@@ -4,6 +4,7 @@
 #include "void_engine/graphics/buffer/array_buffer.hpp"
 #include "void_engine/graphics/buffer/buffer.hpp"
 #include "void_engine/graphics/buffer/element_buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/graphics/vertex_array.hpp"
 
@@ -31,7 +32,7 @@ public:
 
 	template <typename T>
 	void add_vertex_buffer(
-		const std::vector<T>& data, buffer::BufferUsage usage = buffer::BufferUsage::static_draw
+		const std::vector<T>& data, buffer::Usage usage = buffer::Usage::static_draw
 	) {
 		auto* buffer = new buffer::ArrayBuffer(data, usage);
 		_vertex_array->add_vertex_buffer(*buffer);
@@ -41,7 +42,7 @@ public:
 	void set_divisor(unsigned int divisor) const;
 	void set_indices(
 		const std::vector<unsigned int>& data,
-		buffer::BufferUsage usage = buffer::BufferUsage::static_draw
+		buffer::Usage usage = buffer::Usage::static_draw
 	);
 	void set_primitive_type(PrimitiveType primitive);
 

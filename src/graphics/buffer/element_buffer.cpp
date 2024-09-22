@@ -1,24 +1,25 @@
 #include "void_engine/graphics/buffer/element_buffer.hpp"
 
 #include "void_engine/graphics/buffer/buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 
 #include <vector>
 
 namespace void_engine::graphics::buffer {
 
-ElementBuffer::ElementBuffer() : Buffer(BufferTarget::element_array) {
+ElementBuffer::ElementBuffer() : Buffer(Target::element_array) {
 }
 
-ElementBuffer::ElementBuffer(unsigned int size, BufferUsage usage) : ElementBuffer() {
+ElementBuffer::ElementBuffer(unsigned int size, Usage usage) : ElementBuffer() {
 	Buffer::allocate(size, usage);
 }
 
-ElementBuffer::ElementBuffer(const std::vector<unsigned int>& indices, BufferUsage usage) :
+ElementBuffer::ElementBuffer(const std::vector<unsigned int>& indices, Usage usage) :
 	ElementBuffer() {
 	set_data(indices, usage);
 }
 
-void ElementBuffer::set_data(const std::vector<unsigned int>& indices, BufferUsage usage) {
+void ElementBuffer::set_data(const std::vector<unsigned int>& indices, Usage usage) {
 	Buffer::set_data(indices.size() * sizeof(unsigned int), indices.data(), usage);
 	_count = indices.size();
 }

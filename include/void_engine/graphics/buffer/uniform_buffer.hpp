@@ -12,10 +12,10 @@ namespace void_engine::graphics::buffer {
 template <typename T>
 class UniformBuffer final : public Buffer {
 public:
-	UniformBuffer() : Buffer(BufferTarget::uniform) {
+	UniformBuffer() : Buffer(Target::uniform) {
 	}
 
-	void set_data(const T& data, BufferUsage usage = BufferUsage::dynamic_draw) {
+	void set_data(const T& data, Usage usage = Usage::dynamic_draw) {
 		Buffer::set_data(data, usage);
 		_data = data;
 	}

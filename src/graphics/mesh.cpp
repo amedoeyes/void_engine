@@ -2,6 +2,7 @@
 
 #include "void_engine/graphics/buffer/buffer.hpp"
 #include "void_engine/graphics/buffer/element_buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/graphics/vertex_array.hpp"
 
@@ -98,7 +99,7 @@ void Mesh::set_divisor(unsigned int divisor) const {
 	_vertex_array->set_divisor(divisor);
 }
 
-void Mesh::set_indices(const std::vector<unsigned int>& data, buffer::BufferUsage usage) {
+void Mesh::set_indices(const std::vector<unsigned int>& data, buffer::Usage usage) {
 	_element_buffer->set_data(data, usage);
 }
 
