@@ -8,17 +8,16 @@
 #include <glm/ext/vector_float4.hpp>
 #include <glm/ext/vector_int2.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <vector>
 
-namespace void_engine::resource {
+namespace void_engine::resource::texture {
 
 Texture::Texture(const Texture& other) : _target(other._target), _size(other._size) {
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
-		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
-		case TextureTarget::texture_3d:
-		case TextureTarget::texture_2d_array:
-			set_texture_storage_3d(1, other._internal_format, _size);
-			break;
+		case Target::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		case Target::texture_3d:
+		case Target::texture_2d_array: set_texture_storage_3d(1, other._internal_format, _size); break;
 		default: assert(false && "Not implemented");
 	}
 	glCopyImageSubData(
@@ -56,11 +55,9 @@ auto Texture::operator=(const Texture& other) -> Texture& {
 	_size = other._size;
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
-		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
-		case TextureTarget::texture_3d:
-		case TextureTarget::texture_2d_array:
-			set_texture_storage_3d(1, other._internal_format, _size);
-			break;
+		case Target::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+		case Target::texture_3d:
+		case Target::texture_2d_array: set_texture_storage_3d(1, other._internal_format, _size); break;
 		default: assert(false && "Not implemented");
 	}
 	glCopyImageSubData(
@@ -95,7 +92,7 @@ auto Texture::operator=(Texture&& other) noexcept -> Texture& {
 	return *this;
 }
 
-Texture::Texture(TextureTarget target) : _target(target) {
+Texture::Texture(Target target) : _target(target) {
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 }
 
@@ -119,7 +116,7 @@ void Texture::bind_unit(unsigned int unit) const {
 }
 
 void Texture::set_texture_storage_2d(
-	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
+	unsigned int levels, InternalFormat internal_format, const glm::ivec2& size
 ) {
 	glTextureStorage2D(
 		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y
@@ -129,7 +126,7 @@ void Texture::set_texture_storage_2d(
 }
 
 void Texture::set_texture_storage_3d(
-	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec3& size
+	unsigned int levels, InternalFormat internal_format, const glm::ivec3& size
 ) {
 	glTextureStorage3D(
 		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y, size.z
@@ -139,7 +136,7 @@ void Texture::set_texture_storage_3d(
 }
 
 void Texture::set_sub_image_2d(
-	unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, TextureFormat format,
+	unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, Format format,
 	const void* pixels
 ) const {
 	glTextureSubImage2D(
@@ -156,7 +153,7 @@ void Texture::set_sub_image_2d(
 }
 
 void Texture::set_sub_image_3d(
-	unsigned int level, const glm::ivec3& offset, const glm::ivec3& size, TextureFormat format,
+	unsigned int level, const glm::ivec3& offset, const glm::ivec3& size, Format format,
 	const void* pixels
 ) const {
 	glTextureSubImage3D(
@@ -178,7 +175,7 @@ void Texture::generate_mipmap() const {
 	glGenerateTextureMipmap(_id);
 }
 
-void Texture::set_depth_stencil_mode(TextureDepthStencilMode mode) const {
+void Texture::set_depth_stencil_mode(DepthStencilMode mode) const {
 	glTextureParameteri(_id, GL_DEPTH_STENCIL_TEXTURE_MODE, static_cast<GLint>(mode));
 }
 
@@ -194,19 +191,19 @@ void Texture::set_border_color(const glm::vec4& color) const {
 	glTextureParameterfv(_id, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(color));
 }
 
-void Texture::set_compare_func(TextureCompareFunc func) const {
+void Texture::set_compare_func(CompareFunc func) const {
 	glTextureParameteri(_id, GL_TEXTURE_COMPARE_FUNC, static_cast<GLint>(func));
 }
 
-void Texture::set_compare_mode(TextureCompareMode mode) const {
+void Texture::set_compare_mode(CompareMode mode) const {
 	glTextureParameteri(_id, GL_TEXTURE_COMPARE_MODE, static_cast<GLint>(mode));
 }
 
-void Texture::set_min_filter(TextureMinFilter filter) const {
+void Texture::set_min_filter(MinFilter filter) const {
 	glTextureParameteri(_id, GL_TEXTURE_MIN_FILTER, static_cast<GLint>(filter));
 }
 
-void Texture::set_mag_filter(TextureMagFilter filter) const {
+void Texture::set_mag_filter(MagFilter filter) const {
 	glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(filter));
 }
 
@@ -222,35 +219,35 @@ void Texture::set_lod_bias(float bias) const {
 	glTextureParameterf(_id, GL_TEXTURE_LOD_BIAS, bias);
 }
 
-void Texture::set_swizzle_r(TextureSwizzle swizzle) const {
+void Texture::set_swizzle_r(Swizzle swizzle) const {
 	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_R, static_cast<GLint>(swizzle));
 }
 
-void Texture::set_swizzle_g(TextureSwizzle swizzle) const {
+void Texture::set_swizzle_g(Swizzle swizzle) const {
 	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_G, static_cast<GLint>(swizzle));
 }
 
-void Texture::set_swizzle_b(TextureSwizzle swizzle) const {
+void Texture::set_swizzle_b(Swizzle swizzle) const {
 	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_B, static_cast<GLint>(swizzle));
 }
 
-void Texture::set_swizzle_a(TextureSwizzle swizzle) const {
+void Texture::set_swizzle_a(Swizzle swizzle) const {
 	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_A, static_cast<GLint>(swizzle));
 }
 
-void Texture::set_wrap_s(TextureWrap wrap) const {
+void Texture::set_wrap_s(Wrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_S, static_cast<GLint>(wrap));
 }
 
-void Texture::set_wrap_t(TextureWrap wrap) const {
+void Texture::set_wrap_t(Wrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_T, static_cast<GLint>(wrap));
 }
 
-void Texture::set_wrap_r(TextureWrap wrap) const {
+void Texture::set_wrap_r(Wrap wrap) const {
 	glTextureParameteri(_id, GL_TEXTURE_WRAP_R, static_cast<GLint>(wrap));
 }
 
-auto Texture::get_data(TextureFormat format) const -> std::vector<std::byte> {
+auto Texture::get_data(Format format) const -> std::vector<std::byte> {
 	std::vector<std::byte> data;
 	data.resize(
 		static_cast<decltype(data)::size_type>(_size.x) * _size.y * _size.z *
@@ -271,9 +268,9 @@ auto Texture::get_size() const -> const glm::ivec3& {
 	return _size;
 }
 
-auto Texture::get_bytes_per_pixel(TextureFormat format) -> unsigned int {
+auto Texture::get_bytes_per_pixel(Format format) -> unsigned int {
 	switch (format) {
-		using enum TextureFormat;
+		using enum Format;
 		case r: return 1;
 		case rg: return 2;
 		case rgb:
@@ -285,4 +282,4 @@ auto Texture::get_bytes_per_pixel(TextureFormat format) -> unsigned int {
 	return 0;
 }
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::texture

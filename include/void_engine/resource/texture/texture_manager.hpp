@@ -8,7 +8,7 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace void_engine::resource {
+namespace void_engine::resource::texture {
 
 class TextureManager {
 public:
@@ -31,6 +31,6 @@ private:
 	std::filesystem::path _root_path;
 };
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::texture
 
 #endif // !VOID_ENGINE_RESOURCE_TEXTURE_MANAGER_HPP

@@ -43,7 +43,7 @@ public:
 	void add_fallback(std::span<const std::byte> data);
 
 	[[nodiscard]] auto get_glyphs(std::u32string_view text) const -> std::vector<Glyph>;
-	[[nodiscard]] auto get_texture() const -> const resource::Texture&;
+	[[nodiscard]] auto get_texture() const -> const texture::Texture&;
 	[[nodiscard]] auto get_line_height() const -> unsigned int;
 	[[nodiscard]] auto get_fonts() const -> const std::vector<hb_font_t*>&;
 
@@ -53,7 +53,7 @@ private:
 	std::vector<hb_font_t*> _fonts;
 	unsigned int _size;
 	glm::uvec2 _atlas_size;
-	resource::Texture _texture = resource::Texture(resource::TextureTarget::texture_2d);
+	texture::Texture _texture = texture::Texture(resource::Target::texture_2d);
 	mutable std::unordered_map<unsigned long, Glyph> _glyphs;
 	mutable glm::uvec2 _next_glpyh_position = glm::vec2(0.0f);
 	mutable unsigned int _max_glyph_height = 0.0f;

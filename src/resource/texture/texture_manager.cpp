@@ -1,16 +1,17 @@
 #include "void_engine/resource/texture/texture_manager.hpp"
 
+#include "void_engine/resource/image/enums.hpp"
 #include "void_engine/resource/image/image.hpp"
+#include "void_engine/resource/texture/enums.hpp"
 #include "void_engine/resource/texture/texture.hpp"
 
 #include <cassert>
 #include <filesystem>
-#include <glm/ext/vector_float2.hpp>
 #include <string_view>
 #include <unordered_map>
 #include <utility>
 
-namespace void_engine::resource {
+namespace void_engine::resource::texture {
 
 TextureManager::TextureManager(std::filesystem::path root_path) : _root_path(std::move(root_path)) {
 }
@@ -26,16 +27,16 @@ auto TextureManager::create_2d(std::string_view name, const std::filesystem::pat
 	assert(_textures.find(name.data()) == _textures.end() && "Texture already exists");
 
 	const resource::image::Image image(_root_path / path, true);
-	auto* texture = new Texture(TextureTarget::texture_2d);
-	texture->set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.get_size());
+	auto* texture = new Texture(Target::texture_2d);
+	texture->set_texture_storage_2d(1, InternalFormat::rgba8, image.get_size());
 
-	TextureFormat format = TextureFormat::none;
+	Format format = Format::none;
 	switch (image.get_color_type()) {
 		using enum resource::image::ColorType;
-		case gray: format = TextureFormat::r; break;
-		case gray_alpha: format = TextureFormat::rg; break;
-		case rgb: format = TextureFormat::rgb; break;
-		case rgba: format = TextureFormat::rgba; break;
+		case gray: format = Format::r; break;
+		case gray_alpha: format = Format::rg; break;
+		case rgb: format = Format::rgb; break;
+		case rgba: format = Format::rgba; break;
 		default: std::unreachable();
 	}
 
@@ -62,4 +63,4 @@ void TextureManager::set_root_path(const std::filesystem::path& root_path) {
 	_root_path = root_path;
 }
 
-} // namespace void_engine::resource
+} // namespace void_engine::resource::texture

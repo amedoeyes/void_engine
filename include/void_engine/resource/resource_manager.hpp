@@ -19,12 +19,12 @@ public:
 	explicit ResourceManager(const std::filesystem::path& resources_path);
 	~ResourceManager();
 
-	auto textures() -> TextureManager&;
+	auto textures() -> texture::TextureManager&;
 	auto shaders() -> shader::ShaderManager&;
 	auto fonts() -> font::FontManager&;
 
 private:
-	TextureManager* _textures;
+	texture::TextureManager* _textures;
 	shader::ShaderManager* _shaders;
 	font::FontManager* _fonts;
 };
