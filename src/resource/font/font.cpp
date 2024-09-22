@@ -32,11 +32,11 @@ Font::Font(
 	_atlas_size(atlas_size) {
 	_faces.push_back(load_font(path, _size));
 	_fonts.push_back(hb_ft_font_create(_faces.back(), nullptr));
-	_texture.set_texture_storage_2d(1, resource::TextureInternalFormat::r8, _atlas_size);
-	_texture.set_min_filter(resource::TextureMinFilter::linear);
-	_texture.set_mag_filter(resource::TextureMagFilter::linear);
-	_texture.set_wrap_s(resource::TextureWrap::clamp_to_edge);
-	_texture.set_wrap_t(resource::TextureWrap::clamp_to_edge);
+	_texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
+	_texture.set_min_filter(resource::MinFilter::linear);
+	_texture.set_mag_filter(resource::MagFilter::linear);
+	_texture.set_wrap_s(resource::Wrap::clamp_to_edge);
+	_texture.set_wrap_t(resource::Wrap::clamp_to_edge);
 }
 
 Font::Font(
@@ -47,11 +47,11 @@ Font::Font(
 	_atlas_size(atlas_size) {
 	_faces.push_back(load_font(data, _size));
 	_fonts.push_back(hb_ft_font_create(_faces.back(), nullptr));
-	_texture.set_texture_storage_2d(1, resource::TextureInternalFormat::r8, _atlas_size);
-	_texture.set_min_filter(resource::TextureMinFilter::linear);
-	_texture.set_mag_filter(resource::TextureMagFilter::linear);
-	_texture.set_wrap_s(resource::TextureWrap::clamp_to_edge);
-	_texture.set_wrap_t(resource::TextureWrap::clamp_to_edge);
+	_texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
+	_texture.set_min_filter(resource::MinFilter::linear);
+	_texture.set_mag_filter(resource::MagFilter::linear);
+	_texture.set_wrap_s(resource::Wrap::clamp_to_edge);
+	_texture.set_wrap_t(resource::Wrap::clamp_to_edge);
 }
 
 Font::~Font() {
@@ -104,7 +104,7 @@ auto Font::get_glyphs(std::u32string_view text) const -> std::vector<Glyph> {
 	return glyphs;
 }
 
-auto Font::get_texture() const -> const resource::Texture& {
+auto Font::get_texture() const -> const texture::Texture& {
 	return _texture;
 }
 
@@ -171,7 +171,7 @@ auto Font::get_glyph(unsigned int index, unsigned int codepoint) const -> const 
 		}
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 		_texture.set_sub_image_2d(
-			0, _next_glpyh_position, bitmap_size, resource::TextureFormat::r, face->glyph->bitmap.buffer
+			0, _next_glpyh_position, bitmap_size, resource::Format::r, face->glyph->bitmap.buffer
 		);
 		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 		it->second = {

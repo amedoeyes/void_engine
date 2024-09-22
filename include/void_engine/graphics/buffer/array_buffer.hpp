@@ -2,6 +2,7 @@
 #define VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP
 
 #include "void_engine/graphics/buffer/buffer.hpp"
+#include "void_engine/graphics/buffer/enums.hpp"
 
 #include <vector>
 

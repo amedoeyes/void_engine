@@ -1,4 +1,5 @@
 #include "void_engine/graphics/buffer/buffer.hpp"
+
 #include "void_engine/graphics/buffer/enums.hpp"
 
 #include <glad/glad.h>

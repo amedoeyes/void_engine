@@ -1,4 +1,5 @@
 #include "void_engine/resource/shader/shader.hpp"
+
 #include "void_engine/resource/shader/enums.hpp"
 #include "void_engine/resource/shader/shader_source.hpp"
 

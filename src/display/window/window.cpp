@@ -3,14 +3,16 @@
 #include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
-#include "void_engine/utility/get_exec_path.hpp"
 #include "void_engine/resource/image/image.hpp"
+#include "void_engine/utility/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
+#include <bit>
 #include <cassert>
 #include <cstddef>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_int2.hpp>
+#include <glm/ext/vector_uint2.hpp>
 #include <string>
 #include <string_view>
 #include <tuple>

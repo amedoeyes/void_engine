@@ -1,11 +1,13 @@
 #ifndef VOID_ENGINE_UTILITY_LOGGER_HPP
 #define VOID_ENGINE_UTILITY_LOGGER_HPP
 
+#include <bits/chrono.h>
 #include <chrono>
 #include <cstdint>
 #include <format>
 #include <iostream>
 #include <mutex>
+#include <string>
 #include <string_view>
 #include <utility>
 
@@ -40,7 +42,7 @@ void log(Level level, std::string_view fmt, Args&&... args) {
 	if (_level == Level::none || level < _level) {
 		return;
 	}
-	std::lock_guard<std::mutex> lock(_mutex);
+	const std::lock_guard<std::mutex> lock(_mutex);
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
 	auto zt = std::chrono::zoned_time{
@@ -56,7 +58,7 @@ void log(Level level, std::string_view fmt, Args&&... args) {
 		case error: prefix = "ERROR"; break;
 		default: std::unreachable();
 	}
-	const std::string message = std::vformat(fmt, std::make_format_args(args...));
+	const std::string message = std::vformat(fmt, std::make_format_args(std::forward<Args>(args)...));
 	*_output << std::format("{}: {}: {}\n", timestamp, prefix, message);
 }
 

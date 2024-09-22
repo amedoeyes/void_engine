@@ -4,9 +4,11 @@
 #include "void_engine/utility/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
+#include <bit>
 #include <cassert>
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
+#include <glm/ext/vector_uint2.hpp>
 
 namespace void_engine::display::window::input {
 
