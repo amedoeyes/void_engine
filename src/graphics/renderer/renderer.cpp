@@ -14,6 +14,7 @@
 #include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/text.hpp"
+#include "void_engine/resource/resource_manager.hpp"
 #include "void_engine/resource/shader/shader.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/logger.hpp"
@@ -24,6 +25,7 @@
 #include <cstddef>
 #include <glad/glad.h>
 #include <glm/common.hpp>
+#include <glm/ext/matrix_clip_space.hpp>
 #include <glm/ext/matrix_float4x4.hpp>
 #include <glm/ext/matrix_transform.hpp>
 #include <glm/ext/scalar_constants.hpp>
@@ -33,13 +35,33 @@
 #include <glm/geometric.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
+#include <span>
 #include <string>
 #include <string_view>
+#include <tuple>
 #include <utility>
 
 namespace void_engine::graphics::renderer {
 
+struct CameraUniform {
+	glm::mat4 projection;
+	glm::mat4 view;
+	glm::mat4 view_projection;
+};
+
 namespace {
+
+// NOLINTBEGIN(cppcoreguidelines-avoid-non-const-global-variables)
+glm::ivec2 _viewport_position;
+glm::ivec2 _viewport_size;
+utility::BitMask<ClearFlags> _clear_flags;
+resource::ResourceManager _resource_manager;
+buffer::UniformBuffer<CameraUniform>* _camera_uniform;
+camera::Camera* _camera;
+camera::Camera* _default_camera;
+glm::mat4 _screen_projection;
+resource::font::Text* _text;
+// NOLINTEND(cppcoreguidelines-avoid-non-const-global-variables)
 
 APIENTRY void debug_message_callback(
 	unsigned int source, unsigned int type, unsigned int /*unused*/, unsigned int severity,
@@ -83,6 +105,39 @@ APIENTRY void debug_message_callback(
 	}
 }
 
+void update_camera_viewport() {
+	switch (_camera->get_type()) {
+		using enum camera::CameraType;
+		case perspective: {
+			auto* camera = dynamic_cast<camera::PerspectiveCamera*>(_camera);
+			camera->set_aspect(_viewport_size);
+			break;
+		}
+		case orthographic: {
+			auto* camera = dynamic_cast<camera::OrthographicCamera*>(_camera);
+			camera->set_dimensions(_viewport_size);
+			break;
+		}
+		default: std::unreachable();
+	}
+}
+
+void update_camera_uniform() {
+	const glm::mat4& projection = _camera->get_projection();
+	const glm::mat4& view = _camera->get_view();
+	const glm::mat4& view_projection = _camera->get_view_projection();
+	const CameraUniform& uniform_data = _camera_uniform->get_data();
+	if (projection != uniform_data.projection) {
+		_camera_uniform->set_sub_data(offsetof(CameraUniform, projection), projection);
+	}
+	if (view != uniform_data.view) {
+		_camera_uniform->set_sub_data(offsetof(CameraUniform, view), view);
+	}
+	if (view_projection != uniform_data.view_projection) {
+		_camera_uniform->set_sub_data(offsetof(CameraUniform, view_projection), view_projection);
+	}
+}
+
 // NOLINTNEXTLINE
 constexpr unsigned char shape_shader_vert[] = {
 #include "shape.vert.spv.h"
@@ -115,7 +170,7 @@ constexpr unsigned char liberation_font[] = {
 
 } // namespace
 
-void Renderer::init() {
+void init() {
 	if (gladLoadGL() == 0) {
 		assert(false && "Failed to initialize GLAD");
 	}
@@ -164,37 +219,37 @@ void Renderer::init() {
 	);
 	font_screen_shader.compile();
 
-	resource::font::Font& font =
+	const resource::font::Font& font =
 		_resource_manager.fonts().create("liberation", std::as_bytes(std::span(liberation_font)));
 
 	_text = new resource::font::Text(font, "");
 }
 
-void Renderer::update() {
+void update() {
 	update_camera_uniform();
 	clear();
 }
 
-void Renderer::terminate() {
+void terminate() {
 	delete _default_camera;
 	delete _camera_uniform;
 }
 
-void Renderer::clear() {
+void clear() {
 	glClear(_clear_flags.get());
 }
 
-void Renderer::draw_mesh(const Mesh& mesh) {
+void draw_mesh(const Mesh& mesh) {
 	mesh.bind();
 	draw_elements(mesh.get_primitive_type(), mesh.get_count(), nullptr);
 }
 
-void Renderer::draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
+void draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
 	mesh.bind();
 	draw_elements_instanced(mesh.get_primitive_type(), mesh.get_count(), nullptr, instances);
 }
 
-void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
+void draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 	static const Mesh point = geometry::create_point_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, glm::translate(glm::mat4(1.0f), position));
@@ -204,9 +259,7 @@ void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4
 	draw_mesh(point);
 }
 
-void Renderer::draw_line(
-	const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color
-) {
+void draw_line(const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color) {
 	static const Mesh line = geometry::create_line_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	const glm::vec3 direction = end - start;
@@ -236,7 +289,7 @@ void Renderer::draw_line(
 	draw_mesh(line);
 }
 
-void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& color) {
+void draw_quad(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh quad = geometry::create_quad_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -245,9 +298,7 @@ void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& c
 	draw_mesh(quad);
 }
 
-void Renderer::draw_quad_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void draw_quad_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static const Mesh quad_outline = geometry::create_quad_outline_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -257,7 +308,7 @@ void Renderer::draw_quad_outline(
 	draw_mesh(quad_outline);
 }
 
-void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4& color) {
+void draw_circle(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh circle = geometry::create_circle_mesh(100);
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -266,9 +317,7 @@ void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4&
 	draw_mesh(circle);
 }
 
-void Renderer::draw_circle_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void draw_circle_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static const Mesh circle_outline = geometry::create_circle_outline_mesh(100);
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -278,7 +327,7 @@ void Renderer::draw_circle_outline(
 	draw_mesh(circle_outline);
 }
 
-void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& color) {
+void draw_cube(const utility::Transform& transform, const glm::vec4& color) {
 	static const Mesh cube = geometry::create_cube_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -287,9 +336,7 @@ void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& c
 	draw_mesh(cube);
 }
 
-void Renderer::draw_cube_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	static const Mesh cube_outline = geometry::create_cube_outline_mesh();
 	static const resource::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
@@ -299,11 +346,11 @@ void Renderer::draw_cube_outline(
 	draw_mesh(cube_outline);
 }
 
-void Renderer::draw_elements(PrimitiveType type, unsigned int count, void* indices) {
+void draw_elements(PrimitiveType type, unsigned int count, void* indices) {
 	glDrawElements(static_cast<GLenum>(type), static_cast<GLsizei>(count), GL_UNSIGNED_INT, indices);
 }
 
-void Renderer::draw_elements_instanced(
+void draw_elements_instanced(
 	PrimitiveType type, unsigned int count, void* indices, unsigned int instances
 ) {
 	glDrawElementsInstanced(
@@ -315,12 +362,12 @@ void Renderer::draw_elements_instanced(
 	);
 }
 
-void Renderer::draw_text(
+void draw_text(
 	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
 	static const resource::Shader& shader = _resource_manager.shaders().get("font");
 
-	bool prev_blend = is_blend_enabled();
+	const bool prev_blend = is_blend_enabled();
 	auto [prev_src, prev_dst] = get_blend_func();
 
 	set_blend(true);
@@ -336,19 +383,17 @@ void Renderer::draw_text(
 	set_blend_func(prev_src, prev_dst);
 }
 
-void Renderer::draw_text(
-	std::string_view text, const utility::Transform& transform, const glm::vec4& color
-) {
+void draw_text(std::string_view text, const utility::Transform& transform, const glm::vec4& color) {
 	_text->set_data(text);
 	draw_text(*_text, transform, color);
 }
 
-void Renderer::draw_text_screen(
+void draw_text_screen(
 	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
 	static const resource::Shader& shader = _resource_manager.shaders().get("font_screen");
 
-	bool prev_blend = is_blend_enabled();
+	const bool prev_blend = is_blend_enabled();
 	auto [prev_src, prev_dst] = get_blend_func();
 
 	set_blend(true);
@@ -365,18 +410,18 @@ void Renderer::draw_text_screen(
 	set_blend_func(prev_src, prev_dst);
 }
 
-void Renderer::draw_text_screen(
+void draw_text_screen(
 	std::string_view text, const utility::Transform& transform, const glm::vec4& color
 ) {
 	_text->set_data(text);
 	draw_text_screen(*_text, transform, color);
 }
 
-void Renderer::set_clear_color(const glm::vec4& color) {
+void set_clear_color(const glm::vec4& color) {
 	glClearColor(color.r, color.g, color.b, color.a);
 }
 
-void Renderer::set_viewport(const glm::ivec2& position, const glm::ivec2& size) {
+void set_viewport(const glm::ivec2& position, const glm::ivec2& size) {
 	assert(size.x >= 0 && size.y >= 0 && "Viewport size must be positive");
 	glViewport(position.x, position.y, size.x, size.y);
 	_viewport_position = position;
@@ -386,23 +431,23 @@ void Renderer::set_viewport(const glm::ivec2& position, const glm::ivec2& size) 
 	update_camera_viewport();
 }
 
-void Renderer::set_viewport_position(const glm::ivec2& position) {
+void set_viewport_position(const glm::ivec2& position) {
 	set_viewport(position, _viewport_size);
 }
 
-void Renderer::set_viewport_size(const glm::ivec2& size) {
+void set_viewport_size(const glm::ivec2& size) {
 	set_viewport(_viewport_position, size);
 }
 
-void Renderer::set_point_size(float size) {
+void set_point_size(float size) {
 	glPointSize(size);
 }
 
-void Renderer::set_line_width(float width) {
+void set_line_width(float width) {
 	glLineWidth(width);
 }
 
-void Renderer::set_depth_test(bool enabled) {
+void set_depth_test(bool enabled) {
 	if (enabled) {
 		glEnable(GL_DEPTH_TEST);
 		_clear_flags.set(ClearFlags::depth);
@@ -412,11 +457,11 @@ void Renderer::set_depth_test(bool enabled) {
 	}
 }
 
-void Renderer::set_depth_func(DepthFunc func) {
+void set_depth_func(DepthFunc func) {
 	glDepthFunc(static_cast<GLenum>(func));
 }
 
-void Renderer::set_blend(bool enabled) {
+void set_blend(bool enabled) {
 	if (enabled) {
 		glEnable(GL_BLEND);
 	} else {
@@ -424,15 +469,15 @@ void Renderer::set_blend(bool enabled) {
 	}
 }
 
-void Renderer::set_blend_func(BlendFunc src, BlendFunc dst) {
+void set_blend_func(BlendFunc src, BlendFunc dst) {
 	glBlendFunc(static_cast<GLenum>(src), static_cast<GLenum>(dst));
 }
 
-void Renderer::set_blend_equation(BlendEquation eq) {
+void set_blend_equation(BlendEquation eq) {
 	glBlendEquation(static_cast<GLenum>(eq));
 }
 
-void Renderer::set_stencil(bool enabled) {
+void set_stencil(bool enabled) {
 	if (enabled) {
 		glEnable(GL_STENCIL_TEST);
 		_clear_flags.set(ClearFlags::stencil);
@@ -442,19 +487,19 @@ void Renderer::set_stencil(bool enabled) {
 	}
 }
 
-void Renderer::set_stencil_mask(unsigned int mask) {
+void set_stencil_mask(unsigned int mask) {
 	glStencilMask(mask);
 }
 
-void Renderer::set_stencil_func(StencilFunc func, int ref, unsigned int mask) {
+void set_stencil_func(StencilFunc func, int ref, unsigned int mask) {
 	glStencilFunc(static_cast<GLenum>(func), ref, mask);
 }
 
-void Renderer::set_stencil_op(StencilOp sfail, StencilOp dpfail, StencilOp dppass) {
+void set_stencil_op(StencilOp sfail, StencilOp dpfail, StencilOp dppass) {
 	glStencilOp(static_cast<GLenum>(sfail), static_cast<GLenum>(dpfail), static_cast<GLenum>(dppass));
 }
 
-void Renderer::set_cull_face(bool enabled) {
+void set_cull_face(bool enabled) {
 	if (enabled) {
 		glEnable(GL_CULL_FACE);
 	} else {
@@ -462,36 +507,36 @@ void Renderer::set_cull_face(bool enabled) {
 	}
 }
 
-void Renderer::set_cull_face(CullFace face) {
+void set_cull_face(CullFace face) {
 	glCullFace(static_cast<GLenum>(face));
 }
 
-void Renderer::set_front_face(FrontFace face) {
+void set_front_face(FrontFace face) {
 	glFrontFace(static_cast<GLenum>(face));
 }
 
-void Renderer::set_polygon_mode(PolygonMode mode) {
+void set_polygon_mode(PolygonMode mode) {
 	glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
 }
 
-void Renderer::set_camera(camera::Camera& camera) {
+void set_camera(camera::Camera& camera) {
 	_camera = &camera;
 	update_camera_viewport();
 }
 
-auto Renderer::get_viewport_position() -> const glm::ivec2& {
+auto get_viewport_position() -> const glm::ivec2& {
 	return _viewport_position;
 }
 
-auto Renderer::get_viewport_size() -> const glm::ivec2& {
+auto get_viewport_size() -> const glm::ivec2& {
 	return _viewport_size;
 }
 
-auto Renderer::is_blend_enabled() -> bool {
+auto is_blend_enabled() -> bool {
 	return glIsEnabled(GL_BLEND) == GL_TRUE;
 }
 
-auto Renderer::get_blend_func() -> std::pair<BlendFunc, BlendFunc> {
+auto get_blend_func() -> std::pair<BlendFunc, BlendFunc> {
 	int src = 0;
 	int dst = 0;
 	glGetIntegerv(GL_BLEND_SRC, &src);
@@ -499,23 +544,23 @@ auto Renderer::get_blend_func() -> std::pair<BlendFunc, BlendFunc> {
 	return {static_cast<BlendFunc>(src), static_cast<BlendFunc>(dst)};
 }
 
-auto Renderer::get_blend_equation() -> BlendEquation {
+auto get_blend_equation() -> BlendEquation {
 	int eq = 0;
 	glGetIntegerv(GL_BLEND_EQUATION, &eq);
 	return static_cast<BlendEquation>(eq);
 }
 
-auto Renderer::is_stencil_enabled() -> bool {
+auto is_stencil_enabled() -> bool {
 	return glIsEnabled(GL_STENCIL_TEST) == GL_TRUE;
 }
 
-auto Renderer::get_stencil_mask() -> unsigned int {
+auto get_stencil_mask() -> unsigned int {
 	int mask = 0;
 	glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
 	return static_cast<unsigned int>(mask);
 }
 
-auto Renderer::get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int> {
+auto get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int> {
 	int func = 0;
 	int ref = 0;
 	int mask = 0;
@@ -525,7 +570,7 @@ auto Renderer::get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int> 
 	return {static_cast<StencilFunc>(func), ref, static_cast<unsigned int>(mask)};
 }
 
-auto Renderer::get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp> {
+auto get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp> {
 	int sfail = 0;
 	int dpfail = 0;
 	int dppass = 0;
@@ -537,63 +582,30 @@ auto Renderer::get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp> {
 	};
 }
 
-auto Renderer::is_cull_face_enabled() -> bool {
+auto is_cull_face_enabled() -> bool {
 	return glIsEnabled(GL_CULL_FACE) == GL_TRUE;
 }
 
-auto Renderer::get_cull_face() -> CullFace {
+auto get_cull_face() -> CullFace {
 	int face = 0;
 	glGetIntegerv(GL_CULL_FACE, &face);
 	return static_cast<CullFace>(face);
 }
 
-auto Renderer::get_front_face() -> FrontFace {
+auto get_front_face() -> FrontFace {
 	int face = 0;
 	glGetIntegerv(GL_FRONT_FACE, &face);
 	return static_cast<FrontFace>(face);
 }
 
-auto Renderer::get_polygon_mode() -> PolygonMode {
+auto get_polygon_mode() -> PolygonMode {
 	int mode = 0;
 	glGetIntegerv(GL_POLYGON_MODE, &mode);
 	return static_cast<PolygonMode>(mode);
 }
 
-auto Renderer::get_camera() -> camera::Camera& {
+auto get_camera() -> camera::Camera& {
 	return *_camera;
-}
-
-void Renderer::update_camera_viewport() {
-	switch (_camera->get_type()) {
-		using enum camera::CameraType;
-		case perspective: {
-			auto* camera = dynamic_cast<camera::PerspectiveCamera*>(_camera);
-			camera->set_aspect(_viewport_size);
-			break;
-		}
-		case orthographic: {
-			auto* camera = dynamic_cast<camera::OrthographicCamera*>(_camera);
-			camera->set_dimensions(_viewport_size);
-			break;
-		}
-		default: std::unreachable();
-	}
-}
-
-void Renderer::update_camera_uniform() {
-	const glm::mat4& projection = _camera->get_projection();
-	const glm::mat4& view = _camera->get_view();
-	const glm::mat4& view_projection = _camera->get_view_projection();
-	const CameraUniform& uniform_data = _camera_uniform->get_data();
-	if (projection != uniform_data.projection) {
-		_camera_uniform->set_sub_data(offsetof(CameraUniform, projection), projection);
-	}
-	if (view != uniform_data.view) {
-		_camera_uniform->set_sub_data(offsetof(CameraUniform, view), view);
-	}
-	if (view_projection != uniform_data.view_projection) {
-		_camera_uniform->set_sub_data(offsetof(CameraUniform, view_projection), view_projection);
-	}
 }
 
 } // namespace void_engine::graphics::renderer
