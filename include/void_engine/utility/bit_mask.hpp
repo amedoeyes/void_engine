@@ -49,6 +49,14 @@ public:
 		_value &= ~static_cast<std::underlying_type_t<T>>(flag);
 	}
 
+	void set(T flag, bool value) {
+		if (value) {
+			set(flag);
+		} else {
+			unset(flag);
+		}
+	}
+
 	void toggle(T flag) {
 		_value ^= static_cast<std::underlying_type_t<T>>(flag);
 	}
