@@ -18,6 +18,7 @@ public:
 	void set_dimensions(const glm::vec2& dimensions);
 	void set_zoom(float zoom);
 	void zoom(float zoom);
+	void set_size(const glm::vec2& size) override;
 	[[nodiscard]] auto get_left() const -> float;
 	[[nodiscard]] auto get_right() const -> float;
 	[[nodiscard]] auto get_bottom() const -> float;

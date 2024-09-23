@@ -53,6 +53,10 @@ void OrthographicCamera::zoom(float zoom) {
 	update_projection();
 }
 
+void OrthographicCamera::set_size(const glm::vec2& size) {
+	set_dimensions(size);
+}
+
 auto OrthographicCamera::get_left() const -> float {
 	return _left;
 }

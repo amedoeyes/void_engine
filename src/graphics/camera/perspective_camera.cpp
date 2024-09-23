@@ -22,6 +22,10 @@ void PerspectiveCamera::set_aspect(const glm::vec2& size) {
 	update_projection();
 }
 
+void PerspectiveCamera::set_size(const glm::vec2& size) {
+	set_aspect(size);
+}
+
 auto PerspectiveCamera::get_fov() const -> float {
 	return _fov;
 }
