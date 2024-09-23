@@ -29,6 +29,7 @@ void Camera::set_position(const glm::vec3& position) {
 
 void Camera::set_rotation(const glm::vec3& rotation) {
 	_orientation = glm::normalize(calculate_rotation(rotation));
+	update_view();
 }
 
 void Camera::move(const glm::vec3& movement) {
