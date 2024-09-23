@@ -3,14 +3,7 @@
 #include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
-#include "void_engine/graphics/camera/enums.hpp"
-#include "void_engine/graphics/camera/orthographic_camera.hpp"
 #include "void_engine/graphics/camera/perspective_camera.hpp"
-#include "void_engine/graphics/geometry/circle.hpp"
-#include "void_engine/graphics/geometry/cube.hpp"
-#include "void_engine/graphics/geometry/line.hpp"
-#include "void_engine/graphics/geometry/point.hpp"
-#include "void_engine/graphics/geometry/quad.hpp"
 #include "void_engine/graphics/mesh.hpp"
 #include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/resource/font/font.hpp"
@@ -41,39 +34,11 @@
 #include <span>
 #include <string>
 #include <string_view>
-#include <tuple>
 #include <utility>
 
 namespace void_engine::graphics::renderer {
 
-struct CameraUniform {
-	glm::mat4 projection;
-	glm::mat4 view;
-	glm::mat4 view_projection;
-};
-
-struct Viewport {
-	glm::ivec2 position = {0, 0};
-	glm::ivec2 size = {0, 0};
-};
-
-struct Context {
-	Viewport viewport;
-	utility::BitMask<ClearFlags> clear_flags;
-	resource::ResourceManager resource_manager;
-	buffer::UniformBuffer<CameraUniform> camera_uniform;
-	camera::Camera* default_camera = nullptr;
-	camera::Camera* camera = nullptr;
-	glm::mat4 screen_projection = glm::mat4(1.0f);
-	resource::font::Text text;
-};
-
 namespace {
-
-auto get_context() -> Context& {
-	static Context context;
-	return context;
-}
 
 APIENTRY void debug_message_callback(
 	unsigned int source, unsigned int type, unsigned int /*unused*/, unsigned int severity,
@@ -117,41 +82,6 @@ APIENTRY void debug_message_callback(
 	}
 }
 
-void update_camera_viewport() {
-	static const Context& context = get_context();
-	switch (context.camera->get_type()) {
-		using enum camera::Type;
-		case perspective: {
-			auto* camera = dynamic_cast<camera::PerspectiveCamera*>(context.camera);
-			camera->set_aspect(context.viewport.size);
-			break;
-		}
-		case orthographic: {
-			auto* camera = dynamic_cast<camera::OrthographicCamera*>(context.camera);
-			camera->set_dimensions(context.viewport.size);
-			break;
-		}
-		default: std::unreachable();
-	}
-}
-
-void update_camera_uniform() {
-	static Context& context = get_context();
-	const glm::mat4& projection = context.camera->get_projection();
-	const glm::mat4& view = context.camera->get_view();
-	const glm::mat4& view_projection = context.camera->get_view_projection();
-	const CameraUniform& uniform_data = context.camera_uniform.get_data();
-	if (projection != uniform_data.projection) {
-		context.camera_uniform.set_sub_data(offsetof(CameraUniform, projection), projection);
-	}
-	if (view != uniform_data.view) {
-		context.camera_uniform.set_sub_data(offsetof(CameraUniform, view), view);
-	}
-	if (view_projection != uniform_data.view_projection) {
-		context.camera_uniform.set_sub_data(offsetof(CameraUniform, view_projection), view_projection);
-	}
-}
-
 // NOLINTNEXTLINE
 constexpr unsigned char shape_shader_vert[] = {
 #include "shape.vert.spv.h"
@@ -184,11 +114,7 @@ constexpr unsigned char liberation_font[] = {
 
 } // namespace
 
-void init() {
-	if (gladLoadGL() == 0) {
-		assert(false && "Failed to initialize GLAD");
-	}
-
+Renderer::Renderer() {
 	int flags = 0;
 	glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
 	if ((static_cast<unsigned int>(flags) & GL_CONTEXT_FLAG_DEBUG_BIT) != 0) {
@@ -196,17 +122,12 @@ void init() {
 		glDebugMessageCallback(debug_message_callback, nullptr);
 	}
 
-	Context& context = get_context();
+	_default_camera = _camera = new camera::PerspectiveCamera();
 
-	context.clear_flags.set(ClearFlags::color);
+	_camera_uniform.bind_range(0);
+	_camera_uniform.allocate(sizeof(CameraUniform), buffer::Usage::dynamic_draw);
 
-	context.default_camera = new camera::PerspectiveCamera();
-	context.camera = context.default_camera;
-
-	context.camera_uniform.bind_range(0);
-	context.camera_uniform.allocate(sizeof(CameraUniform), buffer::Usage::dynamic_draw);
-
-	resource::shader::Shader& shape_shader = context.resource_manager.shaders().create("shape");
+	resource::shader::Shader& shape_shader = _resource_manager.shaders().create("shape");
 	shape_shader.add_source(
 		resource::shader::Type::vertex,
 		std::as_bytes(std::span(shape_shader_vert)),
@@ -219,7 +140,7 @@ void init() {
 	);
 	shape_shader.compile();
 
-	resource::shader::Shader& font_shader = context.resource_manager.shaders().create("font");
+	resource::shader::Shader& font_shader = _resource_manager.shaders().create("font");
 	font_shader.add_source(
 		resource::shader::Type::vertex,
 		std::as_bytes(std::span(font_shader_vert)),
@@ -232,8 +153,7 @@ void init() {
 	);
 	font_shader.compile();
 
-	resource::shader::Shader& font_screen_shader =
-		context.resource_manager.shaders().create("font_screen");
+	resource::shader::Shader& font_screen_shader = _resource_manager.shaders().create("font_screen");
 	font_screen_shader.add_source(
 		resource::shader::Type::vertex,
 		std::as_bytes(std::span(font_screen_shader_vert)),
@@ -246,53 +166,38 @@ void init() {
 	);
 	font_screen_shader.compile();
 
-	const resource::font::Font& font = context.resource_manager.fonts().create(
-		"liberation", std::as_bytes(std::span(liberation_font))
-	);
+	const resource::font::Font& font =
+		_resource_manager.fonts().create("liberation", std::as_bytes(std::span(liberation_font)));
 
-	context.text.set_font(font);
+	_draw_objects.text.set_font(font);
 }
 
-void update() {
+Renderer::~Renderer() {
+	delete _default_camera;
+}
+
+void Renderer::clear() const {
+	glClear(_clear.flags.get());
+}
+
+void Renderer::update() {
 	update_camera_uniform();
 	clear();
 }
 
-void terminate() {
-	static const Context& context = get_context();
-	delete context.default_camera;
-}
-
-void clear() {
-	static const Context& context = get_context();
-	glClear(context.clear_flags.get());
-}
-
-void draw_mesh(const Mesh& mesh) {
-	mesh.bind();
-	draw_elements(mesh.get_primitive_type(), mesh.get_count(), nullptr);
-}
-
-void draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
-	mesh.bind();
-	draw_elements_instanced(mesh.get_primitive_type(), mesh.get_count(), nullptr, instances);
-}
-
-void draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh point = geometry::create_point_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, glm::translate(glm::mat4(1.0f), position));
 	shader.set_uniform(1, color);
 	shader.bind();
 	set_point_size(size);
-	draw_mesh(point);
+	draw_mesh(_draw_objects.point);
 }
 
-void draw_line(const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh line = geometry::create_line_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_line(
+	const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	const glm::vec3 direction = end - start;
 	const glm::vec3 normal = glm::normalize(direction);
 	const glm::vec3 reference(1.0f, 0.0f, 0.0f);
@@ -317,77 +222,128 @@ void draw_line(const glm::vec3& start, const glm::vec3& end, float width, const 
 	shader.set_uniform(1, color);
 	shader.bind();
 	set_line_width(width);
-	draw_mesh(line);
+	draw_mesh(_draw_objects.line);
 }
 
-void draw_quad(const utility::Transform& transform, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh quad = geometry::create_quad_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& color) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
-	draw_mesh(quad);
+	draw_mesh(_draw_objects.quad);
 }
 
-void draw_quad_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh quad_outline = geometry::create_quad_outline_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
-	shader.set_uniform(0, transform.get_model());
-	shader.set_uniform(1, color);
-	shader.bind();
-	set_line_width(width);
-	draw_mesh(quad_outline);
-}
-
-void draw_circle(const utility::Transform& transform, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh circle = geometry::create_circle_mesh(100);
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
-	shader.set_uniform(0, transform.get_model());
-	shader.set_uniform(1, color);
-	shader.bind();
-	draw_mesh(circle);
-}
-
-void draw_circle_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh circle_outline = geometry::create_circle_outline_mesh(100);
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_quad_outline(
+	const utility::Transform& transform, float width, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
 	set_line_width(width);
-	draw_mesh(circle_outline);
+	draw_mesh(_draw_objects.quad_outline);
 }
 
-void draw_cube(const utility::Transform& transform, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh cube = geometry::create_cube_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4& color) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
-	draw_mesh(cube);
+	draw_mesh(_draw_objects.circle);
 }
 
-void draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
-	static Context& context = get_context();
-	static const Mesh cube_outline = geometry::create_cube_outline_mesh();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("shape");
+void Renderer::draw_circle_outline(
+	const utility::Transform& transform, float width, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
 	set_line_width(width);
-	draw_mesh(cube_outline);
+	draw_mesh(_draw_objects.circle_outline);
 }
 
-void draw_elements(PrimitiveType type, unsigned int count, void* indices) {
+void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& color) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	shader.set_uniform(0, transform.get_model());
+	shader.set_uniform(1, color);
+	shader.bind();
+	draw_mesh(_draw_objects.cube);
+}
+
+void Renderer::draw_cube_outline(
+	const utility::Transform& transform, float width, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	shader.set_uniform(0, transform.get_model());
+	shader.set_uniform(1, color);
+	shader.bind();
+	set_line_width(width);
+	draw_mesh(_draw_objects.cube_outline);
+}
+
+void Renderer::draw_text(
+	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("font");
+	const Blend prev_blend = get_blend();
+	set_blend_enabled(true);
+	set_blend_factors({BlendFactor::src_alpha, BlendFactor::one_minus_src_alpha});
+	shader.set_uniform(0, transform.get_model());
+	shader.set_uniform(2, color);
+	shader.bind();
+	text.get_font().get_texture().bind_unit(0);
+	draw_mesh(text.get_mesh());
+	set_blend_enabled(prev_blend.enabled);
+	set_blend_factors(prev_blend.factors);
+}
+
+void Renderer::draw_text(
+	std::string_view text, const utility::Transform& transform, const glm::vec4& color
+) {
+	_draw_objects.text.set_data(text);
+	draw_text(_draw_objects.text, transform, color);
+}
+
+void Renderer::draw_text_screen(
+	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+) {
+	const resource::shader::Shader& shader = _resource_manager.shaders().get("font_screen");
+	const Blend prev_blend = get_blend();
+	set_blend_enabled(true);
+	set_blend_factors({BlendFactor::src_alpha, BlendFactor::one_minus_src_alpha});
+	text.get_font().get_texture().bind_unit(0);
+	shader.set_uniform(0, transform.get_model());
+	shader.set_uniform(1, _screen_projection);
+	shader.set_uniform(2, color);
+	shader.bind();
+	draw_mesh(text.get_mesh());
+	set_blend_enabled(prev_blend.enabled);
+	set_blend_factors(prev_blend.factors);
+}
+
+void Renderer::draw_text_screen(
+	std::string_view text, const utility::Transform& transform, const glm::vec4& color
+) {
+	_draw_objects.text.set_data(text);
+	draw_text_screen(_draw_objects.text, transform, color);
+}
+
+void Renderer::draw_mesh(const Mesh& mesh) {
+	mesh.bind();
+	draw_elements(mesh.get_primitive_type(), mesh.get_count(), nullptr);
+}
+
+void Renderer::draw_mesh_instanced(const Mesh& mesh, unsigned int instances) {
+	mesh.bind();
+	draw_elements_instanced(mesh.get_primitive_type(), mesh.get_count(), nullptr, instances);
+}
+
+void Renderer::draw_elements(PrimitiveType type, unsigned int count, void* indices) {
 	glDrawElements(static_cast<GLenum>(type), static_cast<GLsizei>(count), GL_UNSIGNED_INT, indices);
 }
 
-void draw_elements_instanced(
+void Renderer::draw_elements_instanced(
 	PrimitiveType type, unsigned int count, void* indices, unsigned int instances
 ) {
 	glDrawElementsInstanced(
@@ -399,256 +355,181 @@ void draw_elements_instanced(
 	);
 }
 
-void draw_text(
-	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
-) {
-	static Context& context = get_context();
-	static const resource::shader::Shader& shader = context.resource_manager.shaders().get("font");
-	const bool prev_blend = is_blend_enabled();
-	auto [prev_src, prev_dst] = get_blend_func();
-	set_blend(true);
-	set_blend_func(BlendFunc::src_alpha, BlendFunc::one_minus_src_alpha);
-	shader.set_uniform(0, transform.get_model());
-	shader.set_uniform(2, color);
-	shader.bind();
-	text.get_font().get_texture().bind_unit(0);
-	draw_mesh(text.get_mesh());
-	set_blend(prev_blend);
-	set_blend_func(prev_src, prev_dst);
+void Renderer::set_camera(camera::Camera& camera) {
+	_camera = &camera;
+	_camera->set_size(get_viewport().size);
 }
 
-void draw_text(std::string_view text, const utility::Transform& transform, const glm::vec4& color) {
-	static Context& context = get_context();
-	context.text.set_data(text);
-	draw_text(context.text, transform, color);
-}
-
-void draw_text_screen(
-	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
-) {
-	static Context& context = get_context();
-	static const resource::shader::Shader& shader =
-		context.resource_manager.shaders().get("font_screen");
-	const bool prev_blend = is_blend_enabled();
-	auto [prev_src, prev_dst] = get_blend_func();
-	set_blend(true);
-	set_blend_func(BlendFunc::src_alpha, BlendFunc::one_minus_src_alpha);
-	text.get_font().get_texture().bind_unit(0);
-	shader.set_uniform(0, transform.get_model());
-	shader.set_uniform(1, context.screen_projection);
-	shader.set_uniform(2, color);
-	shader.bind();
-	draw_mesh(text.get_mesh());
-	set_blend(prev_blend);
-	set_blend_func(prev_src, prev_dst);
-}
-
-void draw_text_screen(
-	std::string_view text, const utility::Transform& transform, const glm::vec4& color
-) {
-	static Context& context = get_context();
-	context.text.set_data(text);
-	draw_text_screen(context.text, transform, color);
-}
-
-void set_clear_color(const glm::vec4& color) {
+void Renderer::set_clear_color(const glm::vec4& color) {
 	glClearColor(color.r, color.g, color.b, color.a);
+	_clear.color = color;
 }
 
-void set_viewport(const glm::ivec2& position, const glm::ivec2& size) {
-	assert(size.x >= 0 && size.y >= 0 && "Viewport size must be positive");
-	static Context& context = get_context();
-	glViewport(position.x, position.y, size.x, size.y);
-	context.viewport.position = position;
-	context.viewport.size = size;
-	context.screen_projection =
-		glm::ortho(0.0f, static_cast<float>(size.x), 0.0f, static_cast<float>(size.y));
-	update_camera_viewport();
+void Renderer::set_polygon_mode(PolygonMode mode) {
+	glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
+	_polygon_mode = mode;
 }
 
-void set_viewport_position(const glm::ivec2& position) {
-	static const Context& context = get_context();
-	set_viewport(position, context.viewport.size);
+void Renderer::set_blend(const Blend& blend) {
+	set_blend_enabled(blend.enabled);
+	set_blend_factors(blend.factors);
+	set_blend_equation(blend.equation);
 }
 
-void set_viewport_size(const glm::ivec2& size) {
-	static const Context& context = get_context();
-	set_viewport(context.viewport.position, size);
+void Renderer::set_blend_enabled(bool enabled) {
+	set_enabled(GL_BLEND, enabled);
+	_blend.enabled = enabled;
 }
 
-void set_point_size(float size) {
+void Renderer::set_blend_factors(const BlendFactors& factors) {
+	glBlendFunc(static_cast<GLenum>(factors.source), static_cast<GLenum>(factors.destination));
+	_blend.factors = factors;
+}
+
+void Renderer::set_blend_equation(BlendEquation equation) {
+	glBlendEquation(static_cast<GLenum>(equation));
+	_blend.equation = equation;
+}
+
+void Renderer::set_cull_face(const CullFace& cull_face) {
+	set_cull_face_enabled(cull_face.enabled);
+	set_cull_face_facet(cull_face.facet);
+	set_cull_face_orientation(cull_face.orientation);
+}
+
+void Renderer::set_cull_face_enabled(bool enabled) {
+	set_enabled(GL_CULL_FACE, enabled);
+	_cull_face.enabled = enabled;
+}
+
+void Renderer::set_cull_face_facet(CullFaceFacet facet) {
+	glCullFace(static_cast<GLenum>(facet));
+	_cull_face.facet = facet;
+}
+
+void Renderer::set_cull_face_orientation(CullFaceOrientation orientation) {
+	glFrontFace(static_cast<GLenum>(orientation));
+	_cull_face.orientation = orientation;
+}
+
+void Renderer::set_depth(const Depth& depth) {
+	set_depth_enabled(depth.enabled);
+	set_depth_function(depth.function);
+}
+
+void Renderer::set_depth_enabled(bool enabled) {
+	set_enabled(GL_DEPTH_TEST, enabled);
+	_depth.enabled = enabled;
+	_clear.flags.set(ClearFlags::depth, enabled);
+}
+
+void Renderer::set_depth_function(DepthFunction function) {
+	glDepthFunc(static_cast<GLenum>(function));
+	_depth.function = function;
+}
+
+void Renderer::set_stencil(const Stencil& stencil) {
+	set_stencil_enabled(stencil.enabled);
+	set_stencil_settings(stencil.settings);
+	set_stencil_actions(stencil.actions);
+}
+
+void Renderer::set_stencil_enabled(bool enabled) {
+	set_enabled(GL_STENCIL_TEST, enabled);
+	_stencil.enabled = enabled;
+	_clear.flags.set(ClearFlags::stencil, enabled);
+}
+
+void Renderer::set_stencil_settings(const StencilSettings& settings) {
+	glStencilFunc(static_cast<GLenum>(settings.function), settings.reference, settings.mask);
+	_stencil.settings = settings;
+}
+
+void Renderer::set_stencil_actions(const StencilActions& actions) {
+	glStencilOp(
+		static_cast<GLenum>(actions.stencil_fail),
+		static_cast<GLenum>(actions.depth_fail),
+		static_cast<GLenum>(actions.depth_pass)
+	);
+	_stencil.actions = actions;
+}
+
+void Renderer::set_viewport(const Viewport& viewport) {
+	assert(viewport.size.x >= 0 && viewport.size.y >= 0 && "Viewport size must be positive");
+	glViewport(viewport.position.x, viewport.position.y, viewport.size.x, viewport.size.y);
+	_viewport = viewport;
+	_screen_projection = glm::ortho(
+		0.0f, static_cast<float>(viewport.size.x), 0.0f, static_cast<float>(viewport.size.y)
+	);
+	_camera->set_size(viewport.size);
+}
+
+void Renderer::set_viewport_position(const glm::ivec2& position) {
+	set_viewport({position, get_viewport().size});
+}
+
+void Renderer::set_viewport_size(const glm::ivec2& size) {
+	set_viewport({get_viewport().position, size});
+}
+
+void Renderer::set_point_size(float size) {
 	glPointSize(size);
 }
 
-void set_line_width(float width) {
+void Renderer::set_line_width(float width) {
 	glLineWidth(width);
 }
 
-void set_depth_test(bool enabled) {
-	static Context& context = get_context();
-	if (enabled) {
-		glEnable(GL_DEPTH_TEST);
-		context.clear_flags.set(ClearFlags::depth);
-	} else {
-		glDisable(GL_DEPTH_TEST);
-		context.clear_flags.unset(ClearFlags::depth);
+auto Renderer::get_camera() const -> camera::Camera& {
+	return *_camera;
+}
+
+auto Renderer::get_clear_color() const -> const glm::vec4& {
+	return _clear.color;
+}
+
+auto Renderer::get_polygon_mode() const -> PolygonMode {
+	return _polygon_mode;
+}
+
+auto Renderer::get_blend() const -> const Blend& {
+	return _blend;
+}
+
+auto Renderer::get_cull_face() const -> const CullFace& {
+	return _cull_face;
+}
+
+auto Renderer::get_depth() const -> const Depth& {
+	return _depth;
+}
+
+auto Renderer::get_stencil() const -> const Stencil& {
+	return _stencil;
+}
+
+auto Renderer::get_viewport() const -> const Viewport& {
+	return _viewport;
+}
+
+void Renderer::update_camera_uniform() {
+	const glm::mat4& projection = _camera->get_projection();
+	const glm::mat4& view = _camera->get_view();
+	const glm::mat4& view_projection = _camera->get_view_projection();
+	const CameraUniform& uniform_data = _camera_uniform.get_data();
+	if (projection != uniform_data.projection) {
+		_camera_uniform.set_sub_data(offsetof(CameraUniform, projection), projection);
+	}
+	if (view != uniform_data.view) {
+		_camera_uniform.set_sub_data(offsetof(CameraUniform, view), view);
+	}
+	if (view_projection != uniform_data.view_projection) {
+		_camera_uniform.set_sub_data(offsetof(CameraUniform, view_projection), view_projection);
 	}
 }
 
-void set_depth_func(DepthFunc func) {
-	glDepthFunc(static_cast<GLenum>(func));
-}
-
-void set_blend(bool enabled) {
-	if (enabled) {
-		glEnable(GL_BLEND);
-	} else {
-		glDisable(GL_BLEND);
-	}
-}
-
-void set_blend_func(BlendFunc src, BlendFunc dst) {
-	glBlendFunc(static_cast<GLenum>(src), static_cast<GLenum>(dst));
-}
-
-void set_blend_equation(BlendEquation eq) {
-	glBlendEquation(static_cast<GLenum>(eq));
-}
-
-void set_stencil(bool enabled) {
-	static Context& context = get_context();
-	if (enabled) {
-		glEnable(GL_STENCIL_TEST);
-		context.clear_flags.set(ClearFlags::stencil);
-	} else {
-		glDisable(GL_STENCIL_TEST);
-		context.clear_flags.unset(ClearFlags::stencil);
-	}
-}
-
-void set_stencil_mask(unsigned int mask) {
-	glStencilMask(mask);
-}
-
-void set_stencil_func(StencilFunc func, int ref, unsigned int mask) {
-	glStencilFunc(static_cast<GLenum>(func), ref, mask);
-}
-
-void set_stencil_op(StencilOp sfail, StencilOp dpfail, StencilOp dppass) {
-	glStencilOp(static_cast<GLenum>(sfail), static_cast<GLenum>(dpfail), static_cast<GLenum>(dppass));
-}
-
-void set_cull_face(bool enabled) {
-	if (enabled) {
-		glEnable(GL_CULL_FACE);
-	} else {
-		glDisable(GL_CULL_FACE);
-	}
-}
-
-void set_cull_face(CullFace face) {
-	glCullFace(static_cast<GLenum>(face));
-}
-
-void set_front_face(FrontFace face) {
-	glFrontFace(static_cast<GLenum>(face));
-}
-
-void set_polygon_mode(PolygonMode mode) {
-	glPolygonMode(GL_FRONT_AND_BACK, static_cast<GLenum>(mode));
-}
-
-void set_camera(camera::Camera& camera) {
-	static Context& context = get_context();
-	context.camera = &camera;
-	update_camera_viewport();
-}
-
-auto get_viewport_position() -> const glm::ivec2& {
-	static const Context& context = get_context();
-	return context.viewport.position;
-}
-
-auto get_viewport_size() -> const glm::ivec2& {
-	static const Context& context = get_context();
-	return context.viewport.size;
-}
-
-auto is_blend_enabled() -> bool {
-	return glIsEnabled(GL_BLEND) == GL_TRUE;
-}
-
-auto get_blend_func() -> std::pair<BlendFunc, BlendFunc> {
-	int src = 0;
-	int dst = 0;
-	glGetIntegerv(GL_BLEND_SRC, &src);
-	glGetIntegerv(GL_BLEND_DST, &dst);
-	return {static_cast<BlendFunc>(src), static_cast<BlendFunc>(dst)};
-}
-
-auto get_blend_equation() -> BlendEquation {
-	int eq = 0;
-	glGetIntegerv(GL_BLEND_EQUATION, &eq);
-	return static_cast<BlendEquation>(eq);
-}
-
-auto is_stencil_enabled() -> bool {
-	return glIsEnabled(GL_STENCIL_TEST) == GL_TRUE;
-}
-
-auto get_stencil_mask() -> unsigned int {
-	int mask = 0;
-	glGetIntegerv(GL_STENCIL_WRITEMASK, &mask);
-	return static_cast<unsigned int>(mask);
-}
-
-auto get_stencil_func() -> std::tuple<StencilFunc, int, unsigned int> {
-	int func = 0;
-	int ref = 0;
-	int mask = 0;
-	glGetIntegerv(GL_STENCIL_FUNC, &func);
-	glGetIntegerv(GL_STENCIL_REF, &ref);
-	glGetIntegerv(GL_STENCIL_VALUE_MASK, &mask);
-	return {static_cast<StencilFunc>(func), ref, static_cast<unsigned int>(mask)};
-}
-
-auto get_stencil_op() -> std::tuple<StencilOp, StencilOp, StencilOp> {
-	int sfail = 0;
-	int dpfail = 0;
-	int dppass = 0;
-	glGetIntegerv(GL_STENCIL_FAIL, &sfail);
-	glGetIntegerv(GL_STENCIL_PASS_DEPTH_FAIL, &dpfail);
-	glGetIntegerv(GL_STENCIL_PASS_DEPTH_PASS, &dppass);
-	return {
-		static_cast<StencilOp>(sfail), static_cast<StencilOp>(dpfail), static_cast<StencilOp>(dppass)
-	};
-}
-
-auto is_cull_face_enabled() -> bool {
-	return glIsEnabled(GL_CULL_FACE) == GL_TRUE;
-}
-
-auto get_cull_face() -> CullFace {
-	int face = 0;
-	glGetIntegerv(GL_CULL_FACE, &face);
-	return static_cast<CullFace>(face);
-}
-
-auto get_front_face() -> FrontFace {
-	int face = 0;
-	glGetIntegerv(GL_FRONT_FACE, &face);
-	return static_cast<FrontFace>(face);
-}
-
-auto get_polygon_mode() -> PolygonMode {
-	int mode = 0;
-	glGetIntegerv(GL_POLYGON_MODE, &mode);
-	return static_cast<PolygonMode>(mode);
-}
-
-auto get_camera() -> camera::Camera& {
-	static const Context& context = get_context();
-	return *context.camera;
+void Renderer::set_enabled(unsigned int capability, bool enabled) {
+	(enabled ? glEnable : glDisable)(capability);
 }
 
 } // namespace void_engine::graphics::renderer

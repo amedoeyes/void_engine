@@ -20,7 +20,7 @@ enum class PrimitiveType : uint8_t {
 	patches = 0x000E
 };
 
-enum class DepthFunc : uint16_t {
+enum class DepthFunction : uint16_t {
 	never = 0x0200,
 	less = 0x0201,
 	equal = 0x0202,
@@ -31,7 +31,7 @@ enum class DepthFunc : uint16_t {
 	always = 0x0207,
 };
 
-enum class BlendFunc : uint16_t {
+enum class BlendFactor : uint16_t {
 	zero = 0,
 	one = 1,
 	src_color = 0x0300,
@@ -56,7 +56,7 @@ enum class BlendEquation : uint16_t {
 	max = 0x8008,
 };
 
-enum class StencilFunc : uint16_t {
+enum class StencilFunction : uint16_t {
 	never = 0x0200,
 	less = 0x0201,
 	equal = 0x0202,
@@ -67,7 +67,7 @@ enum class StencilFunc : uint16_t {
 	always = 0x0207,
 };
 
-enum class StencilOp : uint16_t {
+enum class StencilAction : uint16_t {
 	keep = 0x1E00,
 	zero = 0,
 	replace = 0x1E01,
@@ -84,15 +84,15 @@ enum class StencilFace : uint16_t {
 	front_and_back = 0x0408,
 };
 
-enum class CullFace : uint16_t {
+enum class CullFaceFacet : uint16_t {
 	front = 0x0404,
 	back = 0x0405,
 	front_and_back = 0x0408,
 };
 
-enum class FrontFace : uint16_t {
-	clockwise = 0x0900,
-	counter_clockwise = 0x0901,
+enum class CullFaceOrientation : uint16_t {
+	cw = 0x0900,
+	ccw = 0x0901,
 };
 
 enum class PolygonMode : uint16_t {

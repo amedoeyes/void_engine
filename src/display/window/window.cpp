@@ -10,6 +10,7 @@
 #include <bit>
 #include <cassert>
 #include <cstddef>
+#include <glad/glad.h>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_int2.hpp>
 #include <glm/ext/vector_uint2.hpp>
@@ -27,6 +28,11 @@ Window::Window(std::string_view title, const glm::ivec2& size) {
 	glfwSetWindowUserPointer(_window, this);
 	_event_handler = new WindowEventHandler(*this);
 	_input_handler = new WindowInputHandler(*this);
+	// NOLINTNEXTLINE(cppcoreguidelines-pro-type-cstyle-cast)
+	const int result = gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+	if (result == 0) {
+		assert(false && "Failed to initialize GLAD");
+	}
 }
 
 Window::~Window() {
