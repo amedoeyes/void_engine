@@ -10,34 +10,37 @@
 
 namespace void_engine::display::monitor {
 
-std::vector<Monitor*> MonitorManager::_monitors;
-
-void MonitorManager::init() {
-	int count = 0;
-	GLFWmonitor** monitors = glfwGetMonitors(&count);
-	_monitors.reserve(count);
-	for (int i = 0; i < count; i++) {
-		_monitors.push_back(new Monitor(monitors[i]));
-	}
-	glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
-		if (event == GLFW_CONNECTED) {
-			_monitors.push_back(new Monitor(monitor));
-		} else if (event == GLFW_DISCONNECTED) {
-			const auto it = std::ranges::find_if(_monitors, [monitor](Monitor* m) {
-				return m->_monitor == monitor;
-			});
-			delete *it;
-			_monitors.erase(it);
+MonitorManager::MonitorManager() {
+	if (_instance_count == 0) {
+		int count = 0;
+		GLFWmonitor** monitors = glfwGetMonitors(&count);
+		_monitors.reserve(count);
+		for (int i = 0; i < count; i++) {
+			_monitors.push_back(new Monitor(monitors[i]));
 		}
-	});
+		glfwSetMonitorCallback([](GLFWmonitor* monitor, int event) {
+			if (event == GLFW_CONNECTED) {
+				_monitors.push_back(new Monitor(monitor));
+			} else if (event == GLFW_DISCONNECTED) {
+				const auto it = std::ranges::find_if(_monitors, [monitor](Monitor* m) {
+					return m->_monitor == monitor;
+				});
+				delete *it;
+				_monitors.erase(it);
+			}
+		});
+		++_instance_count;
+	}
 }
 
-void MonitorManager::terminate() {
-	glfwSetMonitorCallback(nullptr);
-	for (Monitor* monitor : _monitors) {
-		delete monitor;
+MonitorManager::~MonitorManager() {
+	--_instance_count;
+	if (_instance_count == 0) {
+		glfwSetMonitorCallback(nullptr);
+		for (const auto* monitor : _monitors) {
+			delete monitor;
+		}
 	}
-	_monitors.clear();
 }
 
 auto MonitorManager::get(std::string_view name) -> Monitor& {
@@ -48,7 +51,7 @@ auto MonitorManager::get(std::string_view name) -> Monitor& {
 	return **it;
 }
 
-auto MonitorManager::get_all() -> const std::vector<Monitor*>& {
+auto MonitorManager::get_all() -> std::span<Monitor*> {
 	return _monitors;
 }
 

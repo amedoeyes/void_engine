@@ -18,19 +18,19 @@ class Window;
 
 namespace input {
 
-enum class MouseButton : std::uint8_t {
+enum class MouseButton : uint8_t {
 	left = 0,
 	right = 1,
 	middle = 2,
 };
 
-enum class MouseMode {
+enum class MouseMode : uint32_t {
 	normal = 0x00034001,
 	hidden = 0x00034002,
 	disabled = 0x00034003,
 };
 
-enum class MouseShape {
+enum class MouseShape : uint32_t {
 	arrow = 0x00036001,
 	ibeam = 0x00036002,
 	crosshair = 0x00036003,
@@ -57,7 +57,7 @@ public:
 	void set_mode(MouseMode mode) const;
 	void set_raw_motion(bool value) const;
 	void set_shape(MouseShape shape);
-	void set_image(const std::filesystem::path& path, const glm::vec2& hot_spot = glm::vec2(0.f));
+	void set_image(const std::filesystem::path& path, const glm::vec2& hot_spot = {0.0f, 0.0f});
 
 	[[nodiscard]] auto is_down(MouseButton button) const -> bool;
 	[[nodiscard]] auto is_up(MouseButton button) const -> bool;

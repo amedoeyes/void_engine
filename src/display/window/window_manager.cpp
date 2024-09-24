@@ -5,30 +5,37 @@
 #include <GLFW/glfw3.h>
 #include <cassert>
 #include <glm/ext/vector_int2.hpp>
-#include <string>
+#include <ranges>
 #include <string_view>
 #include <unordered_map>
 
 namespace void_engine::display::window {
 
-std::unordered_map<std::string, Window*> WindowManager::_windows;
-
-void WindowManager::terminate() {
-	for (const auto& [_, window] : _windows) {
-		delete window;
-	}
-	_windows.clear();
-}
-
-auto WindowManager::create(std::string_view name, std::string_view title, const glm::ivec2& size)
-	-> Window& {
-	assert(_windows.find(name.data()) == _windows.end() && "Window already exists");
+WindowManager::WindowManager() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 #ifdef DEBUG
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, 1);
 #endif
+}
+
+WindowManager::~WindowManager() {
+	for (const auto& [_, window] : _windows) {
+		delete window;
+	}
+}
+
+void WindowManager::update() {
+	glfwPollEvents();
+	for (const auto& [_, window] : _windows) {
+		window->update();
+	}
+}
+
+auto WindowManager::create(std::string_view name, std::string_view title, const glm::ivec2& size)
+	-> Window& {
+	assert(_windows.find(name.data()) == _windows.end() && "Window already exists");
 	auto [it, _] = _windows.emplace(name, new Window(title, size));
 	return *(it->second);
 }
@@ -46,11 +53,8 @@ auto WindowManager::get(std::string_view name) -> Window& {
 	return *(it->second);
 }
 
-void WindowManager::update() {
-	glfwPollEvents();
-	for (const auto& [_, window] : _windows) {
-		window->update();
-	}
+auto WindowManager::get_all() -> std::vector<Window*> {
+	return std::ranges::to<std::vector<Window*>>(_windows | std::views::values);
 }
 
 void WindowManager::set_hint_resizable(bool value) {

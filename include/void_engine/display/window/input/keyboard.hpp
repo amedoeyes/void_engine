@@ -12,7 +12,7 @@ class WindowInputHandler;
 
 namespace input {
 
-enum class KeyboardKey : std::uint16_t {
+enum class KeyboardKey : uint16_t {
 	unknown = 0,
 	space = 32,
 	apostrophe = 39,

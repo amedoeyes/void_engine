@@ -8,21 +8,23 @@
 #include <string_view>
 #include <unordered_map>
 
-namespace void_engine::display {
-
-class DisplayManager;
-
-namespace window {
+namespace void_engine::display::window {
 
 class WindowManager {
-	friend class display::DisplayManager;
-
 public:
-	static auto create(std::string_view name, std::string_view title, const glm::ivec2& size)
-		-> Window&;
-	static void destroy(std::string_view name);
-	static auto get(std::string_view name) -> Window&;
-	static void update();
+	WindowManager(const WindowManager&) = default;
+	WindowManager(WindowManager&&) = default;
+	auto operator=(const WindowManager&) -> WindowManager& = default;
+	auto operator=(WindowManager&&) -> WindowManager& = default;
+	WindowManager();
+	~WindowManager();
+
+	void update();
+
+	auto create(std::string_view name, std::string_view title, const glm::ivec2& size) -> Window&;
+	void destroy(std::string_view name);
+	[[nodiscard]] auto get(std::string_view name) -> Window&;
+	[[nodiscard]] auto get_all() -> std::vector<Window*>;
 
 	static void set_hint_resizable(bool value);
 	static void set_hint_visible(bool value);
@@ -57,13 +59,9 @@ public:
 	static void set_hint_doublebuffer(bool value);
 
 private:
-	static std::unordered_map<std::string, Window*> _windows;
-
-	static void terminate();
+	std::unordered_map<std::string, Window*> _windows;
 };
 
-} // namespace window
-
-} // namespace void_engine::display
+} // namespace void_engine::display::window
 
 #endif // !VOID_ENGINE_DISPLAY_WINDOW_WINDOW_MANAGER_HPP
