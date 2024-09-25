@@ -6,7 +6,6 @@
 
 #include <GLFW/glfw3.h>
 #include <cassert>
-#include <glm/ext/vector_int2.hpp>
 #include <string_view>
 
 namespace void_engine::display {
@@ -15,9 +14,11 @@ DisplayManager::DisplayManager() {
 	if (_instance_count == 0) {
 		const int result = glfwInit();
 		assert(result != 0 && "Failed to initialize GLFW");
+#ifdef DEBUG
 		glfwSetErrorCallback([](int, const char* description) {
 			utility::logger::error("GLFW: {}", description);
 		});
+#endif
 	}
 	++_instance_count;
 	_window_manager = new window::WindowManager();

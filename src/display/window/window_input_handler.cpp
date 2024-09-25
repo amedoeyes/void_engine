@@ -17,7 +17,7 @@ WindowInputHandler::WindowInputHandler(Window& window) :
 	_mouse(new input::Mouse(*window._window)) {
 	using namespace event;
 	using namespace input;
-	WindowEventHandler& events = _window->event_handler();
+	WindowEventHandler& events = _window->get_event_handler();
 	_keyboard_key_listener =
 		events.add_listener<KeyboardKeyEvent>([this](const KeyboardKeyEvent& event) {
 			_keyboard->set_key(static_cast<KeyboardKey>(event.key), event.action > 0);
@@ -39,7 +39,7 @@ WindowInputHandler::WindowInputHandler(Window& window) :
 WindowInputHandler::~WindowInputHandler() {
 	delete _keyboard;
 	delete _mouse;
-	WindowEventHandler& events = _window->event_handler();
+	WindowEventHandler& events = _window->get_event_handler();
 	events.remove_listener(_keyboard_key_listener);
 	events.remove_listener(_mouse_button_listener);
 	events.remove_listener(_mouse_position_listener);
