@@ -94,7 +94,7 @@ struct Viewport {
 
 class Renderer {
 public:
-	Renderer(const Renderer& other) = default;
+	Renderer(const Renderer&) = default;
 	Renderer(Renderer&&) = delete;
 	auto operator=(const Renderer&) -> Renderer& = default;
 	auto operator=(Renderer&&) -> Renderer& = delete;
@@ -175,6 +175,7 @@ public:
 	[[nodiscard]] auto get_viewport() const -> const Viewport&;
 
 private:
+	bool _initialized = initialize();
 	resource::ResourceManager _resource_manager;
 	DrawObjects _draw_objects;
 	buffer::UniformBuffer<CameraUniform> _camera_uniform;
@@ -189,8 +190,9 @@ private:
 	Stencil _stencil;
 	Viewport _viewport;
 
-	void update_camera_uniform();
+	static auto initialize() -> bool;
 	static void set_enabled(unsigned int capability, bool enabled);
+	void update_camera_uniform();
 };
 
 } // namespace void_engine::graphics::renderer

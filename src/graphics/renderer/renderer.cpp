@@ -15,6 +15,7 @@
 #include "void_engine/utility/logger.hpp"
 #include "void_engine/utility/transform.hpp"
 
+#include <GLFW/glfw3.h>
 #include <cassert>
 #include <cmath>
 #include <cstddef>
@@ -182,7 +183,6 @@ void Renderer::clear() const {
 
 void Renderer::update() {
 	update_camera_uniform();
-	clear();
 }
 
 void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
@@ -512,6 +512,24 @@ auto Renderer::get_viewport() const -> const Viewport& {
 	return _viewport;
 }
 
+auto Renderer::initialize() -> bool {
+	static bool initialized = false;
+	if (!initialized) {
+		const int result = gladLoadGLLoader([](const char* name) -> void* {
+			return std::bit_cast<void*>(glfwGetProcAddress(name));
+		});
+		if (result == 0) {
+			assert(false && "Failed to initialize GLAD");
+		}
+		initialized = true;
+	}
+	return initialized;
+}
+
+void Renderer::set_enabled(unsigned int capability, bool enabled) {
+	(enabled ? glEnable : glDisable)(capability);
+}
+
 void Renderer::update_camera_uniform() {
 	const glm::mat4& projection = _camera->get_projection();
 	const glm::mat4& view = _camera->get_view();
@@ -526,10 +544,6 @@ void Renderer::update_camera_uniform() {
 	if (view_projection != uniform_data.view_projection) {
 		_camera_uniform.set_sub_data(offsetof(CameraUniform, view_projection), view_projection);
 	}
-}
-
-void Renderer::set_enabled(unsigned int capability, bool enabled) {
-	(enabled ? glEnable : glDisable)(capability);
 }
 
 } // namespace void_engine::graphics::renderer
