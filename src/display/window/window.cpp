@@ -11,11 +11,10 @@
 #include <GLFW/glfw3.h>
 #include <bit>
 #include <cassert>
-#include <cstddef>
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_int2.hpp>
-#include <glm/ext/vector_uint2.hpp>
+#include <span>
 #include <string_view>
 #include <tuple>
 #include <vector>
@@ -51,7 +50,7 @@ Window::Window(
 	const Hints& hints
 ) {
 	apply_hints(hints);
-	_window = glfwCreateWindow(size.x, size.y, title.data(), monitor, share);
+	_window = glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share);
 	assert(_window != nullptr && "Failed to create window");
 	glfwMakeContextCurrent(_window);
 	glfwSetWindowUserPointer(_window, this);
@@ -119,47 +118,27 @@ void Window::fullscreen() const {
 void Window::fullscreen(const monitor::Monitor& monitor) const {
 	const monitor::VideoMode& mode = monitor.get_video_mode();
 	glfwSetWindowMonitor(
-		_window,
-		monitor._monitor,
-		0,
-		0,
-		static_cast<int>(mode.size.x),
-		static_cast<int>(mode.size.y),
-		static_cast<int>(mode.refresh_rate)
+		_window, monitor._monitor, 0, 0, mode.size.x, mode.size.y, mode.refresh_rate
 	);
 }
 
 void Window::fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode)
 	const {
 	glfwSetWindowMonitor(
-		_window,
-		monitor._monitor,
-		0,
-		0,
-		static_cast<int>(video_mode.size.x),
-		static_cast<int>(video_mode.size.y),
-		static_cast<int>(video_mode.refresh_rate)
+		_window, monitor._monitor, 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate
 	);
 }
 
-void Window::windowed(const glm::ivec2& position, const glm::uvec2& size) const {
-	glfwSetWindowMonitor(
-		_window,
-		nullptr,
-		position.x,
-		position.y,
-		static_cast<int>(size.x),
-		static_cast<int>(size.y),
-		GLFW_DONT_CARE
-	);
+void Window::windowed(const glm::ivec2& position, const glm::ivec2& size) const {
+	glfwSetWindowMonitor(_window, nullptr, position.x, position.y, size.x, size.y, GLFW_DONT_CARE);
 }
 
 void Window::set_always_on_top(bool enabled) {
 	glfwSetWindowAttrib(_window, GLFW_FLOATING, static_cast<int>(enabled));
 }
 
-void Window::set_aspect_ratio(const glm::uvec2& ratio) {
-	glfwSetWindowAspectRatio(_window, static_cast<int>(ratio.x), static_cast<int>(ratio.y));
+void Window::set_aspect_ratio(const glm::ivec2& ratio) {
+	glfwSetWindowAspectRatio(_window, ratio.x, ratio.y);
 }
 
 void Window::set_auto_minimize(bool enabled) {
@@ -177,7 +156,7 @@ void Window::set_focus_on_show(bool enabled) {
 void Window::set_icon(const std::filesystem::path& path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
 	const resource::image::Image image(utility::get_exec_path().parent_path() / path, true);
-	const glm::ivec2 size = image.get_size();
+	const glm::ivec2& size = image.get_size();
 	const GLFWimage glfw_image = {
 		.width = size.x,
 		.height = size.y,
@@ -186,17 +165,17 @@ void Window::set_icon(const std::filesystem::path& path) {
 	glfwSetWindowIcon(_window, 1, &glfw_image);
 }
 
-void Window::set_icons(std::vector<std::filesystem::path> paths) {
+void Window::set_icons(std::span<std::filesystem::path> paths) {
 	std::vector<GLFWimage> images;
 	images.reserve(paths.size());
-	for (size_t i = 0; i < paths.size(); ++i) {
-		const resource::image::Image image(utility::get_exec_path().parent_path() / paths[i], true);
-		const glm::ivec2 size = image.get_size();
-		images[i] = {
+	for (const auto& path : paths) {
+		const resource::image::Image image(utility::get_exec_path().parent_path() / path, true);
+		const glm::ivec2& size = image.get_size();
+		images.push_back({
 			.width = size.x,
 			.height = size.y,
 			.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
-		};
+		});
 	}
 	glfwSetWindowIcon(_window, static_cast<int>(images.size()), images.data());
 }
@@ -217,26 +196,20 @@ void Window::set_size(const glm::ivec2& size) {
 	glfwSetWindowSize(_window, size.x, size.y);
 }
 
-void Window::set_size_constraints(const glm::uvec2& min, const glm::uvec2& max) {
-	glfwSetWindowSizeLimits(
-		_window,
-		static_cast<int>(min.x),
-		static_cast<int>(min.y),
-		static_cast<int>(max.x),
-		static_cast<int>(max.y)
-	);
+void Window::set_size_constraints(const glm::ivec2& min, const glm::ivec2& max) {
+	glfwSetWindowSizeLimits(_window, min.x, min.y, max.x, max.y);
 }
 
 void Window::set_title(std::string_view title) {
-	glfwSetWindowTitle(_window, title.data());
+	glfwSetWindowTitle(_window, std::string(title).c_str());
 }
 
 void Window::set_vsync(bool enabled) {
 	set_swap_interval(enabled ? 1 : 0);
 }
 
-void Window::set_swap_interval(unsigned int interval) {
-	glfwSwapInterval(static_cast<int>(interval));
+void Window::set_swap_interval(int interval) {
+	glfwSwapInterval(interval);
 }
 
 auto Window::get_event_handler() -> WindowEventHandler& {
@@ -254,7 +227,7 @@ auto Window::get_content_scale() const -> glm::vec2 {
 	return {x, y};
 }
 
-auto Window::get_frame_size() const -> std::tuple<glm::uvec2, glm::uvec2> {
+auto Window::get_frame_size() const -> std::tuple<glm::ivec2, glm::ivec2> {
 	int left = 0;
 	int top = 0;
 	int right = 0;
@@ -270,7 +243,7 @@ auto Window::get_framebuffer_position() const -> glm::ivec2 {
 	return {x, y};
 }
 
-auto Window::get_framebuffer_size() const -> glm::uvec2 {
+auto Window::get_framebuffer_size() const -> glm::ivec2 {
 	int width = 0;
 	int height = 0;
 	glfwGetFramebufferSize(_window, &width, &height);
@@ -288,7 +261,7 @@ auto Window::get_position() const -> glm::ivec2 {
 	return {x, y};
 }
 
-auto Window::get_size() const -> glm::uvec2 {
+auto Window::get_size() const -> glm::ivec2 {
 	int width = 0;
 	int height = 0;
 	glfwGetWindowSize(_window, &width, &height);
@@ -390,8 +363,8 @@ void Window::apply_hints(const Hints& hints) {
 
 	glfwWindowHint(GLFW_CLIENT_API, static_cast<int>(hints.context.client_api));
 	glfwWindowHint(GLFW_CONTEXT_CREATION_API, static_cast<int>(hints.context.creation_api));
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, static_cast<int>(hints.context.version.x));
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, static_cast<int>(hints.context.version.y));
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, hints.context.version.first);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, hints.context.version.second);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, static_cast<int>(hints.context.opengl_forward_compat));
 	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, static_cast<int>(hints.context.debug));
 	glfwWindowHint(GLFW_OPENGL_PROFILE, static_cast<int>(hints.context.opengl_profile));

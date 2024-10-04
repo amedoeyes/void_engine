@@ -62,14 +62,14 @@ auto WindowManager::create(
 }
 
 void WindowManager::destroy(std::string_view name) {
-	const auto it = _windows.find(name.data());
+	const auto it = _windows.find(name);
 	assert(it != _windows.end() && "Window does not exist");
 	delete it->second;
 	_windows.erase(it);
 }
 
 auto WindowManager::get(std::string_view name) -> Window& {
-	auto it = _windows.find(name.data());
+	auto it = _windows.find(name);
 	assert(it != _windows.end() && "Window does not exist");
 	return *it->second;
 }

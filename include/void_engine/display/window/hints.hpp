@@ -5,9 +5,9 @@
 
 #include <glm/ext/vector_int2.hpp>
 #include <glm/ext/vector_int4.hpp>
-#include <glm/ext/vector_uint2.hpp>
 #include <limits>
 #include <string>
+#include <utility>
 namespace void_engine::display::window {
 
 struct WindowHints {
@@ -74,7 +74,7 @@ struct ContextHints {
 	// Which context creation API to use to create the context.
 	ContextCreationAPI creation_api = ContextCreationAPI::native;
 	// The client API version that the created context must be compatible with.
-	glm::uvec2 version = {4, 6};
+	std::pair<int, int> version = {4, 6};
 	// Whether the OpenGL context should be forward-compatible.
 	bool opengl_forward_compat = false;
 	// Whether the context should be created in debug mode.

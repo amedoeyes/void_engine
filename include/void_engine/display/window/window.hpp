@@ -9,10 +9,9 @@
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
 #include <glm/ext/vector_int2.hpp>
-#include <glm/ext/vector_uint2.hpp>
+#include <span>
 #include <string_view>
 #include <tuple>
-#include <vector>
 
 struct GLFWwindow;
 struct GLFWmonitor;
@@ -66,35 +65,35 @@ public:
 	void fullscreen() const;
 	void fullscreen(const monitor::Monitor& monitor) const;
 	void fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode) const;
-	void windowed(const glm::ivec2& position, const glm::uvec2& size) const;
+	void windowed(const glm::ivec2& position, const glm::ivec2& size) const;
 
 	void set_always_on_top(bool enabled);
-	void set_aspect_ratio(const glm::uvec2& ratio);
+	void set_aspect_ratio(const glm::ivec2& ratio);
 	void set_auto_minimize(bool enabled);
 	void set_decoration(bool enabled);
 	void set_focus_on_show(bool enabled);
 	void set_icon(const std::filesystem::path& path);
-	void set_icons(std::vector<std::filesystem::path> paths);
+	void set_icons(std::span<std::filesystem::path> paths);
 	void set_opacity(float alpha);
 	void set_position(const glm::ivec2& position);
 	void set_resizable(bool enabled);
 	void set_size(const glm::ivec2& size);
-	void set_size_constraints(const glm::uvec2& min, const glm::uvec2& max);
+	void set_size_constraints(const glm::ivec2& min, const glm::ivec2& max);
 	void set_title(std::string_view title);
 
 	static void set_vsync(bool enabled);
-	static void set_swap_interval(unsigned int interval);
+	static void set_swap_interval(int interval);
 
 	[[nodiscard]] auto get_event_handler() -> WindowEventHandler&;
 	[[nodiscard]] auto get_input_handler() -> WindowInputHandler&;
 
 	[[nodiscard]] auto get_content_scale() const -> glm::vec2;
-	[[nodiscard]] auto get_frame_size() const -> std::tuple<glm::uvec2, glm::uvec2>;
+	[[nodiscard]] auto get_frame_size() const -> std::tuple<glm::ivec2, glm::ivec2>;
 	[[nodiscard]] auto get_framebuffer_position() const -> glm::ivec2;
-	[[nodiscard]] auto get_framebuffer_size() const -> glm::uvec2;
+	[[nodiscard]] auto get_framebuffer_size() const -> glm::ivec2;
 	[[nodiscard]] auto get_opacity() const -> float;
 	[[nodiscard]] auto get_position() const -> glm::ivec2;
-	[[nodiscard]] auto get_size() const -> glm::uvec2;
+	[[nodiscard]] auto get_size() const -> glm::ivec2;
 	[[nodiscard]] auto get_title() const -> std::string_view;
 
 	[[nodiscard]] auto has_focus_on_show() const -> bool;

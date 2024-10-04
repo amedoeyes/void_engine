@@ -30,7 +30,7 @@ Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {
 	_video_mode = {
 		.size = {mode->width, mode->height},
 		.color_bits = {mode->redBits, mode->greenBits, mode->blueBits},
-		.refresh_rate = static_cast<unsigned int>(mode->refreshRate),
+		.refresh_rate = mode->refreshRate,
 	};
 	int count = 0;
 	const GLFWvidmode* modes = glfwGetVideoModes(_monitor, &count);
@@ -39,7 +39,7 @@ Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {
 		_video_modes.push_back(VideoMode{
 			.size = {modes[i].width, modes[i].height},
 			.color_bits = {modes[i].redBits, modes[i].greenBits, modes[i].blueBits},
-			.refresh_rate = static_cast<unsigned int>(modes[i].refreshRate),
+			.refresh_rate = modes[i].refreshRate,
 		});
 	}
 }

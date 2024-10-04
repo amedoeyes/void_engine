@@ -3,7 +3,9 @@
 
 #include "void_engine/display/window/hints.hpp"
 #include "void_engine/display/window/window.hpp"
+#include "void_engine/utility/string_hash.hpp"
 
+#include <functional>
 #include <glm/ext/vector_int2.hpp>
 #include <string>
 #include <string_view>
@@ -43,7 +45,7 @@ public:
 	[[nodiscard]] auto get_all() -> std::vector<Window*>;
 
 private:
-	std::unordered_map<std::string, Window*> _windows;
+	std::unordered_map<std::string, Window*, utility::string_hash, std::equal_to<>> _windows;
 
 	auto create_window(
 		std::string_view title, const glm::ivec2& size, const monitor::Monitor* monitor,
