@@ -1,90 +1,100 @@
-#include "void_engine/display/window/input/mouse.hpp"
+#include "void_engine/display/window/input/mouse/mouse.hpp"
 
+#include "void_engine/display/window/event/mouse_button_event.hpp"
+#include "void_engine/display/window/input/mouse/enums.hpp"
+#include "void_engine/display/window/event/mouse_position_event.hpp"
+#include "void_engine/display/window/event/mouse_scroll_event.hpp"
+#include "void_engine/display/window/window.hpp"
+#include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/resource/image/image.hpp"
-#include "void_engine/utility/get_exec_path.hpp"
 
 #include <GLFW/glfw3.h>
 #include <bit>
 #include <cassert>
+#include <cstddef>
 #include <filesystem>
 #include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_uint2.hpp>
+#include <glm/ext/vector_int2.hpp>
 
-namespace void_engine::display::window::input {
+namespace void_engine::display::window::input::mouse {
 
-Mouse::Mouse(GLFWwindow& window) : _window(&window) {
+Mouse::Mouse(Window& window) : _window(&window) {
+	WindowEventHandler& events = _window->get_event_handler();
+	_mouse_button_listener =
+		events.add_listener<event::MouseButtonEvent>([this](const event::MouseButtonEvent& event) {
+			set_button(event.button, event.action == input::mouse::ButtonAction::press);
+		});
+	_mouse_position_listener =
+		events.add_listener<event::MousePositionEvent>([this](const event::MousePositionEvent& event) {
+			set_position(event.position);
+		});
+	_mouse_scroll_listener =
+		events.add_listener<event::MouseScrollEvent>([this](const event::MouseScrollEvent& event) {
+			set_scroll(event.offset);
+		});
 }
 
 Mouse::~Mouse() {
+	WindowEventHandler& events = _window->get_event_handler();
+	events.remove_listener<event::MouseButtonEvent>(_mouse_button_listener);
+	events.remove_listener<event::MousePositionEvent>(_mouse_position_listener);
+	events.remove_listener<event::MouseScrollEvent>(_mouse_scroll_listener);
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
 }
 
-void Mouse::set_mode(MouseMode mode) const {
-	glfwSetInputMode(_window, GLFW_CURSOR, static_cast<int>(mode));
+void Mouse::update() {
+	for (auto& button : _buttons) {
+		button.set_previous(button.get());
+	}
+	_position.set_previous(_position.get());
 }
 
-void Mouse::set_raw_motion(bool value) const {
-	glfwSetInputMode(_window, GLFW_RAW_MOUSE_MOTION, static_cast<int>(value));
+void Mouse::set_button(Button button, bool state) {
+	_buttons[static_cast<size_t>(button)].set_current(state);
 }
 
-void Mouse::set_shape(MouseShape shape) {
+void Mouse::set_position(const glm::vec2& position) {
+	_position.set_current(position);
+}
+
+void Mouse::set_scroll(const glm::vec2& scroll) {
+	_scroll = scroll;
+}
+
+void Mouse::set_mode(Mode mode) const {
+	glfwSetInputMode(_window->_window, GLFW_CURSOR, static_cast<int>(mode));
+}
+
+void Mouse::set_raw_motion(bool enabled) const {
+	glfwSetInputMode(_window->_window, GLFW_RAW_MOUSE_MOTION, static_cast<int>(enabled));
+}
+
+void Mouse::set_shape(Shape shape) {
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
 	_cursor = glfwCreateStandardCursor(static_cast<int>(shape));
 	assert(_cursor != nullptr && "Failed to create cursor");
-	glfwSetCursor(_window, _cursor);
+	glfwSetCursor(_window->_window, _cursor);
 }
 
 void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_spot) {
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
-	const resource::image::Image image(utility::get_exec_path().parent_path() / path, true);
-	const glm::uvec2 size = image.get_size();
+	const resource::image::Image image(path, true);
+	const glm::ivec2& size = image.get_size();
 	const GLFWimage glfw_image = {
-		.width = static_cast<int>(size.x),
-		.height = static_cast<int>(size.y),
+		.width = size.x,
+		.height = size.y,
 		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
 	};
 	_cursor =
 		glfwCreateCursor(&glfw_image, static_cast<int>(hot_spot.x), static_cast<int>(hot_spot.y));
 	assert(_cursor != nullptr && "Failed to create cursor");
-	glfwSetCursor(_window, _cursor);
-}
-
-auto Mouse::is_down(MouseButton button) const -> bool {
-	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) {
-		return false;
-	}
-	return it->second.get();
-}
-
-auto Mouse::is_up(MouseButton button) const -> bool {
-	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) {
-		return false;
-	}
-	return !it->second.get();
-}
-
-auto Mouse::is_pressed(MouseButton button) const -> bool {
-	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) {
-		return false;
-	}
-	return it->second.entered(true);
-}
-
-auto Mouse::is_released(MouseButton button) const -> bool {
-	const auto it = _buttons.find(button);
-	if (it == _buttons.end()) {
-		return false;
-	}
-	return it->second.exited(true);
+	glfwSetCursor(_window->_window, _cursor);
 }
 
 auto Mouse::get_position() const -> glm::vec2 {
@@ -99,23 +109,20 @@ auto Mouse::get_scroll() const -> glm::vec2 {
 	return _scroll;
 }
 
-void Mouse::update() {
-	for (auto& [_, button] : _buttons) {
-		button.set_previous(button.get());
-	}
-	_position.set_previous(_position.get());
+auto Mouse::is_down(Button button) const -> bool {
+	return _buttons[static_cast<size_t>(button)].get();
 }
 
-void Mouse::set_button(MouseButton button, bool state) {
-	_buttons[button].set_current(state);
+auto Mouse::is_up(Button button) const -> bool {
+	return !_buttons[static_cast<size_t>(button)].get();
 }
 
-void Mouse::set_position(const glm::vec2& position) {
-	_position.set_current(position);
+auto Mouse::is_pressed(Button button) const -> bool {
+	return _buttons[static_cast<size_t>(button)].entered(true);
 }
 
-void Mouse::set_scroll(const glm::vec2& scroll) {
-	_scroll = scroll;
+auto Mouse::is_released(Button button) const -> bool {
+	return _buttons[static_cast<size_t>(button)].exited(true);
 }
 
-} // namespace void_engine::display::window::input
+} // namespace void_engine::display::window::input::mouse

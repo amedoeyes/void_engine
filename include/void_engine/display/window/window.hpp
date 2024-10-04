@@ -1,8 +1,10 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
 
+#include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/monitor/video_mode.hpp"
 #include "void_engine/display/window/hints.hpp"
+#include "void_engine/display/window/input/mouse/mouse.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/display/window/window_input_handler.hpp"
 
@@ -16,17 +18,11 @@
 struct GLFWwindow;
 struct GLFWmonitor;
 
-namespace void_engine::display {
-
-namespace monitor {
-class Monitor;
-}
-
-namespace window {
+namespace void_engine::display::window {
 
 class Window {
 	friend class WindowEventHandler;
-	friend class WindowInputHandler;
+	friend class input::mouse::Mouse;
 
 public:
 	Window(const Window&) = default;
@@ -124,8 +120,6 @@ private:
 	static void apply_hints(const Hints& hints);
 };
 
-} // namespace window
-
-} // namespace void_engine::display
+} // namespace void_engine::display::window
 
 #endif // !VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP

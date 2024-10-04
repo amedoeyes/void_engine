@@ -1,13 +1,16 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_EVENT_KEYBOARD_KEY_EVENT_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_EVENT_KEYBOARD_KEY_EVENT_HPP
 
+#include "void_engine/display/window/input/keyboard/enums.hpp"
+#include "void_engine/utility/bit_mask.hpp"
+
 namespace void_engine::display::window::event {
 
 struct KeyboardKeyEvent {
-	int key;
+	input::keyboard::Key key;
 	int scancode;
-	int action;
-	int mods;
+	input::keyboard::KeyAction action;
+	utility::BitMask<input::keyboard::KeyMod> mods;
 };
 
 } // namespace void_engine::display::window::event

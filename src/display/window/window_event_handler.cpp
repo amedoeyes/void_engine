@@ -17,7 +17,11 @@
 #include "void_engine/display/window/event/window_position_event.hpp"
 #include "void_engine/display/window/event/window_refresh_event.hpp"
 #include "void_engine/display/window/event/window_size_event.hpp"
+#include "void_engine/display/window/input/keyboard/enums.hpp"
+#include "void_engine/display/window/input/mouse/enums.hpp"
+#include "void_engine/display/window/input/mouse/mouse.hpp"
 #include "void_engine/display/window/window.hpp"
+#include "void_engine/utility/bit_mask.hpp"
 
 #include <GLFW/glfw3.h>
 #include <filesystem>
@@ -59,9 +63,12 @@ WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
 		[](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(
-					event::KeyboardKeyEvent{.key = key, .scancode = scancode, .action = action, .mods = mods}
-				);
+				.emit(event::KeyboardKeyEvent{
+					.key = static_cast<input::keyboard::Key>(key),
+					.scancode = scancode,
+					.action = static_cast<input::keyboard::KeyAction>(action),
+					.mods = utility::BitMask<input::keyboard::KeyMod>(mods),
+				});
 		}
 	);
 	glfwSetMouseButtonCallback(
@@ -69,7 +76,11 @@ WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
 		[](GLFWwindow* window, int button, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(event::MouseButtonEvent{.button = button, .action = action, .mods = mods});
+				.emit(event::MouseButtonEvent{
+					.button = static_cast<input::mouse::Button>(button),
+					.action = static_cast<input::mouse::ButtonAction>(action),
+					.mods = utility::BitMask<input::keyboard::KeyMod>(mods),
+				});
 		}
 	);
 	glfwSetCursorEnterCallback(_window->_window, [](GLFWwindow* window, int entered) {

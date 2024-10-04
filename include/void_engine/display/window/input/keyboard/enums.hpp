@@ -1,19 +1,12 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
-
-#include "void_engine/utility/state.hpp"
+#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP
+#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP
 
 #include <cstdint>
-#include <unordered_map>
 
-namespace void_engine::display::window {
+namespace void_engine::display::window::input::keyboard {
 
-class WindowInputHandler;
-
-namespace input {
-
-enum class KeyboardKey : uint16_t {
-	unknown = 0,
+enum class Key : uint16_t {
+	none = 0,
 	space = 32,
 	apostrophe = 39,
 	comma = 44,
@@ -104,31 +97,21 @@ enum class KeyboardKey : uint16_t {
 	menu = 348
 };
 
-class Keyboard {
-	friend class window::WindowInputHandler;
-
-public:
-	Keyboard(const Keyboard&) = default;
-	Keyboard(Keyboard&&) = default;
-	auto operator=(const Keyboard&) -> Keyboard& = default;
-	auto operator=(Keyboard&&) -> Keyboard& = default;
-	Keyboard() = default;
-	~Keyboard() = default;
-
-	[[nodiscard]] auto is_down(KeyboardKey key) const -> bool;
-	[[nodiscard]] auto is_up(KeyboardKey key) const -> bool;
-	[[nodiscard]] auto is_pressed(KeyboardKey key) const -> bool;
-	[[nodiscard]] auto is_released(KeyboardKey key) const -> bool;
-
-private:
-	std::unordered_map<KeyboardKey, utility::State<bool>> _keys;
-
-	void update();
-	void set_key(KeyboardKey key, bool state);
+enum class KeyAction : uint8_t {
+	release = 0,
+	press = 1,
+	repeat = 2,
 };
 
-} // namespace input
+enum class KeyMod : uint8_t {
+	shift = 0x0001,
+	control = 0x0002,
+	alt = 0x0004,
+	super = 0x0008,
+	caps_lock = 0x0010,
+	num_lock = 0x0020,
+};
 
-} // namespace void_engine::display::window
+} // namespace void_engine::display::window::input::keyboard
 
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_HPP
+#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP

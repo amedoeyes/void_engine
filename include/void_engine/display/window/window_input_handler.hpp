@@ -1,9 +1,8 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_INPUT_HANDLER_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_INPUT_HANDLER_HPP
 
-#include "void_engine/display/window/input/keyboard.hpp"
-#include "void_engine/display/window/input/mouse.hpp"
-#include "void_engine/utility/event.hpp"
+#include "void_engine/display/window/input/keyboard/keyboard.hpp"
+#include "void_engine/display/window/input/mouse/mouse.hpp"
 
 namespace void_engine::display::window {
 
@@ -15,22 +14,18 @@ public:
 	WindowInputHandler(WindowInputHandler&&) = delete;
 	auto operator=(const WindowInputHandler&) -> WindowInputHandler& = default;
 	auto operator=(WindowInputHandler&&) -> WindowInputHandler& = delete;
+	WindowInputHandler() = delete;
 	explicit WindowInputHandler(Window& window);
-	~WindowInputHandler();
+	~WindowInputHandler() = default;
 
 	void update();
 
-	[[nodiscard]] auto get_keyboard() -> input::Keyboard&;
-	[[nodiscard]] auto get_mouse() -> input::Mouse&;
+	[[nodiscard]] auto get_keyboard() -> input::keyboard::Keyboard&;
+	[[nodiscard]] auto get_mouse() -> input::mouse::Mouse&;
 
 private:
-	Window* _window;
-	input::Keyboard* _keyboard;
-	input::Mouse* _mouse;
-	utility::event::EventListenerID _keyboard_key_listener;
-	utility::event::EventListenerID _mouse_button_listener;
-	utility::event::EventListenerID _mouse_position_listener;
-	utility::event::EventListenerID _mouse_scroll_listener;
+	input::keyboard::Keyboard _keyboard;
+	input::mouse::Mouse _mouse;
 };
 
 } // namespace void_engine::display::window

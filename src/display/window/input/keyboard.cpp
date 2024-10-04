@@ -1,47 +1,53 @@
-#include "void_engine/display/window/input/keyboard.hpp"
+#include "void_engine/display/window/input/keyboard/keyboard.hpp"
 
-namespace void_engine::display::window::input {
+#include "void_engine/display/window/event/keyboard_key_event.hpp"
+#include "void_engine/display/window/input/keyboard/enums.hpp"
+#include "void_engine/display/window/window.hpp"
+#include "void_engine/display/window/window_event_handler.hpp"
+#include <cstddef>
 
-auto Keyboard::is_down(KeyboardKey key) const -> bool {
-	const auto it = _keys.find(key);
-	if (it == _keys.end()) {
-		return false;
-	}
-	return it->second.get();
+namespace void_engine::display::window::input::keyboard {
+
+Keyboard::Keyboard(Window& window) : _window(&window) {
+	_keyboard_key_listener = _window->get_event_handler().add_listener<event::KeyboardKeyEvent>(
+		[this](const event::KeyboardKeyEvent& event) {
+			set_key(
+				event.key,
+				event.action == input::keyboard::KeyAction::press ||
+					event.action == input::keyboard::KeyAction::repeat
+			);
+		}
+	);
 }
 
-auto Keyboard::is_up(KeyboardKey key) const -> bool {
-	const auto it = _keys.find(key);
-	if (it == _keys.end()) {
-		return true;
-	}
-	return !it->second.get();
-}
-
-auto Keyboard::is_pressed(KeyboardKey key) const -> bool {
-	const auto it = _keys.find(key);
-	if (it == _keys.end()) {
-		return false;
-	}
-	return it->second.entered(true);
-}
-
-auto Keyboard::is_released(KeyboardKey key) const -> bool {
-	const auto it = _keys.find(key);
-	if (it == _keys.end()) {
-		return false;
-	}
-	return it->second.exited(true);
+Keyboard::~Keyboard() {
+	_window->get_event_handler().remove_listener<event::KeyboardKeyEvent>(_keyboard_key_listener);
 }
 
 void Keyboard::update() {
-	for (auto& [_, key] : _keys) {
+	for (auto& key : _keys) {
 		key.set_previous(key.get());
 	}
 }
 
-void Keyboard::set_key(KeyboardKey key, bool state) {
-	_keys[key].set_current(state);
+void Keyboard::set_key(Key key, bool state) {
+	_keys[static_cast<size_t>(key)].set_current(state);
 }
 
-} // namespace void_engine::display::window::input
+auto Keyboard::is_down(Key key) const -> bool {
+	return _keys[static_cast<size_t>(key)].get();
+}
+
+auto Keyboard::is_up(Key key) const -> bool {
+	return !_keys[static_cast<size_t>(key)].get();
+}
+
+auto Keyboard::is_pressed(Key key) const -> bool {
+	return _keys[static_cast<size_t>(key)].entered(true);
+}
+
+auto Keyboard::is_released(Key key) const -> bool {
+	return _keys[static_cast<size_t>(key)].exited(true);
+}
+
+} // namespace void_engine::display::window::input::keyboard
