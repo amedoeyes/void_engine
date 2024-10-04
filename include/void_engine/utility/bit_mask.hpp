@@ -39,6 +39,9 @@ public:
 	explicit BitMask(T value) : _value(static_cast<std::underlying_type_t<T>>(value)) {
 	}
 
+	explicit BitMask(std::underlying_type_t<T> value) : _value(value) {
+	}
+
 	~BitMask() = default;
 
 	void set(T flag) {
