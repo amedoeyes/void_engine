@@ -26,7 +26,6 @@
 namespace void_engine::display::window {
 
 WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
-	using namespace event;
 	glfwSetDropCallback(_window->_window, [](GLFWwindow* window, int count, const char** paths) {
 		std::vector<std::filesystem::path> paths_vector;
 		paths_vector.reserve(count);
@@ -35,24 +34,24 @@ WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
 		}
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(DropEvent{paths_vector});
+			.emit(event::DropEvent{paths_vector});
 	});
 	glfwSetFramebufferSizeCallback(_window->_window, [](GLFWwindow* window, int width, int height) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(FramebufferSizeEvent{glm::vec2(width, height)});
+			.emit(event::FramebufferSizeEvent{glm::vec2(width, height)});
 	});
 	glfwSetCharCallback(_window->_window, [](GLFWwindow* window, unsigned int codepoint) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(KeyboardCharEvent{codepoint});
+			.emit(event::KeyboardCharEvent{codepoint});
 	});
 	glfwSetCharModsCallback(
 		_window->_window,
 		[](GLFWwindow* window, unsigned int codepoint, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(KeyboardCharModsEvent{codepoint, mods});
+				.emit(event::KeyboardCharModsEvent{.codepoint = codepoint, .mods = mods});
 		}
 	);
 	glfwSetKeyCallback(
@@ -60,7 +59,9 @@ WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
 		[](GLFWwindow* window, int key, int scancode, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(KeyboardKeyEvent{key, scancode, action, mods});
+				.emit(
+					event::KeyboardKeyEvent{.key = key, .scancode = scancode, .action = action, .mods = mods}
+				);
 		}
 	);
 	glfwSetMouseButtonCallback(
@@ -68,66 +69,66 @@ WindowEventHandler::WindowEventHandler(Window& window) : _window(&window) {
 		[](GLFWwindow* window, int button, int action, int mods) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(MouseButtonEvent{button, action, mods});
+				.emit(event::MouseButtonEvent{.button = button, .action = action, .mods = mods});
 		}
 	);
 	glfwSetCursorEnterCallback(_window->_window, [](GLFWwindow* window, int entered) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(MouseEnterEvent{entered == 1});
+			.emit(event::MouseEnterEvent{entered == 1});
 	});
 	glfwSetCursorPosCallback(_window->_window, [](GLFWwindow* window, double xpos, double ypos) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(MousePositionEvent{glm::vec2(xpos, ypos)});
+			.emit(event::MousePositionEvent{glm::vec2(xpos, ypos)});
 	});
 	glfwSetScrollCallback(_window->_window, [](GLFWwindow* window, double xoffset, double yoffset) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(MouseScrollEvent{glm::vec2(xoffset, yoffset)});
+			.emit(event::MouseScrollEvent{glm::vec2(xoffset, yoffset)});
 	});
 	glfwSetWindowCloseCallback(_window->_window, [](GLFWwindow* window) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit<WindowCloseEvent>();
+			.emit<event::WindowCloseEvent>();
 	});
 	glfwSetWindowContentScaleCallback(
 		_window->_window,
 		[](GLFWwindow* window, float xscale, float yscale) {
 			static_cast<Window*>(glfwGetWindowUserPointer(window))
 				->get_event_handler()
-				.emit(WindowContentScaleEvent{glm::vec2(xscale, yscale)});
+				.emit(event::WindowContentScaleEvent{glm::vec2(xscale, yscale)});
 		}
 	);
 	glfwSetWindowFocusCallback(_window->_window, [](GLFWwindow* window, int focused) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(WindowFocusEvent{focused == 1});
+			.emit(event::WindowFocusEvent{focused == 1});
 	});
 	glfwSetWindowIconifyCallback(_window->_window, [](GLFWwindow* window, int iconified) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(WindowIconifyEvent{iconified == 1});
+			.emit(event::WindowIconifyEvent{iconified == 1});
 	});
 	glfwSetWindowMaximizeCallback(_window->_window, [](GLFWwindow* window, int maximized) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(WindowMaximizeEvent{maximized == 1});
+			.emit(event::WindowMaximizeEvent{maximized == 1});
 	});
 	glfwSetWindowPosCallback(_window->_window, [](GLFWwindow* window, int xpos, int ypos) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(WindowPositionEvent{glm::vec2(xpos, ypos)});
+			.emit(event::WindowPositionEvent{glm::vec2(xpos, ypos)});
 	});
 	glfwSetWindowRefreshCallback(_window->_window, [](GLFWwindow* window) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit<WindowRefreshEvent>();
+			.emit<event::WindowRefreshEvent>();
 	});
 	glfwSetWindowSizeCallback(_window->_window, [](GLFWwindow* window, int width, int height) {
 		static_cast<Window*>(glfwGetWindowUserPointer(window))
 			->get_event_handler()
-			.emit(WindowSizeEvent{glm::vec2(width, height)});
+			.emit(event::WindowSizeEvent{glm::vec2(width, height)});
 	});
 }
 
