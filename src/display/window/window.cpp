@@ -132,10 +132,6 @@ void Window::windowed(const glm::ivec2& position, const glm::ivec2& size) const 
 	glfwSetWindowMonitor(_window, nullptr, position.x, position.y, size.x, size.y, GLFW_DONT_CARE);
 }
 
-void Window::set_always_on_top(bool enabled) {
-	glfwSetWindowAttrib(_window, GLFW_FLOATING, static_cast<int>(enabled));
-}
-
 void Window::set_aspect_ratio(const glm::ivec2& ratio) {
 	glfwSetWindowAspectRatio(_window, ratio.x, ratio.y);
 }
@@ -146,6 +142,10 @@ void Window::set_auto_minimize(bool enabled) {
 
 void Window::set_decoration(bool enabled) {
 	glfwSetWindowAttrib(_window, GLFW_DECORATED, static_cast<int>(enabled));
+}
+
+void Window::set_floating(bool enabled) {
+	glfwSetWindowAttrib(_window, GLFW_FLOATING, static_cast<int>(enabled));
 }
 
 void Window::set_focus_on_show(bool enabled) {
@@ -283,12 +283,12 @@ auto Window::has_transparent_framebuffer() const -> bool {
 	return glfwGetWindowAttrib(_window, GLFW_TRANSPARENT_FRAMEBUFFER) != 0;
 }
 
-auto Window::is_always_on_top() const -> bool {
-	return glfwGetWindowAttrib(_window, GLFW_FLOATING) != 0;
-}
-
 auto Window::is_decorated() const -> bool {
 	return glfwGetWindowAttrib(_window, GLFW_DECORATED) != 0;
+}
+
+auto Window::is_floating() const -> bool {
+	return glfwGetWindowAttrib(_window, GLFW_FLOATING) != 0;
 }
 
 auto Window::is_focused() const -> bool {
@@ -329,7 +329,7 @@ void Window::apply_hints(const Hints& hints) {
 	glfwWindowHint(GLFW_DECORATED, static_cast<int>(hints.window.decorated));
 	glfwWindowHint(GLFW_FOCUSED, static_cast<int>(hints.window.focused));
 	glfwWindowHint(GLFW_AUTO_ICONIFY, static_cast<int>(hints.window.auto_minimize));
-	glfwWindowHint(GLFW_FLOATING, static_cast<int>(hints.window.always_on_top));
+	glfwWindowHint(GLFW_FLOATING, static_cast<int>(hints.window.floating));
 	glfwWindowHint(GLFW_MAXIMIZED, static_cast<int>(hints.window.maximized));
 	glfwWindowHint(GLFW_CENTER_CURSOR, static_cast<int>(hints.window.center_cursor));
 	glfwWindowHint(

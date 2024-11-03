@@ -63,10 +63,10 @@ public:
 	void fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode) const;
 	void windowed(const glm::ivec2& position, const glm::ivec2& size) const;
 
-	void set_always_on_top(bool enabled);
 	void set_aspect_ratio(const glm::ivec2& ratio);
 	void set_auto_minimize(bool enabled);
 	void set_decoration(bool enabled);
+	void set_floating(bool enabled);
 	void set_focus_on_show(bool enabled);
 	void set_icon(const std::filesystem::path& path);
 	void set_icons(std::span<std::filesystem::path> paths);
@@ -95,8 +95,8 @@ public:
 	[[nodiscard]] auto has_focus_on_show() const -> bool;
 	[[nodiscard]] auto has_mouse_passthrough() const -> bool;
 	[[nodiscard]] auto has_transparent_framebuffer() const -> bool;
-	[[nodiscard]] auto is_always_on_top() const -> bool;
 	[[nodiscard]] auto is_decorated() const -> bool;
+	[[nodiscard]] auto is_floating() const -> bool;
 	[[nodiscard]] auto is_focused() const -> bool;
 	[[nodiscard]] auto is_hovered() const -> bool;
 	[[nodiscard]] auto is_maximized() const -> bool;

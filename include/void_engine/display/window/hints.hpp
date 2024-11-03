@@ -23,7 +23,7 @@ struct WindowHints {
 	// on input focus loss.
 	bool auto_minimize = true;
 	// Whether the window will be always on top of other regular windows.
-	bool always_on_top = false;
+	bool floating = false;
 	// Whether the windowed mode window will be maximized when created.
 	bool maximized = false;
 	// Whether the cursor should be centered over newly created full screen windows.
