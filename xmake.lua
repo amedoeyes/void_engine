@@ -1,8 +1,6 @@
----@diagnostic disable: undefined-global, undefined-field
-
 set_project("void_engine")
 set_version("0.1.0")
-set_languages("c++23")
+set_languages("cxx23")
 set_warnings("allextra", "pedantic", "error")
 
 add_rules("mode.debug", "mode.release", "mode.releasedbg", "mode.check", "mode.profile")
@@ -15,17 +13,12 @@ end
 add_defines("GLM_ENABLE_EXPERIMENTAL")
 
 add_requireconfs("*", { system = false })
-add_requires({
-	"glfw ^3.4",
-	"glad ^0.1.36",
-	"glm ^1.0.1",
-	"stb ^2024.06.01",
-	"freetype ^2.13.1",
-	"harfbuzz ^9.0.0",
-})
-add_requireconfs("glad", {
-	configs = { profile = "core" },
-})
+add_requires("glfw", { version = "^3.4" })
+add_requires("glad", { version = "^0.1.36", configs = { profile = "core" } })
+add_requires("glm", { version = "^1.0.1" })
+add_requires("stb", { version = "^2024.06.01" })
+add_requires("freetype", { version = "^2.13.1" })
+add_requires("harfbuzz", { version = "^9.0.0" })
 
 target("void_engine", function()
 	set_kind("static")
@@ -45,14 +38,14 @@ target("void_engine", function()
 end)
 
 option("tests", {
-	description = "Build the test suite",
+	description = "Build test suite",
 	showmenu = true,
 	default = false,
 	type = "boolean",
 })
 
 option("examples", {
-	description = "Build the examples",
+	description = "Build examples",
 	showmenu = true,
 	default = false,
 	type = "boolean",
