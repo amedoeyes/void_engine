@@ -14,7 +14,6 @@ Checks:
   -cppcoreguidelines-pro-bounds-pointer-arithmetic,
   -cppcoreguidelines-pro-type-union-access,
   hicpp-*,
-  -hicpp-avoid-c-arrays,
   -hicpp-uppercase-literal-suffix,
   misc-*,
   -misc-non-private-member-variables-in-classes,
@@ -24,4 +23,5 @@ Checks:
   readability-*,
   -readability-identifier-length,
   -readability-magic-numbers,
+  -readability-static-accessed-through-instance,
   -readability-uppercase-literal-suffix,
