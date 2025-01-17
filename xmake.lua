@@ -1,7 +1,10 @@
 set_project("void_engine")
 set_version("0.1.0")
 set_languages("cxx23")
-set_warnings("allextra", "pedantic", "error")
+set_warnings("allextra", "pedantic")
+
+set_toolchains("clang")
+set_runtimes("c++_shared")
 
 add_rules("mode.debug", "mode.release", "mode.releasedbg", "mode.check", "mode.profile")
 add_rules("plugin.compile_commands.autoupdate", { lsp = "clangd", outputdir = "build" })
@@ -22,10 +25,7 @@ add_requires("harfbuzz", { version = "^9.0.0" })
 
 target("void_engine", function()
 	set_kind("static")
-	add_rules(
-		"utils.glsl2spv",
-		{ outputdir = "build/shaders", targetenv = "opengl", client = "opengl100", bin2c = true }
-	)
+	add_rules("utils.glsl2spv", { targetenv = "opengl", client = "opengl100", bin2c = true })
 	add_rules("utils.bin2c", { extensions = { ".ttf" } })
 	add_files({
 		"src/**.cpp",
@@ -33,8 +33,10 @@ target("void_engine", function()
 		"resources/shaders/**.frag",
 		"resources/fonts/**.ttf",
 	})
-	add_includedirs("include")
-	add_packages({ "glfw", "glad", "glm", "stb", "freetype", "harfbuzz" })
+	add_files("./src/**.cppm", { public = true })
+	add_includedirs("include", { public = true })
+	add_packages("glm", { public = true })
+	add_packages({ "glfw", "glad", "stb", "freetype", "harfbuzz" })
 end)
 
 option("tests", {
@@ -53,14 +55,7 @@ option("examples", {
 
 if has_config("examples") then
 	for _, example in ipairs(os.files("examples/*.cpp")) do
-		local name = path.basename(example)
-		target(name, {
-			kind = "binary",
-			files = example,
-			includedirs = "include",
-			deps = "void_engine",
-			packages = { "glm" },
-		})
+		target(path.basename(example), { files = example, deps = "void_engine" })
 	end
 end
 
