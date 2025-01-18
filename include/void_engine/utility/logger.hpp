@@ -1,7 +1,6 @@
 #ifndef VOID_ENGINE_UTILITY_LOGGER_HPP
 #define VOID_ENGINE_UTILITY_LOGGER_HPP
 
-#include <bits/chrono.h>
 #include <chrono>
 #include <cstdint>
 #include <format>
@@ -51,10 +50,8 @@ void log(Level level, std::string_view fmt, Args&&... args) {
 	const std::lock_guard<std::mutex> lock(context.mutex);
 	auto now = std::chrono::system_clock::now();
 	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
-	auto zt = std::chrono::zoned_time{
-		std::chrono::current_zone(), std::chrono::floor<std::chrono::seconds>(now)
-	};
-	const std::string timestamp = std::format("{:%T}.{:03}", zt, ms.count());
+	auto seconds = std::chrono::floor<std::chrono::seconds>(now);
+	const std::string timestamp = std::format("{:%T}.{:03}", seconds, ms.count());
 	std::string_view prefix;
 	switch (level) {
 		using enum Level;
