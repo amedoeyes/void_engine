@@ -5,11 +5,11 @@ module;
 
 #include <GLFW/glfw3.h>
 
-export module display.display_manager;
+export module void_engine.display.display_manager;
 
 import std;
 import glm;
-import window.window_manager;
+import void_engine.window.window_manager;
 
 export namespace void_engine::display {
 

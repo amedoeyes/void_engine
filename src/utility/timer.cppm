@@ -1,4 +1,4 @@
-export module utility.timer;
+export module void_engine.utility.timer;
 
 import std;
 

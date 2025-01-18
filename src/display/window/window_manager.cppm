@@ -6,7 +6,7 @@ module;
 
 #include <GLFW/glfw3.h>
 
-export module window.window_manager;
+export module void_engine.window.window_manager;
 
 import std;
 import glm;

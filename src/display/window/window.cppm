@@ -1,3 +1,3 @@
-export module display.window;
+export module void_engine.display.window;
 
-export import window.window_manager;
+export import void_engine.window.window_manager;

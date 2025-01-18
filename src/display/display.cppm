@@ -1,5 +1,5 @@
 export module void_engine.display;
 
-export import display.window;
-// import export display.monitor;
-export import display.display_manager;
+export import void_engine.display.window;
+// import export void_engine.display.monitor;
+export import void_engine.display.display_manager;
