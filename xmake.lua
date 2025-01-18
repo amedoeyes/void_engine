@@ -23,20 +23,26 @@ add_requires("stb", { version = "^2024.06.01" })
 add_requires("freetype", { version = "^2.13.1" })
 add_requires("harfbuzz", { version = "^9.0.0" })
 
-target("void_engine", function()
+target("embed", function()
 	set_kind("static")
 	add_rules("utils.glsl2spv", { targetenv = "opengl", client = "opengl100", bin2c = true })
 	add_rules("utils.bin2c", { extensions = { ".ttf" } })
-	add_files({
-		"src/**.cpp",
-		"resources/shaders/**.vert",
-		"resources/shaders/**.frag",
-		"resources/fonts/**.ttf",
-	})
+	add_files(
+		"./resources/embed.cpp",
+		"./resources/shaders/**.vert",
+		"./resources/shaders/**.frag",
+		"./resources/fonts/**.ttf"
+	)
+	add_includedirs("./resources/", { public = true })
+end)
+
+target("void_engine", function()
+	set_kind("static")
+	add_files("./src/**.cpp")
 	add_files("./src/**.cppm", { public = true })
 	add_includedirs("include", { public = true })
-	add_packages("glm", { public = true })
-	add_packages({ "glfw", "glad", "stb", "freetype", "harfbuzz" })
+	add_packages("glfw", "glad", "glm", "stb", "freetype", "harfbuzz", { public = true })
+	add_deps("embed")
 end)
 
 option("tests", {

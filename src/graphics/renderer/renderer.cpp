@@ -1,5 +1,6 @@
 #include "void_engine/graphics/renderer/renderer.hpp"
 
+#include "embed.hpp"
 #include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
@@ -83,36 +84,6 @@ APIENTRY void debug_message_callback(
 	}
 }
 
-// NOLINTNEXTLINE
-constexpr unsigned char shape_shader_vert[] = {
-#include "shape.vert.spv.h"
-};
-
-// NOLINTNEXTLINE
-constexpr unsigned char shape_shader_frag[] = {
-#include "shape.frag.spv.h"
-};
-
-// NOLINTNEXTLINE
-constexpr unsigned char font_shader_vert[] = {
-#include "font.vert.spv.h"
-};
-
-// NOLINTNEXTLINE
-constexpr unsigned char font_screen_shader_vert[] = {
-#include "font_screen.vert.spv.h"
-};
-
-// NOLINTNEXTLINE
-constexpr unsigned char font_shader_frag[] = {
-#include "font.frag.spv.h"
-};
-
-// NOLINTNEXTLINE
-constexpr unsigned char liberation_font[] = {
-#include "liberation.ttf.h"
-};
-
 } // namespace
 
 Renderer::Renderer() {
@@ -130,45 +101,33 @@ Renderer::Renderer() {
 
 	resource::shader::Shader& shape_shader = _resource_manager.shaders().create("shape");
 	shape_shader.add_source(
-		resource::shader::Type::vertex,
-		std::as_bytes(std::span(shape_shader_vert)),
-		resource::shader::Format::spirv
+		resource::shader::Type::vertex, shape_shader_vert_bytes, resource::shader::Format::spirv
 	);
 	shape_shader.add_source(
-		resource::shader::Type::fragment,
-		std::as_bytes(std::span(shape_shader_frag)),
-		resource::shader::Format::spirv
+		resource::shader::Type::fragment, shape_shader_frag_bytes, resource::shader::Format::spirv
 	);
 	shape_shader.compile();
 
 	resource::shader::Shader& font_shader = _resource_manager.shaders().create("font");
 	font_shader.add_source(
-		resource::shader::Type::vertex,
-		std::as_bytes(std::span(font_shader_vert)),
-		resource::shader::Format::spirv
+		resource::shader::Type::vertex, font_shader_vert_bytes, resource::shader::Format::spirv
 	);
 	font_shader.add_source(
-		resource::shader::Type::fragment,
-		std::as_bytes(std::span(font_shader_frag)),
-		resource::shader::Format::spirv
+		resource::shader::Type::fragment, font_shader_frag_bytes, resource::shader::Format::spirv
 	);
 	font_shader.compile();
 
 	resource::shader::Shader& font_screen_shader = _resource_manager.shaders().create("font_screen");
 	font_screen_shader.add_source(
-		resource::shader::Type::vertex,
-		std::as_bytes(std::span(font_screen_shader_vert)),
-		resource::shader::Format::spirv
+		resource::shader::Type::vertex, font_screen_shader_vert_bytes, resource::shader::Format::spirv
 	);
 	font_screen_shader.add_source(
-		resource::shader::Type::fragment,
-		std::as_bytes(std::span(font_shader_frag)),
-		resource::shader::Format::spirv
+		resource::shader::Type::fragment, font_shader_frag_bytes, resource::shader::Format::spirv
 	);
 	font_screen_shader.compile();
 
 	const resource::font::Font& font =
-		_resource_manager.fonts().create("liberation", std::as_bytes(std::span(liberation_font)));
+		_resource_manager.fonts().create("liberation", liberation_font_bytes);
 
 	_draw_objects.text.set_font(font);
 }
