@@ -3,9 +3,10 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/constants.hpp>
 #include <glm/trigonometric.hpp>
-#include <void_engine/display/display_manager.hpp>
 #include <void_engine/display/window/event/window_size_event.hpp>
 #include <void_engine/graphics/renderer/renderer.hpp>
+
+import void_engine;
 
 namespace display = void_engine::display;
 namespace renderer = void_engine::graphics::renderer;
