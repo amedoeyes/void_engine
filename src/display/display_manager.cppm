@@ -4,6 +4,7 @@ module;
 #include "void_engine/utility/logger.hpp"
 
 #include <GLFW/glfw3.h>
+#include <cassert>
 
 export module void_engine.display.display_manager;
 

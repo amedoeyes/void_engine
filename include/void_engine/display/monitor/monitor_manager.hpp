@@ -1,13 +1,12 @@
 #ifndef VOID_ENGINE_DISPLAY_MONITOR_MONITOR_MANAGER_HPP
 #define VOID_ENGINE_DISPLAY_MONITOR_MONITOR_MANAGER_HPP
 
-#include "void_engine/display/monitor/monitor.hpp"
-
 #include <span>
 #include <string_view>
 #include <vector>
 
 namespace void_engine::display::monitor {
+class Monitor;
 
 class MonitorManager {
 public:

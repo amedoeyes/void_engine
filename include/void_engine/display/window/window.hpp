@@ -1,7 +1,6 @@
 #ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
 #define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
 
-#include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/monitor/video_mode.hpp"
 #include "void_engine/display/window/hints.hpp"
 #include "void_engine/display/window/input/mouse/mouse.hpp"
@@ -17,6 +16,10 @@
 
 struct GLFWwindow;
 struct GLFWmonitor;
+
+namespace void_engine::display::monitor {
+class Monitor;
+}
 
 namespace void_engine::display::window {
 

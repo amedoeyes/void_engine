@@ -1,6 +1,5 @@
 #include "void_engine/display/window/window.hpp"
 
-#include "void_engine/display/monitor/monitor.hpp"
 #include "void_engine/display/monitor/video_mode.hpp"
 #include "void_engine/display/window/hints.hpp"
 #include "void_engine/display/window/window_event_handler.hpp"
@@ -18,20 +17,22 @@
 #include <tuple>
 #include <vector>
 
+import void_engine.display.monitor;
+
 namespace void_engine::display::window {
 
 Window::Window(
 	std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
 	const Window& share, const Hints& hints
 ) :
-	Window(title, size, monitor._monitor, share._window, hints) {
+	Window(title, size, monitor.raw(), share._window, hints) {
 }
 
 Window::Window(
 	std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
 	const Hints& hints
 ) :
-	Window(title, size, monitor._monitor, nullptr, hints) {
+	Window(title, size, monitor.raw(), nullptr, hints) {
 }
 
 Window::Window(
@@ -116,15 +117,13 @@ void Window::fullscreen() const {
 
 void Window::fullscreen(const monitor::Monitor& monitor) const {
 	const monitor::VideoMode& mode = monitor.get_video_mode();
-	glfwSetWindowMonitor(
-		_window, monitor._monitor, 0, 0, mode.size.x, mode.size.y, mode.refresh_rate
-	);
+	glfwSetWindowMonitor(_window, monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
 }
 
 void Window::fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode)
 	const {
 	glfwSetWindowMonitor(
-		_window, monitor._monitor, 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate
+		_window, monitor.raw(), 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate
 	);
 }
 
