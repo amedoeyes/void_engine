@@ -5,16 +5,15 @@ module;
 
 #include <GLFW/glfw3.h>
 
-export module void_engine.display.window:input.mouse;
+export module void_engine.display:input.mouse;
 
-export import :input.mouse.enums;
-
-import :window;
+import :input.mouse.enums;
+import :window.window;
 
 import std;
 import glm;
 
-export namespace void_engine::display::window::input::mouse {
+export namespace void_engine::display::input::mouse {
 
 class Mouse {
 public:
@@ -22,7 +21,7 @@ public:
 	Mouse(Mouse&&) = delete;
 	auto operator=(const Mouse&) -> Mouse& = default;
 	auto operator=(Mouse&&) -> Mouse& = delete;
-	explicit Mouse(Window& window);
+	explicit Mouse(window::Window& window);
 	~Mouse();
 
 	void update();
@@ -45,7 +44,7 @@ public:
 	[[nodiscard]] auto is_released(Button button) const -> bool;
 
 private:
-	Window* _window;
+	window::Window* _window;
 	GLFWcursor* _cursor = nullptr;
 	std::array<utility::State<bool>, 4> _buttons;
 	utility::State<glm::vec2> _position;
@@ -55,4 +54,4 @@ private:
 	utility::event::EventListenerID _mouse_scroll_listener;
 };
 
-} // namespace void_engine::display::window::input::mouse
+} // namespace void_engine::display::input::mouse

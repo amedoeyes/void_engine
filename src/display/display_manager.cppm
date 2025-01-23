@@ -1,16 +1,12 @@
 module;
 
-#include "void_engine/utility/logger.hpp"
-
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-export module void_engine.display.display_manager;
+export module void_engine.display:display_manager;
 
-import std;
-import glm;
-import void_engine.display.window;
-import void_engine.display.monitor;
+import :window.window_manager;
+import :monitor.monitor_manager;
 
 export namespace void_engine::display {
 
@@ -20,38 +16,11 @@ public:
 	DisplayManager(DisplayManager&&) = default;
 	auto operator=(const DisplayManager&) -> DisplayManager& = default;
 	auto operator=(DisplayManager&&) -> DisplayManager& = default;
-	DisplayManager() {
-		if (_instance_count == 0) {
-			const int result = glfwInit();
-			assert(result != 0 && "Failed to initialize GLFW");
-#ifdef DEBUG
-			glfwSetErrorCallback([](int, const char* description) {
-				utility::logger::error("GLFW: {}", description);
-			});
-#endif
-		}
-		++_instance_count;
-		_window_manager = new window::WindowManager();
-		_monitor_manager = new monitor::MonitorManager();
-	}
+	DisplayManager();
+	~DisplayManager();
 
-	~DisplayManager() {
-		delete _window_manager;
-		delete _monitor_manager;
-		--_instance_count;
-		if (_instance_count == 0) {
-			glfwSetErrorCallback(nullptr);
-			glfwTerminate();
-		}
-	}
-
-	auto windows() -> window::WindowManager& {
-		return *_window_manager;
-	}
-
-	auto monitors() -> monitor::MonitorManager& {
-		return *_monitor_manager;
-	}
+	auto windows() -> window::WindowManager&;
+	auto monitors() -> monitor::MonitorManager&;
 
 private:
 	static inline unsigned int _instance_count;

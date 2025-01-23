@@ -1,4 +1,4 @@
-export module void_engine.display.window:enums;
+export module void_engine.display:window.enums;
 
 import std;
 

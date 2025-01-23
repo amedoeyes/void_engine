@@ -1,16 +1,14 @@
 module;
 
-#include "void_engine/display/monitor/video_mode.hpp"
-
 #include <GLFW/glfw3.h>
 
-export module void_engine.display.window:window;
+export module void_engine.display:window.window;
 
-import :window_hints;
+import :monitor.monitor;
+import :window.window_hints;
 
 import std;
 import glm;
-import void_engine.display.monitor;
 
 export namespace void_engine::display::window {
 class WindowEventHandler;
@@ -20,7 +18,6 @@ class WindowInputHandler;
 export namespace void_engine::display::window {
 
 class Window {
-
 public:
 	Window(const Window&) = default;
 	Window(Window&&) = delete;

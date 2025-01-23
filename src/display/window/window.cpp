@@ -1,19 +1,18 @@
 module;
 
-#include "void_engine/display/monitor/video_mode.hpp"
 #include "void_engine/resource/image/image.hpp"
 
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-module void_engine.display.window;
+module void_engine.display;
 
-import :window;
-import :window_hints;
+import :monitor.monitor;
+import :window.window;
+import :window.window_hints;
 
 import std;
 import glm;
-import void_engine.display.monitor;
 
 namespace void_engine::display::window {
 

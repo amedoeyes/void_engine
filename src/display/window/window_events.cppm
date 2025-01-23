@@ -2,7 +2,7 @@ module;
 
 #include "void_engine/utility/bit_mask.hpp"
 
-export module void_engine.display.window:window_events;
+export module void_engine.display:window.window_events;
 
 import :input.keyboard.enums;
 import :input.mouse.enums;

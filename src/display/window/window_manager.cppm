@@ -2,10 +2,10 @@ module;
 
 #include "void_engine/utility/string_hash.hpp"
 
-export module void_engine.display.window:window_manager;
+export module void_engine.display:window.window_manager;
 
-import :window;
-import :window_hints;
+import :window.window;
+import :window.window_hints;
 
 import std;
 import glm;
@@ -44,11 +44,6 @@ public:
 
 private:
 	std::unordered_map<std::string, Window*, utility::string_hash, std::equal_to<>> _windows;
-
-	auto create_window(
-		std::string_view title, const glm::ivec2& size, const monitor::Monitor* monitor,
-		const Window* share, const Hints& hints
-	) -> Window*;
 };
 
 } // namespace void_engine::display::window

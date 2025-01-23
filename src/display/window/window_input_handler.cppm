@@ -1,8 +1,8 @@
-export module void_engine.display.window:window_input_handler;
+export module void_engine.display:window.window_input_handler;
 
-import :window;
-import :input.mouse;
 import :input.keyboard;
+import :input.mouse;
+import :window.window;
 
 export namespace void_engine::display::window {
 

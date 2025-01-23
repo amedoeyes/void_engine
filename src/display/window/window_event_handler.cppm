@@ -2,10 +2,10 @@ module;
 
 #include "void_engine/utility/event.hpp"
 
-export module void_engine.display.window:window_event_handler;
+export module void_engine.display:window.window_event_handler;
 
-import :window;
-import :window_events;
+import :window.window;
+import :window.window_events;
 
 export namespace void_engine::display::window {
 

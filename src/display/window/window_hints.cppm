@@ -1,6 +1,6 @@
-export module void_engine.display.window:window_hints;
+export module void_engine.display:window.window_hints;
 
-import :enums;
+import :window.enums;
 
 import std;
 import glm;

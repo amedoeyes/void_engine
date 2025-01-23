@@ -1,5 +1,6 @@
-module void_engine.display.window;
-import :window_event_handler;
+module void_engine.display;
+
+import :window.window_event_handler;
 
 namespace void_engine::display::window {
 

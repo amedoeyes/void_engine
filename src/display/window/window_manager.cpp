@@ -5,14 +5,14 @@ module;
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-module void_engine.display.window;
+module void_engine.display;
 
-import :window_manager;
-import :window_hints;
+import :window.window_hints;
+import :window.window_manager;
+import :monitor.monitor;
 
 import std;
 import glm;
-import void_engine.display.monitor;
 
 namespace void_engine::display::window {
 

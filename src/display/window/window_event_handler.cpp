@@ -4,9 +4,12 @@ module;
 
 #include <GLFW/glfw3.h>
 
-module void_engine.display.window;
-import :window_event_handler;
-import :window_events;
+module void_engine.display;
+
+import :input.keyboard.enums;
+import :input.mouse.enums;
+import :window.window_event_handler;
+import :window.window_events;
 
 import std;
 import glm;
