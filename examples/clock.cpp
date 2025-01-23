@@ -1,11 +1,7 @@
-#include <chrono>
-#include <ctime>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/gtc/constants.hpp>
-#include <glm/trigonometric.hpp>
-#include <void_engine/display/window/event/window_size_event.hpp>
 #include <void_engine/graphics/renderer/renderer.hpp>
 
+import std;
+import glm;
 import void_engine;
 
 namespace display = void_engine::display;

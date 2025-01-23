@@ -1,14 +1,11 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_HINTS_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_HINTS_HPP
+export module void_engine.display.window:window_hints;
 
-#include "void_engine/display/window/enums.hpp"
+import :enums;
 
-#include <glm/ext/vector_int2.hpp>
-#include <glm/ext/vector_int4.hpp>
-#include <limits>
-#include <string>
-#include <utility>
-namespace void_engine::display::window {
+import std;
+import glm;
+
+export namespace void_engine::display::window {
 
 struct WindowHints {
 	// Whether the window will be resizable by the user.
@@ -131,5 +128,3 @@ struct Hints {
 };
 
 } // namespace void_engine::display::window
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_HINTS_HPP

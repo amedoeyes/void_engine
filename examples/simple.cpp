@@ -1,5 +1,3 @@
-#include <void_engine/display/window/event/window_size_event.hpp>
-#include <void_engine/display/window/window.hpp>
 #include <void_engine/graphics/renderer/renderer.hpp>
 
 import void_engine;

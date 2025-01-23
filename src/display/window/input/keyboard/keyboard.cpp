@@ -1,10 +1,7 @@
-#include "void_engine/display/window/input/keyboard/keyboard.hpp"
+module void_engine.display.window;
+import :input.keyboard;
 
-#include "void_engine/display/window/event/keyboard_key_event.hpp"
-#include "void_engine/display/window/input/keyboard/enums.hpp"
-#include "void_engine/display/window/window.hpp"
-#include "void_engine/display/window/window_event_handler.hpp"
-#include <cstddef>
+import std;
 
 namespace void_engine::display::window::input::keyboard {
 
@@ -31,23 +28,23 @@ void Keyboard::update() {
 }
 
 void Keyboard::set_key(Key key, bool state) {
-	_keys[static_cast<size_t>(key)].set_current(state);
+	_keys[static_cast<std::size_t>(key)].set_current(state);
 }
 
 auto Keyboard::is_down(Key key) const -> bool {
-	return _keys[static_cast<size_t>(key)].get();
+	return _keys[static_cast<std::size_t>(key)].get();
 }
 
 auto Keyboard::is_up(Key key) const -> bool {
-	return !_keys[static_cast<size_t>(key)].get();
+	return !_keys[static_cast<std::size_t>(key)].get();
 }
 
 auto Keyboard::is_pressed(Key key) const -> bool {
-	return _keys[static_cast<size_t>(key)].entered(true);
+	return _keys[static_cast<std::size_t>(key)].entered(true);
 }
 
 auto Keyboard::is_released(Key key) const -> bool {
-	return _keys[static_cast<size_t>(key)].exited(true);
+	return _keys[static_cast<std::size_t>(key)].exited(true);
 }
 
 } // namespace void_engine::display::window::input::keyboard

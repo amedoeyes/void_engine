@@ -1,22 +1,19 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_KEYBOARD_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_KEYBOARD_HPP
+module;
 
-#include "void_engine/display/window/input/keyboard/enums.hpp"
 #include "void_engine/utility/event.hpp"
 #include "void_engine/utility/state.hpp"
 
-#include <array>
+export module void_engine.display.window:input.keyboard;
 
-namespace void_engine::display::window {
+export import :input.keyboard.enums;
 
-class WindowInputHandler;
-class Window;
+import :window;
 
-namespace input::keyboard {
+import std;
+
+export namespace void_engine::display::window::input::keyboard {
 
 class Keyboard {
-	friend class window::WindowInputHandler;
-
 public:
 	Keyboard(const Keyboard&) = default;
 	Keyboard(Keyboard&&) = default;
@@ -40,8 +37,4 @@ private:
 	utility::event::EventListenerID _keyboard_key_listener;
 };
 
-} // namespace input::keyboard
-
-} // namespace void_engine::display::window
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_KEYBOARD_HPP
+} // namespace void_engine::display::window::input::keyboard

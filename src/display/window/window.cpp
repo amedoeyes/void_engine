@@ -1,22 +1,18 @@
-#include "void_engine/display/window/window.hpp"
+module;
 
 #include "void_engine/display/monitor/video_mode.hpp"
-#include "void_engine/display/window/hints.hpp"
-#include "void_engine/display/window/window_event_handler.hpp"
-#include "void_engine/display/window/window_input_handler.hpp"
 #include "void_engine/resource/image/image.hpp"
 
 #include <GLFW/glfw3.h>
-#include <bit>
 #include <cassert>
-#include <filesystem>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_int2.hpp>
-#include <span>
-#include <string_view>
-#include <tuple>
-#include <vector>
 
+module void_engine.display.window;
+
+import :window;
+import :window_hints;
+
+import std;
+import glm;
 import void_engine.display.monitor;
 
 namespace void_engine::display::window {
@@ -320,6 +316,10 @@ auto Window::scales_to_monitor() const -> bool {
 
 auto Window::should_close() const -> bool {
 	return glfwWindowShouldClose(_window) != 0;
+}
+
+auto Window::raw() const -> GLFWwindow* {
+	return _window;
 }
 
 void Window::apply_hints(const Hints& hints) {

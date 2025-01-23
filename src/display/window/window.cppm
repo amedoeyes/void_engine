@@ -1,31 +1,25 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP
+module;
 
 #include "void_engine/display/monitor/video_mode.hpp"
-#include "void_engine/display/window/hints.hpp"
-#include "void_engine/display/window/input/mouse/mouse.hpp"
-#include "void_engine/display/window/window_event_handler.hpp"
-#include "void_engine/display/window/window_input_handler.hpp"
 
-#include <filesystem>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_int2.hpp>
-#include <span>
-#include <string_view>
-#include <tuple>
+#include <GLFW/glfw3.h>
 
-struct GLFWwindow;
-struct GLFWmonitor;
+export module void_engine.display.window:window;
 
-namespace void_engine::display::monitor {
-class Monitor;
-}
+import :window_hints;
 
-namespace void_engine::display::window {
+import std;
+import glm;
+import void_engine.display.monitor;
+
+export namespace void_engine::display::window {
+class WindowEventHandler;
+class WindowInputHandler;
+} // namespace void_engine::display::window
+
+export namespace void_engine::display::window {
 
 class Window {
-	friend class WindowEventHandler;
-	friend class input::mouse::Mouse;
 
 public:
 	Window(const Window&) = default;
@@ -110,6 +104,8 @@ public:
 	[[nodiscard]] auto scales_to_monitor() const -> bool;
 	[[nodiscard]] auto should_close() const -> bool;
 
+	[[nodiscard]] auto raw() const -> GLFWwindow*;
+
 private:
 	GLFWwindow* _window;
 	WindowEventHandler* _event_handler;
@@ -124,5 +120,3 @@ private:
 };
 
 } // namespace void_engine::display::window
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_WINDOW_HPP

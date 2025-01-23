@@ -1,28 +1,27 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_ENUMS_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_ENUMS_HPP
+export module void_engine.display.window:input.mouse.enums;
 
-#include <cstdint>
+import std;
 
-namespace void_engine::display::window::input::mouse {
+export namespace void_engine::display::window::input::mouse {
 
-enum class Button : uint8_t {
+enum class Button : std::uint8_t {
 	left = 0,
 	right = 1,
 	middle = 2,
 };
 
-enum class ButtonAction : uint8_t {
+enum class ButtonAction : std::uint8_t {
 	release = 0,
 	press = 1,
 };
 
-enum class Mode : uint32_t {
+enum class Mode : std::uint32_t {
 	normal = 0x00034001,
 	hidden = 0x00034002,
 	disabled = 0x00034003,
 };
 
-enum class Shape : uint32_t {
+enum class Shape : std::uint32_t {
 	arrow = 0x00036001,
 	ibeam = 0x00036002,
 	crosshair = 0x00036003,
@@ -36,5 +35,3 @@ enum class Shape : uint32_t {
 };
 
 } // namespace void_engine::display::window::input::mouse
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_ENUMS_HPP

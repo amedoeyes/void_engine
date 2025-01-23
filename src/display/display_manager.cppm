@@ -1,6 +1,5 @@
 module;
 
-#include "void_engine/display/monitor/monitor_manager.hpp"
 #include "void_engine/utility/logger.hpp"
 
 #include <GLFW/glfw3.h>
@@ -10,7 +9,8 @@ export module void_engine.display.display_manager;
 
 import std;
 import glm;
-import void_engine.window.window_manager;
+import void_engine.display.window;
+import void_engine.display.monitor;
 
 export namespace void_engine::display {
 

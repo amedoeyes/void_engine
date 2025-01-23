@@ -1,11 +1,10 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP
+export module void_engine.display.window:input.keyboard.enums;
 
-#include <cstdint>
+import std;
 
-namespace void_engine::display::window::input::keyboard {
+export namespace void_engine::display::window::input::keyboard {
 
-enum class Key : uint16_t {
+enum class Key : std::uint16_t {
 	none = 0,
 	space = 32,
 	apostrophe = 39,
@@ -97,13 +96,13 @@ enum class Key : uint16_t {
 	menu = 348
 };
 
-enum class KeyAction : uint8_t {
+enum class KeyAction : std::uint8_t {
 	release = 0,
 	press = 1,
 	repeat = 2,
 };
 
-enum class KeyMod : uint8_t {
+enum class KeyMod : std::uint8_t {
 	shift = 0x0001,
 	control = 0x0002,
 	alt = 0x0004,
@@ -113,5 +112,3 @@ enum class KeyMod : uint8_t {
 };
 
 } // namespace void_engine::display::window::input::keyboard
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_KEYBOARD_ENUMS_HPP

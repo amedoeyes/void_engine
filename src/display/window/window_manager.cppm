@@ -1,12 +1,11 @@
 module;
 
-#include "void_engine/display/window/hints.hpp"
-#include "void_engine/display/window/window.hpp"
 #include "void_engine/utility/string_hash.hpp"
 
-#include <GLFW/glfw3.h>
+export module void_engine.display.window:window_manager;
 
-export module void_engine.window.window_manager;
+import :window;
+import :window_hints;
 
 import std;
 import glm;
@@ -20,73 +19,36 @@ public:
 	auto operator=(const WindowManager&) -> WindowManager& = default;
 	auto operator=(WindowManager&&) -> WindowManager& = default;
 	WindowManager() = default;
-	~WindowManager() {
-		for (const auto& [_, window] : _windows) {
-			delete window;
-		}
-	}
+	~WindowManager();
 
-	void update() {
-		glfwPollEvents();
-		for (const auto& [_, window] : _windows) {
-			window->update();
-		}
-	}
+	void update();
 
 	auto create(
 		std::string_view name, std::string_view title, const glm::ivec2& size,
 		const monitor::Monitor& monitor, const Window& share, const Hints& hints = {}
-	) -> Window& {
-		auto [it, sucess] = _windows.emplace(name, new Window(title, size, monitor, share, hints));
-		assert(sucess && "Window already exists");
-		return *it->second;
-	}
-
+	) -> Window&;
 	auto create(
 		std::string_view name, std::string_view title, const glm::ivec2& size,
 		const monitor::Monitor& monitor, const Hints& hints = {}
-	) -> Window& {
-		auto [it, sucess] = _windows.emplace(name, new Window(title, size, monitor, hints));
-		assert(sucess && "Window already exists");
-		return *it->second;
-	}
-
+	) -> Window&;
 	auto create(
 		std::string_view name, std::string_view title, const glm::ivec2& size, const Window& share,
 		const Hints& hints = {}
-	) -> Window& {
-		auto [it, sucess] = _windows.emplace(name, new Window(title, size, share, hints));
-		assert(sucess && "Window already exists");
-		return *it->second;
-	}
-
+	) -> Window&;
 	auto create(
 		std::string_view name, std::string_view title, const glm::ivec2& size, const Hints& hints = {}
-	) -> Window& {
-		auto [it, sucess] = _windows.emplace(name, new Window(title, size, hints));
-		assert(sucess && "Window already exists");
-		return *it->second;
-	}
-
-	void destroy(std::string_view name) {
-		const auto it = _windows.find(name);
-		assert(it != _windows.end() && "Window does not exist");
-		delete it->second;
-		_windows.erase(it);
-	}
-
-	[[nodiscard]] auto get(std::string_view name) -> Window& {
-		auto it = _windows.find(name);
-		assert(it != _windows.end() && "Window does not exist");
-		return *it->second;
-	}
-
-	[[nodiscard]] auto get_all() -> std::vector<Window*> {
-		return std::ranges::to<std::vector<Window*>>(_windows | std::views::values);
-	}
+	) -> Window&;
+	void destroy(std::string_view name);
+	[[nodiscard]] auto get(std::string_view name) -> Window&;
+	[[nodiscard]] auto get_all() -> std::vector<Window*>;
 
 private:
 	std::unordered_map<std::string, Window*, utility::string_hash, std::equal_to<>> _windows;
+
+	auto create_window(
+		std::string_view title, const glm::ivec2& size, const monitor::Monitor* monitor,
+		const Window* share, const Hints& hints
+	) -> Window*;
 };
 
 } // namespace void_engine::display::window

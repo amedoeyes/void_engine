@@ -1,20 +1,14 @@
-#include "void_engine/display/window/input/mouse/mouse.hpp"
+module;
 
-#include "void_engine/display/window/event/mouse_button_event.hpp"
-#include "void_engine/display/window/input/mouse/enums.hpp"
-#include "void_engine/display/window/event/mouse_position_event.hpp"
-#include "void_engine/display/window/event/mouse_scroll_event.hpp"
-#include "void_engine/display/window/window.hpp"
-#include "void_engine/display/window/window_event_handler.hpp"
 #include "void_engine/resource/image/image.hpp"
 
 #include <GLFW/glfw3.h>
-#include <bit>
-#include <cassert>
-#include <cstddef>
-#include <filesystem>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_int2.hpp>
+
+module void_engine.display.window;
+import :input.mouse;
+
+import std;
+import glm;
 
 namespace void_engine::display::window::input::mouse {
 
@@ -64,11 +58,11 @@ void Mouse::set_scroll(const glm::vec2& scroll) {
 }
 
 void Mouse::set_mode(Mode mode) const {
-	glfwSetInputMode(_window->_window, GLFW_CURSOR, static_cast<int>(mode));
+	glfwSetInputMode(_window->raw(), GLFW_CURSOR, static_cast<int>(mode));
 }
 
 void Mouse::set_raw_motion(bool enabled) const {
-	glfwSetInputMode(_window->_window, GLFW_RAW_MOUSE_MOTION, static_cast<int>(enabled));
+	glfwSetInputMode(_window->raw(), GLFW_RAW_MOUSE_MOTION, static_cast<int>(enabled));
 }
 
 void Mouse::set_shape(Shape shape) {
@@ -77,7 +71,7 @@ void Mouse::set_shape(Shape shape) {
 	}
 	_cursor = glfwCreateStandardCursor(static_cast<int>(shape));
 	assert(_cursor != nullptr && "Failed to create cursor");
-	glfwSetCursor(_window->_window, _cursor);
+	glfwSetCursor(_window->raw(), _cursor);
 }
 
 void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_spot) {
@@ -94,7 +88,7 @@ void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_sp
 	_cursor =
 		glfwCreateCursor(&glfw_image, static_cast<int>(hot_spot.x), static_cast<int>(hot_spot.y));
 	assert(_cursor != nullptr && "Failed to create cursor");
-	glfwSetCursor(_window->_window, _cursor);
+	glfwSetCursor(_window->raw(), _cursor);
 }
 
 auto Mouse::get_position() const -> glm::vec2 {

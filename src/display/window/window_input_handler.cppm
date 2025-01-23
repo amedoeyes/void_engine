@@ -1,12 +1,10 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_WINDOW_INPUT_HANDLER_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_WINDOW_INPUT_HANDLER_HPP
+export module void_engine.display.window:window_input_handler;
 
-#include "void_engine/display/window/input/keyboard/keyboard.hpp"
-#include "void_engine/display/window/input/mouse/mouse.hpp"
+import :window;
+import :input.mouse;
+import :input.keyboard;
 
-namespace void_engine::display::window {
-
-class Window;
+export namespace void_engine::display::window {
 
 class WindowInputHandler {
 public:
@@ -29,5 +27,3 @@ private:
 };
 
 } // namespace void_engine::display::window
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_WINDOW_INPUT_HANDLER_HPP

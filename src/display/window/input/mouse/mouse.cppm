@@ -1,22 +1,20 @@
-#ifndef VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
-#define VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
+module;
 
-#include "void_engine/display/window/input/mouse/enums.hpp"
 #include "void_engine/utility/event.hpp"
 #include "void_engine/utility/state.hpp"
 
-#include <array>
-#include <filesystem>
-#include <glm/ext/vector_float2.hpp>
+#include <GLFW/glfw3.h>
 
-struct GLFWwindow;
-struct GLFWcursor;
+export module void_engine.display.window:input.mouse;
 
-namespace void_engine::display::window {
+export import :input.mouse.enums;
 
-class Window;
+import :window;
 
-namespace input::mouse {
+import std;
+import glm;
+
+export namespace void_engine::display::window::input::mouse {
 
 class Mouse {
 public:
@@ -57,8 +55,4 @@ private:
 	utility::event::EventListenerID _mouse_scroll_listener;
 };
 
-} // namespace input::mouse
-
-} // namespace void_engine::display::window
-
-#endif // !VOID_ENGINE_DISPLAY_WINDOW_INPUT_MOUSE_HPP
+} // namespace void_engine::display::window::input::mouse
