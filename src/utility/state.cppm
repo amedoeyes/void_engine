@@ -1,9 +1,8 @@
-#ifndef VOID_ENGINE_UTILITY_STATE_HPP
-#define VOID_ENGINE_UTILITY_STATE_HPP
+export module void_engine.utility.state;
 
-#include <algorithm>
+import std;
 
-namespace void_engine::utility {
+export namespace void_engine::utility {
 
 template <typename T>
 class State {
@@ -93,5 +92,3 @@ private:
 };
 
 } // namespace void_engine::utility
-
-#endif // !VOID_ENGINE_UTILITY_STATE_HPP

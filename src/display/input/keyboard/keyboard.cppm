@@ -1,7 +1,3 @@
-module;
-
-#include "void_engine/utility/state.hpp"
-
 export module void_engine.display:input.keyboard;
 
 import :input.keyboard.enums;
@@ -9,6 +5,7 @@ import :window.window;
 
 import std;
 import void_engine.utility.event;
+import void_engine.utility.state;
 
 export namespace void_engine::display::input::keyboard {
 
