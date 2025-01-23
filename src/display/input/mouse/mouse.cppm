@@ -1,6 +1,5 @@
 module;
 
-#include "void_engine/utility/event.hpp"
 #include "void_engine/utility/state.hpp"
 
 #include <GLFW/glfw3.h>
@@ -12,6 +11,7 @@ import :window.window;
 
 import std;
 import glm;
+import void_engine.utility.event;
 
 export namespace void_engine::display::input::mouse {
 

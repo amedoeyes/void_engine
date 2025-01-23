@@ -1,11 +1,9 @@
-module;
-
-#include "void_engine/utility/event.hpp"
-
 export module void_engine.display:window.window_event_handler;
 
 import :window.window;
 import :window.window_events;
+
+import void_engine.utility.event;
 
 export namespace void_engine::display::window {
 

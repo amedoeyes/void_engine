@@ -1,20 +1,14 @@
-#ifndef VOID_ENGINE_UTILITY_EVENT_HPP
-#define VOID_ENGINE_UTILITY_EVENT_HPP
+module;
 
-#include <algorithm>
-#include <array>
 #include <cassert>
-#include <cstdint>
-#include <functional>
-#include <queue>
-#include <type_traits>
-#include <utility>
-#include <variant>
-#include <vector>
 
-namespace void_engine::utility::event {
+export module void_engine.utility.event;
 
-using EventListenerID = uint16_t;
+import std;
+
+export namespace void_engine::utility::event {
+
+using EventListenerID = std::uint16_t;
 
 template <typename... Args>
 class EventManager {
@@ -24,7 +18,7 @@ public:
 	using Event = std::variant<Args...>;
 	using EventListeners = std::vector<std::pair<EventListenerID, std::function<void(const Event&)>>>;
 	using Events = std::array<EventListeners, std::variant_size_v<Event>>;
-	using EventIndex = uint16_t;
+	using EventIndex = std::uint16_t;
 	using EventQueue = std::queue<std::pair<EventIndex, Event>>;
 
 	EventManager(const EventManager&) = default;
@@ -97,5 +91,3 @@ private:
 };
 
 } // namespace void_engine::utility::event
-
-#endif // !VOID_ENGINE_UTILITY_EVENT_HPP
