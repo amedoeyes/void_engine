@@ -1,16 +1,8 @@
-#ifndef VOID_ENGINE_UTILITY_LOGGER_HPP
-#define VOID_ENGINE_UTILITY_LOGGER_HPP
+export module void_engine.utility.logger;
 
-#include <chrono>
-#include <cstdint>
-#include <format>
-#include <iostream>
-#include <mutex>
-#include <string>
-#include <string_view>
-#include <utility>
+import std;
 
-namespace void_engine::utility::logger {
+export namespace void_engine::utility::logger {
 
 enum class Level : std::uint8_t {
 	none,
@@ -19,6 +11,10 @@ enum class Level : std::uint8_t {
 	warning,
 	error,
 };
+
+} // namespace void_engine::utility::logger
+
+namespace void_engine::utility::logger {
 
 struct Context {
 	Level level = Level::info;
@@ -30,6 +26,10 @@ static inline auto get_context() -> Context& {
 	static Context context;
 	return context;
 }
+
+} // namespace void_engine::utility::logger
+
+export namespace void_engine::utility::logger {
 
 inline void set_level(Level level) {
 	static Context& context = get_context();
@@ -86,5 +86,3 @@ void error(std::string_view fmt, Args&&... args) {
 }
 
 } // namespace void_engine::utility::logger
-
-#endif // !VOID_ENGINE_UTILITY_LOGGER_HPP

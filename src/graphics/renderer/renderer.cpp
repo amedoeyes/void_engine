@@ -1,9 +1,6 @@
 module;
 
 #include "embed.hpp"
-#include "void_engine/utility/bit_mask.hpp"
-#include "void_engine/utility/logger.hpp"
-#include "void_engine/utility/transform.hpp"
 
 #include <GLFW/glfw3.h>
 #include <glad/glad.h>
@@ -20,6 +17,8 @@ import :buffer.enums;
 import std;
 import glm;
 import void_engine.resources;
+import void_engine.utility.transform;
+import void_engine.utility.logger;
 
 namespace void_engine::graphics::renderer {
 

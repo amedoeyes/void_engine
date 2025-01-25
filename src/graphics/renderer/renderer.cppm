@@ -1,7 +1,6 @@
 module;
 
-#include "void_engine/utility/bit_mask.hpp"
-#include "void_engine/utility/transform.hpp"
+#include <glm/ext/matrix_clip_space.hpp>
 
 export module void_engine.graphics:renderer.renderer;
 
@@ -14,6 +13,8 @@ import :buffer.uniform;
 import std;
 import glm;
 import void_engine.resources;
+import void_engine.utility.bit_mask;
+import void_engine.utility.transform;
 
 export namespace void_engine::graphics::renderer {
 

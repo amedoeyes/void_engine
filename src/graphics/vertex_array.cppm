@@ -1,12 +1,10 @@
-module;
-
-#include "void_engine/utility/get_gl_type.hpp"
-
 export module void_engine.graphics:vertex_array;
 
 import :buffer;
 import :buffer.array;
 import :buffer.element;
+
+import void_engine.utility.get_gl_type;
 
 export namespace void_engine::graphics {
 

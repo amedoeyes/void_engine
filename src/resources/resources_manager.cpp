@@ -1,11 +1,8 @@
-module;
-
-#include "void_engine/utility/get_exec_path.hpp"
-
 module void_engine.resources;
 import :resources_manager;
 
 import std;
+import void_engine.utility.get_exec_path;
 
 namespace void_engine::resource {
 

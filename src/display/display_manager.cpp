@@ -1,18 +1,17 @@
 module;
 
-#include "void_engine/utility/logger.hpp"
-
 #include <GLFW/glfw3.h>
 #include <cassert>
 
 module void_engine.display;
-
 import :display_manager;
+
+import :window.window_manager;
+import :monitor.monitor_manager;
 
 import std;
 import glm;
-import :window.window_manager;
-import :monitor.monitor_manager;
+import void_engine.utility.logger;
 
 namespace void_engine::display {
 

@@ -1,6 +1,8 @@
-#include "void_engine/utility/get_gl_type.hpp"
+module;
 
 #include <glad/glad.h>
+
+module void_engine.utility.get_gl_type;
 
 namespace void_engine::utility {
 

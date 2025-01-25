@@ -1,7 +1,5 @@
 module;
 
-#include "void_engine/utility/bit_mask.hpp"
-
 #include <GLFW/glfw3.h>
 
 module void_engine.display;
@@ -13,6 +11,7 @@ import :window.window_events;
 
 import std;
 import glm;
+import void_engine.utility.bit_mask;
 
 namespace void_engine::display::window {
 

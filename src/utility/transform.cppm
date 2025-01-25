@@ -1,12 +1,8 @@
-#ifndef VOID_ENGINE_UTILITY_TRANSFORM_HPP
-#define VOID_ENGINE_UTILITY_TRANSFORM_HPP
+export module void_engine.utility.transform;
 
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/quaternion_float.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/fwd.hpp>
+import glm;
 
-namespace void_engine::utility {
+export namespace void_engine::utility {
 
 class Transform {
 public:
@@ -42,5 +38,3 @@ private:
 };
 
 } // namespace void_engine::utility
-
-#endif // VOID_ENGINE_UTILITY_TRANSFORM_HPP

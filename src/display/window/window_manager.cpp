@@ -1,7 +1,5 @@
 module;
 
-#include "void_engine/utility/string_hash.hpp"
-
 #include <GLFW/glfw3.h>
 #include <cassert>
 

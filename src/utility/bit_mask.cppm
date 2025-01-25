@@ -1,9 +1,8 @@
-#ifndef VOID_ENGINE_UTILITY_BIT_MASK_HPP
-#define VOID_ENGINE_UTILITY_BIT_MASK_HPP
+export module void_engine.utility.bit_mask;
 
-#include <type_traits>
+import std;
 
-namespace void_engine::utility {
+export namespace void_engine::utility {
 
 template <typename T>
 class BitMask {
@@ -131,5 +130,3 @@ private:
 };
 
 } // namespace void_engine::utility
-
-#endif // !VOID_ENGINE_UTILITY_BIT_MASK_HPP

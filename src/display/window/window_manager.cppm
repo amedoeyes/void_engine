@@ -1,7 +1,3 @@
-module;
-
-#include "void_engine/utility/string_hash.hpp"
-
 export module void_engine.display:window.window_manager;
 
 import :window.window;
@@ -9,6 +5,7 @@ import :window.window_hints;
 
 import std;
 import glm;
+import void_engine.utility.string_hash;
 
 export namespace void_engine::display::window {
 

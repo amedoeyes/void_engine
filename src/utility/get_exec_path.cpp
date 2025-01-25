@@ -1,7 +1,4 @@
-#include "void_engine/utility/get_exec_path.hpp"
-
-#include <array>
-#include <filesystem>
+module;
 
 #if defined(_WIN32)
 #include <windows.h>
@@ -13,6 +10,10 @@
 #include <sys/types.h>
 #include <unistd.h>
 #endif
+
+module void_engine.utility.get_exec_path;
+
+import std;
 
 namespace void_engine::utility {
 

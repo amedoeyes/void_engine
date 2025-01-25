@@ -10,39 +10,19 @@ class Timer {
 	using Duration = std::chrono::duration<float>;
 
 public:
-	Timer() : _start(Clock::now()), _end(Clock::now()) {
-	}
+	Timer(const Timer&) = default;
+	Timer(Timer&&) = default;
+	auto operator=(const Timer&) -> Timer& = default;
+	auto operator=(Timer&&) -> Timer& = default;
+	Timer();
+	~Timer() = default;
 
-	void reset() {
-		_start = Clock::now();
-		_end = Clock::now();
-		_is_running = false;
-	}
+	void reset();
+	void start();
+	void stop();
 
-	void start() {
-		if (!_is_running) {
-			_start = Clock::now() - (_end - _start);
-			_is_running = true;
-		}
-	}
-
-	void stop() {
-		if (_is_running) {
-			_end = Clock::now();
-			_is_running = false;
-		}
-	}
-
-	[[nodiscard]] auto get_elapsed() const -> float {
-		if (_is_running) {
-			return Duration(Clock::now() - _start).count();
-		}
-		return Duration(_end - _start).count();
-	}
-
-	[[nodiscard]] auto is_running() const -> bool {
-		return _is_running;
-	}
+	[[nodiscard]] auto get_elapsed() const -> float;
+	[[nodiscard]] auto is_running() const -> bool;
 
 private:
 	TimePoint _start;

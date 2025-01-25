@@ -1,7 +1,3 @@
-module;
-
-#include "void_engine/utility/bit_mask.hpp"
-
 export module void_engine.display:window.window_events;
 
 import :input.keyboard.enums;
@@ -9,6 +5,7 @@ import :input.mouse.enums;
 
 import std;
 import glm;
+import void_engine.utility.bit_mask;
 
 export namespace void_engine::display::window::event {
 
