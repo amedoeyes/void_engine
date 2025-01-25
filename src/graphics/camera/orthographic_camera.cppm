@@ -1,12 +1,11 @@
-#ifndef VOID_ENGINE_GRAPHICS_CAMERA_ORTHOGRAPHIC_CAMERA_HPP
-#define VOID_ENGINE_GRAPHICS_CAMERA_ORTHOGRAPHIC_CAMERA_HPP
+export module void_engine.graphics:camera.orthographic;
 
-#include "void_engine/graphics/camera/camera.hpp"
-#include "void_engine/graphics/camera/enums.hpp"
+import :camera;
+import :camera.enums;
 
-#include <glm/ext/vector_float2.hpp>
+import std;
 
-namespace void_engine::graphics::camera {
+export namespace void_engine::graphics::camera {
 
 class OrthographicCamera : public Camera {
 public:
@@ -37,5 +36,3 @@ protected:
 };
 
 } // namespace void_engine::graphics::camera
-
-#endif // !VOID_ENGINE_GRAPHICS_CAMERA_ORTHOGRAPHIC_CAMERA_HPP

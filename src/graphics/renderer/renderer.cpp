@@ -3,8 +3,6 @@ module;
 #include "embed.hpp"
 #include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
-#include "void_engine/graphics/camera/camera.hpp"
-#include "void_engine/graphics/camera/perspective_camera.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/text.hpp"
 #include "void_engine/resource/resource_manager.hpp"
@@ -23,6 +21,9 @@ module void_engine.graphics;
 
 import :renderer.renderer;
 import :renderer.enums;
+import :camera;
+import :camera.perspective;
+import :camera.orthographic;
 
 import std;
 import glm;

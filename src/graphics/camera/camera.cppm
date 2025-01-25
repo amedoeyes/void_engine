@@ -1,14 +1,10 @@
-#ifndef VOID_ENGINE_GRAPHICS_CAMERA_CAMERA_HPP
-#define VOID_ENGINE_GRAPHICS_CAMERA_CAMERA_HPP
+export module void_engine.graphics:camera;
 
-#include "void_engine/graphics/camera/enums.hpp"
+import :camera.enums;
 
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/quaternion_float.hpp>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
+import glm;
 
-namespace void_engine::graphics::camera {
+export namespace void_engine::graphics::camera {
 
 class Camera {
 public:
@@ -56,5 +52,3 @@ protected:
 };
 
 } // namespace void_engine::graphics::camera
-
-#endif // !VOID_ENGINE_GRAPHICS_CAMERA_CAMERA_HPP

@@ -1,13 +1,15 @@
-#ifndef VOID_ENGINE_GRAPHICS_CAMERA_PERSPECTIVE_CAMERA_HPP
-#define VOID_ENGINE_GRAPHICS_CAMERA_PERSPECTIVE_CAMERA_HPP
+module;
 
-#include "void_engine/graphics/camera/camera.hpp"
-#include "void_engine/graphics/camera/enums.hpp"
-
-#include <glm/ext/vector_float2.hpp>
 #include <glm/gtc/constants.hpp>
 
-namespace void_engine::graphics::camera {
+export module void_engine.graphics:camera.perspective;
+
+import :camera;
+import :camera.enums;
+
+import glm;
+
+export namespace void_engine::graphics::camera {
 
 class PerspectiveCamera : public Camera {
 public:
@@ -27,5 +29,3 @@ protected:
 };
 
 } // namespace void_engine::graphics::camera
-
-#endif // !VOID_ENGINE_GRAPHICS_CAMERA_PERSPECTIVE_CAMERA_HPP
