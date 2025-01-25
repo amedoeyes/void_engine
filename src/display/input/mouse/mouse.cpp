@@ -1,8 +1,7 @@
 module;
 
-#include "void_engine/resource/image/image.hpp"
-
 #include <GLFW/glfw3.h>
+#include <cassert>
 
 module void_engine.display;
 
@@ -11,6 +10,7 @@ import :input.mouse.enums;
 
 import std;
 import glm;
+import void_engine.resources;
 
 namespace void_engine::display::input::mouse {
 

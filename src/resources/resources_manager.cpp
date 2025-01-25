@@ -1,10 +1,11 @@
-#include "void_engine/resource/font/font_manager.hpp"
-#include "void_engine/resource/resource_manager.hpp"
-#include "void_engine/resource/shader/shader_manager.hpp"
-#include "void_engine/resource/texture/texture_manager.hpp"
+module;
+
 #include "void_engine/utility/get_exec_path.hpp"
 
-#include <filesystem>
+module void_engine.resources;
+import :resources_manager;
+
+import std;
 
 namespace void_engine::resource {
 

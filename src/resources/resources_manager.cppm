@@ -1,13 +1,12 @@
-#ifndef VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
-#define VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP
+export module void_engine.resources:resources_manager;
 
-#include "void_engine/resource/font/font_manager.hpp"
-#include "void_engine/resource/shader/shader_manager.hpp"
-#include "void_engine/resource/texture/texture_manager.hpp"
+import :font.manager;
+import :shader.manager;
+import :texture.manager;
 
-#include <filesystem>
+import std;
 
-namespace void_engine::resource {
+export namespace void_engine::resource {
 
 class ResourceManager {
 public:
@@ -30,5 +29,3 @@ private:
 };
 
 } // namespace void_engine::resource
-
-#endif // !VOID_ENGINE_RESOURCE_RESOURCE_MANAGER_HPP

@@ -1,15 +1,11 @@
-#ifndef VOID_ENGINE_RESOURCE_TEXTURE_HPP
-#define VOID_ENGINE_RESOURCE_TEXTURE_HPP
+export module void_engine.resources:texture;
 
-#include "void_engine/resource/texture/enums.hpp"
+import :texture.enums;
 
-#include <cstddef>
-#include <glm/ext/vector_float4.hpp>
-#include <glm/ext/vector_int2.hpp>
-#include <glm/ext/vector_int3.hpp>
-#include <vector>
+import std;
+import glm;
 
-namespace void_engine::resource::texture {
+export namespace void_engine::resource::texture {
 
 class Texture {
 public:
@@ -83,5 +79,3 @@ private:
 };
 
 } // namespace void_engine::resource::texture
-
-#endif // !VOID_ENGINE_RESOURCE_TEXTURE_HPP

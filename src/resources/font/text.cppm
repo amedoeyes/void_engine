@@ -1,13 +1,11 @@
-#ifndef VOID_ENGINE_RESOURCE_FONT_TEXT_HPP
-#define VOID_ENGINE_RESOURCE_FONT_TEXT_HPP
+export module void_engine.resources:font.text;
 
-#include "void_engine/resource/font/font.hpp"
+import :font;
 
-#include <glm/ext/vector_float2.hpp>
-#include <string>
-#include <string_view>
+import std;
+import glm;
 
-namespace void_engine::resource::font {
+export namespace void_engine::resource::font {
 
 class Text {
 public:
@@ -38,5 +36,3 @@ private:
 };
 
 } // namespace void_engine::resource::font
-
-#endif // VOID_ENGINE_RESOURCE_FONT_TEXT_HPP

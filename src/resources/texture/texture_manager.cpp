@@ -1,15 +1,15 @@
-#include "void_engine/resource/texture/texture_manager.hpp"
-
-#include "void_engine/resource/image/enums.hpp"
-#include "void_engine/resource/image/image.hpp"
-#include "void_engine/resource/texture/enums.hpp"
-#include "void_engine/resource/texture/texture.hpp"
+module;
 
 #include <cassert>
-#include <filesystem>
-#include <string_view>
-#include <unordered_map>
-#include <utility>
+
+module void_engine.resources;
+import :texture.manager;
+
+import :image;
+import :image.enums;
+import :texture.enums;
+
+import std;
 
 namespace void_engine::resource::texture {
 

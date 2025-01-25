@@ -1,11 +1,6 @@
 module;
 
 #include "embed.hpp"
-#include "void_engine/resource/font/font.hpp"
-#include "void_engine/resource/font/text.hpp"
-#include "void_engine/resource/resource_manager.hpp"
-#include "void_engine/resource/shader/enums.hpp"
-#include "void_engine/resource/shader/shader.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/logger.hpp"
 #include "void_engine/utility/transform.hpp"
@@ -24,6 +19,7 @@ import :buffer.enums;
 
 import std;
 import glm;
+import void_engine.resources;
 
 namespace void_engine::graphics::renderer {
 

@@ -1,14 +1,10 @@
-#ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP
-#define VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP
+export module void_engine.resources:shader.manager;
 
-#include "void_engine/resource/shader/shader.hpp"
+import :shader;
 
-#include <filesystem>
-#include <string>
-#include <string_view>
-#include <unordered_map>
+import std;
 
-namespace void_engine::resource::shader {
+export namespace void_engine::resource::shader {
 
 class ShaderManager {
 public:
@@ -32,5 +28,3 @@ private:
 };
 
 } // namespace void_engine::resource::shader
-
-#endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_MANAGER_HPP

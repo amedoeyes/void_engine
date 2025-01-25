@@ -1,22 +1,16 @@
-#include "void_engine/resource/image/image.hpp"
-
-#include "void_engine/resource/image/enums.hpp"
-
-#include <cassert>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
+module;
 
 #define STB_IMAGE_IMPLEMENTATION
 #define STB_IMAGE_WRITE_IMPLEMENTATION
 
-#include <bit>
-#include <cstddef>
-#include <cstdio>
-#include <cstring>
-#include <filesystem>
 #include <stb_image.h>
 #include <stb_image_write.h>
-#include <vector>
+
+module void_engine.resources;
+import :image;
+
+import std;
+import glm;
 
 namespace void_engine::resource::image {
 

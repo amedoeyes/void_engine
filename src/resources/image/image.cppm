@@ -1,15 +1,11 @@
-#ifndef VOID_ENGINE_RESOURCE_IMAGE_IMAGE_HPP
-#define VOID_ENGINE_RESOURCE_IMAGE_IMAGE_HPP
+export module void_engine.resources:image;
 
-#include "void_engine/resource/image/enums.hpp"
+import :image.enums;
 
-#include <cstddef>
-#include <filesystem>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
-#include <vector>
+import std;
+import glm;
 
-namespace void_engine::resource::image {
+export namespace void_engine::resource::image {
 
 class Image {
 public:
@@ -35,5 +31,3 @@ private:
 };
 
 } // namespace void_engine::resource::image
-
-#endif // !VOID_ENGINE_RESOURCE_IMAGE_IMAGE_HPP

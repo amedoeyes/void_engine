@@ -1,7 +1,5 @@
 module;
 
-#include "void_engine/resource/image/image.hpp"
-
 #include <GLFW/glfw3.h>
 #include <cassert>
 
@@ -13,6 +11,7 @@ import :window.window_hints;
 
 import std;
 import glm;
+import void_engine.resources;
 
 namespace void_engine::display::window {
 

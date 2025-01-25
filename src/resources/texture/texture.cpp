@@ -1,14 +1,14 @@
-#include "void_engine/resource/texture/texture.hpp"
-
-#include "void_engine/resource/texture/enums.hpp"
+module;
 
 #include <cassert>
-#include <cstddef>
 #include <glad/glad.h>
-#include <glm/ext/vector_float4.hpp>
-#include <glm/ext/vector_int2.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <vector>
+
+module void_engine.resources;
+import :texture;
+
+import std;
+import glm;
 
 namespace void_engine::resource::texture {
 

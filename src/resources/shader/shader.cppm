@@ -1,22 +1,12 @@
-#ifndef VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
-#define VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP
+export module void_engine.resources:shader;
 
-#include "void_engine/resource/shader/enums.hpp"
-#include "void_engine/resource/shader/shader_source.hpp"
+import :shader.enums;
+import :shader.source;
 
-#include <cstddef>
-#include <filesystem>
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/ext/vector_float4.hpp>
-#include <span>
-#include <string>
-#include <string_view>
-#include <unordered_map>
-#include <vector>
+import std;
+import glm;
 
-namespace void_engine::resource::shader {
+export namespace void_engine::resource::shader {
 
 class Shader {
 public:
@@ -65,5 +55,3 @@ private:
 };
 
 } // namespace void_engine::resource::shader
-
-#endif // !VOID_ENGINE_RESOURCE_SHADER_SHADER_HPP

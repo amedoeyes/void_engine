@@ -1,26 +1,17 @@
-#include "void_engine/resource/font/font.hpp"
+module;
 
-#include "void_engine/resource/font/glyph.hpp"
-#include "void_engine/resource/texture/enums.hpp"
-
-#include <algorithm>
-#include <bit>
 #include <cassert>
-#include <cstddef>
-#include <cstdint>
-#include <filesystem>
 #include <freetype/freetype.h>
 #include <glad/glad.h>
-#include <glm/common.hpp>
-#include <glm/ext/vector_uint2.hpp>
 #include <hb-ft.h>
 #include <hb.h>
-#include <iterator>
-#include <span>
-#include <string>
-#include <string_view>
-#include <utility>
-#include <vector>
+
+module void_engine.resources;
+
+import :font;
+
+import glm;
+import std;
 
 namespace void_engine::resource::font {
 

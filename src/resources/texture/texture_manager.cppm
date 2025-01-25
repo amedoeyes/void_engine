@@ -1,14 +1,10 @@
-#ifndef VOID_ENGINE_RESOURCE_TEXTURE_MANAGER_HPP
-#define VOID_ENGINE_RESOURCE_TEXTURE_MANAGER_HPP
+export module void_engine.resources:texture.manager;
 
-#include "void_engine/resource/texture/texture.hpp"
+import :texture;
 
-#include <filesystem>
-#include <string>
-#include <string_view>
-#include <unordered_map>
+import std;
 
-namespace void_engine::resource::texture {
+export namespace void_engine::resource::texture {
 
 class TextureManager {
 public:
@@ -32,5 +28,3 @@ private:
 };
 
 } // namespace void_engine::resource::texture
-
-#endif // !VOID_ENGINE_RESOURCE_TEXTURE_MANAGER_HPP

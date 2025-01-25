@@ -1,7 +1,5 @@
 module;
 
-#include "void_engine/resource/font/text.hpp"
-#include "void_engine/resource/resource_manager.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/transform.hpp"
 
@@ -15,6 +13,7 @@ import :buffer.uniform;
 
 import std;
 import glm;
+import void_engine.resources;
 
 export namespace void_engine::graphics::renderer {
 

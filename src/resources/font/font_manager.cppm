@@ -1,20 +1,13 @@
-#ifndef VOID_ENGINE_RESOURCE_FONT_FONT_MANAGER_HPP
-#define VOID_ENGINE_RESOURCE_FONT_FONT_MANAGER_HPP
+export module void_engine.resources:font.manager;
 
-#include "void_engine/resource/font/font.hpp"
+import :font;
 
-#include <cassert>
-#include <cstddef>
-#include <filesystem>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
-#include <string>
-#include <string_view>
-#include <unordered_map>
+import std;
+import glm;
 
 using FT_Library = struct FT_LibraryRec_*;
 
-namespace void_engine::resource::font {
+export namespace void_engine::resource::font {
 
 class FontManager {
 public:
@@ -44,5 +37,3 @@ private:
 };
 
 } // namespace void_engine::resource::font
-
-#endif // VOID_ENGINE_RESOURCE_FONT_FONT_MANAGER_HPP

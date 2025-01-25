@@ -1,14 +1,14 @@
-#include "void_engine/resource/font/font_manager.hpp"
-
-#include "void_engine/resource/font/font.hpp"
+module;
 
 #include <cassert>
-#include <cstddef>
 #include <freetype/freetype.h>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
-#include <string_view>
-#include <utility>
+
+module void_engine.resources;
+
+import :font.manager;
+
+import std;
+import glm;
 
 namespace void_engine::resource::font {
 

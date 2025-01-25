@@ -1,18 +1,15 @@
-#include "void_engine/resource/font/text.hpp"
+module;
 
-#include "void_engine/resource/font/font.hpp"
-#include "void_engine/resource/font/glyph.hpp"
-
-#include <algorithm>
-#include <array>
 #include <cassert>
-#include <codecvt>
-#include <glm/ext/vector_float2.hpp>
-#include <iterator>
-#include <locale>
-#include <string_view>
-#include <utility>
-#include <vector>
+
+module void_engine.resources;
+import :font.text;
+
+import :font;
+import :font.glyph;
+
+import std;
+import glm;
 
 namespace void_engine::resource::font {
 

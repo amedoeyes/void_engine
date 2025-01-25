@@ -1,27 +1,17 @@
-#ifndef VOID_ENGINE_RESOURCE_FONT_FONT_HPP
-#define VOID_ENGINE_RESOURCE_FONT_FONT_HPP
+export module void_engine.resources:font;
 
-#include "void_engine/resource/font/glyph.hpp"
-#include "void_engine/resource/texture/enums.hpp"
-#include "void_engine/resource/texture/texture.hpp"
+import :font.glyph;
+import :texture;
+import :texture.enums;
 
-#include <cassert>
-#include <cstddef>
-#include <cstdlib>
-#include <cstring>
-#include <filesystem>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
-#include <string_view>
-#include <unordered_map>
-#include <vector>
+import glm;
+import std;
 
 using FT_Library = struct FT_LibraryRec_*;
 using FT_Face = struct FT_FaceRec_*;
 struct hb_font_t;
 
-namespace void_engine::resource::font {
+export namespace void_engine::resource::font {
 
 class Font {
 public:
@@ -66,5 +56,3 @@ private:
 };
 
 } // namespace void_engine::resource::font
-
-#endif // VOID_ENGINE_RESOURCE_FONT_FONT_HPP
