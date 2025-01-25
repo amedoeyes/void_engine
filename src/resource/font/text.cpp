@@ -1,6 +1,5 @@
 #include "void_engine/resource/font/text.hpp"
 
-#include "void_engine/graphics/buffer/enums.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/glyph.hpp"
 

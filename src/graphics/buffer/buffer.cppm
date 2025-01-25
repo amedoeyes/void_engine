@@ -1,9 +1,8 @@
-#ifndef VOID_ENGINE_GRAPHICS_BUFFER_HPP
-#define VOID_ENGINE_GRAPHICS_BUFFER_HPP
+export module void_engine.graphics:buffer;
 
-#include "void_engine/graphics/buffer/enums.hpp"
+import :buffer.enums;
 
-namespace void_engine::graphics::buffer {
+export namespace void_engine::graphics::buffer {
 
 class Buffer {
 public:
@@ -53,5 +52,3 @@ protected:
 };
 
 } // namespace void_engine::graphics::buffer
-
-#endif // !VOID_ENGINE_GRAPHICS_BUFFER_HPP

@@ -1,12 +1,11 @@
-#ifndef VOID_ENGINE_GRAPHICS_BUFFER_ELEMENT_BUFFER_HPP
-#define VOID_ENGINE_GRAPHICS_BUFFER_ELEMENT_BUFFER_HPP
+export module void_engine.graphics:buffer.element;
 
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/enums.hpp"
+import :buffer;
+import :buffer.enums;
 
-#include <vector>
+import std;
 
-namespace void_engine::graphics::buffer {
+export namespace void_engine::graphics::buffer {
 
 class ElementBuffer final : public Buffer {
 public:
@@ -26,5 +25,3 @@ private:
 };
 
 } // namespace void_engine::graphics::buffer
-
-#endif // !VOID_ENGINE_GRAPHICS_BUFFER_ELEMENT_BUFFER_HPP

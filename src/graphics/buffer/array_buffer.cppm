@@ -1,12 +1,11 @@
-#ifndef VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP
-#define VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP
+export module void_engine.graphics:buffer.array;
 
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/enums.hpp"
+import :buffer;
+import :buffer.enums;
 
-#include <vector>
+import std;
 
-namespace void_engine::graphics::buffer {
+export namespace void_engine::graphics::buffer {
 
 template <typename T>
 class ArrayBuffer final : public Buffer {
@@ -49,5 +48,3 @@ private:
 };
 
 } // namespace void_engine::graphics::buffer
-
-#endif // !VOID_ENGINE_GRAPHICS_BUFFER_ARRAY_BUFFER_HPP

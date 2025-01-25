@@ -1,9 +1,10 @@
-#include "void_engine/graphics/buffer/element_buffer.hpp"
+module void_engine.graphics;
 
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/enums.hpp"
+import :buffer;
+import :buffer.element;
+import :buffer.enums;
 
-#include <vector>
+import std;
 
 namespace void_engine::graphics::buffer {
 

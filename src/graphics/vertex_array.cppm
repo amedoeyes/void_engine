@@ -1,12 +1,14 @@
-#ifndef VOID_ENGINE_GRAPHICS_VERTEX_ARRAY_HPP
-#define VOID_ENGINE_GRAPHICS_VERTEX_ARRAY_HPP
+module;
 
-#include "void_engine/graphics/buffer/array_buffer.hpp"
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/element_buffer.hpp"
 #include "void_engine/utility/get_gl_type.hpp"
 
-namespace void_engine::graphics {
+export module void_engine.graphics:vertex_array;
+
+import :buffer;
+import :buffer.array;
+import :buffer.element;
+
+export namespace void_engine::graphics {
 
 class VertexArray {
 public:
@@ -43,5 +45,3 @@ private:
 };
 
 } // namespace void_engine::graphics
-
-#endif // !VOID_ENGINE_GRAPHICS_VERTEX_ARRAY_VERTEX_ARRAY_HPP

@@ -1,10 +1,14 @@
-#include "void_engine/graphics/vertex_array.hpp"
-
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/element_buffer.hpp"
+module;
 
 #include <cassert>
 #include <glad/glad.h>
+
+module void_engine.graphics;
+
+import :vertex_array;
+
+import :buffer;
+import :buffer.element;
 
 namespace void_engine::graphics {
 

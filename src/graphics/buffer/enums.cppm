@@ -1,10 +1,10 @@
-#ifndef VOID_ENGINE_GRAPHICS_BUFFER_ENUMS_HPP
-#define VOID_ENGINE_GRAPHICS_BUFFER_ENUMS_HPP
+export module void_engine.graphics:buffer.enums;
 
-#include <cstdint>
-namespace void_engine::graphics::buffer {
+import std;
 
-enum class Target : uint16_t {
+export namespace void_engine::graphics::buffer {
+
+enum class Target : std::uint16_t {
 	none = 0,
 	array = 0x8892,
 	atomic_counter = 0x92C0,
@@ -22,7 +22,7 @@ enum class Target : uint16_t {
 	uniform = 0x8A11
 };
 
-enum class Usage : uint16_t {
+enum class Usage : std::uint16_t {
 	none = 0,
 	stream_draw = 0x88E0,
 	stream_read = 0x88E1,
@@ -36,5 +36,3 @@ enum class Usage : uint16_t {
 };
 
 } // namespace void_engine::graphics::buffer
-
-#endif // !VOID_ENGINE_GRAPHICS_BUFFER_ENUMS_HPP

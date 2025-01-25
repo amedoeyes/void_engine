@@ -1,14 +1,10 @@
-module;
-
-#include "void_engine/graphics/buffer/array_buffer.hpp"
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/element_buffer.hpp"
-#include "void_engine/graphics/buffer/enums.hpp"
-#include "void_engine/graphics/vertex_array.hpp"
-
 export module void_engine.graphics:mesh;
 
 import :renderer.enums;
+import :buffer.enums;
+import :buffer.array;
+import :buffer.element;
+import :vertex_array;
 
 import std;
 

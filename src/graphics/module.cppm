@@ -11,3 +11,11 @@ export import :camera;
 export import :camera.enums;
 export import :camera.perspective;
 export import :camera.orthographic;
+
+export import :buffer;
+export import :buffer.enums;
+export import :buffer.array;
+export import :buffer.element;
+export import :buffer.uniform;
+
+export import :vertex_array;

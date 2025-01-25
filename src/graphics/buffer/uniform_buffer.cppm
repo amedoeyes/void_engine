@@ -1,14 +1,12 @@
-#ifndef VOID_ENGINE_GRAPHICS_BUFFER_UNIFORM_BUFFER_HPP
-#define VOID_ENGINE_GRAPHICS_BUFFER_UNIFORM_BUFFER_HPP
+export module void_engine.graphics:buffer.uniform;
 
-#include "void_engine/graphics/buffer/buffer.hpp"
-#include "void_engine/graphics/buffer/enums.hpp"
+import :buffer;
+import :buffer.element;
+import :buffer.enums;
 
-#include <bit>
-#include <cstddef>
-#include <cstring>
+import std;
 
-namespace void_engine::graphics::buffer {
+export namespace void_engine::graphics::buffer {
 
 template <typename T>
 class UniformBuffer final : public Buffer {
@@ -45,5 +43,3 @@ private:
 };
 
 } // namespace void_engine::graphics::buffer
-
-#endif // !VOID_ENGINE_GRAPHICS_BUFFER_UNIFORM_BUFFER_HPP

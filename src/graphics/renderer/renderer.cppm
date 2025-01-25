@@ -1,6 +1,5 @@
 module;
 
-#include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/resource/font/text.hpp"
 #include "void_engine/resource/resource_manager.hpp"
 #include "void_engine/utility/bit_mask.hpp"
@@ -12,6 +11,7 @@ import :renderer.enums;
 import :geometry;
 import :mesh;
 import :camera;
+import :buffer.uniform;
 
 import std;
 import glm;
