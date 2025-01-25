@@ -1,16 +1,18 @@
-#ifndef VOID_ENGINE_GRAPHICS_MESH_HPP
-#define VOID_ENGINE_GRAPHICS_MESH_HPP
+module;
 
 #include "void_engine/graphics/buffer/array_buffer.hpp"
 #include "void_engine/graphics/buffer/buffer.hpp"
 #include "void_engine/graphics/buffer/element_buffer.hpp"
 #include "void_engine/graphics/buffer/enums.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/graphics/vertex_array.hpp"
 
-#include <vector>
+export module void_engine.graphics:mesh;
 
-namespace void_engine::graphics {
+import :renderer.enums;
+
+import std;
+
+export namespace void_engine::graphics {
 
 class Mesh {
 public:
@@ -69,5 +71,3 @@ private:
 };
 
 } // namespace void_engine::graphics
-
-#endif // !VOID_ENGINE_GRAPHICS_MESH_HPP

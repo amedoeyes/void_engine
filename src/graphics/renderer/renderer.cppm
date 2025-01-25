@@ -2,19 +2,16 @@ module;
 
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
-#include "void_engine/graphics/geometry/circle.hpp"
-#include "void_engine/graphics/geometry/cube.hpp"
-#include "void_engine/graphics/geometry/line.hpp"
-#include "void_engine/graphics/geometry/point.hpp"
-#include "void_engine/graphics/geometry/quad.hpp"
-#include "void_engine/graphics/mesh.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/resource/font/text.hpp"
 #include "void_engine/resource/resource_manager.hpp"
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/transform.hpp"
 
 export module void_engine.graphics:renderer.renderer;
+
+import :renderer.enums;
+import :geometry;
+import :mesh;
 
 import std;
 import glm;

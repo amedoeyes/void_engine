@@ -5,8 +5,6 @@ module;
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
 #include "void_engine/graphics/camera/perspective_camera.hpp"
-#include "void_engine/graphics/mesh.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/text.hpp"
 #include "void_engine/resource/resource_manager.hpp"
@@ -24,6 +22,7 @@ module;
 module void_engine.graphics;
 
 import :renderer.renderer;
+import :renderer.enums;
 
 import std;
 import glm;
@@ -238,7 +237,7 @@ void Renderer::draw_text(
 	shader.set_uniform(2, color);
 	shader.bind();
 	text.get_font().get_texture().bind_unit(0);
-	draw_mesh(text.get_mesh());
+	// draw_mesh(text.get_mesh());
 	set_blend_enabled(prev_blend.enabled);
 	set_blend_factors(prev_blend.factors);
 }
@@ -262,7 +261,7 @@ void Renderer::draw_text_screen(
 	shader.set_uniform(1, _screen_projection);
 	shader.set_uniform(2, color);
 	shader.bind();
-	draw_mesh(text.get_mesh());
+	// draw_mesh(text.get_mesh());
 	set_blend_enabled(prev_blend.enabled);
 	set_blend_factors(prev_blend.factors);
 }

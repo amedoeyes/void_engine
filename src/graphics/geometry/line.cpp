@@ -1,10 +1,10 @@
-#include "void_engine/graphics/geometry/line.hpp"
+module void_engine.graphics;
 
-#include "void_engine/graphics/geometry/attributes.hpp"
-#include "void_engine/graphics/mesh.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
+import :geometry.attributes;
+import :geometry;
 
-#include <vector>
+import std;
+import glm;
 
 namespace void_engine::graphics::geometry {
 

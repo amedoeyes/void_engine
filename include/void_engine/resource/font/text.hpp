@@ -1,7 +1,6 @@
 #ifndef VOID_ENGINE_RESOURCE_FONT_TEXT_HPP
 #define VOID_ENGINE_RESOURCE_FONT_TEXT_HPP
 
-#include "void_engine/graphics/mesh.hpp"
 #include "void_engine/resource/font/font.hpp"
 
 #include <glm/ext/vector_float2.hpp>
@@ -26,13 +25,13 @@ public:
 	[[nodiscard]] auto get_font() const -> const Font&;
 	[[nodiscard]] auto get_data() const -> const std::string&;
 	[[nodiscard]] auto get_size() const -> const glm::vec2&;
-	[[nodiscard]] auto get_mesh() const -> const graphics::Mesh&;
+	// [[nodiscard]] auto get_mesh() const -> const graphics::Mesh&;
 
 private:
 	const Font* _font = nullptr;
 	std::string _data;
 	mutable glm::vec2 _size = {0.0f, 0.0f};
-	mutable graphics::Mesh* _mesh = nullptr;
+	// mutable graphics::Mesh* _mesh = nullptr;
 	mutable bool _dirty = false;
 
 	void update() const;

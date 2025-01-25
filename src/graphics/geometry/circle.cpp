@@ -1,20 +1,18 @@
-#include "void_engine/graphics/geometry/circle.hpp"
+module;
 
-#include "void_engine/graphics/geometry/attributes.hpp"
-#include "void_engine/graphics/mesh.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
-
-#include <cmath>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/constants.hpp>
-#include <vector>
+
+module void_engine.graphics;
+
+import :geometry.attributes;
+import :geometry;
+
+import std;
+import glm;
 
 namespace void_engine::graphics::geometry {
 
-namespace {
-
-auto generate_circle_attributes(unsigned int segments) -> Attributes {
+static auto generate_circle_attributes(unsigned int segments) -> Attributes {
 	const float step = glm::two_pi<float>() / static_cast<float>(segments);
 	std::vector<glm::vec3> positions = {{0.0f, 0.0f, 0.0f}};
 	std::vector<glm::vec3> normals = {{0.0f, 0.0f, 1.0f}};
@@ -29,8 +27,6 @@ auto generate_circle_attributes(unsigned int segments) -> Attributes {
 	}
 	return {positions, normals, uvs};
 }
-
-} // namespace
 
 auto create_circle_mesh(unsigned int segments) -> Mesh {
 	std::vector<unsigned int> indices;

@@ -1,13 +1,15 @@
-#include "void_engine/graphics/mesh.hpp"
+module;
 
 #include "void_engine/graphics/buffer/buffer.hpp"
 #include "void_engine/graphics/buffer/element_buffer.hpp"
 #include "void_engine/graphics/buffer/enums.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
 #include "void_engine/graphics/vertex_array.hpp"
 
-#include <utility>
-#include <vector>
+module void_engine.graphics;
+
+import :mesh;
+
+import std;
 
 namespace void_engine::graphics {
 

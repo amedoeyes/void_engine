@@ -1,7 +1,6 @@
 #include "void_engine/resource/font/text.hpp"
 
 #include "void_engine/graphics/buffer/enums.hpp"
-#include "void_engine/graphics/mesh.hpp"
 #include "void_engine/resource/font/font.hpp"
 #include "void_engine/resource/font/glyph.hpp"
 
@@ -23,7 +22,7 @@ Text::Text(const Text& other) : _font(other._font), _data(other._data) {
 }
 
 Text::Text(Text&& other) noexcept : _font(other._font), _data(std::move(other._data)) {
-	other._mesh = nullptr;
+	// other._mesh = nullptr;
 	other._font = nullptr;
 }
 
@@ -40,8 +39,8 @@ auto Text::operator=(Text&& other) noexcept -> Text& {
 	if (this != &other) {
 		_font = other._font;
 		_data = std::move(other._data);
-		_mesh = other._mesh;
-		other._mesh = nullptr;
+		// _mesh = other._mesh;
+		// other._mesh = nullptr;
 		other._font = nullptr;
 	}
 	return *this;
@@ -52,7 +51,7 @@ Text::Text(const Font& font, std::string_view data) : _font(&font), _data(data) 
 }
 
 Text::~Text() {
-	delete _mesh;
+	// delete _mesh;
 }
 
 void Text::set_font(const Font& font) {
@@ -83,13 +82,13 @@ auto Text::get_size() const -> const glm::vec2& {
 	}
 	return _size;
 }
-auto Text::get_mesh() const -> const graphics::Mesh& {
-	if (_dirty) {
-		update();
-		_dirty = false;
-	}
-	return *_mesh;
-}
+// auto Text::get_mesh() const -> const graphics::Mesh& {
+// 	if (_dirty) {
+// 		update();
+// 		_dirty = false;
+// 	}
+// 	return *_mesh;
+// }
 
 void Text::update() const {
 	assert(_font != nullptr && "Font is not set");
@@ -139,17 +138,17 @@ void Text::update() const {
 		indices_offset += 4;
 		_size = position + size;
 	}
-	if (_mesh == nullptr) {
-		_mesh = new graphics::Mesh();
-		_mesh->add_attribute<float>(2);
-		_mesh->add_vertex_buffer(positions, graphics::buffer::Usage::dynamic_draw);
-		_mesh->add_attribute<float>(2);
-		_mesh->add_vertex_buffer(uvs, graphics::buffer::Usage::dynamic_draw);
-	} else {
-		_mesh->get_vertex_buffer<glm::vec2>(0).update_data(positions);
-		_mesh->get_vertex_buffer<glm::vec2>(1).update_data(uvs);
-	}
-	_mesh->set_indices(indices);
+	// if (_mesh == nullptr) {
+	// 	_mesh = new graphics::Mesh();
+	// 	_mesh->add_attribute<float>(2);
+	// 	_mesh->add_vertex_buffer(positions, graphics::buffer::Usage::dynamic_draw);
+	// 	_mesh->add_attribute<float>(2);
+	// 	_mesh->add_vertex_buffer(uvs, graphics::buffer::Usage::dynamic_draw);
+	// } else {
+	// 	_mesh->get_vertex_buffer<glm::vec2>(0).update_data(positions);
+	// 	_mesh->get_vertex_buffer<glm::vec2>(1).update_data(uvs);
+	// }
+	// _mesh->set_indices(indices);
 }
 
 } // namespace void_engine::resource::font
