@@ -1,5 +1,4 @@
-#ifndef VOID_ENGINE_GRAPHICS_RENDERER_RENDERER_HPP
-#define VOID_ENGINE_GRAPHICS_RENDERER_RENDERER_HPP
+module;
 
 #include "void_engine/graphics/buffer/uniform_buffer.hpp"
 #include "void_engine/graphics/camera/camera.hpp"
@@ -15,14 +14,12 @@
 #include "void_engine/utility/bit_mask.hpp"
 #include "void_engine/utility/transform.hpp"
 
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/ext/vector_float4.hpp>
-#include <glm/ext/vector_int2.hpp>
-#include <string_view>
+export module void_engine.graphics:renderer.renderer;
 
-namespace void_engine::graphics::renderer {
+import std;
+import glm;
+
+export namespace void_engine::graphics::renderer {
 
 struct DrawObjects {
 	Mesh point = geometry::create_point_mesh();
@@ -196,5 +193,3 @@ private:
 };
 
 } // namespace void_engine::graphics::renderer
-
-#endif // !VOID_ENGINE_GRAPHICS_RENDERER_RENDERER_HPP

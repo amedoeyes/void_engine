@@ -1,5 +1,3 @@
-#include <void_engine/graphics/renderer/renderer.hpp>
-
 import void_engine;
 
 namespace display = void_engine::display;

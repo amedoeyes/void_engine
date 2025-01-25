@@ -1,4 +1,4 @@
-#include "void_engine/graphics/renderer/renderer.hpp"
+module;
 
 #include "embed.hpp"
 #include "void_engine/graphics/buffer/enums.hpp"
@@ -17,30 +17,18 @@
 #include "void_engine/utility/transform.hpp"
 
 #include <GLFW/glfw3.h>
-#include <cassert>
-#include <cmath>
-#include <cstddef>
 #include <glad/glad.h>
-#include <glm/common.hpp>
-#include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/scalar_constants.hpp>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/ext/vector_float4.hpp>
-#include <glm/ext/vector_int2.hpp>
-#include <glm/geometric.hpp>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
-#include <span>
-#include <string>
-#include <string_view>
-#include <utility>
+
+module void_engine.graphics;
+
+import :renderer.renderer;
+
+import std;
+import glm;
 
 namespace void_engine::graphics::renderer {
-
-namespace {
 
 APIENTRY void debug_message_callback(
 	unsigned int source, unsigned int type, unsigned int /*unused*/, unsigned int severity,
@@ -83,8 +71,6 @@ APIENTRY void debug_message_callback(
 		default: std::unreachable();
 	}
 }
-
-} // namespace
 
 Renderer::Renderer() {
 	int flags = 0;
