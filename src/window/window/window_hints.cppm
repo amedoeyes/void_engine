@@ -1,11 +1,11 @@
-export module void_engine.display:window.window_hints;
+export module void_engine.window:window_hints;
 
-import :window.enums;
+import :window_enums;
 
 import std;
 import glm;
 
-export namespace void_engine::display::window {
+export namespace void_engine::window {
 
 struct WindowHints {
 	// Whether the window will be resizable by the user.
@@ -127,4 +127,4 @@ struct Hints {
 	X11Hints x11 = {};
 };
 
-} // namespace void_engine::display::window
+} // namespace void_engine::window

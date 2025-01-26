@@ -1,8 +1,8 @@
-export module void_engine.display:window.enums;
+export module void_engine.window:window_enums;
 
 import std;
 
-export namespace void_engine::display::window {
+export namespace void_engine::window {
 
 enum class ContextClientAPI : std::uint32_t {
 	none = 0,
@@ -34,4 +34,4 @@ enum class ContextOpenGLProfile : std::uint32_t {
 	core = 0x00032001,
 };
 
-} // namespace void_engine::display::window
+} // namespace void_engine::window

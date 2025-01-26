@@ -1,8 +1,8 @@
-export module void_engine.display:input.mouse.enums;
+export module void_engine.window:input.mouse_enums;
 
 import std;
 
-export namespace void_engine::display::input::mouse {
+export namespace void_engine::window::input::mouse {
 
 enum class Button : std::uint8_t {
 	left = 0,
@@ -34,4 +34,4 @@ enum class Shape : std::uint32_t {
 	not_allowed = 0x0003600A,
 };
 
-} // namespace void_engine::display::input::mouse
+} // namespace void_engine::window::input::mouse

@@ -3,19 +3,16 @@ module;
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-module void_engine.display;
-
-import :input.mouse;
-import :input.mouse.enums;
+module void_engine.window;
 
 import std;
 import glm;
 import void_engine.resources;
 
-namespace void_engine::display::input::mouse {
+namespace void_engine::window::input::mouse {
 
 Mouse::Mouse(window::Window& window) : _window(&window) {
-	window::WindowEventHandler& events = _window->get_event_handler();
+	window::WindowEventHandler& events = _window->get_events();
 	_mouse_button_listener = events.add_listener<window::event::MouseButtonEvent>(
 		[this](const window::event::MouseButtonEvent& event) {
 			set_button(event.button, event.action == ButtonAction::press);
@@ -34,7 +31,7 @@ Mouse::Mouse(window::Window& window) : _window(&window) {
 }
 
 Mouse::~Mouse() {
-	window::WindowEventHandler& events = _window->get_event_handler();
+	window::WindowEventHandler& events = _window->get_events();
 	events.remove_listener<window::event::MouseButtonEvent>(_mouse_button_listener);
 	events.remove_listener<window::event::MousePositionEvent>(_mouse_position_listener);
 	events.remove_listener<window::event::MouseScrollEvent>(_mouse_scroll_listener);
@@ -124,4 +121,4 @@ auto Mouse::is_released(Button button) const -> bool {
 	return _buttons[static_cast<size_t>(button)].exited(true);
 }
 
-} // namespace void_engine::display::input::mouse
+} // namespace void_engine::window::input::mouse

@@ -1,13 +1,13 @@
-export module void_engine.display:window.window_events;
+export module void_engine.window:window_events;
 
-import :input.keyboard.enums;
-import :input.mouse.enums;
+import :input.keyboard_enums;
+import :input.mouse_enums;
 
 import std;
 import glm;
 import void_engine.utility.bit_mask;
 
-export namespace void_engine::display::window::event {
+export namespace void_engine::window::event {
 
 struct DropEvent {
 	std::vector<std::filesystem::path> paths;
@@ -79,4 +79,4 @@ struct WindowSizeEvent {
 	glm::vec2 size;
 };
 
-} // namespace void_engine::display::window::event
+} // namespace void_engine::window::event

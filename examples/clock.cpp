@@ -3,9 +3,8 @@ import std;
 import glm;
 import void_engine;
 
-namespace display = void_engine::display;
+namespace window = void_engine::window;
 namespace renderer = void_engine::graphics::renderer;
-namespace window = void_engine::display::window;
 
 static auto get_time() -> double {
 	const auto now = std::chrono::system_clock::now();
@@ -24,8 +23,8 @@ static auto get_local_offset() -> double {
 }
 
 auto main() -> int {
-	auto display = display::DisplayManager();
-	auto& window = display.windows().create("main", "Clock", {800, 600});
+	auto window_manager = window::WindowManager();
+	auto& window = window_manager.create("Clock", {800, 600});
 
 	auto renderer = renderer::Renderer();
 	renderer.set_viewport_size(window.get_size());
@@ -33,7 +32,7 @@ auto main() -> int {
 	auto& camera = renderer.get_camera();
 	camera.set_position({0.0f, 0.0f, 5.0f});
 
-	window.get_event_handler().add_listener<window::event::WindowSizeEvent>([&](const auto& event) {
+	window.get_events().add_listener<window::event::WindowSizeEvent>([&](const auto& event) {
 		renderer.set_viewport_size(event.size);
 	});
 
@@ -42,7 +41,7 @@ auto main() -> int {
 	const float scale = 2.0f;
 
 	while (!window.should_close()) {
-		display.windows().update();
+		window_manager.poll_events();
 
 		const long time = static_cast<long>(get_time());
 		const long seconds = time % 60;

@@ -1,8 +1,8 @@
-export module void_engine.display:input.keyboard.enums;
+export module void_engine.window:input.keyboard_enums;
 
 import std;
 
-export namespace void_engine::display::input::keyboard {
+export namespace void_engine::window::input::keyboard {
 
 enum class Key : std::uint16_t {
 	none = 0,
@@ -111,4 +111,4 @@ enum class KeyMod : std::uint8_t {
 	num_lock = 0x0020,
 };
 
-} // namespace void_engine::display::input::keyboard
+} // namespace void_engine::window::input::keyboard

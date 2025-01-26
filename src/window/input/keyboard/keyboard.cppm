@@ -1,13 +1,13 @@
-export module void_engine.display:input.keyboard;
+export module void_engine.window:input.keyboard;
 
-import :input.keyboard.enums;
-import :window.window;
+import :input.keyboard_enums;
+import :window;
 
 import std;
 import void_engine.utility.event;
 import void_engine.utility.state;
 
-export namespace void_engine::display::input::keyboard {
+export namespace void_engine::window::input::keyboard {
 
 class Keyboard {
 public:
@@ -33,4 +33,4 @@ private:
 	utility::event::EventListenerID _keyboard_key_listener;
 };
 
-} // namespace void_engine::display::input::keyboard
+} // namespace void_engine::window::input::keyboard

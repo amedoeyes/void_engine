@@ -2,34 +2,36 @@ module;
 
 #include <GLFW/glfw3.h>
 
-export module void_engine.display:window.window;
+export module void_engine.window:window;
 
-import :monitor.monitor;
-import :window.window_hints;
+import :monitor;
+import :window_hints;
 
 import std;
 import glm;
 
-export namespace void_engine::display::window {
-class WindowEventHandler;
-class WindowInputHandler;
-} // namespace void_engine::display::window
+export namespace void_engine::window::input {
+class InputManager;
+} // namespace void_engine::window::input
 
-export namespace void_engine::display::window {
+export namespace void_engine::window {
+class WindowEventHandler;
+} // namespace void_engine::window
+
+export namespace void_engine::window {
 
 class Window {
 public:
 	Window(const Window&) = default;
-	Window(Window&&) = delete;
+	Window(Window&&) = default;
 	auto operator=(const Window&) -> Window& = default;
-	auto operator=(Window&&) -> Window& = delete;
+	auto operator=(Window&&) -> Window& = default;
 	Window(
-		std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
-		const Window& share, const Hints& hints = {}
+		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Window& share,
+		const Hints& hints = {}
 	);
 	Window(
-		std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
-		const Hints& hints = {}
+		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints = {}
 	);
 	Window(
 		std::string_view title, const glm::ivec2& size, const Window& share, const Hints& hints = {}
@@ -37,7 +39,6 @@ public:
 	Window(std::string_view title, const glm::ivec2& size, const Hints& hints = {});
 	~Window();
 
-	void update();
 	void swap_buffers() const;
 
 	void bind() const;
@@ -53,8 +54,8 @@ public:
 	void restore() const;
 
 	void fullscreen() const;
-	void fullscreen(const monitor::Monitor& monitor) const;
-	void fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode) const;
+	void fullscreen(const Monitor& monitor) const;
+	void fullscreen(const Monitor& monitor, const VideoMode& video_mode) const;
 	void windowed(const glm::ivec2& position, const glm::ivec2& size) const;
 
 	void set_aspect_ratio(const glm::ivec2& ratio);
@@ -74,8 +75,8 @@ public:
 	static void set_vsync(bool enabled);
 	static void set_swap_interval(int interval);
 
-	[[nodiscard]] auto get_event_handler() -> WindowEventHandler&;
-	[[nodiscard]] auto get_input_handler() -> WindowInputHandler&;
+	[[nodiscard]] auto get_events() -> WindowEventHandler&;
+	[[nodiscard]] auto get_inputs() -> input::InputManager&;
 
 	[[nodiscard]] auto get_content_scale() const -> glm::vec2;
 	[[nodiscard]] auto get_frame_size() const -> std::tuple<glm::ivec2, glm::ivec2>;
@@ -105,8 +106,8 @@ public:
 
 private:
 	GLFWwindow* _window;
-	WindowEventHandler* _event_handler;
-	WindowInputHandler* _input_handler;
+	WindowEventHandler* _events;
+	input::InputManager* _inputs;
 
 	Window(
 		std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share,
@@ -116,4 +117,4 @@ private:
 	static void apply_hints(const Hints& hints);
 };
 
-} // namespace void_engine::display::window
+} // namespace void_engine::window

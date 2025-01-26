@@ -3,28 +3,23 @@ module;
 #include <GLFW/glfw3.h>
 #include <cassert>
 
-module void_engine.display;
-
-import :monitor.monitor;
-import :window.window;
-import :window.window_hints;
+module void_engine.window;
 
 import std;
 import glm;
 import void_engine.resources;
 
-namespace void_engine::display::window {
+namespace void_engine::window {
 
 Window::Window(
-	std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
-	const Window& share, const Hints& hints
+	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Window& share,
+	const Hints& hints
 ) :
 	Window(title, size, monitor.raw(), share._window, hints) {
 }
 
 Window::Window(
-	std::string_view title, const glm::ivec2& size, const monitor::Monitor& monitor,
-	const Hints& hints
+	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints
 ) :
 	Window(title, size, monitor.raw(), nullptr, hints) {
 }
@@ -48,19 +43,14 @@ Window::Window(
 	assert(_window != nullptr && "Failed to create window");
 	glfwMakeContextCurrent(_window);
 	glfwSetWindowUserPointer(_window, this);
-	_event_handler = new WindowEventHandler(*this);
-	_input_handler = new WindowInputHandler(*this);
+	_events = new WindowEventHandler(*this);
+	_inputs = new input::InputManager(*this);
 }
 
 Window::~Window() {
-	delete _input_handler;
-	delete _event_handler;
+	delete _inputs;
+	delete _events;
 	glfwDestroyWindow(_window);
-}
-
-void Window::update() {
-	_input_handler->update();
-	_event_handler->poll();
 }
 
 void Window::swap_buffers() const {
@@ -109,13 +99,12 @@ void Window::fullscreen() const {
 	glfwSetWindowMonitor(_window, monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 }
 
-void Window::fullscreen(const monitor::Monitor& monitor) const {
-	const monitor::VideoMode& mode = monitor.get_video_mode();
+void Window::fullscreen(const Monitor& monitor) const {
+	const VideoMode& mode = monitor.get_video_mode();
 	glfwSetWindowMonitor(_window, monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
 }
 
-void Window::fullscreen(const monitor::Monitor& monitor, const monitor::VideoMode& video_mode)
-	const {
+void Window::fullscreen(const Monitor& monitor, const VideoMode& video_mode) const {
 	glfwSetWindowMonitor(
 		_window, monitor.raw(), 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate
 	);
@@ -204,12 +193,12 @@ void Window::set_swap_interval(int interval) {
 	glfwSwapInterval(interval);
 }
 
-auto Window::get_event_handler() -> WindowEventHandler& {
-	return *_event_handler;
+auto Window::get_events() -> WindowEventHandler& {
+	return *_events;
 }
 
-auto Window::get_input_handler() -> WindowInputHandler& {
-	return *_input_handler;
+auto Window::get_inputs() -> input::InputManager& {
+	return *_inputs;
 }
 
 auto Window::get_content_scale() const -> glm::vec2 {
@@ -380,4 +369,4 @@ void Window::apply_hints(const Hints& hints) {
 	glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11.instance_name.c_str());
 }
 
-} // namespace void_engine::display::window
+} // namespace void_engine::window

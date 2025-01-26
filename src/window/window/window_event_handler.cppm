@@ -1,11 +1,11 @@
-export module void_engine.display:window.window_event_handler;
+export module void_engine.window:window_event_handler;
 
-import :window.window;
-import :window.window_events;
+import :window;
+import :window_events;
 
 import void_engine.utility.event;
 
-export namespace void_engine::display::window {
+export namespace void_engine::window {
 
 class WindowEventHandler final
 	: public utility::event::EventManager<
@@ -27,4 +27,4 @@ private:
 	Window* _window;
 };
 
-} // namespace void_engine::display::window
+} // namespace void_engine::window
