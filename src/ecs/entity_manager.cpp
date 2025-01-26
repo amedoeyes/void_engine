@@ -1,6 +1,5 @@
-#include "void_engine/ecs/entity_manager.hpp"
-
-#include "void_engine/ecs/entity.hpp"
+module void_engine.ecs;
+import :entity.manager;
 
 namespace void_engine::ecs {
 

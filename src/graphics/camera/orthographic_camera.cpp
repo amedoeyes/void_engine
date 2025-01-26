@@ -1,9 +1,13 @@
-#include "void_engine/graphics/camera/orthographic_camera.hpp"
-
-#include "void_engine/graphics/camera/enums.hpp"
+module;
 
 #include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/vector_float2.hpp>
+
+module void_engine.graphics;
+
+import :camera.orthographic;
+import :camera.enums;
+
+import glm;
 
 namespace void_engine::graphics::camera {
 

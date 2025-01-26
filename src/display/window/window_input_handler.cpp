@@ -1,9 +1,6 @@
-#include "void_engine/display/window/window_input_handler.hpp"
+module void_engine.display;
 
-#include "void_engine/display/window/input/keyboard/keyboard.hpp"
-#include "void_engine/display/window/input/mouse/mouse.hpp"
-#include "void_engine/display/window/window.hpp"
-#include "void_engine/display/window/window_event_handler.hpp"
+import :window.window_event_handler;
 
 namespace void_engine::display::window {
 

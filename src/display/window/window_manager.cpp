@@ -1,15 +1,16 @@
-#include "void_engine/display/window/window_manager.hpp"
-
-#include "void_engine/display/window/hints.hpp"
-#include "void_engine/display/window/window.hpp"
+module;
 
 #include <GLFW/glfw3.h>
 #include <cassert>
-#include <glm/ext/vector_int2.hpp>
-#include <ranges>
-#include <string_view>
-#include <unordered_map>
-#include <vector>
+
+module void_engine.display;
+
+import :window.window_hints;
+import :window.window_manager;
+import :monitor.monitor;
+
+import std;
+import glm;
 
 namespace void_engine::display::window {
 

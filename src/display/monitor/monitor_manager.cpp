@@ -1,12 +1,15 @@
-#include "void_engine/display/monitor/monitor_manager.hpp"
-
-#include "void_engine/display/monitor/monitor.hpp"
+module;
 
 #include <GLFW/glfw3.h>
-#include <algorithm>
 #include <cassert>
-#include <string_view>
-#include <vector>
+
+module void_engine.display;
+
+import :monitor.monitor;
+import :monitor.monitor_manager;
+
+import std;
+import glm;
 
 namespace void_engine::display::monitor {
 
@@ -23,14 +26,14 @@ MonitorManager::MonitorManager() {
 				_monitors.push_back(new Monitor(monitor));
 			} else if (event == GLFW_DISCONNECTED) {
 				const auto it = std::ranges::find_if(_monitors, [monitor](Monitor* m) {
-					return m->_monitor == monitor;
+					return m->raw() == monitor;
 				});
 				delete *it;
 				_monitors.erase(it);
 			}
 		});
-		++_instance_count;
 	}
+	++_instance_count;
 }
 
 MonitorManager::~MonitorManager() {

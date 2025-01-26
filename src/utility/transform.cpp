@@ -1,12 +1,11 @@
-#include "void_engine/utility/transform.hpp"
+module;
 
-#include <glm/ext/matrix_float4x4.hpp>
-#include <glm/ext/matrix_transform.hpp>
-#include <glm/ext/quaternion_trigonometric.hpp>
-#include <glm/ext/vector_float3.hpp>
-#include <glm/gtc/quaternion.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtx/quaternion.hpp>
+
+module void_engine.utility.transform;
+
+import glm;
 
 namespace void_engine::utility {
 

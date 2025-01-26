@@ -1,0 +1,38 @@
+export module void_engine.resources:font.text;
+
+import :font;
+
+import std;
+import glm;
+
+export namespace void_engine::resource::font {
+
+class Text {
+public:
+	Text(const Text& other);
+	Text(Text&& other) noexcept;
+	auto operator=(const Text& other) -> Text&;
+	auto operator=(Text&& other) noexcept -> Text&;
+	Text() = default;
+	explicit Text(const Font& font, std::string_view data);
+	~Text();
+
+	void set_font(const Font& font);
+	void set_data(std::string_view data);
+
+	[[nodiscard]] auto get_font() const -> const Font&;
+	[[nodiscard]] auto get_data() const -> const std::string&;
+	[[nodiscard]] auto get_size() const -> const glm::vec2&;
+	// [[nodiscard]] auto get_mesh() const -> const graphics::Mesh&;
+
+private:
+	const Font* _font = nullptr;
+	std::string _data;
+	mutable glm::vec2 _size = {0.0f, 0.0f};
+	// mutable graphics::Mesh* _mesh = nullptr;
+	mutable bool _dirty = false;
+
+	void update() const;
+};
+
+} // namespace void_engine::resource::font

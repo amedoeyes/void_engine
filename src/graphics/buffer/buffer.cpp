@@ -1,8 +1,10 @@
-#include "void_engine/graphics/buffer/buffer.hpp"
-
-#include "void_engine/graphics/buffer/enums.hpp"
+module;
 
 #include <glad/glad.h>
+
+module void_engine.graphics;
+
+import :buffer.enums;
 
 namespace void_engine::graphics::buffer {
 

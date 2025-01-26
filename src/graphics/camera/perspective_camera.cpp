@@ -1,9 +1,13 @@
-#include "void_engine/graphics/camera/perspective_camera.hpp"
-
-#include "void_engine/graphics/camera/enums.hpp"
+module;
 
 #include <glm/ext/matrix_clip_space.hpp>
-#include <glm/ext/vector_float2.hpp>
+
+module void_engine.graphics;
+
+import :camera.perspective;
+import :camera.enums;
+
+import glm;
 
 namespace void_engine::graphics::camera {
 

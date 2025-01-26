@@ -1,8 +1,4 @@
-#include <void_engine/display/display_manager.hpp>
-#include <void_engine/display/window/event/window_size_event.hpp>
-#include <void_engine/display/window/window.hpp>
-#include <void_engine/graphics/renderer/renderer.hpp>
-#include <void_engine/utility/timer.hpp>
+import void_engine;
 
 namespace display = void_engine::display;
 namespace window = void_engine::display::window;
@@ -22,7 +18,7 @@ auto main() -> int {
 		}
 	);
 
-	void_engine::utility::Timer timer;
+	auto timer = void_engine::utility::Timer();
 	timer.start();
 
 	while (!window.should_close()) {

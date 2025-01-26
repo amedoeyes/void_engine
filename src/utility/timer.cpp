@@ -1,4 +1,4 @@
-#include "void_engine/utility/timer.hpp"
+module void_engine.utility.timer;
 
 namespace void_engine::utility {
 

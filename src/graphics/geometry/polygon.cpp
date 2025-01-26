@@ -1,14 +1,14 @@
-#include "void_engine/graphics/geometry/polygon.hpp"
+module;
 
-#include "void_engine/graphics/geometry/attributes.hpp"
-#include "void_engine/graphics/mesh.hpp"
-#include "void_engine/graphics/renderer/enums.hpp"
-
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_float3.hpp>
 #include <glm/gtc/constants.hpp>
-#include <glm/trigonometric.hpp>
-#include <vector>
+
+module void_engine.graphics;
+
+import :geometry.attributes;
+import :geometry;
+
+import std;
+import glm;
 
 namespace void_engine::graphics::geometry {
 

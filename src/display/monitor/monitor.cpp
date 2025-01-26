@@ -1,14 +1,14 @@
-#include "void_engine/display/monitor/monitor.hpp"
-
-#include "void_engine/display/monitor/video_mode.hpp"
+module;
 
 #include <GLFW/glfw3.h>
-#include <glm/ext/vector_float2.hpp>
-#include <glm/ext/vector_uint2.hpp>
-#include <span>
-#include <string_view>
-#include <utility>
-#include <vector>
+
+module void_engine.display;
+
+import :monitor.monitor;
+import :monitor.video_mode;
+
+import std;
+import glm;
 
 namespace void_engine::display::monitor {
 
@@ -42,6 +42,10 @@ Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {
 			.refresh_rate = modes[i].refreshRate,
 		});
 	}
+}
+
+auto Monitor::raw() const -> GLFWmonitor* {
+	return _monitor;
 }
 
 void Monitor::set_gamma(float gamma) const {
