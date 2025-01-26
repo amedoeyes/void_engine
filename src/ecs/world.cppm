@@ -1,15 +1,16 @@
-#ifndef VOID_ENGINE_ECS_WORLD_HPP
-#define VOID_ENGINE_ECS_WORLD_HPP
-
-#include "void_engine/ecs/component_pool_manager.hpp"
-#include "void_engine/ecs/entity.hpp"
-#include "void_engine/ecs/entity_manager.hpp"
+module;
 
 #include <cassert>
-#include <tuple>
-#include <vector>
 
-namespace void_engine::ecs {
+export module void_engine.ecs:world;
+
+import :component_pool.manager;
+import :entity;
+import :entity.manager;
+
+import std;
+
+export namespace void_engine::ecs {
 
 class World {
 public:
@@ -134,5 +135,3 @@ private:
 };
 
 } // namespace void_engine::ecs
-
-#endif //! VOID_ENGINE_ECS_WORLD_HPP

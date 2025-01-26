@@ -1,4 +1,5 @@
-#include "void_engine/ecs/entity.hpp"
+module void_engine.ecs;
+import :entity;
 
 namespace void_engine::ecs {
 

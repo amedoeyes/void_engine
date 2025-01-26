@@ -1,12 +1,10 @@
-#ifndef VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
-#define VOID_ENGINE_ECS_ENTITY_STORAGE_HPP
+export module void_engine.ecs:entity.manager;
 
-#include "void_engine/ecs/entity.hpp"
+import :entity;
 
-#include <queue>
-#include <vector>
+import std;
 
-namespace void_engine::ecs {
+export namespace void_engine::ecs {
 
 class EntityManager {
 public:
@@ -27,5 +25,3 @@ private:
 };
 
 } // namespace void_engine::ecs
-
-#endif // !VOID_ENGINE_ECS_ENTITY_STORAGE_HPP

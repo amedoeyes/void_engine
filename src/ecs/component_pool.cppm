@@ -1,16 +1,17 @@
-#ifndef VOID_ENGINE_ECS_COMPONENT_POOL_HPP
-#define VOID_ENGINE_ECS_COMPONENT_POOL_HPP
-
-#include "void_engine/ecs/component_pool_base.hpp"
-#include "void_engine/ecs/entity.hpp"
+module;
 
 #include <cassert>
-#include <cstddef>
-#include <vector>
 
-namespace void_engine::ecs {
+export module void_engine.ecs:component_pool;
 
-constexpr auto invalid_index = size_t(-1);
+import :component_pool.base;
+import :entity;
+
+import std;
+
+export namespace void_engine::ecs {
+
+constexpr auto invalid_index = std::size_t(-1);
 
 template <typename Component>
 class ComponentPool : public ComponentPoolBase {
@@ -58,7 +59,7 @@ public:
 		assert(contains(entity) && "Entity does not exist");
 
 		const EntityIndex index = get_entity_index(entity);
-		const size_t remove_index = _sparse[index];
+		const std::size_t remove_index = _sparse[index];
 		Entity replacement = _packed.back();
 
 		delete _data[remove_index];
@@ -99,11 +100,9 @@ public:
 	}
 
 private:
-	std::vector<size_t> _sparse;
+	std::vector<std::size_t> _sparse;
 	std::vector<Entity> _packed;
 	std::vector<Component*> _data;
 };
 
 } // namespace void_engine::ecs
-
-#endif // !VOID_ENGINE_ECS_COMPONENT_POOL_HPP

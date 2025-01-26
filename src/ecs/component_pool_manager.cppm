@@ -1,23 +1,18 @@
-#ifndef VOID_ENGINE_ECS_COMPONENT_POOL_MANAGER_HPP
-#define VOID_ENGINE_ECS_COMPONENT_POOL_MANAGER_HPP
+module;
 
-#include "void_engine/ecs/component_pool.hpp"
-#include "void_engine/ecs/component_pool_base.hpp"
-#include "void_engine/ecs/entity.hpp"
-
-#include <algorithm>
-#include <array>
 #include <cassert>
-#include <cstdint>
-#include <iterator>
-#include <unordered_map>
-#include <unordered_set>
-#include <utility>
-#include <vector>
 
-namespace void_engine::ecs {
+export module void_engine.ecs:component_pool.manager;
 
-using ComponentID = uint16_t;
+import :component_pool;
+import :component_pool.base;
+import :entity;
+
+import std;
+
+export namespace void_engine::ecs {
+
+using ComponentID = std::uint16_t;
 
 class ComponentPoolManager {
 public:
@@ -113,9 +108,8 @@ public:
 	template <typename... Components>
 		requires(sizeof...(Components) > 1)
 	[[nodiscard]] auto query() const -> std::vector<Entity> {
-		const std::array<const std::vector<Entity>*, sizeof...(Components)> pools = {
-			&query<Components>()...
-		};
+		const std::array<const std::vector<Entity>*, sizeof...(Components)> pools = {&query<Components>(
+		)...};
 		const std::vector<Entity>* smallest_pool = pools[0];
 		for (const auto& pool : pools) {
 			if (pool->size() < smallest_pool->size()) {
@@ -166,5 +160,3 @@ private:
 };
 
 } // namespace void_engine::ecs
-
-#endif // !VOID_ENGINE_ECS_COMPONENT_POOL_MANAGER_HPP
