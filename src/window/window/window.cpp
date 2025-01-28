@@ -136,7 +136,7 @@ void Window::set_focus_on_show(bool enabled) {
 
 void Window::set_icon(const std::filesystem::path& path) {
 	glfwSetWindowIcon(_window, 0, nullptr);
-	const resource::image::Image image(path, true);
+	const resources::Image image(path, true);
 	const glm::ivec2& size = image.get_size();
 	const GLFWimage glfw_image = {
 		.width = size.x,
@@ -150,7 +150,7 @@ void Window::set_icons(std::span<std::filesystem::path> paths) {
 	std::vector<GLFWimage> images;
 	images.reserve(paths.size());
 	for (const auto& path : paths) {
-		const resource::image::Image image(path, true);
+		const resources::Image image(path, true);
 		const glm::ivec2& size = image.get_size();
 		images.push_back({
 			.width = size.x,

@@ -71,47 +71,10 @@ Renderer::Renderer() {
 		glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 		glDebugMessageCallback(debug_message_callback, nullptr);
 	}
-
-	_default_camera = _camera = new camera::PerspectiveCamera();
-
+	_camera = &_default_resources.camera;
 	_camera_uniform.bind_range(0);
 	_camera_uniform.allocate(sizeof(CameraUniform), buffer::Usage::dynamic_draw);
-
-	resource::shader::Shader& shape_shader = _resource_manager.shaders().create("shape");
-	shape_shader.add_source(
-		resource::shader::Type::vertex, shape_shader_vert_bytes, resource::shader::Format::spirv
-	);
-	shape_shader.add_source(
-		resource::shader::Type::fragment, shape_shader_frag_bytes, resource::shader::Format::spirv
-	);
-	shape_shader.compile();
-
-	resource::shader::Shader& font_shader = _resource_manager.shaders().create("font");
-	font_shader.add_source(
-		resource::shader::Type::vertex, font_shader_vert_bytes, resource::shader::Format::spirv
-	);
-	font_shader.add_source(
-		resource::shader::Type::fragment, font_shader_frag_bytes, resource::shader::Format::spirv
-	);
-	font_shader.compile();
-
-	resource::shader::Shader& font_screen_shader = _resource_manager.shaders().create("font_screen");
-	font_screen_shader.add_source(
-		resource::shader::Type::vertex, font_screen_shader_vert_bytes, resource::shader::Format::spirv
-	);
-	font_screen_shader.add_source(
-		resource::shader::Type::fragment, font_shader_frag_bytes, resource::shader::Format::spirv
-	);
-	font_screen_shader.compile();
-
-	const resource::font::Font& font =
-		_resource_manager.fonts().create("liberation", liberation_font_bytes);
-
-	_draw_objects.text.set_font(font);
-}
-
-Renderer::~Renderer() {
-	delete _default_camera;
+	_draw_objects.text.set_font(_default_resources.font);
 }
 
 void Renderer::clear() const {
@@ -123,7 +86,7 @@ void Renderer::update() {
 }
 
 void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, glm::translate(glm::mat4(1.0f), position));
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -134,7 +97,7 @@ void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4
 void Renderer::draw_line(
 	const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	const glm::vec3 direction = end - start;
 	const glm::vec3 normal = glm::normalize(direction);
 	const glm::vec3 reference(1.0f, 0.0f, 0.0f);
@@ -163,7 +126,7 @@ void Renderer::draw_line(
 }
 
 void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& color) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -173,7 +136,7 @@ void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& c
 void Renderer::draw_quad_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -182,7 +145,7 @@ void Renderer::draw_quad_outline(
 }
 
 void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4& color) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -192,7 +155,7 @@ void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4&
 void Renderer::draw_circle_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -201,7 +164,7 @@ void Renderer::draw_circle_outline(
 }
 
 void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& color) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -211,7 +174,7 @@ void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& c
 void Renderer::draw_cube_outline(
 	const utility::Transform& transform, float width, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("shape");
+	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
 	shader.bind();
@@ -220,17 +183,19 @@ void Renderer::draw_cube_outline(
 }
 
 void Renderer::draw_text(
-	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+	const Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("font");
+	const Shader& shader = _default_resources.font_shader;
 	const Blend prev_blend = get_blend();
 	set_blend_enabled(true);
-	set_blend_factors({BlendFactor::src_alpha, BlendFactor::one_minus_src_alpha});
+	set_blend_factors(
+		{.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha}
+	);
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(2, color);
 	shader.bind();
-	text.get_font().get_texture().bind_unit(0);
-	// draw_mesh(text.get_mesh());
+	// text.get_font().get_texture().bind_unit(0);
+	draw_mesh(text.get_mesh());
 	set_blend_enabled(prev_blend.enabled);
 	set_blend_factors(prev_blend.factors);
 }
@@ -243,18 +208,20 @@ void Renderer::draw_text(
 }
 
 void Renderer::draw_text_screen(
-	const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+	const Text& text, const utility::Transform& transform, const glm::vec4& color
 ) {
-	const resource::shader::Shader& shader = _resource_manager.shaders().get("font_screen");
+	const Shader& shader = _default_resources.font_screen_shader;
 	const Blend prev_blend = get_blend();
 	set_blend_enabled(true);
-	set_blend_factors({BlendFactor::src_alpha, BlendFactor::one_minus_src_alpha});
-	text.get_font().get_texture().bind_unit(0);
+	set_blend_factors(
+		{.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha}
+	);
+	// text.get_font().get_texture().bind_unit(0);
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, _screen_projection);
 	shader.set_uniform(2, color);
 	shader.bind();
-	// draw_mesh(text.get_mesh());
+	draw_mesh(text.get_mesh());
 	set_blend_enabled(prev_blend.enabled);
 	set_blend_factors(prev_blend.factors);
 }
@@ -402,11 +369,11 @@ void Renderer::set_viewport(const Viewport& viewport) {
 }
 
 void Renderer::set_viewport_position(const glm::ivec2& position) {
-	set_viewport({position, get_viewport().size});
+	set_viewport({.position = position, .size = get_viewport().size});
 }
 
 void Renderer::set_viewport_size(const glm::ivec2& size) {
-	set_viewport({get_viewport().position, size});
+	set_viewport({.position = get_viewport().position, .size = size});
 }
 
 void Renderer::set_point_size(float size) {

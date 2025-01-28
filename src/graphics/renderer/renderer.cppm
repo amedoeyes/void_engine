@@ -1,5 +1,7 @@
 module;
 
+#include "embed.hpp"
+
 #include <glm/ext/matrix_clip_space.hpp>
 
 export module void_engine.graphics:renderer.renderer;
@@ -7,7 +9,10 @@ export module void_engine.graphics:renderer.renderer;
 import :renderer.enums;
 import :geometry;
 import :mesh;
+import :text;
+import :shader;
 import :camera;
+import :camera.perspective;
 import :buffer.uniform;
 
 import std;
@@ -18,6 +23,23 @@ import void_engine.utility.transform;
 
 export namespace void_engine::graphics::renderer {
 
+struct DefaultResources {
+	resources::Font font{liberation_font_bytes};
+	Shader shape_shader{
+		{ShaderType::vertex, ShaderFormat::spirv, shape_shader_vert_bytes},
+		{ShaderType::fragment, ShaderFormat::spirv, shape_shader_frag_bytes}
+	};
+	Shader font_shader{
+		{ShaderType::vertex, ShaderFormat::spirv, font_shader_vert_bytes},
+		{ShaderType::fragment, ShaderFormat::spirv, font_shader_frag_bytes},
+	};
+	Shader font_screen_shader{
+		{ShaderType::vertex, ShaderFormat::spirv, font_screen_shader_vert_bytes},
+		{ShaderType::fragment, ShaderFormat::spirv, font_shader_frag_bytes},
+	};
+	camera::PerspectiveCamera camera;
+};
+
 struct DrawObjects {
 	Mesh point = geometry::create_point_mesh();
 	Mesh line = geometry::create_line_mesh();
@@ -27,7 +49,7 @@ struct DrawObjects {
 	Mesh circle_outline = geometry::create_circle_outline_mesh(100);
 	Mesh cube = geometry::create_cube_mesh();
 	Mesh cube_outline = geometry::create_cube_outline_mesh();
-	resource::font::Text text;
+	Text text;
 };
 
 struct CameraUniform {
@@ -88,12 +110,11 @@ struct Viewport {
 
 class Renderer {
 public:
-	Renderer(const Renderer&) = default;
+	Renderer(const Renderer&) = delete;
 	Renderer(Renderer&&) = delete;
-	auto operator=(const Renderer&) -> Renderer& = default;
+	auto operator=(const Renderer&) -> Renderer& = delete;
 	auto operator=(Renderer&&) -> Renderer& = delete;
 	Renderer();
-	~Renderer();
 
 	void clear() const;
 	void update();
@@ -109,14 +130,12 @@ public:
 	);
 	void draw_cube(const utility::Transform& transform, const glm::vec4& color);
 	void draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color);
-	void draw_text(
-		const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
-	);
+	void draw_text(const Text& text, const utility::Transform& transform, const glm::vec4& color);
 	void draw_text(
 		std::string_view text, const utility::Transform& transform, const glm::vec4& color
 	);
 	void draw_text_screen(
-		const resource::font::Text& text, const utility::Transform& transform, const glm::vec4& color
+		const Text& text, const utility::Transform& transform, const glm::vec4& color
 	);
 	void draw_text_screen(
 		std::string_view text, const utility::Transform& transform, const glm::vec4& color
@@ -170,11 +189,10 @@ public:
 
 private:
 	bool _initialized = initialize();
-	resource::ResourceManager _resource_manager;
 	DrawObjects _draw_objects;
+	DefaultResources _default_resources;
 	buffer::UniformBuffer<CameraUniform> _camera_uniform;
-	camera::Camera* _default_camera;
-	camera::Camera* _camera;
+	camera::Camera* _camera = nullptr;
 	glm::mat4 _screen_projection = glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
 	PolygonMode _polygon_mode = PolygonMode::fill;
 	Blend _blend;

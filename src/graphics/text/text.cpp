@@ -2,23 +2,20 @@ module;
 
 #include <cassert>
 
-module void_engine.resources;
-import :font.text;
-
-import :font;
-import :font.glyph;
+module void_engine.graphics;
 
 import std;
 import glm;
+import void_engine.resources;
 
-namespace void_engine::resource::font {
+namespace void_engine::graphics {
 
 Text::Text(const Text& other) : _font(other._font), _data(other._data) {
 	update();
 }
 
 Text::Text(Text&& other) noexcept : _font(other._font), _data(std::move(other._data)) {
-	// other._mesh = nullptr;
+	other._mesh = nullptr;
 	other._font = nullptr;
 }
 
@@ -35,22 +32,22 @@ auto Text::operator=(Text&& other) noexcept -> Text& {
 	if (this != &other) {
 		_font = other._font;
 		_data = std::move(other._data);
-		// _mesh = other._mesh;
-		// other._mesh = nullptr;
+		_mesh = other._mesh;
+		other._mesh = nullptr;
 		other._font = nullptr;
 	}
 	return *this;
 }
 
-Text::Text(const Font& font, std::string_view data) : _font(&font), _data(data) {
+Text::Text(const resources::Font& font, std::string_view data) : _font(&font), _data(data) {
 	update();
 }
 
 Text::~Text() {
-	// delete _mesh;
+	delete _mesh;
 }
 
-void Text::set_font(const Font& font) {
+void Text::set_font(const resources::Font& font) {
 	_font = &font;
 	_dirty = true;
 }
@@ -63,7 +60,7 @@ void Text::set_data(std::string_view data) {
 	_dirty = true;
 }
 
-auto Text::get_font() const -> const Font& {
+auto Text::get_font() const -> const resources::Font& {
 	return *_font;
 }
 
@@ -78,18 +75,19 @@ auto Text::get_size() const -> const glm::vec2& {
 	}
 	return _size;
 }
-// auto Text::get_mesh() const -> const graphics::Mesh& {
-// 	if (_dirty) {
-// 		update();
-// 		_dirty = false;
-// 	}
-// 	return *_mesh;
-// }
+
+auto Text::get_mesh() const -> const graphics::Mesh& {
+	if (_dirty) {
+		update();
+		_dirty = false;
+	}
+	return *_mesh;
+}
 
 void Text::update() const {
 	assert(_font != nullptr && "Font is not set");
 	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> converter;
-	const std::vector<Glyph> glyphs = _font->get_glyphs(converter.from_bytes(_data));
+	const std::vector<resources::Glyph> glyphs = _font->get_glyphs(converter.from_bytes(_data));
 	std::vector<glm::vec2> positions;
 	positions.reserve(glyphs.size() * 4);
 	std::vector<glm::vec2> uvs;
@@ -134,17 +132,17 @@ void Text::update() const {
 		indices_offset += 4;
 		_size = position + size;
 	}
-	// if (_mesh == nullptr) {
-	// 	_mesh = new graphics::Mesh();
-	// 	_mesh->add_attribute<float>(2);
-	// 	_mesh->add_vertex_buffer(positions, graphics::buffer::Usage::dynamic_draw);
-	// 	_mesh->add_attribute<float>(2);
-	// 	_mesh->add_vertex_buffer(uvs, graphics::buffer::Usage::dynamic_draw);
-	// } else {
-	// 	_mesh->get_vertex_buffer<glm::vec2>(0).update_data(positions);
-	// 	_mesh->get_vertex_buffer<glm::vec2>(1).update_data(uvs);
-	// }
-	// _mesh->set_indices(indices);
+	if (_mesh == nullptr) {
+		_mesh = new graphics::Mesh();
+		_mesh->add_attribute<float>(2);
+		_mesh->add_vertex_buffer(positions, graphics::buffer::Usage::dynamic_draw);
+		_mesh->add_attribute<float>(2);
+		_mesh->add_vertex_buffer(uvs, graphics::buffer::Usage::dynamic_draw);
+	} else {
+		_mesh->get_vertex_buffer<glm::vec2>(0).update_data(positions);
+		_mesh->get_vertex_buffer<glm::vec2>(1).update_data(uvs);
+	}
+	_mesh->set_indices(indices);
 }
 
-} // namespace void_engine::resource::font
+} // namespace void_engine::graphics

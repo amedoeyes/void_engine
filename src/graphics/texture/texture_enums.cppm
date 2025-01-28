@@ -1,10 +1,10 @@
-export module void_engine.resources:texture.enums;
+export module void_engine.graphics:texture_enums;
 
 import std;
 
-export namespace void_engine::resource {
+export namespace void_engine::graphics {
 
-enum class Target : std::uint16_t {
+enum class TextureTarget : std::uint16_t {
 	texture_1d = 0x0DE0,
 	texture_2d = 0x0DE1,
 	texture_3d = 0x806F,
@@ -24,7 +24,7 @@ enum class Target : std::uint16_t {
 	texture_cube_map_negative_z = 0x851A
 };
 
-enum class InternalFormat : std::uint16_t {
+enum class TextureInternalFormat : std::uint16_t {
 	none = 0,
 	r8 = 0x8229,
 	r8_snorm = 0x8F94,
@@ -87,7 +87,7 @@ enum class InternalFormat : std::uint16_t {
 	rgba32ui = 0x8D70,
 };
 
-enum class Format : std::uint16_t {
+enum class TextureFormat : std::uint16_t {
 	none = 0,
 	r = 0x1903,
 	rg = 0x8227,
@@ -99,12 +99,12 @@ enum class Format : std::uint16_t {
 	stencil_index = 0x1901,
 };
 
-enum class DepthStencilMode : std::uint16_t {
+enum class TextureDepthStencilMode : std::uint16_t {
 	depth_component = 0x1902,
 	stencil_index = 0x1901
 };
 
-enum class CompareFunc : std::uint16_t {
+enum class TextureCompareFunc : std::uint16_t {
 	lequal = 0x0203,
 	gequal = 0x0206,
 	less = 0x0201,
@@ -115,12 +115,12 @@ enum class CompareFunc : std::uint16_t {
 	never = 0x0200
 };
 
-enum class CompareMode : std::uint16_t {
+enum class TextureCompareMode : std::uint16_t {
 	compare_ref_to_texture = 0x884E,
 	none = 0
 };
 
-enum class MinFilter : std::uint16_t {
+enum class TextureMinFilter : std::uint16_t {
 	nearest = 0x2600,
 	linear = 0x2601,
 	nearest_mipmap_nearest = 0x2700,
@@ -129,12 +129,12 @@ enum class MinFilter : std::uint16_t {
 	linear_mipmap_linear = 0x2703
 };
 
-enum class MagFilter : std::uint16_t {
+enum class TextureMagFilter : std::uint16_t {
 	nearest = 0x2600,
 	linear = 0x2601
 };
 
-enum class Swizzle : std::uint16_t {
+enum class TextureSwizzle : std::uint16_t {
 	red = 0x1903,
 	green = 0x1904,
 	blue = 0x1905,
@@ -143,7 +143,7 @@ enum class Swizzle : std::uint16_t {
 	one = 1
 };
 
-enum class Wrap : std::uint16_t {
+enum class TextureWrap : std::uint16_t {
 	clamp_to_edge = 0x812F,
 	clamp_to_border = 0x812D,
 	mirrored_repeat = 0x8370,
@@ -151,4 +151,4 @@ enum class Wrap : std::uint16_t {
 	mirror_clamp_to_edge = 0x8743
 };
 
-} // namespace void_engine::resource
+} // namespace void_engine::graphics

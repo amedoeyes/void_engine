@@ -1,11 +1,12 @@
-export module void_engine.resources:font.text;
+export module void_engine.graphics:text;
 
-import :font;
+import :mesh;
 
 import std;
 import glm;
+import void_engine.resources;
 
-export namespace void_engine::resource::font {
+export namespace void_engine::graphics {
 
 class Text {
 public:
@@ -14,25 +15,25 @@ public:
 	auto operator=(const Text& other) -> Text&;
 	auto operator=(Text&& other) noexcept -> Text&;
 	Text() = default;
-	explicit Text(const Font& font, std::string_view data);
+	explicit Text(const resources::Font& font, std::string_view data);
 	~Text();
 
-	void set_font(const Font& font);
+	void set_font(const resources::Font& font);
 	void set_data(std::string_view data);
 
-	[[nodiscard]] auto get_font() const -> const Font&;
+	[[nodiscard]] auto get_font() const -> const resources::Font&;
 	[[nodiscard]] auto get_data() const -> const std::string&;
 	[[nodiscard]] auto get_size() const -> const glm::vec2&;
-	// [[nodiscard]] auto get_mesh() const -> const graphics::Mesh&;
+	[[nodiscard]] auto get_mesh() const -> const Mesh&;
 
 private:
-	const Font* _font = nullptr;
+	const resources::Font* _font = nullptr;
 	std::string _data;
 	mutable glm::vec2 _size = {0.0f, 0.0f};
-	// mutable graphics::Mesh* _mesh = nullptr;
+	mutable Mesh* _mesh = nullptr;
 	mutable bool _dirty = false;
 
 	void update() const;
 };
 
-} // namespace void_engine::resource::font
+} // namespace void_engine::graphics

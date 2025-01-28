@@ -7,12 +7,11 @@ module;
 #include <stb_image_write.h>
 
 module void_engine.resources;
-import :image;
 
 import std;
 import glm;
 
-namespace void_engine::resource::image {
+namespace void_engine::resources {
 
 Image::Image(std::span<const std::byte> data, ColorType color_type, const glm::uvec2& size) :
 	_data(data.begin(), data.end()),
@@ -84,4 +83,4 @@ auto Image::get_size() const -> const glm::uvec2& {
 	return _size;
 }
 
-} // namespace void_engine::resource::image
+} // namespace void_engine::resources

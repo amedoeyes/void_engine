@@ -80,7 +80,7 @@ void Mouse::set_image(const std::filesystem::path& path, const glm::vec2& hot_sp
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
-	const resource::image::Image image(path, true);
+	const resources::Image image(path, true);
 	const glm::ivec2& size = image.get_size();
 	const GLFWimage glfw_image = {
 		.width = size.x,

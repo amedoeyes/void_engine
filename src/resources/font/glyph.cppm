@@ -1,8 +1,8 @@
-export module void_engine.resources:font.glyph;
+export module void_engine.resources:glyph;
 
 import glm;
 
-export namespace void_engine::resource::font {
+export namespace void_engine::resources {
 
 struct Glyph {
 	unsigned int codepoint;
@@ -13,4 +13,4 @@ struct Glyph {
 	glm::vec2 uv_size;
 };
 
-} // namespace void_engine::resource::font
+} // namespace void_engine::resources

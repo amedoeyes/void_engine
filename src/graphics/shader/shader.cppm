@@ -1,12 +1,12 @@
-export module void_engine.resources:shader;
+export module void_engine.graphics:shader;
 
-import :shader.enums;
-import :shader.source;
+import :shader_enums;
+import :shader_source;
 
 import std;
 import glm;
 
-export namespace void_engine::resource::shader {
+export namespace void_engine::graphics {
 
 class Shader {
 public:
@@ -15,15 +15,18 @@ public:
 	auto operator=(const Shader& other) -> Shader&;
 	auto operator=(Shader&& other) noexcept -> Shader&;
 	Shader();
-	explicit Shader(std::filesystem::path root_path);
+	Shader(std::initializer_list<ShaderSource> sources);
 	~Shader();
 
 	void bind() const;
 	static void unbind();
 
-	void add_source_path(Type type, const std::filesystem::path& path, Format format = Format::glsl);
-	void add_source(Type type, std::string_view source, Format format = Format::glsl);
-	void add_source(Type type, std::span<const std::byte> source, Format format = Format::glsl);
+	void add_source(
+		ShaderType type, const std::filesystem::path& path, ShaderFormat format = ShaderFormat::glsl
+	);
+	void add_source(
+		ShaderType type, std::span<const std::byte> source, ShaderFormat format = ShaderFormat::glsl
+	);
 	void compile();
 
 	void set_uniform(unsigned int index, int value) const;
@@ -44,7 +47,6 @@ public:
 
 private:
 	unsigned int _id = 0;
-	std::filesystem::path _root_path;
 	std::vector<ShaderSource> _sources;
 	std::vector<unsigned int> _shaders;
 	std::unordered_map<std::string, int> _uniforms;
@@ -54,4 +56,4 @@ private:
 	static auto compile_source_spirv(const ShaderSource& source) -> unsigned int;
 };
 
-} // namespace void_engine::resource::shader
+} // namespace void_engine::graphics

@@ -4,8 +4,15 @@ export import :renderer.renderer;
 export import :renderer.enums;
 
 export import :mesh;
-
 export import :geometry;
+export import :text;
+
+export import :texture;
+export import :texture_enums;
+
+export import :shader;
+export import :shader_source;
+export import :shader_enums;
 
 export import :camera;
 export import :camera.enums;

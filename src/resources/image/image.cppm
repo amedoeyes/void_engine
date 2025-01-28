@@ -1,11 +1,11 @@
 export module void_engine.resources:image;
 
-import :image.enums;
+import :image_enums;
 
 import std;
 import glm;
 
-export namespace void_engine::resource::image {
+export namespace void_engine::resources {
 
 class Image {
 public:
@@ -30,4 +30,4 @@ private:
 	glm::uvec2 _size = {0, 0};
 };
 
-} // namespace void_engine::resource::image
+} // namespace void_engine::resources

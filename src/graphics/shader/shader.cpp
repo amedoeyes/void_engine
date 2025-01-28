@@ -4,24 +4,19 @@ module;
 #include <glad/glad.h>
 #include <glm/gtc/type_ptr.hpp>
 
-module void_engine.resources;
-import :shader;
+module void_engine.graphics;
 
 import std;
 import glm;
 
-namespace void_engine::resource::shader {
+namespace void_engine::graphics {
 
-Shader::Shader(const Shader& other) :
-	_id(glCreateProgram()),
-	_root_path(other._root_path),
-	_sources(other._sources) {
+Shader::Shader(const Shader& other) : _id(glCreateProgram()), _sources(other._sources) {
 	compile();
 }
 
 Shader::Shader(Shader&& other) noexcept :
 	_id(other._id),
-	_root_path(std::move(other._root_path)),
 	_sources(std::move(other._sources)),
 	_shaders(std::move(other._shaders)),
 	_uniforms(std::move(other._uniforms)) {
@@ -32,7 +27,6 @@ auto Shader::operator=(const Shader& other) -> Shader& {
 	if (this == &other) {
 		return *this;
 	}
-	_root_path = other._root_path;
 	_sources = other._sources;
 	compile();
 	return *this;
@@ -40,7 +34,6 @@ auto Shader::operator=(const Shader& other) -> Shader& {
 
 auto Shader::operator=(Shader&& other) noexcept -> Shader& {
 	_id = other._id;
-	_root_path = std::move(other._root_path);
 	_sources = std::move(other._sources);
 	_shaders = std::move(other._shaders);
 	_uniforms = std::move(other._uniforms);
@@ -51,8 +44,9 @@ auto Shader::operator=(Shader&& other) noexcept -> Shader& {
 Shader::Shader() : _id(glCreateProgram()) {
 }
 
-Shader::Shader(std::filesystem::path root_path) : Shader() {
-	_root_path = std::move(root_path);
+Shader::Shader(std::initializer_list<ShaderSource> sources) : Shader() {
+	std::ranges::move(sources, std::back_inserter(_sources));
+	compile();
 }
 
 Shader::~Shader() {
@@ -70,16 +64,12 @@ void Shader::unbind() {
 	glUseProgram(0);
 }
 
-void Shader::add_source_path(Type type, const std::filesystem::path& path, Format format) {
-	_sources.push_back({type, format, _root_path / path});
+void Shader::add_source(ShaderType type, const std::filesystem::path& path, ShaderFormat format) {
+	_sources.push_back({type, format, path});
 }
 
-void Shader::add_source(Type type, std::string_view source, Format format) {
-	_sources.push_back({type, format, std::string(source)});
-}
-
-void Shader::add_source(Type type, std::span<const std::byte> source, Format format) {
-	add_source(type, {std::bit_cast<const char*>(source.data()), source.size()}, format);
+void Shader::add_source(ShaderType type, std::span<const std::byte> source, ShaderFormat format) {
+	_sources.push_back({type, format, source});
 }
 
 void Shader::compile() {
@@ -118,10 +108,6 @@ void Shader::compile() {
 		}
 		delete[] name;
 	}
-}
-
-void Shader::set_root_path(const std::filesystem::path& root_path) {
-	_root_path = root_path;
 }
 
 void Shader::set_uniform(unsigned int index, int value) const {
@@ -209,17 +195,20 @@ void Shader::set_uniform(const std::string& name, const glm::mat4& value) const 
 }
 
 auto Shader::compile_source_glsl(const ShaderSource& source) -> unsigned int {
-	std::string source_code;
+	std::string buffer;
 	if (std::holds_alternative<std::filesystem::path>(source.data)) {
-		std::ifstream file(std::get<std::filesystem::path>(source.data));
+		const auto& file_path = std::get<std::filesystem::path>(source.data);
+		std::ifstream file(file_path, std::ios::binary | std::ios::ate);
 		assert(file.is_open() && "Failed to open file");
-		source_code =
-			std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
-		file.close();
+		std::streamsize file_size = file.tellg();
+		file.seekg(0, std::ios::beg);
+		buffer.resize(file_size);
+		file.read(buffer.data(), file_size);
 	} else {
-		source_code = std::get<std::string>(source.data);
+		const auto& bytes = std::get<std::span<const std::byte>>(source.data);
+		buffer.assign(std::bit_cast<const char*>(bytes.data()), bytes.size());
 	}
-	const char* source_code_c = source_code.c_str();
+	const char* source_code_c = buffer.c_str();
 	const unsigned int shader = glCreateShader(static_cast<GLenum>(source.type));
 	glShaderSource(shader, 1, &source_code_c, nullptr);
 	glCompileShader(shader);
@@ -229,17 +218,16 @@ auto Shader::compile_source_glsl(const ShaderSource& source) -> unsigned int {
 auto Shader::compile_source_spirv(const ShaderSource& source) -> unsigned int {
 	std::string buffer;
 	if (std::holds_alternative<std::filesystem::path>(source.data)) {
-		std::ifstream file(
-			std::get<std::filesystem::path>(source.data), std::ios::binary | std::ios::ate
-		);
-		assert(file.is_open() && "Failed to open SPIR-V binary file");
-		const std::streamsize size = file.tellg();
+		const auto& file_path = std::get<std::filesystem::path>(source.data);
+		std::ifstream file(file_path, std::ios::binary | std::ios::ate);
+		assert(file.is_open() && "Failed to open file");
+		std::streamsize file_size = file.tellg();
 		file.seekg(0, std::ios::beg);
-		buffer.resize(static_cast<std::size_t>(size));
-		file.read(buffer.data(), size);
-		file.close();
+		buffer.resize(file_size);
+		file.read(buffer.data(), file_size);
 	} else {
-		buffer = std::get<std::string>(source.data);
+		const auto& bytes = std::get<std::span<const std::byte>>(source.data);
+		buffer.assign(std::bit_cast<const char*>(bytes.data()), bytes.size());
 	}
 	const unsigned int shader = glCreateShader(static_cast<GLenum>(source.type));
 	glShaderBinary(
@@ -251,10 +239,10 @@ auto Shader::compile_source_spirv(const ShaderSource& source) -> unsigned int {
 
 auto Shader::compile_source(const ShaderSource& source) -> unsigned int {
 	switch (source.format) {
-		case Format::glsl: return compile_source_glsl(source);
-		case Format::spirv: return compile_source_spirv(source);
+		case ShaderFormat::glsl: return compile_source_glsl(source);
+		case ShaderFormat::spirv: return compile_source_spirv(source);
 		default: std::unreachable();
 	}
 }
 
-} // namespace void_engine::resource::shader
+} // namespace void_engine::graphics

@@ -8,41 +8,43 @@ module;
 
 module void_engine.resources;
 
-import :font;
-
 import glm;
 import std;
 
-namespace void_engine::resource::font {
+namespace void_engine::resources {
 
-Font::Font(
-	FT_Library ft, const std::filesystem::path& path, unsigned int size, glm::uvec2 atlas_size
-) :
-	_ft(ft),
+Font::Font(const std::filesystem::path& path, unsigned int size, glm::uvec2 atlas_size) :
 	_size(size),
 	_atlas_size(atlas_size) {
+	if (_instance_count == 0) {
+		const int result = FT_Init_FreeType(&_ft);
+		assert(result == 0 && "Failed to initialize FreeType");
+	}
+	++_instance_count;
 	_faces.push_back(load_font(path, _size));
 	_fonts.push_back(hb_ft_font_create(_faces.back(), nullptr));
-	_texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
-	_texture.set_min_filter(resource::MinFilter::linear);
-	_texture.set_mag_filter(resource::MagFilter::linear);
-	_texture.set_wrap_s(resource::Wrap::clamp_to_edge);
-	_texture.set_wrap_t(resource::Wrap::clamp_to_edge);
+	// _texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
+	// _texture.set_min_filter(resource::MinFilter::linear);
+	// _texture.set_mag_filter(resource::MagFilter::linear);
+	// _texture.set_wrap_s(resource::Wrap::clamp_to_edge);
+	// _texture.set_wrap_t(resource::Wrap::clamp_to_edge);
 }
 
-Font::Font(
-	FT_Library ft, std::span<const std::byte> data, unsigned int size, glm::uvec2 atlas_size
-) :
-	_ft(ft),
+Font::Font(std::span<const std::byte> data, unsigned int size, glm::uvec2 atlas_size) :
 	_size(size),
 	_atlas_size(atlas_size) {
+	if (_instance_count == 0) {
+		const int result = FT_Init_FreeType(&_ft);
+		assert(result == 0 && "Failed to initialize FreeType");
+	}
+	++_instance_count;
 	_faces.push_back(load_font(data, _size));
 	_fonts.push_back(hb_ft_font_create(_faces.back(), nullptr));
-	_texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
-	_texture.set_min_filter(resource::MinFilter::linear);
-	_texture.set_mag_filter(resource::MagFilter::linear);
-	_texture.set_wrap_s(resource::Wrap::clamp_to_edge);
-	_texture.set_wrap_t(resource::Wrap::clamp_to_edge);
+	// _texture.set_texture_storage_2d(1, resource::InternalFormat::r8, _atlas_size);
+	// _texture.set_min_filter(resource::MinFilter::linear);
+	// _texture.set_mag_filter(resource::MagFilter::linear);
+	// _texture.set_wrap_s(resource::Wrap::clamp_to_edge);
+	// _texture.set_wrap_t(resource::Wrap::clamp_to_edge);
 }
 
 Font::~Font() {
@@ -51,6 +53,10 @@ Font::~Font() {
 	}
 	for (auto* face : _faces) {
 		FT_Done_Face(face);
+	}
+	--_instance_count;
+	if (_instance_count == 0) {
+		FT_Done_FreeType(_ft);
 	}
 }
 
@@ -95,9 +101,9 @@ auto Font::get_glyphs(std::u32string_view text) const -> std::vector<Glyph> {
 	return glyphs;
 }
 
-auto Font::get_texture() const -> const texture::Texture& {
-	return _texture;
-}
+// auto Font::get_texture() const -> const graphics::Texture& {
+// 	return _texture;
+// }
 
 auto Font::get_line_height() const -> unsigned int {
 	return _faces[0]->size->metrics.height / 64;
@@ -160,11 +166,11 @@ auto Font::get_glyph(unsigned int index, unsigned int codepoint) const -> const 
 		if (_next_glpyh_position.y + bitmap_size.y + padding > _atlas_size.y) {
 			assert(false && "Font atlas is too small");
 		}
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-		_texture.set_sub_image_2d(
-			0, _next_glpyh_position, bitmap_size, resource::Format::r, face->glyph->bitmap.buffer
-		);
-		glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
+		// glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+		// _texture.set_sub_image_2d(
+		// 	0, _next_glpyh_position, bitmap_size, resource::Format::r, face->glyph->bitmap.buffer
+		// );
+		// glPixelStorei(GL_UNPACK_ALIGNMENT, 4);
 		it->second = {
 			.codepoint = codepoint,
 			.size = bitmap_size,
@@ -179,4 +185,4 @@ auto Font::get_glyph(unsigned int index, unsigned int codepoint) const -> const 
 	return it->second;
 }
 
-} // namespace void_engine::resource::font
+} // namespace void_engine::resources
