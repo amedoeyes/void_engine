@@ -30,7 +30,7 @@ public:
 
 	template <typename T>
 	auto add_listener(EventListener<T>&& listener) -> EventListenerID {
-		constexpr EventIndex index = get_index<T>::value;
+		static constexpr EventIndex index = get_index<T>::value;
 		auto& event = _events[index];
 		EventListenerID id = _next_listener_id++;
 		event.emplace_back(id, ([listener = std::move(listener)](const Event& event) {
@@ -41,7 +41,7 @@ public:
 
 	template <typename T>
 	void remove_listener(EventListenerID id) {
-		constexpr EventIndex index = get_index<T>::value;
+		static constexpr EventIndex index = get_index<T>::value;
 		auto& event = _events[index];
 		const auto it = std::ranges::find_if(event, [id](const auto& pair) {
 			return id == pair.first;
@@ -53,19 +53,19 @@ public:
 
 	template <typename T>
 	void emit(T&& data) {
-		constexpr EventIndex index = get_index<T>::value;
+		static constexpr EventIndex index = get_index<T>::value;
 		_queue.emplace(index, std::forward<T>(data));
 	}
 
 	template <typename T>
 	void emit() {
-		constexpr EventIndex index = get_index<T>::value;
+		static constexpr EventIndex index = get_index<T>::value;
 		_queue.emplace(index, T{});
 	}
 
 	template <typename T>
 	void clear() {
-		constexpr EventIndex index = get_index<T>::value;
+		static constexpr EventIndex index = get_index<T>::value;
 		_events[index].clear();
 	}
 
