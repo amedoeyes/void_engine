@@ -2,9 +2,7 @@ module void_engine.window;
 
 namespace void_engine::window::input {
 
-InputManager::InputManager(Window& window) :
-	_keyboard(keyboard::Keyboard(window)),
-	_mouse(mouse::Mouse(window)) {
+InputManager::InputManager(Window& window) : _keyboard(window), _mouse(window) {
 }
 
 void InputManager::update() {

@@ -87,6 +87,7 @@ void WindowManager::poll_events() {
 	glfwPollEvents();
 	for (auto& window : _windows) {
 		window.get_inputs().update();
+		window.get_events().poll();
 	}
 }
 
