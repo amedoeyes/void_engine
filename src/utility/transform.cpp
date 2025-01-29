@@ -9,10 +9,14 @@ import glm;
 
 namespace void_engine::utility {
 
-Transform::Transform(const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale) :
+Transform::Transform(
+	const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale,
+	const glm::vec3& origin
+) :
 	_position(position),
 	_rotation(rotation),
-	_scale(scale) {
+	_scale(scale),
+	_origin(origin) {
 }
 
 void Transform::translate(const glm::vec3& translation) {
@@ -55,6 +59,11 @@ void Transform::set_scale(const glm::vec3& scale) {
 	_dirty = true;
 }
 
+void Transform::set_origin(const glm::vec3& origin) {
+	_origin = origin;
+	_dirty = true;
+}
+
 auto Transform::get_position() const -> const glm::vec3& {
 	return _position;
 }
@@ -67,12 +76,18 @@ auto Transform::get_scale() const -> const glm::vec3& {
 	return _scale;
 }
 
+auto Transform::get_origin() const -> const glm::vec3& {
+	return _origin;
+}
+
 auto Transform::get_model() const -> const glm::mat4& {
 	if (_dirty) {
 		_model = glm::mat4(1.0f);
 		_model = glm::translate(_model, _position);
 		_model = _model * glm::mat4_cast(_rotation);
+		_model = glm::translate(_model, -_origin);
 		_model = glm::scale(_model, _scale);
+		_model = glm::translate(_model, _origin);
 		_dirty = false;
 	}
 	return _model;
