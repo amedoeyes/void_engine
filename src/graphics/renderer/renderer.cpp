@@ -74,7 +74,7 @@ Renderer::Renderer() {
 	_camera = &_default_resources.camera;
 	_camera_uniform.bind_range(0);
 	_camera_uniform.allocate(sizeof(CameraUniform), buffer::Usage::dynamic_draw);
-	_draw_objects.text.set_font(_default_resources.font);
+	_draw_objects.text.set_atlas(_default_resources.font_atlas);
 }
 
 void Renderer::clear() const {
@@ -194,7 +194,7 @@ void Renderer::draw_text(
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(2, color);
 	shader.bind();
-	// text.get_font().get_texture().bind_unit(0);
+	text.get_atlas().bind_unit(0);
 	draw_mesh(text.get_mesh());
 	set_blend_enabled(prev_blend.enabled);
 	set_blend_factors(prev_blend.factors);
@@ -216,7 +216,7 @@ void Renderer::draw_text_screen(
 	set_blend_factors(
 		{.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha}
 	);
-	// text.get_font().get_texture().bind_unit(0);
+	text.get_atlas().bind_unit(0);
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, _screen_projection);
 	shader.set_uniform(2, color);

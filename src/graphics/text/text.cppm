@@ -1,36 +1,30 @@
 export module void_engine.graphics:text;
 
 import :mesh;
+import :font_atlas;
 
 import std;
 import glm;
-import void_engine.resources;
 
 export namespace void_engine::graphics {
 
 class Text {
 public:
-	Text(const Text& other);
-	Text(Text&& other) noexcept;
-	auto operator=(const Text& other) -> Text&;
-	auto operator=(Text&& other) noexcept -> Text&;
-	Text() = default;
-	explicit Text(const resources::Font& font, std::string_view data);
-	~Text();
+	explicit Text(FontAtlas& atlas, std::string_view data = "");
 
-	void set_font(const resources::Font& font);
+	void set_atlas(FontAtlas& atlas);
 	void set_data(std::string_view data);
 
-	[[nodiscard]] auto get_font() const -> const resources::Font&;
+	[[nodiscard]] auto get_atlas() const -> FontAtlas&;
 	[[nodiscard]] auto get_data() const -> const std::string&;
 	[[nodiscard]] auto get_size() const -> const glm::vec2&;
 	[[nodiscard]] auto get_mesh() const -> const Mesh&;
 
 private:
-	const resources::Font* _font = nullptr;
+	std::reference_wrapper<FontAtlas> _atlas;
 	std::string _data;
 	mutable glm::vec2 _size = {0.0f, 0.0f};
-	mutable Mesh* _mesh = nullptr;
+	mutable Mesh _mesh;
 	mutable bool _dirty = false;
 
 	void update() const;

@@ -9,6 +9,8 @@ export import :text;
 
 export import :texture;
 export import :texture_enums;
+export import :uv_region;
+export import :font_atlas;
 
 export import :shader;
 export import :shader_source;

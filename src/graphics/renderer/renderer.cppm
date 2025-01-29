@@ -9,6 +9,7 @@ export module void_engine.graphics:renderer.renderer;
 import :renderer.enums;
 import :geometry;
 import :mesh;
+import :font_atlas;
 import :text;
 import :shader;
 import :camera;
@@ -25,17 +26,40 @@ export namespace void_engine::graphics::renderer {
 
 struct DefaultResources {
 	resources::Font font{liberation_font_bytes};
+	FontAtlas font_atlas{this->font};
 	Shader shape_shader{
-		{ShaderType::vertex, ShaderFormat::spirv, shape_shader_vert_bytes},
-		{ShaderType::fragment, ShaderFormat::spirv, shape_shader_frag_bytes}
+		{
+			.type = ShaderType::vertex,
+			.format = ShaderFormat::spirv,
+			.data = shape_shader_vert_bytes,
+		},
+		{
+			.type = ShaderType::fragment,
+			.format = ShaderFormat::spirv,
+			.data = shape_shader_frag_bytes,
+		}
 	};
 	Shader font_shader{
-		{ShaderType::vertex, ShaderFormat::spirv, font_shader_vert_bytes},
-		{ShaderType::fragment, ShaderFormat::spirv, font_shader_frag_bytes},
+		{
+			.type = ShaderType::vertex,
+			.format = ShaderFormat::spirv,
+			.data = font_shader_vert_bytes,
+		},
+		{
+			.type = ShaderType::fragment,
+			.format = ShaderFormat::spirv,
+			.data = font_shader_frag_bytes,
+		},
 	};
 	Shader font_screen_shader{
-		{ShaderType::vertex, ShaderFormat::spirv, font_screen_shader_vert_bytes},
-		{ShaderType::fragment, ShaderFormat::spirv, font_shader_frag_bytes},
+		{.type = ShaderType::vertex,
+		 .format = ShaderFormat::spirv,
+		 .data = font_screen_shader_vert_bytes},
+		{
+			.type = ShaderType::fragment,
+			.format = ShaderFormat::spirv,
+			.data = font_shader_frag_bytes,
+		},
 	};
 	camera::PerspectiveCamera camera;
 };
@@ -115,6 +139,7 @@ public:
 	auto operator=(const Renderer&) -> Renderer& = delete;
 	auto operator=(Renderer&&) -> Renderer& = delete;
 	Renderer();
+	~Renderer() = default;
 
 	void clear() const;
 	void update();
@@ -189,8 +214,8 @@ public:
 
 private:
 	bool _initialized = initialize();
-	DrawObjects _draw_objects;
 	DefaultResources _default_resources;
+	DrawObjects _draw_objects{.text{this->_default_resources.font_atlas}};
 	buffer::UniformBuffer<CameraUniform> _camera_uniform;
 	camera::Camera* _camera = nullptr;
 	glm::mat4 _screen_projection = glm::ortho(0.0f, 1.0f, 0.0f, 1.0f);
