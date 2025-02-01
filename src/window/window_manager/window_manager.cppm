@@ -20,19 +20,25 @@ public:
 	~window_manager();
 
 	auto create(
-		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Window& share, const Hints& hints = {}
-	) -> Window&;
+		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints = {}
+	) -> window&;
 
 	auto create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints = {})
-		-> Window&;
+		-> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const Window& share, const Hints& hints = {}) -> Window&;
+	auto create(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints = {}) -> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const Hints& hints = {}) -> Window&;
+	auto create(std::string_view title, const glm::ivec2& size, const Hints& hints = {}) -> window&;
 
-	auto destroy(const Window& window) -> void;
+	auto destroy(const window& window) -> void;
 
 	auto poll_events() -> void;
+
+	auto clear_context() -> void;
+
+	static auto set_swap_interval(std::int32_t interval) -> void;
+
+	static auto set_vsync(bool enabled) -> void;
 
 	[[nodiscard]]
 	static auto monitors() -> std::vector<Monitor>;
@@ -42,7 +48,7 @@ public:
 
 private:
 	static inline std::int32_t instance_count_ = 0;
-	std::vector<std::unique_ptr<Window>> windows_;
+	std::vector<std::unique_ptr<window>> windows_;
 };
 
 } // namespace void_engine::window

@@ -29,11 +29,11 @@ auto main() -> int {
 	auto& window = window_manager.create("Clock", {800, 600});
 
 	auto renderer = graphics::renderer::Renderer{};
-	renderer.set_viewport_size(window.get_size());
+	renderer.set_viewport_size(window.size());
 	renderer.set_clear_color({0.0f, 0.0f, 0.0f, 1.0f});
 	renderer.get_camera().set_position({0.0f, 0.0f, 5.0f});
 
-	window.get_events().add_listener<window::event::WindowSizeEvent>([&](const auto& event) {
+	window.events().add_listener<window::event::WindowSizeEvent>([&](const auto& event) {
 		renderer.set_viewport_size(event.size);
 	});
 

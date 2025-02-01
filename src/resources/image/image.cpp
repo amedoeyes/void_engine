@@ -13,11 +13,10 @@ import glm;
 
 namespace void_engine::resources {
 
-Image::Image(std::span<const std::byte> data, ColorType color_type, const glm::uvec2& size) :
-	_data(data.begin(), data.end()),
-	_color_type(color_type),
-	_size(size) {
-}
+Image::Image(std::span<const std::byte> data, ColorType color_type, const glm::uvec2& size)
+	: _data(data.begin(), data.end()),
+		_color_type(color_type),
+		_size(size) {}
 
 Image::Image(const std::filesystem::path& path, bool flip) {
 	int width = 0;
@@ -41,12 +40,7 @@ Image::Image(std::span<std::byte> data, bool flip) {
 	stbi_set_flip_vertically_on_load(static_cast<int>(flip));
 	// NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
 	unsigned char* image_data = stbi_load_from_memory(
-		std::bit_cast<const unsigned char*>(data.data()),
-		static_cast<int>(data.size()),
-		&width,
-		&height,
-		&channels,
-		0
+		std::bit_cast<const unsigned char*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, 0
 	);
 	assert(image_data != nullptr && "Failed to load image");
 	const unsigned int size = width * height * channels;
@@ -71,16 +65,10 @@ void Image::write(const std::filesystem::path& path) const {
 	}
 }
 
-auto Image::get_data() const -> std::span<const std::byte> {
-	return _data;
-}
+auto Image::get_data() const -> std::span<const std::byte> { return _data; }
 
-auto Image::get_color_type() const -> ColorType {
-	return _color_type;
-}
+auto Image::get_color_type() const -> ColorType { return _color_type; }
 
-auto Image::get_size() const -> const glm::uvec2& {
-	return _size;
-}
+auto Image::get_size() const -> const glm::ivec2& { return _size; }
 
 } // namespace void_engine::resources

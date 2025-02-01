@@ -20,14 +20,17 @@ public:
 
 	void write(const std::filesystem::path& path) const;
 
-	[[nodiscard]] auto get_data() const -> std::span<const std::byte>;
-	[[nodiscard]] auto get_color_type() const -> ColorType;
-	[[nodiscard]] auto get_size() const -> const glm::uvec2&;
+	[[nodiscard]]
+	auto get_data() const -> std::span<const std::byte>;
+	[[nodiscard]]
+	auto get_color_type() const -> ColorType;
+	[[nodiscard]]
+	auto get_size() const -> const glm::ivec2&;
 
 private:
 	std::vector<std::byte> _data;
 	ColorType _color_type;
-	glm::uvec2 _size = {0, 0};
+	glm::ivec2 _size = {0, 0};
 };
 
 } // namespace void_engine::resources

@@ -29,36 +29,42 @@ window_manager::~window_manager() {
 }
 
 auto window_manager::create(
-	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Window& share, const Hints& hints
-) -> Window& {
-	return *windows_.emplace_back(std::make_unique<Window>(title, size, monitor, share, hints));
+	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints
+) -> window& {
+	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, share, hints));
 }
 
 auto window_manager::create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints)
-	-> Window& {
-	return *windows_.emplace_back(std::make_unique<Window>(title, size, monitor, hints));
+	-> window& {
+	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, hints));
 }
 
-auto window_manager::create(std::string_view title, const glm::ivec2& size, const Window& share, const Hints& hints)
-	-> Window& {
-	return *windows_.emplace_back(std::make_unique<Window>(title, size, share, hints));
+auto window_manager::create(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints)
+	-> window& {
+	return *windows_.emplace_back(std::make_unique<window>(title, size, share, hints));
 }
 
-auto window_manager::create(std::string_view title, const glm::ivec2& size, const Hints& hints) -> Window& {
-	return *windows_.emplace_back(std::make_unique<Window>(title, size, hints));
+auto window_manager::create(std::string_view title, const glm::ivec2& size, const Hints& hints) -> window& {
+	return *windows_.emplace_back(std::make_unique<window>(title, size, hints));
 }
 
-auto window_manager::destroy(const Window& window) -> void {
+auto window_manager::destroy(const window& window) -> void {
 	windows_.erase(std::ranges::find_if(windows_, [&](const auto& w) { return w->raw() == window.raw(); }));
 }
 
 auto window_manager::poll_events() -> void {
 	glfwPollEvents();
 	for (auto& window : windows_) {
-		window->get_inputs().update();
-		window->get_events().poll();
+		window->inputs().update();
+		window->events().poll();
 	}
 }
+
+auto window_manager::clear_context() -> void { glfwMakeContextCurrent(nullptr); }
+
+auto window_manager::set_swap_interval(std::int32_t interval) -> void { glfwSwapInterval(interval); }
+
+auto window_manager::set_vsync(bool enabled) -> void { set_swap_interval(enabled ? 1 : 0); }
 
 auto window_manager::monitors() -> std::vector<Monitor> {
 	auto count = 0;
