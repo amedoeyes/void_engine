@@ -10,7 +10,7 @@ auto main() -> int {
 	renderer.set_viewport_size(window.size());
 	renderer.set_clear_color({0.0f, 0.0f, 0.0f, 1.0f});
 
-	window.events().add_listener<window::event::WindowSizeEvent>([&](const auto& event) {
+	window.events().add_listener<window::event::window_size>([&](const auto& event) {
 		renderer.set_viewport_size(event.size);
 	});
 

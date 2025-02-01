@@ -5,12 +5,12 @@ import std;
 namespace void_engine::window::input::keyboard {
 
 Keyboard::Keyboard(window& window) : _window(&window) {
-	_keyboard_key_listener = _window->events().add_listener<event::KeyboardKeyEvent>([this](const auto& event) {
+	_keyboard_key_listener = _window->events().add_listener<event::keyboard_key>([this](const auto& event) {
 		set_key(event.key, event.action == KeyAction::press || event.action == KeyAction::repeat);
 	});
 }
 
-Keyboard::~Keyboard() { _window->events().remove_listener<event::KeyboardKeyEvent>(_keyboard_key_listener); }
+Keyboard::~Keyboard() { _window->events().remove_listener<event::keyboard_key>(_keyboard_key_listener); }
 
 void Keyboard::update() {
 	for (auto& key : _keys) key.set_previous(key.get());

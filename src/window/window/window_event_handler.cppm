@@ -10,23 +10,23 @@ class window;
 
 export namespace void_engine::window {
 
-class WindowEventHandler final : public utility::event::EventManager<event::DropEvent,
-                                                                     event::FramebufferSizeEvent,
-                                                                     event::KeyboardCharEvent,
-                                                                     event::KeyboardCharModsEvent,
-                                                                     event::KeyboardKeyEvent,
-                                                                     event::MouseButtonEvent,
-                                                                     event::MouseEnterEvent,
-                                                                     event::MousePositionEvent,
-                                                                     event::MouseScrollEvent,
-                                                                     event::WindowCloseEvent,
-                                                                     event::WindowContentScaleEvent,
-                                                                     event::WindowFocusEvent,
-                                                                     event::WindowIconifyEvent,
-                                                                     event::WindowMaximizeEvent,
-                                                                     event::WindowPositionEvent,
-                                                                     event::WindowRefreshEvent,
-                                                                     event::WindowSizeEvent> {
+class WindowEventHandler final : public utility::event::EventManager<event::drop,
+                                                                     event::framebuffer_size,
+                                                                     event::keyboard_char,
+                                                                     event::keyboard_char_mods,
+                                                                     event::keyboard_key,
+                                                                     event::mouse_button,
+                                                                     event::mouse_enter,
+                                                                     event::mouse_position,
+                                                                     event::mouse_scroll,
+                                                                     event::window_close,
+                                                                     event::window_content_scale,
+                                                                     event::window_focus,
+                                                                     event::window_iconify,
+                                                                     event::window_maximize,
+                                                                     event::window_position,
+                                                                     event::window_refresh,
+                                                                     event::window_size> {
 public:
 	WindowEventHandler(const WindowEventHandler&) = default;
 	WindowEventHandler(WindowEventHandler&&) = delete;

@@ -13,23 +13,22 @@ namespace void_engine::window::input::mouse {
 
 Mouse::Mouse(window& window) : _window(&window) {
 	WindowEventHandler& events = _window->events();
-	_mouse_button_listener = events.add_listener<event::MouseButtonEvent>([this](const event::MouseButtonEvent& event) {
+	_mouse_button_listener = events.add_listener<event::mouse_button>([this](const auto& event) {
 		set_button(event.button, event.action == ButtonAction::press);
 	});
-	_mouse_position_listener = events
-	                             .add_listener<event::MousePositionEvent>([this](const event::MousePositionEvent& event) {
+	_mouse_position_listener = events.add_listener<event::mouse_position>([this](const auto& event) {
 		set_position(event.position);
 	});
-	_mouse_scroll_listener = events.add_listener<event::MouseScrollEvent>([this](const event::MouseScrollEvent& event) {
+	_mouse_scroll_listener = events.add_listener<event::mouse_scroll>([this](const auto& event) {
 		set_scroll(event.offset);
 	});
 }
 
 Mouse::~Mouse() {
 	WindowEventHandler& events = _window->events();
-	events.remove_listener<event::MouseButtonEvent>(_mouse_button_listener);
-	events.remove_listener<event::MousePositionEvent>(_mouse_position_listener);
-	events.remove_listener<event::MouseScrollEvent>(_mouse_scroll_listener);
+	events.remove_listener<event::mouse_button>(_mouse_button_listener);
+	events.remove_listener<event::mouse_position>(_mouse_position_listener);
+	events.remove_listener<event::mouse_scroll>(_mouse_scroll_listener);
 	if (_cursor != nullptr) {
 		glfwDestroyCursor(_cursor);
 	}
