@@ -11,23 +11,24 @@ import void_engine.resources;
 
 namespace void_engine::window {
 
-window::window(
-	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints
-)
+window::window(std::string_view title,
+               const glm::ivec2& size,
+               const Monitor& monitor,
+               const window& share,
+               const window_hints& hints)
 	: window(title, size, monitor.raw(), share.raw(), hints) {}
 
-window::window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints)
+window::window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints)
 	: window(title, size, monitor.raw(), nullptr, hints) {}
 
-window::window(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints)
+window::window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints)
 	: window(title, size, nullptr, share.raw(), hints) {}
 
-window::window(std::string_view title, const glm::ivec2& size, const Hints& hints)
+window::window(std::string_view title, const glm::ivec2& size, const window_hints& hints)
 	: window(title, size, nullptr, nullptr, hints) {}
 
 window::window(
-	std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const Hints& hints
-) {
+	std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const window_hints& hints) {
 	apply_hints(hints);
 	_window.reset(glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share));
 	assert(_window != nullptr && "Failed to create window");
@@ -66,8 +67,7 @@ auto window::fullscreen(const Monitor& monitor) const -> void {
 
 auto window::fullscreen(const Monitor& monitor, const VideoMode& video_mode) const -> void {
 	glfwSetWindowMonitor(
-		_window.get(), monitor.raw(), 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate
-	);
+		_window.get(), monitor.raw(), 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate);
 }
 
 auto window::windowed(const glm::ivec2& position, const glm::ivec2& size) const -> void {
@@ -218,7 +218,7 @@ auto window::should_close() const -> bool { return glfwWindowShouldClose(_window
 
 auto window::raw() const -> GLFWwindow* { return _window.get(); }
 
-auto window::apply_hints(const Hints& hints) -> void {
+auto window::apply_hints(const window_hints& hints) -> void {
 	glfwWindowHint(GLFW_RESIZABLE, static_cast<int>(hints.window.resizable));
 	glfwWindowHint(GLFW_VISIBLE, static_cast<int>(hints.window.visible));
 	glfwWindowHint(GLFW_DECORATED, static_cast<int>(hints.window.decorated));

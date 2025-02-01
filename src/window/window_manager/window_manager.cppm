@@ -19,16 +19,19 @@ public:
 	window_manager();
 	~window_manager();
 
-	auto create(
-		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints = {}
-	) -> window&;
+	auto create(std::string_view title,
+	            const glm::ivec2& size,
+	            const Monitor& monitor,
+	            const window& share,
+	            const window_hints& hints = {}) -> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints = {})
+	auto create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints = {})
 		-> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints = {}) -> window&;
+	auto create(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints = {})
+		-> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const Hints& hints = {}) -> window&;
+	auto create(std::string_view title, const glm::ivec2& size, const window_hints& hints = {}) -> window&;
 
 	auto destroy(const window& window) -> void;
 

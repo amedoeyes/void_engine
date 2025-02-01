@@ -17,11 +17,12 @@ export namespace void_engine::window {
 class window {
 public:
 	window(
-		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints = {}
+		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share,
+		const window_hints& hints = {}
 	);
-	window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints = {});
-	window(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints = {});
-	window(std::string_view title, const glm::ivec2& size, const Hints& hints = {});
+	window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints = {});
+	window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints = {});
+	window(std::string_view title, const glm::ivec2& size, const window_hints& hints = {});
 
 	auto swap_buffers() const -> void;
 
@@ -156,9 +157,11 @@ private:
 	std::unique_ptr<WindowEventHandler> _events;
 	std::unique_ptr<input::InputManager> _inputs;
 
-	window(std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const Hints& hints);
+	window(
+		std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const window_hints& hints
+	);
 
-	static auto apply_hints(const Hints& hints) -> void;
+	static auto apply_hints(const window_hints& hints) -> void;
 };
 
 } // namespace void_engine::window

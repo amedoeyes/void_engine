@@ -28,23 +28,29 @@ window_manager::~window_manager() {
 	if (--instance_count_ == 0) glfwTerminate();
 }
 
-auto window_manager::create(
-	std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share, const Hints& hints
-) -> window& {
+auto window_manager::create(std::string_view title,
+                            const glm::ivec2& size,
+                            const Monitor& monitor,
+                            const window& share,
+                            const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, share, hints));
 }
 
-auto window_manager::create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const Hints& hints)
-	-> window& {
+auto window_manager::create(std::string_view title,
+                            const glm::ivec2& size,
+                            const Monitor& monitor,
+                            const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, hints));
 }
 
-auto window_manager::create(std::string_view title, const glm::ivec2& size, const window& share, const Hints& hints)
-	-> window& {
+auto window_manager::create(std::string_view title,
+                            const glm::ivec2& size,
+                            const window& share,
+                            const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, share, hints));
 }
 
-auto window_manager::create(std::string_view title, const glm::ivec2& size, const Hints& hints) -> window& {
+auto window_manager::create(std::string_view title, const glm::ivec2& size, const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, hints));
 }
 
