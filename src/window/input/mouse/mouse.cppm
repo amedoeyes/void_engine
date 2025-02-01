@@ -5,10 +5,10 @@ module;
 export module void_engine.window:input.mouse;
 
 import :input.mouse_enums;
+import :window_event_bus;
 
 import std;
 import glm;
-import void_engine.utility.event;
 import void_engine.utility.state;
 
 export namespace void_engine::window {
@@ -58,9 +58,9 @@ private:
 	std::array<utility::State<bool>, 4> _buttons;
 	utility::State<glm::vec2> _position;
 	glm::vec2 _scroll = {0.0f, 0.0f};
-	utility::event::EventListenerID _mouse_button_listener;
-	utility::event::EventListenerID _mouse_position_listener;
-	utility::event::EventListenerID _mouse_scroll_listener;
+	window_event_bus::id_type _mouse_button_listener;
+	window_event_bus::id_type _mouse_position_listener;
+	window_event_bus::id_type _mouse_scroll_listener;
 };
 
 } // namespace void_engine::window::input::mouse

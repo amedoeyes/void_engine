@@ -10,7 +10,7 @@ import void_engine.utility.bit_mask;
 
 namespace void_engine::window {
 
-window_event_handler::window_event_handler(const window& window) : window_{window.raw()} {
+window_event_bus::window_event_bus(const window& window) : window_{window.raw()} {
 	static constexpr auto emit = [](GLFWwindow* w, auto&& data) {
 		return static_cast<class window*>(glfwGetWindowUserPointer(w))->events().emit(std::forward<decltype(data)>(data));
 	};
@@ -68,7 +68,7 @@ window_event_handler::window_event_handler(const window& window) : window_{windo
 	});
 }
 
-window_event_handler::~window_event_handler() {
+window_event_bus::~window_event_bus() {
 	glfwSetCharCallback(window_, nullptr);
 	glfwSetCharModsCallback(window_, nullptr);
 	glfwSetCursorEnterCallback(window_, nullptr);

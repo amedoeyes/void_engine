@@ -1,9 +1,9 @@
 export module void_engine.window:input.keyboard;
 
 import :input.keyboard_enums;
+import :window_event_bus;
 
 import std;
-import void_engine.utility.event;
 import void_engine.utility.state;
 
 export namespace void_engine::window {
@@ -37,7 +37,7 @@ public:
 private:
 	window* _window;
 	std::array<utility::State<bool>, 512> _keys;
-	utility::event::EventListenerID _keyboard_key_listener;
+	window_event_bus::id_type _keyboard_key_listener;
 };
 
 } // namespace void_engine::window::input::keyboard

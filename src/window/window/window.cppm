@@ -6,7 +6,7 @@ export module void_engine.window:window;
 
 import :input.input_manager;
 import :monitor;
-import :window_event_handler;
+import :window_event_bus;
 import :window_hints;
 
 import glm;
@@ -78,7 +78,7 @@ public:
 	auto set_title(std::string_view title) -> void;
 
 	[[nodiscard]]
-	auto events() -> window_event_handler&;
+	auto events() -> window_event_bus&;
 
 	[[nodiscard]]
 	auto inputs() -> input::InputManager&;
@@ -155,7 +155,7 @@ private:
 	};
 
 	std::unique_ptr<GLFWwindow, destroy_glfw_window> _window;
-	std::unique_ptr<window_event_handler> _events;
+	std::unique_ptr<window_event_bus> _events;
 	std::unique_ptr<input::InputManager> _inputs;
 
 	window(std::string_view title,
