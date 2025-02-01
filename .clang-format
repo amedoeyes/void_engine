@@ -150,6 +150,6 @@ SortUsingDeclarations: Lexicographic
 
 # Panalties
 PenaltyBreakAssignment: 1000
+PenaltyBreakOpenParenthesis: 1000
 PenaltyReturnTypeOnItsOwnLine: 1000
 # PenaltyBreakBeforeMemberAccess: 1000
-PenaltyBreakOpenParenthesis: 1000
