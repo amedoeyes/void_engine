@@ -56,9 +56,9 @@ auto main() -> int {
 		renderer.update();
 		renderer.clear();
 
-		renderer.draw_circle_outline(
-			{{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {scale, scale, 1.0f}}, 2.0f, {1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_circle_outline({{0.0f, 0.0f, 0.0f}, {0.0f, 0.0f, 0.0f}, {scale, scale, 1.0f}},
+		                             2.0f,
+		                             {1.0f, 1.0f, 1.0f, 1.0f});
 
 		for (auto i : std::views::iota(0, 60)) {
 			const auto angle = ((i / 60.0) * glm::two_pi<double>()) + angle_offset;
@@ -69,26 +69,20 @@ auto main() -> int {
 			renderer.draw_line(start, end, width, {1.0f, 1.0f, 1.0f, 1.0f});
 		}
 
-		renderer.draw_line(
-			{0.0f, 0.0f, 0.0f},
-			{-glm::cos(hours_angle) * 0.6f * scale, glm::sin(hours_angle) * 0.6f * scale, 0.0f},
-			8.0f,
-			{1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_line({0.0f, 0.0f, 0.0f},
+		                   {-glm::cos(hours_angle) * 0.6f * scale, glm::sin(hours_angle) * 0.6f * scale, 0.0f},
+		                   8.0f,
+		                   {1.0f, 1.0f, 1.0f, 1.0f});
 
-		renderer.draw_line(
-			{0.0f, 0.0f, 0.0f},
-			{-glm::cos(minutes_angle) * 0.9f * scale, glm::sin(minutes_angle) * 0.9f * scale, 0.0f},
-			4.0f,
-			{1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_line({0.0f, 0.0f, 0.0f},
+		                   {-glm::cos(minutes_angle) * 0.9f * scale, glm::sin(minutes_angle) * 0.9f * scale, 0.0f},
+		                   4.0f,
+		                   {1.0f, 1.0f, 1.0f, 1.0f});
 
-		renderer.draw_line(
-			{0.0f, 0.0f, 0.0f},
-			{-glm::cos(seconds_angle) * 0.9f * scale, glm::sin(seconds_angle) * 0.9f * scale, 0.0f},
-			1.0f,
-			{1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_line({0.0f, 0.0f, 0.0f},
+		                   {-glm::cos(seconds_angle) * 0.9f * scale, glm::sin(seconds_angle) * 0.9f * scale, 0.0f},
+		                   1.0f,
+		                   {1.0f, 1.0f, 1.0f, 1.0f});
 
 		renderer.draw_point({0.0f, 0.0f, 0.0f}, 10.0f, {1.0f, 1.0f, 1.0f, 1.0f});
 

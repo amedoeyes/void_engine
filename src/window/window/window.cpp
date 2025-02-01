@@ -27,8 +27,11 @@ window::window(std::string_view title, const glm::ivec2& size, const window& sha
 window::window(std::string_view title, const glm::ivec2& size, const window_hints& hints)
 	: window(title, size, nullptr, nullptr, hints) {}
 
-window::window(
-	std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const window_hints& hints) {
+window::window(std::string_view title,
+               const glm::ivec2& size,
+               GLFWmonitor* monitor,
+               GLFWwindow* share,
+               const window_hints& hints) {
 	apply_hints(hints);
 	_window.reset(glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share));
 	assert(_window != nullptr && "Failed to create window");
@@ -66,8 +69,13 @@ auto window::fullscreen(const Monitor& monitor) const -> void {
 }
 
 auto window::fullscreen(const Monitor& monitor, const VideoMode& video_mode) const -> void {
-	glfwSetWindowMonitor(
-		_window.get(), monitor.raw(), 0, 0, video_mode.size.x, video_mode.size.y, video_mode.refresh_rate);
+	glfwSetWindowMonitor(_window.get(),
+	                     monitor.raw(),
+	                     0,
+	                     0,
+	                     video_mode.size.x,
+	                     video_mode.size.y,
+	                     video_mode.refresh_rate);
 }
 
 auto window::windowed(const glm::ivec2& position, const glm::ivec2& size) const -> void {

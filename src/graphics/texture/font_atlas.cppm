@@ -13,9 +13,10 @@ public:
 	using glyph_atlas_entry = std::tuple<resources::Glyph, resources::GlyphBitmap, UVRegion>;
 
 	FontAtlas() = delete;
-	explicit FontAtlas(const resources::Font& font, std::int32_t size = 1024);
+	explicit FontAtlas(const resources::Font& font, std::int32_t size = 1'024);
 
-	[[nodiscard]] auto glyphs(std::string_view text) -> std::vector<glyph_atlas_entry>;
+	[[nodiscard]]
+	auto glyphs(std::string_view text) -> std::vector<glyph_atlas_entry>;
 
 private:
 	std::reference_wrapper<const resources::Font> _font;

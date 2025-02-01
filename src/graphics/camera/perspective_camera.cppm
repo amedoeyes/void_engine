@@ -17,9 +17,12 @@ public:
 	void set_aspect(float aspect);
 	void set_aspect(const glm::vec2& size);
 	void set_size(const glm::vec2& size) override;
-	[[nodiscard]] auto get_fov() const -> float;
-	[[nodiscard]] auto get_aspect() const -> float;
-	[[nodiscard]] auto get_type() const -> Type override;
+	[[nodiscard]]
+	auto get_fov() const -> float;
+	[[nodiscard]]
+	auto get_aspect() const -> float;
+	[[nodiscard]]
+	auto get_type() const -> Type override;
 
 protected:
 	float _fov = glm::quarter_pi<float>();

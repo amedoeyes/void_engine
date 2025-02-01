@@ -16,9 +16,10 @@ Mouse::Mouse(window& window) : _window(&window) {
 	_mouse_button_listener = events.add_listener<event::MouseButtonEvent>([this](const event::MouseButtonEvent& event) {
 		set_button(event.button, event.action == ButtonAction::press);
 	});
-	_mouse_position_listener = events.add_listener<event::MousePositionEvent>(
-		[this](const event::MousePositionEvent& event) { set_position(event.position); }
-	);
+	_mouse_position_listener = events
+	                             .add_listener<event::MousePositionEvent>([this](const event::MousePositionEvent& event) {
+		set_position(event.position);
+	});
 	_mouse_scroll_listener = events.add_listener<event::MouseScrollEvent>([this](const event::MouseScrollEvent& event) {
 		set_scroll(event.offset);
 	});

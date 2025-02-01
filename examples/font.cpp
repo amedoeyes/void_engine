@@ -33,19 +33,17 @@ auto main() -> int {
 		renderer.update();
 		renderer.clear();
 
-		renderer.draw_text(
-			text,
-			{{0.0f, 0.0f, -10.0f}, {time, time, time}, {0.01f, 0.01f, 0.01f}, {center.x, center.y, 0.0f}},
-			{1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_text(text,
+		                   {{0.0f, 0.0f, -10.0f}, {time, time, time}, {0.01f, 0.01f, 0.01f}, {center.x, center.y, 0.0f}},
+		                   {1.0f, 1.0f, 1.0f, 1.0f});
 
-		renderer.draw_text_screen(
-			std::format("Time: {:.2f}s", time), {{10, 10, 0}, {}, {0.5, 0.5, 1}}, {1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_text_screen(std::format("Time: {:.2f}s", time),
+		                          {{10, 10, 0}, {}, {0.5, 0.5, 1}},
+		                          {1.0f, 1.0f, 1.0f, 1.0f});
 
-		renderer.draw_cube_outline(
-			{{0.0f, 0.0f, -5.0f}, {time, time, time}, {1.0f, 1.0f, 1.0f}}, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_cube_outline({{0.0f, 0.0f, -5.0f}, {time, time, time}, {1.0f, 1.0f, 1.0f}},
+		                           1.0f,
+		                           {1.0f, 1.0f, 1.0f, 1.0f});
 
 		window.swap_buffers();
 	}

@@ -15,9 +15,11 @@ public:
 	EntityManager() = default;
 	~EntityManager() = default;
 
-	[[nodiscard]] auto create() -> Entity;
+	[[nodiscard]]
+	auto create() -> Entity;
 	void destroy(Entity entity);
-	[[nodiscard]] auto contains(Entity entity) const -> bool;
+	[[nodiscard]]
+	auto contains(Entity entity) const -> bool;
 
 private:
 	std::vector<Entity> _data;

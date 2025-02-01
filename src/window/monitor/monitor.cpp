@@ -9,16 +9,11 @@ import glm;
 
 namespace void_engine::window {
 
-Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {
-}
+Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {}
 
-auto Monitor::raw() const -> GLFWmonitor* {
-	return _monitor;
-}
+auto Monitor::raw() const -> GLFWmonitor* { return _monitor; }
 
-void Monitor::set_gamma(float gamma) const {
-	glfwSetGamma(_monitor, gamma);
-}
+void Monitor::set_gamma(float gamma) const { glfwSetGamma(_monitor, gamma); }
 
 auto Monitor::get_content_scale() const -> glm::vec2 {
 	auto scale = glm::vec2();
@@ -26,9 +21,7 @@ auto Monitor::get_content_scale() const -> glm::vec2 {
 	return scale;
 }
 
-auto Monitor::get_name() const -> std::string_view {
-	return glfwGetMonitorName(_monitor);
-}
+auto Monitor::get_name() const -> std::string_view { return glfwGetMonitorName(_monitor); }
 
 auto Monitor::get_physical_size() const -> glm::ivec2 {
 	auto size = glm::ivec2();

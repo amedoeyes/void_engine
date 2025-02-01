@@ -9,15 +9,14 @@ import glm;
 
 namespace void_engine::utility {
 
-Transform::Transform(
-	const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale,
-	const glm::vec3& origin
-) :
-	_position(position),
-	_rotation(rotation),
-	_scale(scale),
-	_origin(origin) {
-}
+Transform::Transform(const glm::vec3& position,
+                     const glm::vec3& rotation,
+                     const glm::vec3& scale,
+                     const glm::vec3& origin)
+	: _position(position),
+		_rotation(rotation),
+		_scale(scale),
+		_origin(origin) {}
 
 void Transform::translate(const glm::vec3& translation) {
 	_position += translation;
@@ -64,21 +63,13 @@ void Transform::set_origin(const glm::vec3& origin) {
 	_dirty = true;
 }
 
-auto Transform::get_position() const -> const glm::vec3& {
-	return _position;
-}
+auto Transform::get_position() const -> const glm::vec3& { return _position; }
 
-auto Transform::get_rotation() const -> glm::vec3 {
-	return glm::eulerAngles(_rotation);
-}
+auto Transform::get_rotation() const -> glm::vec3 { return glm::eulerAngles(_rotation); }
 
-auto Transform::get_scale() const -> const glm::vec3& {
-	return _scale;
-}
+auto Transform::get_scale() const -> const glm::vec3& { return _scale; }
 
-auto Transform::get_origin() const -> const glm::vec3& {
-	return _origin;
-}
+auto Transform::get_origin() const -> const glm::vec3& { return _origin; }
 
 auto Transform::get_model() const -> const glm::mat4& {
 	if (_dirty) {

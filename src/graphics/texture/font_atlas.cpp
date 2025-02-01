@@ -11,10 +11,10 @@ import void_engine.resources;
 
 namespace void_engine::graphics {
 
-FontAtlas::FontAtlas(const resources::Font& font, std::int32_t size) :
-	Texture(TextureTarget::texture_2d),
-	_font(font),
-	_size(size) {
+FontAtlas::FontAtlas(const resources::Font& font, std::int32_t size)
+	: Texture(TextureTarget::texture_2d),
+		_font(font),
+		_size(size) {
 	set_texture_storage_2d(1, TextureInternalFormat::r8, _size);
 	set_min_filter(TextureMinFilter::linear);
 	set_mag_filter(TextureMagFilter::linear);
@@ -22,7 +22,7 @@ FontAtlas::FontAtlas(const resources::Font& font, std::int32_t size) :
 	set_wrap_t(TextureWrap::clamp_to_edge);
 }
 
-[[nodiscard]] auto FontAtlas::glyphs(std::string_view text) -> std::vector<glyph_atlas_entry> {
+auto FontAtlas::glyphs(std::string_view text) -> std::vector<glyph_atlas_entry> {
 	static constexpr auto padding = 1;
 	auto entries = std::vector<glyph_atlas_entry>();
 	const auto glyphs = _font.get().glyphs(text);
@@ -42,9 +42,7 @@ FontAtlas::FontAtlas(const resources::Font& font, std::int32_t size) :
 			auto prev = 0;
 			glGetIntegerv(GL_UNPACK_ALIGNMENT, &prev);
 			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-			set_sub_image_2d(
-				0, _next_glpyh_position, bitmap.size, TextureFormat::r, bitmap.buffer.data()
-			);
+			set_sub_image_2d(0, _next_glpyh_position, bitmap.size, TextureFormat::r, bitmap.buffer.data());
 			glPixelStorei(GL_UNPACK_ALIGNMENT, prev);
 			it->second = {
 				glyph,
@@ -52,7 +50,7 @@ FontAtlas::FontAtlas(const resources::Font& font, std::int32_t size) :
 				{
 					.position = glm::vec2(_next_glpyh_position) / glm::vec2(_size),
 					.size = glm::vec2(bitmap.size) / glm::vec2(_size),
-				}
+				},
 			};
 			_next_glpyh_position.x += bitmap.size.x + padding;
 			_max_glyph_height = glm::max(_max_glyph_height, bitmap.size.y + padding);

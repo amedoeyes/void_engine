@@ -2,8 +2,8 @@ module;
 
 #include "embed.hpp"
 
-#include <GLFW/glfw3.h>
 #include <glad/glad.h>
+#include <GLFW/glfw3.h>
 #include <glm/gtx/rotate_vector.hpp>
 #include <glm/gtx/vector_angle.hpp>
 
@@ -22,45 +22,45 @@ import void_engine.utility.logger;
 
 namespace void_engine::graphics::renderer {
 
-APIENTRY void debug_message_callback(
-	unsigned int source, unsigned int type, unsigned int /*unused*/, unsigned int severity,
-	int /*unused*/, const char* message, const void* /*unused*/
+APIENTRY void debug_message_callback(unsigned int source,
+                                     unsigned int type,
+                                     unsigned int /*unused*/,
+                                     unsigned int severity,
+                                     int /*unused*/,
+                                     const char* message,
+                                     const void* /*unused*/
 ) {
 	std::string source_str;
 	std::string type_str;
 	switch (source) {
-		case GL_DEBUG_SOURCE_API: source_str = "API"; break;
-		case GL_DEBUG_SOURCE_WINDOW_SYSTEM: source_str = "Window System"; break;
-		case GL_DEBUG_SOURCE_SHADER_COMPILER: source_str = "Shader Compiler"; break;
-		case GL_DEBUG_SOURCE_THIRD_PARTY: source_str = "Third Party"; break;
-		case GL_DEBUG_SOURCE_APPLICATION: source_str = "Application"; break;
-		case GL_DEBUG_SOURCE_OTHER: source_str = "Other"; break;
-		default: std::unreachable();
+	case GL_DEBUG_SOURCE_API: source_str = "API"; break;
+	case GL_DEBUG_SOURCE_WINDOW_SYSTEM: source_str = "Window System"; break;
+	case GL_DEBUG_SOURCE_SHADER_COMPILER: source_str = "Shader Compiler"; break;
+	case GL_DEBUG_SOURCE_THIRD_PARTY: source_str = "Third Party"; break;
+	case GL_DEBUG_SOURCE_APPLICATION: source_str = "Application"; break;
+	case GL_DEBUG_SOURCE_OTHER: source_str = "Other"; break;
+	default: std::unreachable();
 	}
 	switch (type) {
-		case GL_DEBUG_TYPE_ERROR: type_str = "Error"; break;
-		case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: type_str = "Deprecated Behaviour"; break;
-		case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: type_str = "Undefined Behaviour"; break;
-		case GL_DEBUG_TYPE_PORTABILITY: type_str = "Portability"; break;
-		case GL_DEBUG_TYPE_PERFORMANCE: type_str = "Performance"; break;
-		case GL_DEBUG_TYPE_MARKER: type_str = "Marker"; break;
-		case GL_DEBUG_TYPE_PUSH_GROUP: type_str = "Push Group"; break;
-		case GL_DEBUG_TYPE_POP_GROUP: type_str = "Pop Group"; break;
-		case GL_DEBUG_TYPE_OTHER: type_str = "Other"; break;
-		default: std::unreachable();
+	case GL_DEBUG_TYPE_ERROR: type_str = "Error"; break;
+	case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: type_str = "Deprecated Behaviour"; break;
+	case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR: type_str = "Undefined Behaviour"; break;
+	case GL_DEBUG_TYPE_PORTABILITY: type_str = "Portability"; break;
+	case GL_DEBUG_TYPE_PERFORMANCE: type_str = "Performance"; break;
+	case GL_DEBUG_TYPE_MARKER: type_str = "Marker"; break;
+	case GL_DEBUG_TYPE_PUSH_GROUP: type_str = "Push Group"; break;
+	case GL_DEBUG_TYPE_POP_GROUP: type_str = "Pop Group"; break;
+	case GL_DEBUG_TYPE_OTHER: type_str = "Other"; break;
+	default: std::unreachable();
 	}
 	switch (severity) {
-		case GL_DEBUG_SEVERITY_HIGH:
-			utility::logger::error("OpenGL: {}: {}: {}", source_str, type_str, message);
-			break;
-		case GL_DEBUG_SEVERITY_MEDIUM:
-		case GL_DEBUG_SEVERITY_LOW:
-			utility::logger::warning("OpenGL: {}: {}: {}", source_str, type_str, message);
-			break;
-		case GL_DEBUG_SEVERITY_NOTIFICATION:
-			utility::logger::info("OpenGL: {}: {}: {}", source_str, type_str, message);
-			break;
-		default: std::unreachable();
+	case GL_DEBUG_SEVERITY_HIGH: utility::logger::error("OpenGL: {}: {}: {}", source_str, type_str, message); break;
+	case GL_DEBUG_SEVERITY_MEDIUM:
+	case GL_DEBUG_SEVERITY_LOW: utility::logger::warning("OpenGL: {}: {}: {}", source_str, type_str, message); break;
+	case GL_DEBUG_SEVERITY_NOTIFICATION:
+		utility::logger::info("OpenGL: {}: {}: {}", source_str, type_str, message);
+		break;
+	default: std::unreachable();
 	}
 }
 
@@ -77,13 +77,9 @@ Renderer::Renderer() {
 	_draw_objects.text.set_atlas(_default_resources.font_atlas);
 }
 
-void Renderer::clear() const {
-	glClear(_clear.flags.get());
-}
+void Renderer::clear() const { glClear(_clear.flags.get()); }
 
-void Renderer::update() {
-	update_camera_uniform();
-}
+void Renderer::update() { update_camera_uniform(); }
 
 void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
@@ -94,9 +90,7 @@ void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4
 	draw_mesh(_draw_objects.point);
 }
 
-void Renderer::draw_line(
-	const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color
-) {
+void Renderer::draw_line(const glm::vec3& start, const glm::vec3& end, float width, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
 	const glm::vec3 direction = end - start;
 	const glm::vec3 normal = glm::normalize(direction);
@@ -133,9 +127,7 @@ void Renderer::draw_quad(const utility::Transform& transform, const glm::vec4& c
 	draw_mesh(_draw_objects.quad);
 }
 
-void Renderer::draw_quad_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void Renderer::draw_quad_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
@@ -152,9 +144,7 @@ void Renderer::draw_circle(const utility::Transform& transform, const glm::vec4&
 	draw_mesh(_draw_objects.circle);
 }
 
-void Renderer::draw_circle_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void Renderer::draw_circle_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
@@ -171,9 +161,7 @@ void Renderer::draw_cube(const utility::Transform& transform, const glm::vec4& c
 	draw_mesh(_draw_objects.cube);
 }
 
-void Renderer::draw_cube_outline(
-	const utility::Transform& transform, float width, const glm::vec4& color
-) {
+void Renderer::draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, color);
@@ -182,15 +170,11 @@ void Renderer::draw_cube_outline(
 	draw_mesh(_draw_objects.cube_outline);
 }
 
-void Renderer::draw_text(
-	const Text& text, const utility::Transform& transform, const glm::vec4& color
-) {
+void Renderer::draw_text(const Text& text, const utility::Transform& transform, const glm::vec4& color) {
 	const Shader& shader = _default_resources.font_shader;
 	const Blend prev_blend = get_blend();
 	set_blend_enabled(true);
-	set_blend_factors(
-		{.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha}
-	);
+	set_blend_factors({.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha});
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(2, color);
 	shader.bind();
@@ -200,22 +184,16 @@ void Renderer::draw_text(
 	set_blend_factors(prev_blend.factors);
 }
 
-void Renderer::draw_text(
-	std::string_view text, const utility::Transform& transform, const glm::vec4& color
-) {
+void Renderer::draw_text(std::string_view text, const utility::Transform& transform, const glm::vec4& color) {
 	_draw_objects.text.set_data(text);
 	draw_text(_draw_objects.text, transform, color);
 }
 
-void Renderer::draw_text_screen(
-	const Text& text, const utility::Transform& transform, const glm::vec4& color
-) {
+void Renderer::draw_text_screen(const Text& text, const utility::Transform& transform, const glm::vec4& color) {
 	const Shader& shader = _default_resources.font_screen_shader;
 	const Blend prev_blend = get_blend();
 	set_blend_enabled(true);
-	set_blend_factors(
-		{.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha}
-	);
+	set_blend_factors({.source = BlendFactor::src_alpha, .destination = BlendFactor::one_minus_src_alpha});
 	text.get_atlas().bind_unit(0);
 	shader.set_uniform(0, transform.get_model());
 	shader.set_uniform(1, _screen_projection);
@@ -226,9 +204,7 @@ void Renderer::draw_text_screen(
 	set_blend_factors(prev_blend.factors);
 }
 
-void Renderer::draw_text_screen(
-	std::string_view text, const utility::Transform& transform, const glm::vec4& color
-) {
+void Renderer::draw_text_screen(std::string_view text, const utility::Transform& transform, const glm::vec4& color) {
 	_draw_objects.text.set_data(text);
 	draw_text_screen(_draw_objects.text, transform, color);
 }
@@ -247,16 +223,12 @@ void Renderer::draw_elements(PrimitiveType type, unsigned int count, void* indic
 	glDrawElements(static_cast<GLenum>(type), static_cast<GLsizei>(count), GL_UNSIGNED_INT, indices);
 }
 
-void Renderer::draw_elements_instanced(
-	PrimitiveType type, unsigned int count, void* indices, unsigned int instances
-) {
-	glDrawElementsInstanced(
-		static_cast<GLenum>(type),
-		static_cast<GLsizei>(count),
-		GL_UNSIGNED_INT,
-		indices,
-		static_cast<GLsizei>(instances)
-	);
+void Renderer::draw_elements_instanced(PrimitiveType type, unsigned int count, void* indices, unsigned int instances) {
+	glDrawElementsInstanced(static_cast<GLenum>(type),
+	                        static_cast<GLsizei>(count),
+	                        GL_UNSIGNED_INT,
+	                        indices,
+	                        static_cast<GLsizei>(instances));
 }
 
 void Renderer::set_camera(camera::Camera& camera) {
@@ -350,11 +322,9 @@ void Renderer::set_stencil_settings(const StencilSettings& settings) {
 }
 
 void Renderer::set_stencil_actions(const StencilActions& actions) {
-	glStencilOp(
-		static_cast<GLenum>(actions.stencil_fail),
-		static_cast<GLenum>(actions.depth_fail),
-		static_cast<GLenum>(actions.depth_pass)
-	);
+	glStencilOp(static_cast<GLenum>(actions.stencil_fail),
+	            static_cast<GLenum>(actions.depth_fail),
+	            static_cast<GLenum>(actions.depth_pass));
 	_stencil.actions = actions;
 }
 
@@ -362,9 +332,7 @@ void Renderer::set_viewport(const Viewport& viewport) {
 	assert(viewport.size.x >= 0 && viewport.size.y >= 0 && "Viewport size must be positive");
 	glViewport(viewport.position.x, viewport.position.y, viewport.size.x, viewport.size.y);
 	_viewport = viewport;
-	_screen_projection = glm::ortho(
-		0.0f, static_cast<float>(viewport.size.x), 0.0f, static_cast<float>(viewport.size.y)
-	);
+	_screen_projection = glm::ortho(0.0f, static_cast<float>(viewport.size.x), 0.0f, static_cast<float>(viewport.size.y));
 	_camera->set_size(viewport.size);
 }
 
@@ -376,45 +344,25 @@ void Renderer::set_viewport_size(const glm::ivec2& size) {
 	set_viewport({.position = get_viewport().position, .size = size});
 }
 
-void Renderer::set_point_size(float size) {
-	glPointSize(size);
-}
+void Renderer::set_point_size(float size) { glPointSize(size); }
 
-void Renderer::set_line_width(float width) {
-	glLineWidth(width);
-}
+void Renderer::set_line_width(float width) { glLineWidth(width); }
 
-auto Renderer::get_camera() const -> camera::Camera& {
-	return *_camera;
-}
+auto Renderer::get_camera() const -> camera::Camera& { return *_camera; }
 
-auto Renderer::get_clear_color() const -> const glm::vec4& {
-	return _clear.color;
-}
+auto Renderer::get_clear_color() const -> const glm::vec4& { return _clear.color; }
 
-auto Renderer::get_polygon_mode() const -> PolygonMode {
-	return _polygon_mode;
-}
+auto Renderer::get_polygon_mode() const -> PolygonMode { return _polygon_mode; }
 
-auto Renderer::get_blend() const -> const Blend& {
-	return _blend;
-}
+auto Renderer::get_blend() const -> const Blend& { return _blend; }
 
-auto Renderer::get_cull_face() const -> const CullFace& {
-	return _cull_face;
-}
+auto Renderer::get_cull_face() const -> const CullFace& { return _cull_face; }
 
-auto Renderer::get_depth() const -> const Depth& {
-	return _depth;
-}
+auto Renderer::get_depth() const -> const Depth& { return _depth; }
 
-auto Renderer::get_stencil() const -> const Stencil& {
-	return _stencil;
-}
+auto Renderer::get_stencil() const -> const Stencil& { return _stencil; }
 
-auto Renderer::get_viewport() const -> const Viewport& {
-	return _viewport;
-}
+auto Renderer::get_viewport() const -> const Viewport& { return _viewport; }
 
 auto Renderer::initialize() -> bool {
 	static bool initialized = false;
@@ -430,9 +378,7 @@ auto Renderer::initialize() -> bool {
 	return initialized;
 }
 
-void Renderer::set_enabled(unsigned int capability, bool enabled) {
-	(enabled ? glEnable : glDisable)(capability);
-}
+void Renderer::set_enabled(unsigned int capability, bool enabled) { (enabled ? glEnable : glDisable)(capability); }
 
 void Renderer::update_camera_uniform() {
 	const glm::mat4& projection = _camera->get_projection();

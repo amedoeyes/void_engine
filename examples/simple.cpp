@@ -24,9 +24,9 @@ auto main() -> int {
 
 		renderer.update();
 		renderer.clear();
-		renderer.draw_cube_outline(
-			{{0.0f, 0.0f, -5.0f}, {time, time, time}, {1.0f, 1.0f, 1.0f}}, 1.0f, {1.0f, 1.0f, 1.0f, 1.0f}
-		);
+		renderer.draw_cube_outline({{0.0f, 0.0f, -5.0f}, {time, time, time}, {1.0f, 1.0f, 1.0f}},
+		                           1.0f,
+		                           {1.0f, 1.0f, 1.0f, 1.0f});
 
 		window.swap_buffers();
 	}

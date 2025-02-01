@@ -2,8 +2,7 @@ module void_engine.utility.timer;
 
 namespace void_engine::utility {
 
-Timer::Timer() : _start(Clock::now()), _end(Clock::now()) {
-}
+Timer::Timer() : _start(Clock::now()), _end(Clock::now()) {}
 
 void Timer::reset() {
 	_start = Clock::now();
@@ -32,8 +31,6 @@ auto Timer::get_elapsed() const -> float {
 	return Duration(_end - _start).count();
 }
 
-auto Timer::is_running() const -> bool {
-	return _is_running;
-}
+auto Timer::is_running() const -> bool { return _is_running; }
 
 } // namespace void_engine::utility

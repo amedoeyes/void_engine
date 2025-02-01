@@ -39,9 +39,12 @@ Image::Image(std::span<std::byte> data, bool flip) {
 	int channels = 0;
 	stbi_set_flip_vertically_on_load(static_cast<int>(flip));
 	// NOLINTNEXTLINE(clang-analyzer-unix.Malloc)
-	unsigned char* image_data = stbi_load_from_memory(
-		std::bit_cast<const unsigned char*>(data.data()), static_cast<int>(data.size()), &width, &height, &channels, 0
-	);
+	unsigned char* image_data = stbi_load_from_memory(std::bit_cast<const unsigned char*>(data.data()),
+	                                                  static_cast<int>(data.size()),
+	                                                  &width,
+	                                                  &height,
+	                                                  &channels,
+	                                                  0);
 	assert(image_data != nullptr && "Failed to load image");
 	const unsigned int size = width * height * channels;
 	_data.resize(size);
@@ -52,14 +55,12 @@ Image::Image(std::span<std::byte> data, bool flip) {
 }
 
 void Image::write(const std::filesystem::path& path) const {
-	const int result = stbi_write_png(
-		path.string().c_str(),
-		static_cast<int>(_size.x),
-		static_cast<int>(_size.y),
-		static_cast<int>(_color_type),
-		_data.data(),
-		0
-	);
+	const int result = stbi_write_png(path.string().c_str(),
+	                                  static_cast<int>(_size.x),
+	                                  static_cast<int>(_size.y),
+	                                  static_cast<int>(_color_type),
+	                                  _data.data(),
+	                                  0);
 	if (result == 0) {
 		assert(false && "Failed to write image");
 	}

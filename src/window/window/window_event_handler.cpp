@@ -14,11 +14,9 @@ WindowEventHandler::WindowEventHandler(window& window) : _window(&window) {
 	glfwSetDropCallback(_window->raw(), [](GLFWwindow* window, int count, const char** paths) {
 		static_cast<class window*>(glfwGetWindowUserPointer(window))
 			->events()
-			.emit(event::DropEvent{
-				std::span(paths, count) //
-				| std::views::transform([](const auto& path) { return std::filesystem::path(path); })
-				| std::ranges::to<std::vector>()
-			});
+			.emit(event::DropEvent{std::span(paths, count) //
+		                         | std::views::transform([](const auto& path) { return std::filesystem::path(path); })
+		                         | std::ranges::to<std::vector>()});
 	});
 	glfwSetFramebufferSizeCallback(_window->raw(), [](GLFWwindow* window, int width, int height) {
 		static_cast<class window*>(glfwGetWindowUserPointer(window))

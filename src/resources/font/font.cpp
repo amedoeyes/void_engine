@@ -30,9 +30,11 @@ Font::Font(std::span<const std::byte> data, std::int32_t size) : _size(size) {
 		assert(result == 0 && "Failed to initialize FreeType");
 	}
 	++_instance_count;
-	const auto result = FT_New_Memory_Face(
-		_ft, std::bit_cast<unsigned char*>(data.data()), static_cast<long>(data.size_bytes()), 0, &_face
-	);
+	const auto result = FT_New_Memory_Face(_ft,
+	                                       std::bit_cast<unsigned char*>(data.data()),
+	                                       static_cast<long>(data.size_bytes()),
+	                                       0,
+	                                       &_face);
 	assert(result == 0 && "Failed to load font");
 	FT_Set_Pixel_Sizes(_face, 0, _size);
 	_font = hb_ft_font_create(_face, nullptr);
@@ -47,9 +49,7 @@ Font::~Font() {
 	}
 }
 
-auto Font::get_line_height() const -> float {
-	return static_cast<float>(_face->size->metrics.height) / 64.0f;
-}
+auto Font::get_line_height() const -> float { return static_cast<float>(_face->size->metrics.height) / 64.0f; }
 
 auto Font::glyphs(std::string_view text) const -> std::vector<Glyph> {
 	auto glyphs = std::vector<Glyph>();
@@ -66,12 +66,9 @@ auto Font::glyphs(std::string_view text) const -> std::vector<Glyph> {
 	for (auto i = 0ul; i < glyph_count; ++i) {
 		glyphs.emplace_back(Glyph{
 			.codepoint = glyph_info[i].codepoint,
-			.offset =
-				{static_cast<float>(glyph_pos[i].x_offset) / 64.0f,
-				 static_cast<float>(glyph_pos[i].y_offset) / 64.0f},
-			.advance =
-				{static_cast<float>(glyph_pos[i].x_advance) / 64.0f,
-				 static_cast<float>(glyph_pos[i].y_advance) / 64.0f},
+			.offset = {static_cast<float>(glyph_pos[i].x_offset) / 64.0f, static_cast<float>(glyph_pos[i].y_offset) / 64.0f},
+			.advance = {static_cast<float>(glyph_pos[i].x_advance) / 64.0f,
+		              static_cast<float>(glyph_pos[i].y_advance) / 64.0f},
 		});
 	}
 	hb_buffer_destroy(buffer);
@@ -82,11 +79,9 @@ auto Font::get_bitmap(std::uint32_t codepoint) const -> GlyphBitmap {
 	const auto result = FT_Load_Glyph(_face, codepoint, FT_LOAD_RENDER);
 	assert(result == 0 && "Failed to load glyph");
 	return {
-		.buffer = std::vector(
-			std::bit_cast<std::byte*>(_face->glyph->bitmap.buffer),
-			std::bit_cast<std::byte*>(_face->glyph->bitmap.buffer) +
-				(static_cast<std::uint64_t>(_face->glyph->bitmap.width * _face->glyph->bitmap.rows))
-		),
+		.buffer = std::vector(std::bit_cast<std::byte*>(_face->glyph->bitmap.buffer),
+	                        std::bit_cast<std::byte*>(_face->glyph->bitmap.buffer)
+	                          + (static_cast<std::uint64_t>(_face->glyph->bitmap.width * _face->glyph->bitmap.rows))),
 		.size = {_face->glyph->bitmap.width, _face->glyph->bitmap.rows},
 		.bearing = {_face->glyph->bitmap_left, _face->glyph->bitmap_top},
 	};

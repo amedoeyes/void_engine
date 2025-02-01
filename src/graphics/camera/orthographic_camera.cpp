@@ -57,38 +57,22 @@ void OrthographicCamera::zoom(float zoom) {
 	update_projection();
 }
 
-void OrthographicCamera::set_size(const glm::vec2& size) {
-	set_dimensions(size);
-}
+void OrthographicCamera::set_size(const glm::vec2& size) { set_dimensions(size); }
 
-auto OrthographicCamera::get_left() const -> float {
-	return _left;
-}
+auto OrthographicCamera::get_left() const -> float { return _left; }
 
-auto OrthographicCamera::get_right() const -> float {
-	return _right;
-}
+auto OrthographicCamera::get_right() const -> float { return _right; }
 
-auto OrthographicCamera::get_bottom() const -> float {
-	return _bottom;
-}
+auto OrthographicCamera::get_bottom() const -> float { return _bottom; }
 
-auto OrthographicCamera::get_top() const -> float {
-	return _top;
-}
+auto OrthographicCamera::get_top() const -> float { return _top; }
 
-auto OrthographicCamera::get_zoom() const -> float {
-	return _zoom;
-}
+auto OrthographicCamera::get_zoom() const -> float { return _zoom; }
 
-auto OrthographicCamera::get_type() const -> Type {
-	return Type::orthographic;
-}
+auto OrthographicCamera::get_type() const -> Type { return Type::orthographic; }
 
 void OrthographicCamera::update_projection() {
-	_projection = glm::ortho(
-		_left * _zoom, _right * _zoom, _bottom * _zoom, _top * _zoom, _near_plane, _far_plane
-	);
+	_projection = glm::ortho(_left * _zoom, _right * _zoom, _bottom * _zoom, _top * _zoom, _near_plane, _far_plane);
 	update_view_projection();
 }
 

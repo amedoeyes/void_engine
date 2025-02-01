@@ -16,10 +16,11 @@ export namespace void_engine::window {
 
 class window {
 public:
-	window(
-		std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window& share,
-		const window_hints& hints = {}
-	);
+	window(std::string_view title,
+	       const glm::ivec2& size,
+	       const Monitor& monitor,
+	       const window& share,
+	       const window_hints& hints = {});
 	window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints = {});
 	window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints = {});
 	window(std::string_view title, const glm::ivec2& size, const window_hints& hints = {});
@@ -157,9 +158,11 @@ private:
 	std::unique_ptr<WindowEventHandler> _events;
 	std::unique_ptr<input::InputManager> _inputs;
 
-	window(
-		std::string_view title, const glm::ivec2& size, GLFWmonitor* monitor, GLFWwindow* share, const window_hints& hints
-	);
+	window(std::string_view title,
+	       const glm::ivec2& size,
+	       GLFWmonitor* monitor,
+	       GLFWwindow* share,
+	       const window_hints& hints);
 
 	static auto apply_hints(const window_hints& hints) -> void;
 };

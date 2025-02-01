@@ -4,17 +4,14 @@ import std;
 
 export namespace void_engine::utility {
 
-template <typename T>
+template<typename T>
 class BitMask {
 public:
 	static_assert(std::is_enum_v<T>, "T must be an enum type");
 
-	BitMask(const BitMask& other) : _value(other._value) {
-	}
+	BitMask(const BitMask& other) : _value(other._value) {}
 
-	BitMask(BitMask&& other) noexcept : _value(other._value) {
-		other._value = 0;
-	}
+	BitMask(BitMask&& other) noexcept : _value(other._value) { other._value = 0; }
 
 	auto operator=(const BitMask& other) -> BitMask& {
 		if (this == &other) {
@@ -35,21 +32,15 @@ public:
 
 	BitMask() = default;
 
-	explicit BitMask(T value) : _value(static_cast<std::underlying_type_t<T>>(value)) {
-	}
+	explicit BitMask(T value) : _value(static_cast<std::underlying_type_t<T>>(value)) {}
 
-	explicit BitMask(std::underlying_type_t<T> value) : _value(value) {
-	}
+	explicit BitMask(std::underlying_type_t<T> value) : _value(value) {}
 
 	~BitMask() = default;
 
-	void set(T flag) {
-		_value |= static_cast<std::underlying_type_t<T>>(flag);
-	}
+	void set(T flag) { _value |= static_cast<std::underlying_type_t<T>>(flag); }
 
-	void unset(T flag) {
-		_value &= ~static_cast<std::underlying_type_t<T>>(flag);
-	}
+	void unset(T flag) { _value &= ~static_cast<std::underlying_type_t<T>>(flag); }
 
 	void set(T flag, bool value) {
 		if (value) {
@@ -59,19 +50,17 @@ public:
 		}
 	}
 
-	void toggle(T flag) {
-		_value ^= static_cast<std::underlying_type_t<T>>(flag);
-	}
+	void toggle(T flag) { _value ^= static_cast<std::underlying_type_t<T>>(flag); }
 
-	void clear() {
-		_value = 0;
-	}
+	void clear() { _value = 0; }
 
-	[[nodiscard]] auto is_set(T flag) const -> bool {
+	[[nodiscard]]
+	auto is_set(T flag) const -> bool {
 		return (_value & static_cast<std::underlying_type_t<T>>(flag)) != 0;
 	}
 
-	[[nodiscard]] auto get() const -> std::underlying_type_t<T> {
+	[[nodiscard]]
+	auto get() const -> std::underlying_type_t<T> {
 		return _value;
 	}
 
@@ -113,17 +102,11 @@ public:
 		return result;
 	}
 
-	explicit operator bool() const {
-		return _value != 0;
-	}
+	explicit operator bool() const { return _value != 0; }
 
-	auto operator==(const BitMask& other) const -> bool {
-		return _value == other._value;
-	}
+	auto operator==(const BitMask& other) const -> bool { return _value == other._value; }
 
-	auto operator!=(const BitMask& other) const -> bool {
-		return _value != other._value;
-	}
+	auto operator!=(const BitMask& other) const -> bool { return _value != other._value; }
 
 private:
 	std::underlying_type_t<T> _value = 0;

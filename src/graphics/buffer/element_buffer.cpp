@@ -8,15 +8,11 @@ import std;
 
 namespace void_engine::graphics::buffer {
 
-ElementBuffer::ElementBuffer() : Buffer(Target::element_array) {
-}
+ElementBuffer::ElementBuffer() : Buffer(Target::element_array) {}
 
-ElementBuffer::ElementBuffer(unsigned int size, Usage usage) : ElementBuffer() {
-	Buffer::allocate(size, usage);
-}
+ElementBuffer::ElementBuffer(unsigned int size, Usage usage) : ElementBuffer() { Buffer::allocate(size, usage); }
 
-ElementBuffer::ElementBuffer(const std::vector<unsigned int>& indices, Usage usage) :
-	ElementBuffer() {
+ElementBuffer::ElementBuffer(const std::vector<unsigned int>& indices, Usage usage) : ElementBuffer() {
 	set_data(indices, usage);
 }
 
@@ -30,8 +26,6 @@ void ElementBuffer::update_data(const std::vector<unsigned int>& indices) {
 	_count = indices.size();
 }
 
-auto ElementBuffer::get_count() const -> unsigned int {
-	return _count;
-}
+auto ElementBuffer::get_count() const -> unsigned int { return _count; }
 
 } // namespace void_engine::graphics::buffer

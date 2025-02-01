@@ -11,15 +11,13 @@ import glm;
 
 namespace void_engine::graphics {
 
-Shader::Shader(const Shader& other) : _id(glCreateProgram()), _sources(other._sources) {
-	compile();
-}
+Shader::Shader(const Shader& other) : _id(glCreateProgram()), _sources(other._sources) { compile(); }
 
-Shader::Shader(Shader&& other) noexcept :
-	_id(other._id),
-	_sources(std::move(other._sources)),
-	_shaders(std::move(other._shaders)),
-	_uniforms(std::move(other._uniforms)) {
+Shader::Shader(Shader&& other) noexcept
+	: _id(other._id),
+		_sources(std::move(other._sources)),
+		_shaders(std::move(other._shaders)),
+		_uniforms(std::move(other._uniforms)) {
 	other._id = 0;
 }
 
@@ -41,8 +39,7 @@ auto Shader::operator=(Shader&& other) noexcept -> Shader& {
 	return *this;
 }
 
-Shader::Shader() : _id(glCreateProgram()) {
-}
+Shader::Shader() : _id(glCreateProgram()) {}
 
 Shader::Shader(std::initializer_list<ShaderSource> sources) : Shader() {
 	std::ranges::move(sources, std::back_inserter(_sources));
@@ -56,13 +53,9 @@ Shader::~Shader() {
 	glDeleteProgram(_id);
 }
 
-void Shader::bind() const {
-	glUseProgram(_id);
-}
+void Shader::bind() const { glUseProgram(_id); }
 
-void Shader::unbind() {
-	glUseProgram(0);
-}
+void Shader::unbind() { glUseProgram(0); }
 
 void Shader::add_source(ShaderType type, const std::filesystem::path& path, ShaderFormat format) {
 	_sources.push_back({type, format, path});
@@ -230,18 +223,16 @@ auto Shader::compile_source_spirv(const ShaderSource& source) -> unsigned int {
 		buffer.assign(std::bit_cast<const char*>(bytes.data()), bytes.size());
 	}
 	const unsigned int shader = glCreateShader(static_cast<GLenum>(source.type));
-	glShaderBinary(
-		1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, buffer.data(), static_cast<GLsizei>(buffer.size())
-	);
+	glShaderBinary(1, &shader, GL_SHADER_BINARY_FORMAT_SPIR_V, buffer.data(), static_cast<GLsizei>(buffer.size()));
 	glSpecializeShader(shader, "main", 0, nullptr, nullptr);
 	return shader;
 }
 
 auto Shader::compile_source(const ShaderSource& source) -> unsigned int {
 	switch (source.format) {
-		case ShaderFormat::glsl: return compile_source_glsl(source);
-		case ShaderFormat::spirv: return compile_source_spirv(source);
-		default: std::unreachable();
+	case ShaderFormat::glsl: return compile_source_glsl(source);
+	case ShaderFormat::spirv: return compile_source_spirv(source);
+	default: std::unreachable();
 	}
 }
 

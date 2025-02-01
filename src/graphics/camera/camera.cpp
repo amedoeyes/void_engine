@@ -55,42 +55,26 @@ auto Camera::is_in_frustum(const glm::vec3& point) const -> bool {
 	return true;
 }
 
-auto Camera::get_near_plane() const -> float {
-	return _near_plane;
-}
+auto Camera::get_near_plane() const -> float { return _near_plane; }
 
-auto Camera::get_far_plane() const -> float {
-	return _far_plane;
-}
+auto Camera::get_far_plane() const -> float { return _far_plane; }
 
-auto Camera::get_position() const -> const glm::vec3& {
-	return _position;
-}
+auto Camera::get_position() const -> const glm::vec3& { return _position; }
 
-auto Camera::get_rotation() const -> glm::vec3 {
-	return glm::eulerAngles(_orientation);
-}
+auto Camera::get_rotation() const -> glm::vec3 { return glm::eulerAngles(_orientation); }
 
-auto Camera::get_view() const -> const glm::mat4& {
-	return _view;
-}
+auto Camera::get_view() const -> const glm::mat4& { return _view; }
 
-auto Camera::get_projection() const -> const glm::mat4& {
-	return _projection;
-}
+auto Camera::get_projection() const -> const glm::mat4& { return _projection; }
 
-auto Camera::get_view_projection() const -> const glm::mat4& {
-	return _view_projection;
-}
+auto Camera::get_view_projection() const -> const glm::mat4& { return _view_projection; }
 
 void Camera::update_view() {
 	_view = glm::translate(glm::mat4_cast(glm::conjugate(_orientation)), -_position);
 	update_view_projection();
 }
 
-void Camera::update_view_projection() {
-	_view_projection = _projection * _view;
-}
+void Camera::update_view_projection() { _view_projection = _projection * _view; }
 
 auto Camera::calculate_rotation(const glm::vec3& rotation) -> glm::quat {
 	const glm::quat x = glm::angleAxis(rotation.x, _orientation * glm::vec3(1.0f, 0.0f, 0.0f));
