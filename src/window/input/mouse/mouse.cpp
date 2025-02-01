@@ -12,7 +12,7 @@ import void_engine.resources;
 namespace void_engine::window::input::mouse {
 
 Mouse::Mouse(window& window) : _window(&window) {
-	WindowEventHandler& events = _window->events();
+	window_event_handler& events = _window->events();
 	_mouse_button_listener = events.add_listener<event::mouse_button>([this](const auto& event) {
 		set_button(event.button, event.action == ButtonAction::press);
 	});
@@ -25,7 +25,7 @@ Mouse::Mouse(window& window) : _window(&window) {
 }
 
 Mouse::~Mouse() {
-	WindowEventHandler& events = _window->events();
+	window_event_handler& events = _window->events();
 	events.remove_listener<event::mouse_button>(_mouse_button_listener);
 	events.remove_listener<event::mouse_position>(_mouse_position_listener);
 	events.remove_listener<event::mouse_scroll>(_mouse_scroll_listener);

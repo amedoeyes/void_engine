@@ -37,7 +37,7 @@ window::window(std::string_view title,
 	assert(_window != nullptr && "Failed to create window");
 	glfwMakeContextCurrent(_window.get());
 	glfwSetWindowUserPointer(_window.get(), this);
-	_events = std::make_unique<WindowEventHandler>(*this);
+	_events = std::make_unique<window_event_handler>(*this);
 	_inputs = std::make_unique<input::InputManager>(*this);
 }
 
@@ -151,7 +151,7 @@ auto window::set_title(std::string_view title) -> void {
 	glfwSetWindowTitle(_window.get(), std::string(title).c_str());
 }
 
-auto window::events() -> WindowEventHandler& { return *_events; }
+auto window::events() -> window_event_handler& { return *_events; }
 
 auto window::inputs() -> input::InputManager& { return *_inputs; }
 

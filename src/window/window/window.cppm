@@ -78,7 +78,7 @@ public:
 	auto set_title(std::string_view title) -> void;
 
 	[[nodiscard]]
-	auto events() -> WindowEventHandler&;
+	auto events() -> window_event_handler&;
 
 	[[nodiscard]]
 	auto inputs() -> input::InputManager&;
@@ -155,7 +155,7 @@ private:
 	};
 
 	std::unique_ptr<GLFWwindow, destroy_glfw_window> _window;
-	std::unique_ptr<WindowEventHandler> _events;
+	std::unique_ptr<window_event_handler> _events;
 	std::unique_ptr<input::InputManager> _inputs;
 
 	window(std::string_view title,
