@@ -53,7 +53,7 @@ auto window::show() const -> void { glfwShowWindow(_window.get()); }
 
 auto window::maximize() const -> void { glfwMaximizeWindow(_window.get()); }
 
-auto window::minimize() const -> void { glfwIconifyWindow(_window.get()); }
+auto window::iconify() const -> void { glfwIconifyWindow(_window.get()); }
 
 auto window::restore() const -> void { glfwRestoreWindow(_window.get()); }
 
@@ -86,7 +86,7 @@ auto window::set_aspect_ratio(const glm::ivec2& ratio) -> void {
 	glfwSetWindowAspectRatio(_window.get(), ratio.x, ratio.y);
 }
 
-auto window::set_auto_minimize(bool enabled) -> void {
+auto window::set_auto_iconify(bool enabled) -> void {
 	glfwSetWindowAttrib(_window.get(), GLFW_AUTO_ICONIFY, static_cast<int>(enabled));
 }
 
@@ -208,7 +208,7 @@ auto window::is_focused() const -> bool { return glfwGetWindowAttrib(_window.get
 
 auto window::is_maximized() const -> bool { return glfwGetWindowAttrib(_window.get(), GLFW_MAXIMIZED) != 0; }
 
-auto window::is_minimized() const -> bool { return glfwGetWindowAttrib(_window.get(), GLFW_ICONIFIED) != 0; }
+auto window::is_iconified() const -> bool { return glfwGetWindowAttrib(_window.get(), GLFW_ICONIFIED) != 0; }
 
 auto window::is_resizable() const -> bool { return glfwGetWindowAttrib(_window.get(), GLFW_RESIZABLE) != 0; }
 
@@ -231,7 +231,7 @@ auto window::apply_hints(const window_hints& hints) -> void {
 	glfwWindowHint(GLFW_VISIBLE, static_cast<int>(hints.window.visible));
 	glfwWindowHint(GLFW_DECORATED, static_cast<int>(hints.window.decorated));
 	glfwWindowHint(GLFW_FOCUSED, static_cast<int>(hints.window.focused));
-	glfwWindowHint(GLFW_AUTO_ICONIFY, static_cast<int>(hints.window.auto_minimize));
+	glfwWindowHint(GLFW_AUTO_ICONIFY, static_cast<int>(hints.window.auto_iconify));
 	glfwWindowHint(GLFW_FLOATING, static_cast<int>(hints.window.floating));
 	glfwWindowHint(GLFW_MAXIMIZED, static_cast<int>(hints.window.maximized));
 	glfwWindowHint(GLFW_CENTER_CURSOR, static_cast<int>(hints.window.center_cursor));

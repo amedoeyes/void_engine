@@ -37,7 +37,7 @@ public:
 
 	auto maximize() const -> void;
 
-	auto minimize() const -> void;
+	auto iconify() const -> void;
 
 	auto restore() const -> void;
 
@@ -51,7 +51,7 @@ public:
 
 	auto set_aspect_ratio(const glm::ivec2& ratio) -> void;
 
-	auto set_auto_minimize(bool enabled) -> void;
+	auto set_auto_iconify(bool enabled) -> void;
 
 	auto set_current_context() const -> void;
 
@@ -129,7 +129,7 @@ public:
 	auto is_maximized() const -> bool;
 
 	[[nodiscard]]
-	auto is_minimized() const -> bool;
+	auto is_iconified() const -> bool;
 
 	[[nodiscard]]
 	auto is_resizable() const -> bool;

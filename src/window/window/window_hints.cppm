@@ -49,9 +49,9 @@ struct window_hints {
 		bool decorated = true;
 		// Whether the window will be given input focus when created.
 		bool focused = true;
-		// Weather the full screen window will automatically minimize and restore the previous video mode on input focus
+		// Weather the full screen window will automatically iconify and restore the previous video mode on input focus
 		// loss.
-		bool auto_minimize = true;
+		bool auto_iconify = true;
 		// Whether the window will be always on top of other regular windows.
 		bool floating = false;
 		// Whether the windowed mode window will be maximized when created.
