@@ -3,7 +3,7 @@ import void_engine;
 using namespace void_engine;
 
 auto main() -> int {
-	auto window_manager = window::WindowManager{};
+	auto window_manager = window::window_manager{};
 	auto& window = window_manager.create("Simple", {800, 600});
 
 	auto renderer = graphics::renderer::Renderer{};
