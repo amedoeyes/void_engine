@@ -63,13 +63,21 @@ void Transform::set_origin(const glm::vec3& origin) {
 	_dirty = true;
 }
 
-auto Transform::get_position() const -> const glm::vec3& { return _position; }
+auto Transform::get_position() const -> const glm::vec3& {
+	return _position;
+}
 
-auto Transform::get_rotation() const -> glm::vec3 { return glm::eulerAngles(_rotation); }
+auto Transform::get_rotation() const -> glm::vec3 {
+	return glm::eulerAngles(_rotation);
+}
 
-auto Transform::get_scale() const -> const glm::vec3& { return _scale; }
+auto Transform::get_scale() const -> const glm::vec3& {
+	return _scale;
+}
 
-auto Transform::get_origin() const -> const glm::vec3& { return _origin; }
+auto Transform::get_origin() const -> const glm::vec3& {
+	return _origin;
+}
 
 auto Transform::get_model() const -> const glm::mat4& {
 	if (_dirty) {

@@ -24,7 +24,9 @@ public:
 		std::memcpy(std::bit_cast<std::byte*>(&_data) + offset, &data, sizeof(U));
 	}
 
-	void bind_range(unsigned int index, unsigned int offset = 0) const { Buffer::bind_range<T>(index, offset); }
+	void bind_range(unsigned int index, unsigned int offset = 0) const {
+		Buffer::bind_range<T>(index, offset);
+	}
 
 	void update_data(const T& data) {
 		Buffer::update_data(data);

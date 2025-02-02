@@ -88,7 +88,9 @@ auto Texture::operator=(Texture&& other) noexcept -> Texture& {
 	return *this;
 }
 
-Texture::Texture(TextureTarget target) : _target(target) { glCreateTextures(static_cast<GLenum>(_target), 1, &_id); }
+Texture::Texture(TextureTarget target) : _target(target) {
+	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
+}
 
 Texture::Texture(TextureTarget target, const std::filesystem::path& path) : Texture(target) {
 	switch (_target) {
@@ -119,11 +121,17 @@ Texture::~Texture() {
 	glDeleteTextures(1, &_id);
 }
 
-void Texture::bind() const { glBindTexture(static_cast<GLenum>(_target), _id); }
+void Texture::bind() const {
+	glBindTexture(static_cast<GLenum>(_target), _id);
+}
 
-void Texture::unbind() const { glBindTexture(static_cast<GLenum>(_target), 0); }
+void Texture::unbind() const {
+	glBindTexture(static_cast<GLenum>(_target), 0);
+}
 
-void Texture::bind_unit(unsigned int unit) const { glBindTextureUnit(unit, _id); }
+void Texture::bind_unit(unsigned int unit) const {
+	glBindTextureUnit(unit, _id);
+}
 
 void Texture::set_texture_storage_2d(unsigned int levels,
                                      TextureInternalFormat internal_format,
@@ -175,15 +183,21 @@ void Texture::set_sub_image_3d(unsigned int level,
 	                    pixels);
 }
 
-void Texture::generate_mipmap() const { glGenerateTextureMipmap(_id); }
+void Texture::generate_mipmap() const {
+	glGenerateTextureMipmap(_id);
+}
 
 void Texture::set_depth_stencil_mode(TextureDepthStencilMode mode) const {
 	glTextureParameteri(_id, GL_DEPTH_STENCIL_TEXTURE_MODE, static_cast<GLint>(mode));
 }
 
-void Texture::set_base_level(int level) const { glTextureParameteri(_id, GL_TEXTURE_BASE_LEVEL, level); }
+void Texture::set_base_level(int level) const {
+	glTextureParameteri(_id, GL_TEXTURE_BASE_LEVEL, level);
+}
 
-void Texture::set_max_level(int level) const { glTextureParameteri(_id, GL_TEXTURE_MAX_LEVEL, level); }
+void Texture::set_max_level(int level) const {
+	glTextureParameteri(_id, GL_TEXTURE_MAX_LEVEL, level);
+}
 
 void Texture::set_border_color(const glm::vec4& color) const {
 	glTextureParameterfv(_id, GL_TEXTURE_BORDER_COLOR, glm::value_ptr(color));
@@ -205,11 +219,17 @@ void Texture::set_mag_filter(TextureMagFilter filter) const {
 	glTextureParameteri(_id, GL_TEXTURE_MAG_FILTER, static_cast<GLint>(filter));
 }
 
-void Texture::set_min_lod(float lod) const { glTextureParameterf(_id, GL_TEXTURE_MIN_LOD, lod); }
+void Texture::set_min_lod(float lod) const {
+	glTextureParameterf(_id, GL_TEXTURE_MIN_LOD, lod);
+}
 
-void Texture::set_max_lod(float lod) const { glTextureParameterf(_id, GL_TEXTURE_MAX_LOD, lod); }
+void Texture::set_max_lod(float lod) const {
+	glTextureParameterf(_id, GL_TEXTURE_MAX_LOD, lod);
+}
 
-void Texture::set_lod_bias(float bias) const { glTextureParameterf(_id, GL_TEXTURE_LOD_BIAS, bias); }
+void Texture::set_lod_bias(float bias) const {
+	glTextureParameterf(_id, GL_TEXTURE_LOD_BIAS, bias);
+}
 
 void Texture::set_swizzle_r(TextureSwizzle swizzle) const {
 	glTextureParameteri(_id, GL_TEXTURE_SWIZZLE_R, static_cast<GLint>(swizzle));
@@ -251,7 +271,9 @@ auto Texture::get_data(TextureFormat format) const -> std::vector<std::byte> {
 	return data;
 }
 
-auto Texture::get_size() const -> const glm::ivec3& { return _size; }
+auto Texture::get_size() const -> const glm::ivec3& {
+	return _size;
+}
 
 auto Texture::get_bytes_per_pixel(TextureFormat format) -> unsigned int {
 	switch (format) {

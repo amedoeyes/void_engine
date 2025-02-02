@@ -34,11 +34,17 @@ void mouse::update() {
 	position_.set_previous(position_.get());
 }
 
-void mouse::set_button(mouse_button button, bool state) { buttons_.at(std::to_underlying(button)).set_current(state); }
+void mouse::set_button(mouse_button button, bool state) {
+	buttons_.at(std::to_underlying(button)).set_current(state);
+}
 
-void mouse::set_position(const glm::vec2& position) { position_.set_current(position); }
+void mouse::set_position(const glm::vec2& position) {
+	position_.set_current(position);
+}
 
-void mouse::set_scroll(const glm::vec2& scroll) { scroll_ = scroll; }
+void mouse::set_scroll(const glm::vec2& scroll) {
+	scroll_ = scroll;
+}
 
 void mouse::set_mode(mouse_mode mode) const {
 	glfwSetInputMode(window_.get().raw(), GLFW_CURSOR, std::to_underlying(mode));
@@ -65,15 +71,25 @@ void mouse::set_image(const resources::Image& image, const glm::ivec2& hot_spot)
 	glfwSetCursor(window_.get().raw(), cursor_.get());
 }
 
-auto mouse::position() const -> glm::vec2 { return position_.get(); }
+auto mouse::position() const -> glm::vec2 {
+	return position_.get();
+}
 
-auto mouse::delta_position() const -> glm::vec2 { return position_.get() - position_.get_previous(); }
+auto mouse::delta_position() const -> glm::vec2 {
+	return position_.get() - position_.get_previous();
+}
 
-auto mouse::scroll() const -> glm::vec2 { return scroll_; }
+auto mouse::scroll() const -> glm::vec2 {
+	return scroll_;
+}
 
-auto mouse::is_down(mouse_button button) const -> bool { return buttons_.at(std::to_underlying(button)).get(); }
+auto mouse::is_down(mouse_button button) const -> bool {
+	return buttons_.at(std::to_underlying(button)).get();
+}
 
-auto mouse::is_up(mouse_button button) const -> bool { return !buttons_.at(std::to_underlying(button)).get(); }
+auto mouse::is_up(mouse_button button) const -> bool {
+	return !buttons_.at(std::to_underlying(button)).get();
+}
 
 auto mouse::is_pressed(mouse_button button) const -> bool {
 	return buttons_.at(std::to_underlying(button)).entered(true);

@@ -9,8 +9,12 @@ void input_manager::update() {
 	mouse_.update();
 }
 
-auto input_manager::keyboard() -> class keyboard& { return keyboard_; }
+auto input_manager::keyboard() -> class keyboard& {
+	return keyboard_;
+}
 
-auto input_manager::mouse() -> class mouse& { return mouse_; }
+auto input_manager::mouse() -> class mouse& {
+	return mouse_;
+}
 
 } // namespace void_engine::window::input

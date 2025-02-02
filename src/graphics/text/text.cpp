@@ -30,9 +30,13 @@ void Text::set_data(std::string_view data) {
 	_dirty = true;
 }
 
-auto Text::get_atlas() const -> FontAtlas& { return _atlas.get(); }
+auto Text::get_atlas() const -> FontAtlas& {
+	return _atlas.get();
+}
 
-auto Text::get_data() const -> const std::string& { return _data; }
+auto Text::get_data() const -> const std::string& {
+	return _data;
+}
 
 auto Text::get_size() const -> const glm::vec2& {
 	if (_dirty) {

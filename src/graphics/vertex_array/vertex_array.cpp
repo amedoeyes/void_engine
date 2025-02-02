@@ -62,7 +62,9 @@ VertexArray::VertexArray(const VertexArray& other) {
 	}
 }
 
-VertexArray::VertexArray(VertexArray&& other) noexcept : _id(other._id) { other._id = 0; }
+VertexArray::VertexArray(VertexArray&& other) noexcept : _id(other._id) {
+	other._id = 0;
+}
 
 auto VertexArray::operator=(const VertexArray& other) -> VertexArray& {
 	if (this == &other) {
@@ -133,13 +135,21 @@ auto VertexArray::operator=(VertexArray&& other) noexcept -> VertexArray& {
 	return *this;
 }
 
-VertexArray::VertexArray() { glCreateVertexArrays(1, &_id); }
+VertexArray::VertexArray() {
+	glCreateVertexArrays(1, &_id);
+}
 
-VertexArray::~VertexArray() { glDeleteVertexArrays(1, &_id); }
+VertexArray::~VertexArray() {
+	glDeleteVertexArrays(1, &_id);
+}
 
-void VertexArray::bind() const { glBindVertexArray(_id); }
+void VertexArray::bind() const {
+	glBindVertexArray(_id);
+}
 
-void VertexArray::unbind() { glBindVertexArray(0); }
+void VertexArray::unbind() {
+	glBindVertexArray(0);
+}
 
 void VertexArray::set_divisor(unsigned int divisor) const {
 	assert(_index > 0 && "No attributes added");

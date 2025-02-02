@@ -49,7 +49,9 @@ Font::~Font() {
 	}
 }
 
-auto Font::get_line_height() const -> float { return static_cast<float>(_face->size->metrics.height) / 64.0f; }
+auto Font::get_line_height() const -> float {
+	return static_cast<float>(_face->size->metrics.height) / 64.0f;
+}
 
 auto Font::glyphs(std::string_view text) const -> std::vector<Glyph> {
 	auto glyphs = std::vector<Glyph>();

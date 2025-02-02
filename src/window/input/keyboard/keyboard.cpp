@@ -10,20 +10,32 @@ keyboard::keyboard(window& window) : window_{window} {
 	});
 }
 
-keyboard::~keyboard() { window_.get().events().remove_listener<event::keyboard_key>(key_listener_id_); }
+keyboard::~keyboard() {
+	window_.get().events().remove_listener<event::keyboard_key>(key_listener_id_);
+}
 
 void keyboard::update() {
 	for (auto& key : keys_) key.set_previous(key.get());
 }
 
-void keyboard::set_key(keyboard_key key, bool state) { keys_.at(std::to_underlying(key)).set_current(state); }
+void keyboard::set_key(keyboard_key key, bool state) {
+	keys_.at(std::to_underlying(key)).set_current(state);
+}
 
-auto keyboard::is_down(keyboard_key key) const -> bool { return keys_.at(std::to_underlying(key)).get(); }
+auto keyboard::is_down(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).get();
+}
 
-auto keyboard::is_up(keyboard_key key) const -> bool { return !keys_.at(std::to_underlying(key)).get(); }
+auto keyboard::is_up(keyboard_key key) const -> bool {
+	return !keys_.at(std::to_underlying(key)).get();
+}
 
-auto keyboard::is_pressed(keyboard_key key) const -> bool { return keys_.at(std::to_underlying(key)).entered(true); }
+auto keyboard::is_pressed(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).entered(true);
+}
 
-auto keyboard::is_released(keyboard_key key) const -> bool { return keys_.at(std::to_underlying(key)).exited(true); }
+auto keyboard::is_released(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).exited(true);
+}
 
 } // namespace void_engine::window::input

@@ -151,7 +151,9 @@ public:
 
 private:
 	struct destroy_glfw_window {
-		void operator()(GLFWwindow* w) { glfwDestroyWindow(w); }
+		void operator()(GLFWwindow* w) {
+			glfwDestroyWindow(w);
+		}
 	};
 
 	std::unique_ptr<GLFWwindow, destroy_glfw_window> _window;

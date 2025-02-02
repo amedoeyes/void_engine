@@ -66,11 +66,17 @@ auto window_manager::poll_events() -> void {
 	}
 }
 
-auto window_manager::clear_context() -> void { glfwMakeContextCurrent(nullptr); }
+auto window_manager::clear_context() -> void {
+	glfwMakeContextCurrent(nullptr);
+}
 
-auto window_manager::set_swap_interval(std::int32_t interval) -> void { glfwSwapInterval(interval); }
+auto window_manager::set_swap_interval(std::int32_t interval) -> void {
+	glfwSwapInterval(interval);
+}
 
-auto window_manager::set_vsync(bool enabled) -> void { set_swap_interval(enabled ? 1 : 0); }
+auto window_manager::set_vsync(bool enabled) -> void {
+	set_swap_interval(enabled ? 1 : 0);
+}
 
 auto window_manager::monitors() -> std::vector<Monitor> {
 	auto count = 0;

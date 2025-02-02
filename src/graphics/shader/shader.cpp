@@ -11,7 +11,9 @@ import glm;
 
 namespace void_engine::graphics {
 
-Shader::Shader(const Shader& other) : _id(glCreateProgram()), _sources(other._sources) { compile(); }
+Shader::Shader(const Shader& other) : _id(glCreateProgram()), _sources(other._sources) {
+	compile();
+}
 
 Shader::Shader(Shader&& other) noexcept
 	: _id(other._id),
@@ -53,9 +55,13 @@ Shader::~Shader() {
 	glDeleteProgram(_id);
 }
 
-void Shader::bind() const { glUseProgram(_id); }
+void Shader::bind() const {
+	glUseProgram(_id);
+}
 
-void Shader::unbind() { glUseProgram(0); }
+void Shader::unbind() {
+	glUseProgram(0);
+}
 
 void Shader::add_source(ShaderType type, const std::filesystem::path& path, ShaderFormat format) {
 	_sources.push_back({type, format, path});

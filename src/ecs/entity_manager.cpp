@@ -20,6 +20,8 @@ void EntityManager::destroy(Entity entity) {
 	_free.push(index);
 }
 
-auto EntityManager::contains(Entity entity) const -> bool { return _data[get_entity_index(entity)] == entity; }
+auto EntityManager::contains(Entity entity) const -> bool {
+	return _data[get_entity_index(entity)] == entity;
+}
 
 } // namespace void_engine::ecs

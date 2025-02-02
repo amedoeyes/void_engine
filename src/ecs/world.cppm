@@ -21,7 +21,9 @@ public:
 	World() = default;
 	~World() = default;
 
-	auto create() -> Entity { return _entities.create(); }
+	auto create() -> Entity {
+		return _entities.create();
+	}
 
 	template<typename... Components>
 	auto create() -> Entity {

@@ -26,13 +26,21 @@ void PerspectiveCamera::set_aspect(const glm::vec2& size) {
 	update_projection();
 }
 
-void PerspectiveCamera::set_size(const glm::vec2& size) { set_aspect(size); }
+void PerspectiveCamera::set_size(const glm::vec2& size) {
+	set_aspect(size);
+}
 
-auto PerspectiveCamera::get_fov() const -> float { return _fov; }
+auto PerspectiveCamera::get_fov() const -> float {
+	return _fov;
+}
 
-auto PerspectiveCamera::get_aspect() const -> float { return _aspect; }
+auto PerspectiveCamera::get_aspect() const -> float {
+	return _aspect;
+}
 
-auto PerspectiveCamera::get_type() const -> Type { return Type::perspective; }
+auto PerspectiveCamera::get_type() const -> Type {
+	return Type::perspective;
+}
 
 void PerspectiveCamera::update_projection() {
 	_projection = glm::perspective(_fov, _aspect, _near_plane, _far_plane);

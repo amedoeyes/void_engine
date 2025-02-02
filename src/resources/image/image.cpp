@@ -66,10 +66,16 @@ void Image::write(const std::filesystem::path& path) const {
 	}
 }
 
-auto Image::get_data() const -> std::span<const std::byte> { return _data; }
+auto Image::get_data() const -> std::span<const std::byte> {
+	return _data;
+}
 
-auto Image::get_color_type() const -> ColorType { return _color_type; }
+auto Image::get_color_type() const -> ColorType {
+	return _color_type;
+}
 
-auto Image::get_size() const -> const glm::ivec2& { return _size; }
+auto Image::get_size() const -> const glm::ivec2& {
+	return _size;
+}
 
 } // namespace void_engine::resources

@@ -11,7 +11,9 @@ public:
 
 	BitMask(const BitMask& other) : _value(other._value) {}
 
-	BitMask(BitMask&& other) noexcept : _value(other._value) { other._value = 0; }
+	BitMask(BitMask&& other) noexcept : _value(other._value) {
+		other._value = 0;
+	}
 
 	auto operator=(const BitMask& other) -> BitMask& {
 		if (this == &other) {
@@ -38,9 +40,13 @@ public:
 
 	~BitMask() = default;
 
-	void set(T flag) { _value |= static_cast<std::underlying_type_t<T>>(flag); }
+	void set(T flag) {
+		_value |= static_cast<std::underlying_type_t<T>>(flag);
+	}
 
-	void unset(T flag) { _value &= ~static_cast<std::underlying_type_t<T>>(flag); }
+	void unset(T flag) {
+		_value &= ~static_cast<std::underlying_type_t<T>>(flag);
+	}
 
 	void set(T flag, bool value) {
 		if (value) {
@@ -50,9 +56,13 @@ public:
 		}
 	}
 
-	void toggle(T flag) { _value ^= static_cast<std::underlying_type_t<T>>(flag); }
+	void toggle(T flag) {
+		_value ^= static_cast<std::underlying_type_t<T>>(flag);
+	}
 
-	void clear() { _value = 0; }
+	void clear() {
+		_value = 0;
+	}
 
 	[[nodiscard]]
 	auto is_set(T flag) const -> bool {
@@ -102,11 +112,17 @@ public:
 		return result;
 	}
 
-	explicit operator bool() const { return _value != 0; }
+	explicit operator bool() const {
+		return _value != 0;
+	}
 
-	auto operator==(const BitMask& other) const -> bool { return _value == other._value; }
+	auto operator==(const BitMask& other) const -> bool {
+		return _value == other._value;
+	}
 
-	auto operator!=(const BitMask& other) const -> bool { return _value != other._value; }
+	auto operator!=(const BitMask& other) const -> bool {
+		return _value != other._value;
+	}
 
 private:
 	std::underlying_type_t<T> _value = 0;

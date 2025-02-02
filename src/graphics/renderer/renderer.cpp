@@ -77,9 +77,13 @@ Renderer::Renderer() {
 	_draw_objects.text.set_atlas(_default_resources.font_atlas);
 }
 
-void Renderer::clear() const { glClear(_clear.flags.get()); }
+void Renderer::clear() const {
+	glClear(_clear.flags.get());
+}
 
-void Renderer::update() { update_camera_uniform(); }
+void Renderer::update() {
+	update_camera_uniform();
+}
 
 void Renderer::draw_point(const glm::vec3& position, float size, const glm::vec4& color) {
 	const Shader& shader = _default_resources.shape_shader;
@@ -344,25 +348,45 @@ void Renderer::set_viewport_size(const glm::ivec2& size) {
 	set_viewport({.position = get_viewport().position, .size = size});
 }
 
-void Renderer::set_point_size(float size) { glPointSize(size); }
+void Renderer::set_point_size(float size) {
+	glPointSize(size);
+}
 
-void Renderer::set_line_width(float width) { glLineWidth(width); }
+void Renderer::set_line_width(float width) {
+	glLineWidth(width);
+}
 
-auto Renderer::get_camera() const -> camera::Camera& { return *_camera; }
+auto Renderer::get_camera() const -> camera::Camera& {
+	return *_camera;
+}
 
-auto Renderer::get_clear_color() const -> const glm::vec4& { return _clear.color; }
+auto Renderer::get_clear_color() const -> const glm::vec4& {
+	return _clear.color;
+}
 
-auto Renderer::get_polygon_mode() const -> PolygonMode { return _polygon_mode; }
+auto Renderer::get_polygon_mode() const -> PolygonMode {
+	return _polygon_mode;
+}
 
-auto Renderer::get_blend() const -> const Blend& { return _blend; }
+auto Renderer::get_blend() const -> const Blend& {
+	return _blend;
+}
 
-auto Renderer::get_cull_face() const -> const CullFace& { return _cull_face; }
+auto Renderer::get_cull_face() const -> const CullFace& {
+	return _cull_face;
+}
 
-auto Renderer::get_depth() const -> const Depth& { return _depth; }
+auto Renderer::get_depth() const -> const Depth& {
+	return _depth;
+}
 
-auto Renderer::get_stencil() const -> const Stencil& { return _stencil; }
+auto Renderer::get_stencil() const -> const Stencil& {
+	return _stencil;
+}
 
-auto Renderer::get_viewport() const -> const Viewport& { return _viewport; }
+auto Renderer::get_viewport() const -> const Viewport& {
+	return _viewport;
+}
 
 auto Renderer::initialize() -> bool {
 	static bool initialized = false;
@@ -378,7 +402,9 @@ auto Renderer::initialize() -> bool {
 	return initialized;
 }
 
-void Renderer::set_enabled(unsigned int capability, bool enabled) { (enabled ? glEnable : glDisable)(capability); }
+void Renderer::set_enabled(unsigned int capability, bool enabled) {
+	(enabled ? glEnable : glDisable)(capability);
+}
 
 void Renderer::update_camera_uniform() {
 	const glm::mat4& projection = _camera->get_projection();

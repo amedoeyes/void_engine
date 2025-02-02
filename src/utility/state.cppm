@@ -38,9 +38,13 @@ public:
 		_current = state;
 	}
 
-	void set_current(T state) { _current = state; }
+	void set_current(T state) {
+		_current = state;
+	}
 
-	void set_previous(T state) { _previous = state; }
+	void set_previous(T state) {
+		_previous = state;
+	}
 
 	[[nodiscard]]
 	auto get() const -> T {
@@ -78,11 +82,17 @@ public:
 		return *this;
 	}
 
-	explicit operator T() const { return _current; }
+	explicit operator T() const {
+		return _current;
+	}
 
-	auto operator==(T state) const -> bool { return _current == state; }
+	auto operator==(T state) const -> bool {
+		return _current == state;
+	}
 
-	auto operator!=(T state) const -> bool { return _current != state; }
+	auto operator!=(T state) const -> bool {
+		return _current != state;
+	}
 
 private:
 	T _current{};

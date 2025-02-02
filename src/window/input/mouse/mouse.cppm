@@ -68,7 +68,9 @@ public:
 
 private:
 	struct destroy_glfw_cursor {
-		auto operator()(GLFWcursor* c) -> void { glfwDestroyCursor(c); }
+		auto operator()(GLFWcursor* c) -> void {
+			glfwDestroyCursor(c);
+		}
 	};
 
 	std::reference_wrapper<window> window_;

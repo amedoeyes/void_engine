@@ -31,6 +31,8 @@ auto Timer::get_elapsed() const -> float {
 	return Duration(_end - _start).count();
 }
 
-auto Timer::is_running() const -> bool { return _is_running; }
+auto Timer::is_running() const -> bool {
+	return _is_running;
+}
 
 } // namespace void_engine::utility
