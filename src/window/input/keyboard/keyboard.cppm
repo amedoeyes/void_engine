@@ -10,34 +10,38 @@ export namespace void_engine::window {
 class window;
 }  // namespace void_engine::window
 
-export namespace void_engine::window::input::keyboard {
+export namespace void_engine::window::input {
 
-class Keyboard {
+class keyboard {
 public:
-	Keyboard(const Keyboard&) = default;
-	Keyboard(Keyboard&&) = default;
-	auto operator=(const Keyboard&) -> Keyboard& = default;
-	auto operator=(Keyboard&&) -> Keyboard& = default;
-	explicit Keyboard(window& window);
-	~Keyboard();
+	keyboard(const keyboard&) = delete;
+	keyboard(keyboard&&) = default;
+	auto operator=(const keyboard&) -> keyboard& = delete;
+	auto operator=(keyboard&&) -> keyboard& = default;
+	keyboard() = delete;
+	explicit keyboard(window& window);
+	~keyboard();
 
 	void update();
 
-	void set_key(Key key, bool state);
+	void set_key(keyboard_key key, bool state);
 
 	[[nodiscard]]
-	auto is_down(Key key) const -> bool;
+	auto is_down(keyboard_key key) const -> bool;
+
 	[[nodiscard]]
-	auto is_up(Key key) const -> bool;
+	auto is_up(keyboard_key key) const -> bool;
+
 	[[nodiscard]]
-	auto is_pressed(Key key) const -> bool;
+	auto is_pressed(keyboard_key key) const -> bool;
+
 	[[nodiscard]]
-	auto is_released(Key key) const -> bool;
+	auto is_released(keyboard_key key) const -> bool;
 
 private:
-	window* _window;
-	std::array<utility::State<bool>, 512> _keys;
-	window_event_bus::id_type _keyboard_key_listener;
+	std::reference_wrapper<window> window_;
+	std::array<utility::State<bool>, 512> keys_;
+	window_event_bus::id_type key_listener_id_;
 };
 
-} // namespace void_engine::window::input::keyboard
+} // namespace void_engine::window::input

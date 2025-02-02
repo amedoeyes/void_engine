@@ -2,15 +2,15 @@ module void_engine.window;
 
 namespace void_engine::window::input {
 
-InputManager::InputManager(window& window) : _keyboard(window), _mouse(window) {}
+input_manager::input_manager(window& window) : keyboard_{window}, mouse_{window} {}
 
-void InputManager::update() {
-	_keyboard.update();
-	_mouse.update();
+void input_manager::update() {
+	keyboard_.update();
+	mouse_.update();
 }
 
-auto InputManager::get_keyboard() -> input::keyboard::Keyboard& { return _keyboard; }
+auto input_manager::keyboard() -> class keyboard& { return keyboard_; }
 
-auto InputManager::get_mouse() -> input::mouse::Mouse& { return _mouse; }
+auto input_manager::mouse() -> class mouse& { return mouse_; }
 
 } // namespace void_engine::window::input

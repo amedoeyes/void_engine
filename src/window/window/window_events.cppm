@@ -27,16 +27,16 @@ struct keyboard_char_mods {
 };
 
 struct keyboard_key {
-	input::keyboard::Key key;
+	input::keyboard_key key;
 	std::int32_t scancode;
-	input::keyboard::KeyAction action;
-	utility::BitMask<input::keyboard::KeyMod> mods;
+	input::keyboard_action action;
+	utility::BitMask<input::keyboard_mod> mods;
 };
 
 struct mouse_button {
-	input::mouse::Button button;
-	input::mouse::ButtonAction action;
-	utility::BitMask<input::keyboard::KeyMod> mods;
+	input::mouse_button button;
+	input::mouse_action action;
+	utility::BitMask<input::keyboard_mod> mods;
 };
 
 struct mouse_enter {

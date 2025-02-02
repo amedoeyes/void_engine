@@ -38,7 +38,7 @@ window::window(std::string_view title,
 	glfwMakeContextCurrent(_window.get());
 	glfwSetWindowUserPointer(_window.get(), this);
 	_events = std::make_unique<window_event_bus>(*this);
-	_inputs = std::make_unique<input::InputManager>(*this);
+	_inputs = std::make_unique<input::input_manager>(*this);
 }
 
 auto window::swap_buffers() const -> void { glfwSwapBuffers(_window.get()); }
@@ -153,7 +153,7 @@ auto window::set_title(std::string_view title) -> void {
 
 auto window::events() -> window_event_bus& { return *_events; }
 
-auto window::inputs() -> input::InputManager& { return *_inputs; }
+auto window::inputs() -> input::input_manager& { return *_inputs; }
 
 auto window::content_scale() const -> glm::vec2 {
 	auto scale = glm::vec2{};

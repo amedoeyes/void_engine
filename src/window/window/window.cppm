@@ -81,7 +81,7 @@ public:
 	auto events() -> window_event_bus&;
 
 	[[nodiscard]]
-	auto inputs() -> input::InputManager&;
+	auto inputs() -> input::input_manager&;
 
 	[[nodiscard]]
 	auto content_scale() const -> glm::vec2;
@@ -156,7 +156,7 @@ private:
 
 	std::unique_ptr<GLFWwindow, destroy_glfw_window> _window;
 	std::unique_ptr<window_event_bus> _events;
-	std::unique_ptr<input::InputManager> _inputs;
+	std::unique_ptr<input::input_manager> _inputs;
 
 	window(std::string_view title,
 	       const glm::ivec2& size,

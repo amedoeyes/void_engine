@@ -29,18 +29,18 @@ window_event_bus::window_event_bus(const window& window) : window_{window.raw()}
 	glfwSetKeyCallback(window_, [](GLFWwindow* w, int key, int scancode, int action, int mods) {
 		emit(w,
 		     event::keyboard_key{
-					 .key = static_cast<input::keyboard::Key>(key),
+					 .key = static_cast<input::keyboard_key>(key),
 					 .scancode = scancode,
-					 .action = static_cast<input::keyboard::KeyAction>(action),
-					 .mods = utility::BitMask<input::keyboard::KeyMod>(mods),
+					 .action = static_cast<input::keyboard_action>(action),
+					 .mods = utility::BitMask<input::keyboard_mod>(mods),
 				 });
 	});
 	glfwSetMouseButtonCallback(window_, [](GLFWwindow* w, int button, int action, int mods) {
 		emit(w,
 		     event::mouse_button{
-					 .button = static_cast<input::mouse::Button>(button),
-					 .action = static_cast<input::mouse::ButtonAction>(action),
-					 .mods = utility::BitMask<input::keyboard::KeyMod>(mods),
+					 .button = static_cast<input::mouse_button>(button),
+					 .action = static_cast<input::mouse_action>(action),
+					 .mods = utility::BitMask<input::keyboard_mod>(mods),
 				 });
 	});
 	glfwSetCursorEnterCallback(window_, [](GLFWwindow* w, int entered) { emit(w, event::mouse_enter{entered == 1}); });

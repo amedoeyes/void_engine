@@ -9,26 +9,22 @@ class window;
 
 export namespace void_engine::window::input {
 
-class InputManager {
+class input_manager {
 public:
-	InputManager(const InputManager&) = default;
-	InputManager(InputManager&&) = default;
-	auto operator=(const InputManager&) -> InputManager& = default;
-	auto operator=(InputManager&&) -> InputManager& = default;
-	InputManager() = delete;
-	explicit InputManager(window& window);
-	~InputManager() = default;
+	input_manager() = delete;
+	explicit input_manager(window& window);
 
 	void update();
 
 	[[nodiscard]]
-	auto get_keyboard() -> keyboard::Keyboard&;
+	auto keyboard() -> keyboard&;
+
 	[[nodiscard]]
-	auto get_mouse() -> mouse::Mouse&;
+	auto mouse() -> mouse&;
 
 private:
-	keyboard::Keyboard _keyboard;
-	mouse::Mouse _mouse;
+	class keyboard keyboard_;
+	class mouse mouse_;
 };
 
 } // namespace void_engine::window::input
