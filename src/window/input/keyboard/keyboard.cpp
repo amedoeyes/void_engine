@@ -14,11 +14,11 @@ keyboard::~keyboard() {
 	window_.get().events().remove_listener<event::keyboard_key>(key_listener_id_);
 }
 
-void keyboard::update() {
+auto keyboard::update() -> void {
 	for (auto& key : keys_) key.set_previous(key.get());
 }
 
-void keyboard::set_key(keyboard_key key, bool state) {
+auto keyboard::set_key(keyboard_key key, bool state) -> void {
 	keys_.at(std::to_underlying(key)).set_current(state);
 }
 

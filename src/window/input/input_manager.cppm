@@ -14,7 +14,7 @@ public:
 	input_manager() = delete;
 	explicit input_manager(window& window);
 
-	void update();
+	auto update() -> void;
 
 	[[nodiscard]]
 	auto keyboard() -> keyboard&;

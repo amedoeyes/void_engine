@@ -29,21 +29,21 @@ public:
 	explicit mouse(window& window);
 	~mouse();
 
-	void update();
+	auto update() -> void;
 
-	void set_button(mouse_button button, bool state);
+	auto set_button(mouse_button button, bool state) -> void;
 
-	void set_position(const glm::vec2& position);
+	auto set_position(const glm::vec2& position) -> void;
 
-	void set_scroll(const glm::vec2& scroll);
+	auto set_scroll(const glm::vec2& scroll) -> void;
 
-	void set_mode(mouse_mode mode) const;
+	auto set_mode(mouse_mode mode) const -> void;
 
-	void set_raw_motion(bool enabled) const;
+	auto set_raw_motion(bool enabled) const -> void;
 
-	void set_shape(mouse_shape shape);
+	auto set_shape(mouse_shape shape) -> void;
 
-	void set_image(const resources::Image& image, const glm::ivec2& hot_spot = {0, 0});
+	auto set_image(const resources::Image& image, const glm::ivec2& hot_spot = {0, 0}) -> void;
 
 	[[nodiscard]]
 	auto position() const -> glm::vec2;

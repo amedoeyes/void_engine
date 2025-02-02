@@ -151,7 +151,7 @@ public:
 
 private:
 	struct destroy_glfw_window {
-		void operator()(GLFWwindow* w) {
+		auto operator()(GLFWwindow* w) -> void {
 			glfwDestroyWindow(w);
 		}
 	};

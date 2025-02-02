@@ -22,9 +22,9 @@ public:
 	explicit keyboard(window& window);
 	~keyboard();
 
-	void update();
+	auto update() -> void;
 
-	void set_key(keyboard_key key, bool state);
+	auto set_key(keyboard_key key, bool state) -> void;
 
 	[[nodiscard]]
 	auto is_down(keyboard_key key) const -> bool;

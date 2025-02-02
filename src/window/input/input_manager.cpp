@@ -4,7 +4,7 @@ namespace void_engine::window::input {
 
 input_manager::input_manager(window& window) : keyboard_{window}, mouse_{window} {}
 
-void input_manager::update() {
+auto input_manager::update() -> void {
 	keyboard_.update();
 	mouse_.update();
 }

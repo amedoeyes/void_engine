@@ -29,38 +29,38 @@ mouse::~mouse() {
 	window_.get().events().remove_listener<event::mouse_scroll>(scroll_listener_id_);
 }
 
-void mouse::update() {
+auto mouse::update() -> void {
 	for (auto& button : buttons_) button.set_previous(button.get());
 	position_.set_previous(position_.get());
 }
 
-void mouse::set_button(mouse_button button, bool state) {
+auto mouse::set_button(mouse_button button, bool state) -> void {
 	buttons_.at(std::to_underlying(button)).set_current(state);
 }
 
-void mouse::set_position(const glm::vec2& position) {
+auto mouse::set_position(const glm::vec2& position) -> void {
 	position_.set_current(position);
 }
 
-void mouse::set_scroll(const glm::vec2& scroll) {
+auto mouse::set_scroll(const glm::vec2& scroll) -> void {
 	scroll_ = scroll;
 }
 
-void mouse::set_mode(mouse_mode mode) const {
+auto mouse::set_mode(mouse_mode mode) const -> void {
 	glfwSetInputMode(window_.get().raw(), GLFW_CURSOR, std::to_underlying(mode));
 }
 
-void mouse::set_raw_motion(bool enabled) const {
+auto mouse::set_raw_motion(bool enabled) const -> void {
 	glfwSetInputMode(window_.get().raw(), GLFW_RAW_MOUSE_MOTION, static_cast<int>(enabled));
 }
 
-void mouse::set_shape(mouse_shape shape) {
+auto mouse::set_shape(mouse_shape shape) -> void {
 	cursor_.reset(glfwCreateStandardCursor(std::to_underlying(shape)));
 	assert(cursor_ != nullptr && "Failed to create cursor");
 	glfwSetCursor(window_.get().raw(), cursor_.get());
 }
 
-void mouse::set_image(const resources::Image& image, const glm::ivec2& hot_spot) {
+auto mouse::set_image(const resources::Image& image, const glm::ivec2& hot_spot) -> void {
 	const auto glfw_image = GLFWimage{
 		.width = image.get_size().x,
 		.height = image.get_size().y,
