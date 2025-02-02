@@ -25,7 +25,6 @@ public:
 	mouse(mouse&&) = default;
 	auto operator=(const mouse&) -> mouse& = delete;
 	auto operator=(mouse&&) -> mouse& = default;
-	mouse() = delete;
 	explicit mouse(window& window);
 	~mouse();
 

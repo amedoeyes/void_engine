@@ -18,7 +18,6 @@ public:
 	keyboard(keyboard&&) = default;
 	auto operator=(const keyboard&) -> keyboard& = delete;
 	auto operator=(keyboard&&) -> keyboard& = default;
-	keyboard() = delete;
 	explicit keyboard(window& window);
 	~keyboard();
 

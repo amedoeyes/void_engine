@@ -36,7 +36,6 @@ public:
 	window_event_bus(window_event_bus&&) = default;
 	auto operator=(const window_event_bus&) -> window_event_bus& = delete;
 	auto operator=(window_event_bus&&) -> window_event_bus& = default;
-	window_event_bus() = delete;
 	explicit window_event_bus(const window& window);
 	~window_event_bus();
 

@@ -11,7 +11,6 @@ export namespace void_engine::window::input {
 
 class input_manager {
 public:
-	input_manager() = delete;
 	explicit input_manager(window& window);
 
 	auto update() -> void;
