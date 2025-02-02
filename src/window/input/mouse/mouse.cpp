@@ -30,8 +30,8 @@ mouse::~mouse() {
 }
 
 auto mouse::update() -> void {
-	for (auto& button : buttons_) button.set_previous(button.get());
-	position_.set_previous(position_.get());
+	for (auto& button : buttons_) button.set_previous(button.current());
+	position_.set_previous(position_.current());
 }
 
 auto mouse::set_button(mouse_button button, bool state) -> void {
@@ -72,11 +72,11 @@ auto mouse::set_image(const resources::Image& image, const glm::ivec2& hot_spot)
 }
 
 auto mouse::position() const -> glm::vec2 {
-	return position_.get();
+	return position_.current();
 }
 
 auto mouse::delta_position() const -> glm::vec2 {
-	return position_.get() - position_.get_previous();
+	return position_.current() - position_.previous();
 }
 
 auto mouse::scroll() const -> glm::vec2 {
@@ -84,11 +84,11 @@ auto mouse::scroll() const -> glm::vec2 {
 }
 
 auto mouse::is_down(mouse_button button) const -> bool {
-	return buttons_.at(std::to_underlying(button)).get();
+	return buttons_.at(std::to_underlying(button)).current();
 }
 
 auto mouse::is_up(mouse_button button) const -> bool {
-	return !buttons_.at(std::to_underlying(button)).get();
+	return !buttons_.at(std::to_underlying(button)).current();
 }
 
 auto mouse::is_pressed(mouse_button button) const -> bool {

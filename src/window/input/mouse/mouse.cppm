@@ -75,8 +75,8 @@ private:
 
 	std::reference_wrapper<window> window_;
 	std::unique_ptr<GLFWcursor, destroy_glfw_cursor> cursor_;
-	std::array<utility::State<bool>, 4> buttons_;
-	utility::State<glm::vec2> position_;
+	std::array<utility::state<bool>, 4> buttons_;
+	utility::state<glm::vec2> position_;
 	glm::vec2 scroll_ = {0.0f, 0.0f};
 	window_event_bus::id_type button_listener_id_;
 	window_event_bus::id_type position_listener_id_;

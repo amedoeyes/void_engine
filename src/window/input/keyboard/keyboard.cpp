@@ -15,7 +15,7 @@ keyboard::~keyboard() {
 }
 
 auto keyboard::update() -> void {
-	for (auto& key : keys_) key.set_previous(key.get());
+	for (auto& key : keys_) key.set_previous(key.current());
 }
 
 auto keyboard::set_key(keyboard_key key, bool state) -> void {
@@ -23,11 +23,11 @@ auto keyboard::set_key(keyboard_key key, bool state) -> void {
 }
 
 auto keyboard::is_down(keyboard_key key) const -> bool {
-	return keys_.at(std::to_underlying(key)).get();
+	return keys_.at(std::to_underlying(key)).current();
 }
 
 auto keyboard::is_up(keyboard_key key) const -> bool {
-	return !keys_.at(std::to_underlying(key)).get();
+	return !keys_.at(std::to_underlying(key)).current();
 }
 
 auto keyboard::is_pressed(keyboard_key key) const -> bool {

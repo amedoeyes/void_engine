@@ -40,7 +40,7 @@ public:
 
 private:
 	std::reference_wrapper<window> window_;
-	std::array<utility::State<bool>, 512> keys_;
+	std::array<utility::state<bool>, 512> keys_;
 	window_event_bus::id_type key_listener_id_;
 };
 
