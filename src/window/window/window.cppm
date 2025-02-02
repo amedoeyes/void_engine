@@ -11,6 +11,7 @@ import :window_hints;
 
 import glm;
 import std;
+import void_engine.resources;
 
 export namespace void_engine::window {
 
@@ -61,9 +62,9 @@ public:
 
 	auto set_focus_on_show(bool enabled) -> void;
 
-	auto set_icon(const std::filesystem::path& path) -> void;
+	auto set_icon(const resources::Image& image) -> void;
 
-	auto set_icons(std::span<std::filesystem::path> paths) -> void;
+	auto set_icons(std::span<resources::Image> images) -> void;
 
 	auto set_opacity(float alpha) -> void;
 
@@ -156,9 +157,9 @@ private:
 		}
 	};
 
-	std::unique_ptr<GLFWwindow, destroy_glfw_window> _window;
-	std::unique_ptr<window_event_bus> _events;
-	std::unique_ptr<input::input_manager> _inputs;
+	std::unique_ptr<GLFWwindow, destroy_glfw_window> window_;
+	std::unique_ptr<window_event_bus> events_;
+	std::unique_ptr<input::input_manager> inputs_;
 
 	window(std::string_view title,
 	       const glm::ivec2& size,

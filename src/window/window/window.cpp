@@ -91,59 +91,59 @@ window::window(std::string_view title,
                GLFWwindow* share,
                const window_hints& hints) {
 	apply_hints(hints);
-	_window.reset(glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share));
-	assert(_window != nullptr && "Failed to create window");
-	glfwMakeContextCurrent(_window.get());
-	glfwSetWindowUserPointer(_window.get(), this);
-	_events = std::make_unique<window_event_bus>(*this);
-	_inputs = std::make_unique<input::input_manager>(*this);
+	window_.reset(glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share));
+	assert(window_ != nullptr && "Failed to create window");
+	glfwMakeContextCurrent(window_.get());
+	glfwSetWindowUserPointer(window_.get(), this);
+	events_ = std::make_unique<window_event_bus>(*this);
+	inputs_ = std::make_unique<input::input_manager>(*this);
 }
 
 auto window::swap_buffers() const -> void {
-	glfwSwapBuffers(_window.get());
+	glfwSwapBuffers(window_.get());
 }
 
 auto window::close() const -> void {
-	glfwSetWindowShouldClose(_window.get(), 1);
+	glfwSetWindowShouldClose(window_.get(), 1);
 }
 
 auto window::focus() const -> void {
-	glfwFocusWindow(_window.get());
+	glfwFocusWindow(window_.get());
 }
 
 auto window::hide() const -> void {
-	glfwHideWindow(_window.get());
+	glfwHideWindow(window_.get());
 }
 
 auto window::show() const -> void {
-	glfwShowWindow(_window.get());
+	glfwShowWindow(window_.get());
 }
 
 auto window::maximize() const -> void {
-	glfwMaximizeWindow(_window.get());
+	glfwMaximizeWindow(window_.get());
 }
 
 auto window::iconify() const -> void {
-	glfwIconifyWindow(_window.get());
+	glfwIconifyWindow(window_.get());
 }
 
 auto window::restore() const -> void {
-	glfwRestoreWindow(_window.get());
+	glfwRestoreWindow(window_.get());
 }
 
 auto window::fullscreen() const -> void {
 	auto* monitor = glfwGetPrimaryMonitor();
 	const auto* mode = glfwGetVideoMode(monitor);
-	glfwSetWindowMonitor(_window.get(), monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
+	glfwSetWindowMonitor(window_.get(), monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 }
 
 auto window::fullscreen(const monitor& monitor) const -> void {
 	const auto& mode = monitor.get_video_mode();
-	glfwSetWindowMonitor(_window.get(), monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
+	glfwSetWindowMonitor(window_.get(), monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
 }
 
 auto window::fullscreen(const monitor& monitor, const video_mode& video_mode) const -> void {
-	glfwSetWindowMonitor(_window.get(),
+	glfwSetWindowMonitor(window_.get(),
 	                     monitor.raw(),
 	                     0,
 	                     0,
@@ -153,185 +153,181 @@ auto window::fullscreen(const monitor& monitor, const video_mode& video_mode) co
 }
 
 auto window::windowed(const glm::ivec2& position, const glm::ivec2& size) const -> void {
-	glfwSetWindowMonitor(_window.get(), nullptr, position.x, position.y, size.x, size.y, GLFW_DONT_CARE);
+	glfwSetWindowMonitor(window_.get(), nullptr, position.x, position.y, size.x, size.y, GLFW_DONT_CARE);
 }
 
 auto window::set_aspect_ratio(const glm::ivec2& ratio) -> void {
-	glfwSetWindowAspectRatio(_window.get(), ratio.x, ratio.y);
+	glfwSetWindowAspectRatio(window_.get(), ratio.x, ratio.y);
 }
 
 auto window::set_auto_iconify(bool enabled) -> void {
-	glfwSetWindowAttrib(_window.get(), GLFW_AUTO_ICONIFY, static_cast<int>(enabled));
+	glfwSetWindowAttrib(window_.get(), GLFW_AUTO_ICONIFY, static_cast<int>(enabled));
 }
 
 auto window::set_current_context() const -> void {
-	glfwMakeContextCurrent(_window.get());
+	glfwMakeContextCurrent(window_.get());
 }
 
 auto window::set_decoration(bool enabled) -> void {
-	glfwSetWindowAttrib(_window.get(), GLFW_DECORATED, static_cast<int>(enabled));
+	glfwSetWindowAttrib(window_.get(), GLFW_DECORATED, static_cast<int>(enabled));
 }
 
 auto window::set_floating(bool enabled) -> void {
-	glfwSetWindowAttrib(_window.get(), GLFW_FLOATING, static_cast<int>(enabled));
+	glfwSetWindowAttrib(window_.get(), GLFW_FLOATING, static_cast<int>(enabled));
 }
 
 auto window::set_focus_on_show(bool enabled) -> void {
-	glfwSetWindowAttrib(_window.get(), GLFW_FOCUS_ON_SHOW, static_cast<int>(enabled));
+	glfwSetWindowAttrib(window_.get(), GLFW_FOCUS_ON_SHOW, static_cast<int>(enabled));
 }
 
-auto window::set_icon(const std::filesystem::path& path) -> void {
-	glfwSetWindowIcon(_window.get(), 0, nullptr);
-	const auto image = resources::Image(path, true);
-	const auto& size = image.get_size();
+auto window::set_icon(const resources::Image& image) -> void {
+	glfwSetWindowIcon(window_.get(), 0, nullptr);
 	const auto glfw_image = GLFWimage{
-		.width = size.x,
-		.height = size.y,
+		.width = image.get_size().x,
+		.height = image.get_size().y,
 		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
 	};
-	glfwSetWindowIcon(_window.get(), 1, &glfw_image);
+	glfwSetWindowIcon(window_.get(), 1, &glfw_image);
 }
 
-auto window::set_icons(std::span<std::filesystem::path> paths) -> void {
-	auto images = std::vector<GLFWimage>{};
-	images.reserve(paths.size());
-	for (const auto& path : paths) {
-		const auto image = resources::Image(path, true);
-		const auto& size = image.get_size();
-		images.push_back({
-			.width = size.x,
-			.height = size.y,
-			.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
-		});
-	}
-	glfwSetWindowIcon(_window.get(), static_cast<int>(images.size()), images.data());
+auto window::set_icons(std::span<resources::Image> images) -> void {
+	const auto glfw_images = images //
+	                       | std::views::transform([](const auto& image) {
+														 return GLFWimage{
+															 .width = image.get_size().x,
+															 .height = image.get_size().y,
+															 .pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
+														 };
+													 })
+	                       | std::ranges::to<std::vector>();
+	glfwSetWindowIcon(window_.get(), static_cast<int>(glfw_images.size()), glfw_images.data());
 }
 
 auto window::set_opacity(float alpha) -> void {
-	glfwSetWindowOpacity(_window.get(), alpha);
+	glfwSetWindowOpacity(window_.get(), alpha);
 }
 
 auto window::set_position(const glm::ivec2& position) -> void {
-	glfwSetWindowPos(_window.get(), position.x, position.y);
+	glfwSetWindowPos(window_.get(), position.x, position.y);
 }
 
 auto window::set_resizable(bool enabled) -> void {
-	glfwSetWindowAttrib(_window.get(), GLFW_RESIZABLE, static_cast<int>(enabled));
+	glfwSetWindowAttrib(window_.get(), GLFW_RESIZABLE, static_cast<int>(enabled));
 }
 
 auto window::set_size(const glm::ivec2& size) -> void {
-	glfwSetWindowSize(_window.get(), size.x, size.y);
+	glfwSetWindowSize(window_.get(), size.x, size.y);
 }
 
 auto window::set_size_constraints(const glm::ivec2& min, const glm::ivec2& max) -> void {
-	glfwSetWindowSizeLimits(_window.get(), min.x, min.y, max.x, max.y);
+	glfwSetWindowSizeLimits(window_.get(), min.x, min.y, max.x, max.y);
 }
 
 auto window::set_title(std::string_view title) -> void {
-	glfwSetWindowTitle(_window.get(), std::string(title).c_str());
+	glfwSetWindowTitle(window_.get(), std::string(title).c_str());
 }
 
 auto window::events() -> window_event_bus& {
-	return *_events;
+	return *events_;
 }
 
 auto window::inputs() -> input::input_manager& {
-	return *_inputs;
+	return *inputs_;
 }
 
 auto window::content_scale() const -> glm::vec2 {
 	auto scale = glm::vec2{};
-	glfwGetWindowContentScale(_window.get(), &scale.x, &scale.y);
+	glfwGetWindowContentScale(window_.get(), &scale.x, &scale.y);
 	return scale;
 }
 
 auto window::frame_size() const -> std::pair<glm::ivec2, glm::ivec2> {
 	auto position = glm::ivec2{};
 	auto size = glm::ivec2{};
-	glfwGetWindowFrameSize(_window.get(), &position.x, &position.y, &size.x, &size.y);
+	glfwGetWindowFrameSize(window_.get(), &position.x, &position.y, &size.x, &size.y);
 	return {position, size};
 }
 
 auto window::framebuffer_size() const -> glm::ivec2 {
 	auto size = glm::ivec2{};
-	glfwGetFramebufferSize(_window.get(), &size.x, &size.y);
+	glfwGetFramebufferSize(window_.get(), &size.x, &size.y);
 	return size;
 }
 
 auto window::opacity() const -> float {
-	return glfwGetWindowOpacity(_window.get());
+	return glfwGetWindowOpacity(window_.get());
 }
 
 auto window::position() const -> glm::ivec2 {
 	auto position = glm::ivec2{};
-	glfwGetWindowPos(_window.get(), &position.x, &position.y);
+	glfwGetWindowPos(window_.get(), &position.x, &position.y);
 	return position;
 }
 
 auto window::size() const -> glm::ivec2 {
 	auto size = glm::ivec2{};
-	glfwGetWindowSize(_window.get(), &size.x, &size.y);
+	glfwGetWindowSize(window_.get(), &size.x, &size.y);
 	return size;
 }
 
 auto window::title() const -> std::string_view {
-	return glfwGetWindowTitle(_window.get());
+	return glfwGetWindowTitle(window_.get());
 }
 
 auto window::has_focus_on_show() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_FOCUS_ON_SHOW) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_FOCUS_ON_SHOW) != 0;
 }
 
 auto window::has_mouse_passthrough() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_MOUSE_PASSTHROUGH) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_MOUSE_PASSTHROUGH) != 0;
 }
 
 auto window::has_transparent_framebuffer() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_TRANSPARENT_FRAMEBUFFER) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_TRANSPARENT_FRAMEBUFFER) != 0;
 }
 
 auto window::is_decorated() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_DECORATED) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_DECORATED) != 0;
 }
 
 auto window::is_floating() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_FLOATING) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_FLOATING) != 0;
 }
 
 auto window::is_focused() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_FOCUSED) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_FOCUSED) != 0;
 }
 
 auto window::is_maximized() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_MAXIMIZED) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_MAXIMIZED) != 0;
 }
 
 auto window::is_iconified() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_ICONIFIED) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_ICONIFIED) != 0;
 }
 
 auto window::is_resizable() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_RESIZABLE) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_RESIZABLE) != 0;
 }
 
 auto window::is_visible() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_VISIBLE) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_VISIBLE) != 0;
 }
 
 auto window::scales_framebuffer_to_monitor() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_SCALE_FRAMEBUFFER) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_SCALE_FRAMEBUFFER) != 0;
 }
 
 auto window::scales_to_monitor() const -> bool {
-	return glfwGetWindowAttrib(_window.get(), GLFW_SCALE_TO_MONITOR) != 0;
+	return glfwGetWindowAttrib(window_.get(), GLFW_SCALE_TO_MONITOR) != 0;
 }
 
 auto window::should_close() const -> bool {
-	return glfwWindowShouldClose(_window.get()) != 0;
+	return glfwWindowShouldClose(window_.get()) != 0;
 }
 
 auto window::raw() const -> GLFWwindow* {
-	return _window.get();
+	return window_.get();
 }
 
 }  // namespace void_engine::window
