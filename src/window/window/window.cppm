@@ -165,8 +165,6 @@ private:
 	       GLFWmonitor* monitor,
 	       GLFWwindow* share,
 	       const window_hints& hints);
-
-	static auto apply_hints(const window_hints& hints) -> void;
 };
 
 } // namespace void_engine::window

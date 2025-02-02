@@ -11,6 +11,64 @@ import void_engine.resources;
 
 namespace void_engine::window {
 
+static auto apply_hints(const window_hints& hints) -> void {
+	glfwWindowHint(GLFW_RESIZABLE, static_cast<int>(hints.window.resizable));
+	glfwWindowHint(GLFW_VISIBLE, static_cast<int>(hints.window.visible));
+	glfwWindowHint(GLFW_DECORATED, static_cast<int>(hints.window.decorated));
+	glfwWindowHint(GLFW_FOCUSED, static_cast<int>(hints.window.focused));
+	glfwWindowHint(GLFW_AUTO_ICONIFY, static_cast<int>(hints.window.auto_iconify));
+	glfwWindowHint(GLFW_FLOATING, static_cast<int>(hints.window.floating));
+	glfwWindowHint(GLFW_MAXIMIZED, static_cast<int>(hints.window.maximized));
+	glfwWindowHint(GLFW_CENTER_CURSOR, static_cast<int>(hints.window.center_cursor));
+	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, static_cast<int>(hints.window.transparent_framebuffer));
+	glfwWindowHint(GLFW_FOCUS_ON_SHOW, static_cast<int>(hints.window.focus_on_show));
+	glfwWindowHint(GLFW_SCALE_TO_MONITOR, static_cast<int>(hints.window.scale_to_monitor));
+	glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, static_cast<int>(hints.window.scale_framebuffer));
+	glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, static_cast<int>(hints.window.mouse_passthrough));
+	glfwWindowHint(GLFW_POSITION_X, hints.window.position.x);
+	glfwWindowHint(GLFW_POSITION_Y, hints.window.position.y);
+
+	glfwWindowHint(GLFW_RED_BITS, hints.framebuffer.color_bits.r);
+	glfwWindowHint(GLFW_GREEN_BITS, hints.framebuffer.color_bits.g);
+	glfwWindowHint(GLFW_BLUE_BITS, hints.framebuffer.color_bits.b);
+	glfwWindowHint(GLFW_ALPHA_BITS, hints.framebuffer.color_bits.a);
+	glfwWindowHint(GLFW_DEPTH_BITS, hints.framebuffer.depth_bits);
+	glfwWindowHint(GLFW_STENCIL_BITS, hints.framebuffer.stencil_bits);
+	glfwWindowHint(GLFW_ACCUM_RED_BITS, hints.framebuffer.accumulation_color_bits.r);
+	glfwWindowHint(GLFW_ACCUM_GREEN_BITS, hints.framebuffer.accumulation_color_bits.g);
+	glfwWindowHint(GLFW_ACCUM_BLUE_BITS, hints.framebuffer.accumulation_color_bits.b);
+	glfwWindowHint(GLFW_ACCUM_ALPHA_BITS, hints.framebuffer.accumulation_color_bits.a);
+	glfwWindowHint(GLFW_AUX_BUFFERS, hints.framebuffer.auxiliary_buffers);
+	glfwWindowHint(GLFW_STEREO, static_cast<int>(hints.framebuffer.stereo));
+	glfwWindowHint(GLFW_SAMPLES, hints.framebuffer.samples);
+	glfwWindowHint(GLFW_SRGB_CAPABLE, static_cast<int>(hints.framebuffer.srgb_capable));
+	glfwWindowHint(GLFW_DOUBLEBUFFER, static_cast<int>(hints.framebuffer.doublebuffer));
+
+	glfwWindowHint(GLFW_REFRESH_RATE, hints.monitor.refresh_rate);
+
+	glfwWindowHint(GLFW_CLIENT_API, static_cast<int>(hints.context.client_api));
+	glfwWindowHint(GLFW_CONTEXT_CREATION_API, static_cast<int>(hints.context.creation_api));
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, hints.context.version.first);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, hints.context.version.second);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, static_cast<int>(hints.context.opengl_forward_compat));
+	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, static_cast<int>(hints.context.debug));
+	glfwWindowHint(GLFW_OPENGL_PROFILE, static_cast<int>(hints.context.opengl_profile));
+	glfwWindowHint(GLFW_CONTEXT_ROBUSTNESS, static_cast<int>(hints.context.robustness));
+	glfwWindowHint(GLFW_CONTEXT_RELEASE_BEHAVIOR, static_cast<int>(hints.context.release_behavior));
+	glfwWindowHint(GLFW_CONTEXT_NO_ERROR, static_cast<int>(hints.context.no_error));
+
+	glfwWindowHint(GLFW_WIN32_KEYBOARD_MENU, static_cast<int>(hints.win32.keyboard_menu));
+	glfwWindowHint(GLFW_WIN32_SHOWDEFAULT, static_cast<int>(hints.win32.showdefault));
+
+	glfwWindowHintString(GLFW_COCOA_FRAME_NAME, hints.cocoa.frame_name.c_str());
+	glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, static_cast<int>(hints.cocoa.graphics_switching));
+
+	glfwWindowHintString(GLFW_WAYLAND_APP_ID, hints.wayland.app_id.c_str());
+
+	glfwWindowHintString(GLFW_X11_CLASS_NAME, hints.x11.class_name.c_str());
+	glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11.instance_name.c_str());
+}
+
 window::window(std::string_view title,
                const glm::ivec2& size,
                const Monitor& monitor,
@@ -274,64 +332,6 @@ auto window::should_close() const -> bool {
 
 auto window::raw() const -> GLFWwindow* {
 	return _window.get();
-}
-
-auto window::apply_hints(const window_hints& hints) -> void {
-	glfwWindowHint(GLFW_RESIZABLE, static_cast<int>(hints.window.resizable));
-	glfwWindowHint(GLFW_VISIBLE, static_cast<int>(hints.window.visible));
-	glfwWindowHint(GLFW_DECORATED, static_cast<int>(hints.window.decorated));
-	glfwWindowHint(GLFW_FOCUSED, static_cast<int>(hints.window.focused));
-	glfwWindowHint(GLFW_AUTO_ICONIFY, static_cast<int>(hints.window.auto_iconify));
-	glfwWindowHint(GLFW_FLOATING, static_cast<int>(hints.window.floating));
-	glfwWindowHint(GLFW_MAXIMIZED, static_cast<int>(hints.window.maximized));
-	glfwWindowHint(GLFW_CENTER_CURSOR, static_cast<int>(hints.window.center_cursor));
-	glfwWindowHint(GLFW_TRANSPARENT_FRAMEBUFFER, static_cast<int>(hints.window.transparent_framebuffer));
-	glfwWindowHint(GLFW_FOCUS_ON_SHOW, static_cast<int>(hints.window.focus_on_show));
-	glfwWindowHint(GLFW_SCALE_TO_MONITOR, static_cast<int>(hints.window.scale_to_monitor));
-	glfwWindowHint(GLFW_SCALE_FRAMEBUFFER, static_cast<int>(hints.window.scale_framebuffer));
-	glfwWindowHint(GLFW_MOUSE_PASSTHROUGH, static_cast<int>(hints.window.mouse_passthrough));
-	glfwWindowHint(GLFW_POSITION_X, hints.window.position.x);
-	glfwWindowHint(GLFW_POSITION_Y, hints.window.position.y);
-
-	glfwWindowHint(GLFW_RED_BITS, hints.framebuffer.color_bits.r);
-	glfwWindowHint(GLFW_GREEN_BITS, hints.framebuffer.color_bits.g);
-	glfwWindowHint(GLFW_BLUE_BITS, hints.framebuffer.color_bits.b);
-	glfwWindowHint(GLFW_ALPHA_BITS, hints.framebuffer.color_bits.a);
-	glfwWindowHint(GLFW_DEPTH_BITS, hints.framebuffer.depth_bits);
-	glfwWindowHint(GLFW_STENCIL_BITS, hints.framebuffer.stencil_bits);
-	glfwWindowHint(GLFW_ACCUM_RED_BITS, hints.framebuffer.accumulation_color_bits.r);
-	glfwWindowHint(GLFW_ACCUM_GREEN_BITS, hints.framebuffer.accumulation_color_bits.g);
-	glfwWindowHint(GLFW_ACCUM_BLUE_BITS, hints.framebuffer.accumulation_color_bits.b);
-	glfwWindowHint(GLFW_ACCUM_ALPHA_BITS, hints.framebuffer.accumulation_color_bits.a);
-	glfwWindowHint(GLFW_AUX_BUFFERS, hints.framebuffer.auxiliary_buffers);
-	glfwWindowHint(GLFW_STEREO, static_cast<int>(hints.framebuffer.stereo));
-	glfwWindowHint(GLFW_SAMPLES, hints.framebuffer.samples);
-	glfwWindowHint(GLFW_SRGB_CAPABLE, static_cast<int>(hints.framebuffer.srgb_capable));
-	glfwWindowHint(GLFW_DOUBLEBUFFER, static_cast<int>(hints.framebuffer.doublebuffer));
-
-	glfwWindowHint(GLFW_REFRESH_RATE, hints.monitor.refresh_rate);
-
-	glfwWindowHint(GLFW_CLIENT_API, static_cast<int>(hints.context.client_api));
-	glfwWindowHint(GLFW_CONTEXT_CREATION_API, static_cast<int>(hints.context.creation_api));
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, hints.context.version.first);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, hints.context.version.second);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, static_cast<int>(hints.context.opengl_forward_compat));
-	glfwWindowHint(GLFW_OPENGL_DEBUG_CONTEXT, static_cast<int>(hints.context.debug));
-	glfwWindowHint(GLFW_OPENGL_PROFILE, static_cast<int>(hints.context.opengl_profile));
-	glfwWindowHint(GLFW_CONTEXT_ROBUSTNESS, static_cast<int>(hints.context.robustness));
-	glfwWindowHint(GLFW_CONTEXT_RELEASE_BEHAVIOR, static_cast<int>(hints.context.release_behavior));
-	glfwWindowHint(GLFW_CONTEXT_NO_ERROR, static_cast<int>(hints.context.no_error));
-
-	glfwWindowHint(GLFW_WIN32_KEYBOARD_MENU, static_cast<int>(hints.win32.keyboard_menu));
-	glfwWindowHint(GLFW_WIN32_SHOWDEFAULT, static_cast<int>(hints.win32.showdefault));
-
-	glfwWindowHintString(GLFW_COCOA_FRAME_NAME, hints.cocoa.frame_name.c_str());
-	glfwWindowHint(GLFW_COCOA_GRAPHICS_SWITCHING, static_cast<int>(hints.cocoa.graphics_switching));
-
-	glfwWindowHintString(GLFW_WAYLAND_APP_ID, hints.wayland.app_id.c_str());
-
-	glfwWindowHintString(GLFW_X11_CLASS_NAME, hints.x11.class_name.c_str());
-	glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11.instance_name.c_str());
 }
 
 }  // namespace void_engine::window
