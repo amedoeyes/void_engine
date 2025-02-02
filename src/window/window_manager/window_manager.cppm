@@ -21,11 +21,11 @@ public:
 
 	auto create(std::string_view title,
 	            const glm::ivec2& size,
-	            const Monitor& monitor,
+	            const monitor& monitor,
 	            const window& share,
 	            const window_hints& hints = {}) -> window&;
 
-	auto create(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints = {})
+	auto create(std::string_view title, const glm::ivec2& size, const monitor& monitor, const window_hints& hints = {})
 		-> window&;
 
 	auto create(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints = {})
@@ -44,10 +44,10 @@ public:
 	static auto set_vsync(bool enabled) -> void;
 
 	[[nodiscard]]
-	static auto monitors() -> std::vector<Monitor>;
+	static auto monitors() -> std::vector<monitor>;
 
 	[[nodiscard]]
-	static auto primary_monitor() -> std::optional<Monitor>;
+	static auto primary_monitor() -> std::optional<monitor>;
 
 private:
 	static inline std::int32_t instance_count_ = 0;

@@ -30,7 +30,7 @@ window_manager::~window_manager() {
 
 auto window_manager::create(std::string_view title,
                             const glm::ivec2& size,
-                            const Monitor& monitor,
+                            const monitor& monitor,
                             const window& share,
                             const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, share, hints));
@@ -38,7 +38,7 @@ auto window_manager::create(std::string_view title,
 
 auto window_manager::create(std::string_view title,
                             const glm::ivec2& size,
-                            const Monitor& monitor,
+                            const monitor& monitor,
                             const window_hints& hints) -> window& {
 	return *windows_.emplace_back(std::make_unique<window>(title, size, monitor, hints));
 }
@@ -78,18 +78,18 @@ auto window_manager::set_vsync(bool enabled) -> void {
 	set_swap_interval(enabled ? 1 : 0);
 }
 
-auto window_manager::monitors() -> std::vector<Monitor> {
+auto window_manager::monitors() -> std::vector<monitor> {
 	auto count = 0;
 	auto* monitors = glfwGetMonitors(&count);
 	return std::span(monitors, count) //
-	     | std::views::transform([](auto* m) { return Monitor{m}; }) //
+	     | std::views::transform([](auto* m) { return monitor{m}; }) //
 	     | std::ranges::to<std::vector>();
 }
 
-auto window_manager::primary_monitor() -> std::optional<Monitor> {
+auto window_manager::primary_monitor() -> std::optional<monitor> {
 	auto* monitor_ptr = glfwGetPrimaryMonitor();
 	if (monitor_ptr == nullptr) return std::nullopt;
-	return Monitor(monitor_ptr);
+	return monitor(monitor_ptr);
 }
 
 } // namespace void_engine::window

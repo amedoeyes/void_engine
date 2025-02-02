@@ -18,10 +18,10 @@ class window {
 public:
 	window(std::string_view title,
 	       const glm::ivec2& size,
-	       const Monitor& monitor,
+	       const monitor& monitor,
 	       const window& share,
 	       const window_hints& hints = {});
-	window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints = {});
+	window(std::string_view title, const glm::ivec2& size, const monitor& monitor, const window_hints& hints = {});
 	window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints = {});
 	window(std::string_view title, const glm::ivec2& size, const window_hints& hints = {});
 
@@ -43,9 +43,9 @@ public:
 
 	auto fullscreen() const -> void;
 
-	auto fullscreen(const Monitor& monitor) const -> void;
+	auto fullscreen(const monitor& monitor) const -> void;
 
-	auto fullscreen(const Monitor& monitor, const VideoMode& video_mode) const -> void;
+	auto fullscreen(const monitor& monitor, const video_mode& video_mode) const -> void;
 
 	auto windowed(const glm::ivec2& position, const glm::ivec2& size) const -> void;
 

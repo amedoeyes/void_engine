@@ -71,12 +71,12 @@ static auto apply_hints(const window_hints& hints) -> void {
 
 window::window(std::string_view title,
                const glm::ivec2& size,
-               const Monitor& monitor,
+               const monitor& monitor,
                const window& share,
                const window_hints& hints)
 	: window(title, size, monitor.raw(), share.raw(), hints) {}
 
-window::window(std::string_view title, const glm::ivec2& size, const Monitor& monitor, const window_hints& hints)
+window::window(std::string_view title, const glm::ivec2& size, const monitor& monitor, const window_hints& hints)
 	: window(title, size, monitor.raw(), nullptr, hints) {}
 
 window::window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints)
@@ -137,12 +137,12 @@ auto window::fullscreen() const -> void {
 	glfwSetWindowMonitor(_window.get(), monitor, 0, 0, mode->width, mode->height, mode->refreshRate);
 }
 
-auto window::fullscreen(const Monitor& monitor) const -> void {
+auto window::fullscreen(const monitor& monitor) const -> void {
 	const auto& mode = monitor.get_video_mode();
 	glfwSetWindowMonitor(_window.get(), monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
 }
 
-auto window::fullscreen(const Monitor& monitor, const VideoMode& video_mode) const -> void {
+auto window::fullscreen(const monitor& monitor, const video_mode& video_mode) const -> void {
 	glfwSetWindowMonitor(_window.get(),
 	                     monitor.raw(),
 	                     0,
