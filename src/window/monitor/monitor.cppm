@@ -18,25 +18,25 @@ public:
 	void set_gamma(float gamma) const;
 
 	[[nodiscard]]
-	auto get_content_scale() const -> glm::vec2;
+	auto content_scale() const -> glm::vec2;
 
 	[[nodiscard]]
-	auto get_name() const -> std::string_view;
+	auto name() const -> std::string_view;
 
 	[[nodiscard]]
-	auto get_physical_size() const -> glm::ivec2;
+	auto physical_size() const -> glm::ivec2;
 
 	[[nodiscard]]
-	auto get_video_mode() const -> video_mode;
+	auto current_video_mode() const -> video_mode;
 
 	[[nodiscard]]
-	auto get_video_modes() const -> std::vector<video_mode>;
+	auto video_modes() const -> std::vector<video_mode>;
 
 	[[nodiscard]]
-	auto get_virtual_position() const -> glm::ivec2;
+	auto virtual_position() const -> glm::ivec2;
 
 	[[nodiscard]]
-	auto get_work_area() const -> std::pair<glm::ivec2, glm::ivec2>;
+	auto work_area() const -> std::pair<glm::ivec2, glm::ivec2>;
 
 	[[nodiscard]]
 	auto raw() const -> GLFWmonitor*;

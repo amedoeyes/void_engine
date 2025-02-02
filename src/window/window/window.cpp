@@ -138,7 +138,7 @@ auto window::fullscreen() const -> void {
 }
 
 auto window::fullscreen(const monitor& monitor) const -> void {
-	const auto& mode = monitor.get_video_mode();
+	const auto& mode = monitor.current_video_mode();
 	glfwSetWindowMonitor(window_.get(), monitor.raw(), 0, 0, mode.size.x, mode.size.y, mode.refresh_rate);
 }
 
