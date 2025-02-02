@@ -4,8 +4,8 @@ module;
 
 module void_engine.window;
 
-import std;
 import glm;
+import std;
 import void_engine.utility.bit_mask;
 
 namespace void_engine::window {
@@ -15,9 +15,12 @@ window_event_bus::window_event_bus(const window& window) : window_{window.raw()}
 		return static_cast<class window*>(glfwGetWindowUserPointer(w))->events().emit(std::forward<decltype(data)>(data));
 	};
 	glfwSetDropCallback(window_, [](GLFWwindow* w, int count, const char** paths) {
-		emit(w, event::drop{std::span(paths, count) | std::views::transform([](const auto& path) {
-			return std::filesystem::path(path);
-		}) | std::ranges::to<std::vector>()});
+		emit(w,
+		     event::drop{
+					 std::span(paths, count) //
+						 | std::views::transform([](const auto& path) { return std::filesystem::path(path); })
+						 | std::ranges::to<std::vector>(),
+				 });
 	});
 	glfwSetFramebufferSizeCallback(window_, [](GLFWwindow* w, int width, int height) {
 		emit(w, event::framebuffer_size{glm::vec2(width, height)});
