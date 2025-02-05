@@ -41,7 +41,7 @@ inline void set_output(std::ostream& output) {
 	context.output = &output;
 }
 
-template <typename... Args>
+template<typename... Args>
 void log(Level level, std::string_view fmt, Args&&... args) {
 	static Context& context = get_context();
 	if (context.level == Level::none || level < context.level) {
@@ -49,38 +49,38 @@ void log(Level level, std::string_view fmt, Args&&... args) {
 	}
 	const std::lock_guard<std::mutex> lock(context.mutex);
 	auto now = std::chrono::system_clock::now();
-	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1000;
+	auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()) % 1'000;
 	auto seconds = std::chrono::floor<std::chrono::seconds>(now);
 	const std::string timestamp = std::format("{:%T}.{:03}", seconds, ms.count());
 	std::string_view prefix;
 	switch (level) {
 		using enum Level;
-		case debug: prefix = "DEBUG"; break;
-		case info: prefix = "INFO"; break;
-		case warning: prefix = "WARNING"; break;
-		case error: prefix = "ERROR"; break;
-		default: std::unreachable();
+	case debug: prefix = "DEBUG"; break;
+	case info: prefix = "INFO"; break;
+	case warning: prefix = "WARNING"; break;
+	case error: prefix = "ERROR"; break;
+	default: std::unreachable();
 	}
 	const std::string message = std::vformat(fmt, std::make_format_args(std::forward<Args>(args)...));
 	*context.output << std::format("{}: {}: {}\n", timestamp, prefix, message);
 }
 
-template <typename... Args>
+template<typename... Args>
 void debug(std::string_view fmt, Args&&... args) {
 	log(Level::debug, fmt, std::forward<Args>(args)...);
 }
 
-template <typename... Args>
+template<typename... Args>
 void info(std::string_view fmt, Args&&... args) {
 	log(Level::info, fmt, std::forward<Args>(args)...);
 }
 
-template <typename... Args>
+template<typename... Args>
 void warning(std::string_view fmt, Args&&... args) {
 	log(Level::warning, fmt, std::forward<Args>(args)...);
 }
 
-template <typename... Args>
+template<typename... Args>
 void error(std::string_view fmt, Args&&... args) {
 	log(Level::error, fmt, std::forward<Args>(args)...);
 }

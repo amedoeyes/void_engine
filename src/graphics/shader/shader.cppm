@@ -21,12 +21,8 @@ public:
 	void bind() const;
 	static void unbind();
 
-	void add_source(
-		ShaderType type, const std::filesystem::path& path, ShaderFormat format = ShaderFormat::glsl
-	);
-	void add_source(
-		ShaderType type, std::span<const std::byte> source, ShaderFormat format = ShaderFormat::glsl
-	);
+	void add_source(ShaderType type, const std::filesystem::path& path, ShaderFormat format = ShaderFormat::glsl);
+	void add_source(ShaderType type, std::span<const std::byte> source, ShaderFormat format = ShaderFormat::glsl);
 	void compile();
 
 	void set_uniform(unsigned int index, int value) const;

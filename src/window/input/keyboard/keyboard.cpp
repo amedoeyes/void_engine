@@ -2,44 +2,40 @@ module void_engine.window;
 
 import std;
 
-namespace void_engine::window::input::keyboard {
+namespace void_engine::window::input {
 
-Keyboard::Keyboard(window::Window& window) : _window(&window) {
-	_keyboard_key_listener = _window->get_events().add_listener<window::event::KeyboardKeyEvent>(
-		[this](const window::event::KeyboardKeyEvent& event) {
-			set_key(event.key, event.action == KeyAction::press || event.action == KeyAction::repeat);
-		}
-	);
+keyboard::keyboard(window& window) : window_{window} {
+	key_listener_id_ = window_.get().events().add_listener<event::keyboard_key>([&](const auto& event) {
+		set_key(event.key, event.action == keyboard_action::press || event.action == keyboard_action::repeat);
+	});
 }
 
-Keyboard::~Keyboard() {
-	_window->get_events().remove_listener<window::event::KeyboardKeyEvent>(_keyboard_key_listener);
+keyboard::~keyboard() {
+	window_.get().events().remove_listener<event::keyboard_key>(key_listener_id_);
 }
 
-void Keyboard::update() {
-	for (auto& key : _keys) {
-		key.set_previous(key.get());
-	}
+auto keyboard::update() -> void {
+	for (auto& key : keys_) key.set_previous(key.current());
 }
 
-void Keyboard::set_key(Key key, bool state) {
-	_keys[static_cast<std::size_t>(key)].set_current(state);
+auto keyboard::set_key(keyboard_key key, bool state) -> void {
+	keys_.at(std::to_underlying(key)).set_current(state);
 }
 
-auto Keyboard::is_down(Key key) const -> bool {
-	return _keys[static_cast<std::size_t>(key)].get();
+auto keyboard::is_down(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).current();
 }
 
-auto Keyboard::is_up(Key key) const -> bool {
-	return !_keys[static_cast<std::size_t>(key)].get();
+auto keyboard::is_up(keyboard_key key) const -> bool {
+	return !keys_.at(std::to_underlying(key)).current();
 }
 
-auto Keyboard::is_pressed(Key key) const -> bool {
-	return _keys[static_cast<std::size_t>(key)].entered(true);
+auto keyboard::is_pressed(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).entered(true);
 }
 
-auto Keyboard::is_released(Key key) const -> bool {
-	return _keys[static_cast<std::size_t>(key)].exited(true);
+auto keyboard::is_released(keyboard_key key) const -> bool {
+	return keys_.at(std::to_underlying(key)).exited(true);
 }
 
-} // namespace void_engine::window::input::keyboard
+} // namespace void_engine::window::input

@@ -6,4 +6,4 @@ export namespace void_engine::utility {
 
 auto get_exec_path() -> std::filesystem::path;
 
-}
+}  // namespace void_engine::utility

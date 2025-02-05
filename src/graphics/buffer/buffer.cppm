@@ -22,27 +22,28 @@ public:
 	void update_data(const void* data) const;
 	void bind_range(unsigned int index, unsigned int offset, unsigned int size) const;
 
-	template <typename T>
+	template<typename T>
 	void set_data(const T& data, Usage usage) {
 		set_data(sizeof(T), &data, usage);
 	}
 
-	template <typename T>
+	template<typename T>
 	void set_sub_data(unsigned int offset, const T& data) const {
 		set_sub_data(offset, sizeof(T), &data);
 	}
 
-	template <typename T>
+	template<typename T>
 	void update_data(const T& data) const {
 		update_data(static_cast<const void*>(&data));
 	}
 
-	template <typename T>
+	template<typename T>
 	void bind_range(unsigned int index, unsigned int offset) const {
 		bind_range(index, offset, sizeof(T));
 	}
 
-	[[nodiscard]] auto get_id() const -> unsigned int;
+	[[nodiscard]]
+	auto get_id() const -> unsigned int;
 
 protected:
 	unsigned int _id = 0;

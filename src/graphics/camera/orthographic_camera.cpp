@@ -86,9 +86,7 @@ auto OrthographicCamera::get_type() const -> Type {
 }
 
 void OrthographicCamera::update_projection() {
-	_projection = glm::ortho(
-		_left * _zoom, _right * _zoom, _bottom * _zoom, _top * _zoom, _near_plane, _far_plane
-	);
+	_projection = glm::ortho(_left * _zoom, _right * _zoom, _bottom * _zoom, _top * _zoom, _near_plane, _far_plane);
 	update_view_projection();
 }
 

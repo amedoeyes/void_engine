@@ -4,40 +4,35 @@ module;
 
 module void_engine.window;
 
-import std;
 import glm;
+import std;
 
 namespace void_engine::window {
 
-Monitor::Monitor(GLFWmonitor* monitor) : _monitor(monitor) {
+monitor::monitor(GLFWmonitor* monitor) : monitor_{monitor} {}
+
+void monitor::set_gamma(float gamma) const {
+	glfwSetGamma(monitor_, gamma);
 }
 
-auto Monitor::raw() const -> GLFWmonitor* {
-	return _monitor;
-}
-
-void Monitor::set_gamma(float gamma) const {
-	glfwSetGamma(_monitor, gamma);
-}
-
-auto Monitor::get_content_scale() const -> glm::vec2 {
-	auto scale = glm::vec2();
-	glfwGetMonitorContentScale(_monitor, &scale.x, &scale.y);
+auto monitor::content_scale() const -> glm::vec2 {
+	auto scale = glm::vec2{};
+	glfwGetMonitorContentScale(monitor_, &scale.x, &scale.y);
 	return scale;
 }
 
-auto Monitor::get_name() const -> std::string_view {
-	return glfwGetMonitorName(_monitor);
+auto monitor::name() const -> std::string_view {
+	return glfwGetMonitorName(monitor_);
 }
 
-auto Monitor::get_physical_size() const -> glm::ivec2 {
-	auto size = glm::ivec2();
-	glfwGetMonitorPhysicalSize(_monitor, &size.x, &size.y);
+auto monitor::physical_size() const -> glm::ivec2 {
+	auto size = glm::ivec2{};
+	glfwGetMonitorPhysicalSize(monitor_, &size.x, &size.y);
 	return size;
 }
 
-auto Monitor::get_video_mode() const -> VideoMode {
-	const auto* mode = glfwGetVideoMode(_monitor);
+auto monitor::current_video_mode() const -> video_mode {
+	const auto* mode = glfwGetVideoMode(monitor_);
 	return {
 		.size = {mode->width, mode->height},
 		.color_bits = {mode->redBits, mode->greenBits, mode->blueBits},
@@ -45,32 +40,35 @@ auto Monitor::get_video_mode() const -> VideoMode {
 	};
 }
 
-auto Monitor::get_video_modes() const -> std::vector<VideoMode> {
+auto monitor::video_modes() const -> std::vector<video_mode> {
 	int count = 0;
-	const GLFWvidmode* modes = glfwGetVideoModes(_monitor, &count);
-	auto video_modes = std::vector<VideoMode>();
-	video_modes.reserve(count);
-	for (auto i = 0; i < count; ++i) {
-		video_modes.emplace_back(VideoMode{
-			.size = {modes[i].width, modes[i].height},
-			.color_bits = {modes[i].redBits, modes[i].greenBits, modes[i].blueBits},
-			.refresh_rate = modes[i].refreshRate,
-		});
-	}
-	return video_modes;
+	const GLFWvidmode* modes = glfwGetVideoModes(monitor_, &count);
+	return std::span(modes, count) //
+	     | std::views::transform([](const auto mode) {
+					 return video_mode{
+						 .size = {mode.width, mode.height},
+						 .color_bits = {mode.redBits, mode.greenBits, mode.blueBits},
+						 .refresh_rate = mode.refreshRate,
+					 };
+				 })
+	     | std::ranges::to<std::vector>();
 }
 
-auto Monitor::get_virtual_position() const -> glm::ivec2 {
-	auto pos = glm::ivec2();
-	glfwGetMonitorPos(_monitor, &pos.x, &pos.y);
+auto monitor::virtual_position() const -> glm::ivec2 {
+	auto pos = glm::ivec2{};
+	glfwGetMonitorPos(monitor_, &pos.x, &pos.y);
 	return pos;
 }
 
-auto Monitor::get_work_area() const -> std::pair<glm::ivec2, glm::ivec2> {
-	auto pos = glm::ivec2();
-	auto size = glm::ivec2();
-	glfwGetMonitorWorkarea(_monitor, &pos.x, &pos.y, &size.x, &size.y);
+auto monitor::work_area() const -> std::pair<glm::ivec2, glm::ivec2> {
+	auto pos = glm::ivec2{};
+	auto size = glm::ivec2{};
+	glfwGetMonitorWorkarea(monitor_, &pos.x, &pos.y, &size.x, &size.y);
 	return {pos, size};
+}
+
+auto monitor::raw() const -> GLFWmonitor* {
+	return monitor_;
 }
 
 } // namespace void_engine::window

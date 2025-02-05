@@ -6,20 +6,20 @@ import std;
 
 namespace void_engine::graphics {
 
-Mesh::Mesh(const Mesh& other) :
-	_vertex_array(new VertexArray(*other._vertex_array)),
-	_element_buffer(new buffer::ElementBuffer(*other._element_buffer)),
-	_primitive_type(other._primitive_type) {
+Mesh::Mesh(const Mesh& other)
+	: _vertex_array(new VertexArray(*other._vertex_array)),
+		_element_buffer(new buffer::ElementBuffer(*other._element_buffer)),
+		_primitive_type(other._primitive_type) {
 	for (const auto* buffer : other._vertex_buffers) {
 		_vertex_buffers.push_back(new buffer::Buffer(*buffer));
 	}
 }
 
-Mesh::Mesh(Mesh&& other) noexcept :
-	_vertex_array(other._vertex_array),
-	_vertex_buffers(std::move(other._vertex_buffers)),
-	_element_buffer(other._element_buffer),
-	_primitive_type(other._primitive_type) {
+Mesh::Mesh(Mesh&& other) noexcept
+	: _vertex_array(other._vertex_array),
+		_vertex_buffers(std::move(other._vertex_buffers)),
+		_element_buffer(other._element_buffer),
+		_primitive_type(other._primitive_type) {
 	other._vertex_array = nullptr;
 	other._element_buffer = nullptr;
 }
@@ -60,17 +60,17 @@ auto Mesh::operator=(Mesh&& other) noexcept -> Mesh& {
 	return *this;
 }
 
-Mesh::Mesh() :
-	_vertex_array(new VertexArray()),
-	_element_buffer(new buffer::ElementBuffer()),
-	_primitive_type(renderer::PrimitiveType::triangles) {
+Mesh::Mesh()
+	: _vertex_array(new VertexArray()),
+		_element_buffer(new buffer::ElementBuffer()),
+		_primitive_type(renderer::PrimitiveType::triangles) {
 	_vertex_array->set_element_buffer(*_element_buffer);
 }
 
-Mesh::Mesh(renderer::PrimitiveType primitive_type) :
-	_vertex_array(new VertexArray()),
-	_element_buffer(new buffer::ElementBuffer()),
-	_primitive_type(primitive_type) {
+Mesh::Mesh(renderer::PrimitiveType primitive_type)
+	: _vertex_array(new VertexArray()),
+		_element_buffer(new buffer::ElementBuffer()),
+		_primitive_type(primitive_type) {
 	_vertex_array->set_element_buffer(*_element_buffer);
 }
 

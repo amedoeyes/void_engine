@@ -21,8 +21,10 @@ public:
 	void start();
 	void stop();
 
-	[[nodiscard]] auto get_elapsed() const -> float;
-	[[nodiscard]] auto is_running() const -> bool;
+	[[nodiscard]]
+	auto get_elapsed() const -> float;
+	[[nodiscard]]
+	auto is_running() const -> bool;
 
 private:
 	TimePoint _start;

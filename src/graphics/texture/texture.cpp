@@ -9,43 +9,40 @@ module void_engine.graphics;
 import std;
 import glm;
 import void_engine.resources;
+import void_engine.utility;
 
 namespace void_engine::graphics {
 
 Texture::Texture(const Texture& other) : _target(other._target), _size(other._size) {
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
-		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
-		case TextureTarget::texture_3d:
-		case TextureTarget::texture_2d_array:
-			set_texture_storage_3d(1, other._internal_format, _size);
-			break;
-		default: assert(false && "Not implemented");
+	case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+	case TextureTarget::texture_3d:
+	case TextureTarget::texture_2d_array: set_texture_storage_3d(1, other._internal_format, _size); break;
+	default: assert(false && "Not implemented");
 	}
-	glCopyImageSubData(
-		other._id,
-		static_cast<GLenum>(other._target),
-		0,
-		0,
-		0,
-		0,
-		_id,
-		static_cast<GLenum>(_target),
-		0,
-		0,
-		0,
-		0,
-		other._size.x,
-		other._size.y,
-		other._size.z
-	);
+	glCopyImageSubData(other._id,
+	                   static_cast<GLenum>(other._target),
+	                   0,
+	                   0,
+	                   0,
+	                   0,
+	                   _id,
+	                   static_cast<GLenum>(_target),
+	                   0,
+	                   0,
+	                   0,
+	                   0,
+	                   other._size.x,
+	                   other._size.y,
+	                   other._size.z);
 }
 
-Texture::Texture(Texture&& other) noexcept :
-	_id(other._id),
-	_target(other._target),
-	_size(other._size),
-	_internal_format(other._internal_format) {
+Texture::Texture(Texture&& other) noexcept
+	: _id(other._id),
+		_target(other._target),
+		_size(other._size),
+		_internal_format(other._internal_format) {
 	other._id = 0;
 }
 
@@ -57,30 +54,26 @@ auto Texture::operator=(const Texture& other) -> Texture& {
 	_size = other._size;
 	glCreateTextures(static_cast<GLenum>(_target), 1, &_id);
 	switch (other._target) {
-		case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
-		case TextureTarget::texture_3d:
-		case TextureTarget::texture_2d_array:
-			set_texture_storage_3d(1, other._internal_format, _size);
-			break;
-		default: assert(false && "Not implemented");
+	case TextureTarget::texture_2d: set_texture_storage_2d(1, other._internal_format, _size); break;
+	case TextureTarget::texture_3d:
+	case TextureTarget::texture_2d_array: set_texture_storage_3d(1, other._internal_format, _size); break;
+	default: assert(false && "Not implemented");
 	}
-	glCopyImageSubData(
-		other._id,
-		static_cast<GLenum>(other._target),
-		0,
-		0,
-		0,
-		0,
-		_id,
-		static_cast<GLenum>(_target),
-		0,
-		0,
-		0,
-		0,
-		other._size.x,
-		other._size.y,
-		other._size.z
-	);
+	glCopyImageSubData(other._id,
+	                   static_cast<GLenum>(other._target),
+	                   0,
+	                   0,
+	                   0,
+	                   0,
+	                   _id,
+	                   static_cast<GLenum>(_target),
+	                   0,
+	                   0,
+	                   0,
+	                   0,
+	                   other._size.x,
+	                   other._size.y,
+	                   other._size.z);
 	return *this;
 }
 
@@ -103,22 +96,23 @@ Texture::Texture(TextureTarget target) : _target(target) {
 Texture::Texture(TextureTarget target, const std::filesystem::path& path) : Texture(target) {
 	switch (_target) {
 		using enum TextureTarget;
-		case texture_2d: {
-			const auto image = resources::Image(path, true);
-			set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.get_size());
-			TextureFormat format = TextureFormat::none;
-			switch (image.get_color_type()) {
-				using enum resources::ColorType;
-				case gray: format = TextureFormat::r; break;
-				case gray_alpha: format = TextureFormat::rg; break;
-				case rgb: format = TextureFormat::rgb; break;
-				case rgba: format = TextureFormat::rgba; break;
-				default: std::unreachable();
-			}
-			set_sub_image_2d(0, {0, 0}, image.get_size(), format, image.get_data().data());
-			break;
+	case texture_2d: {
+		const auto bytes = *utility::read_bytes(path);
+		auto image = resources::image(bytes);
+		image.flip();
+		set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.size());
+		TextureFormat format = TextureFormat::none;
+		switch (image.channels()) {
+		case 1: format = TextureFormat::r; break;
+		case 2: format = TextureFormat::rg; break;
+		case 3: format = TextureFormat::rgb; break;
+		case 4: format = TextureFormat::rgba; break;
+		default: std::unreachable();
 		}
-		default: break;
+		set_sub_image_2d(0, {0, 0}, image.size(), format, image.data().data());
+		break;
+	}
+	default: break;
 	}
 }
 
@@ -141,60 +135,54 @@ void Texture::bind_unit(unsigned int unit) const {
 	glBindTextureUnit(unit, _id);
 }
 
-void Texture::set_texture_storage_2d(
-	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec2& size
-) {
-	glTextureStorage2D(
-		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y
-	);
+void Texture::set_texture_storage_2d(unsigned int levels,
+                                     TextureInternalFormat internal_format,
+                                     const glm::ivec2& size) {
+	glTextureStorage2D(_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y);
 	_size = glm::ivec3(size, 1.0f);
 	_internal_format = internal_format;
 }
 
-void Texture::set_texture_storage_3d(
-	unsigned int levels, TextureInternalFormat internal_format, const glm::ivec3& size
-) {
-	glTextureStorage3D(
-		_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y, size.z
-	);
+void Texture::set_texture_storage_3d(unsigned int levels,
+                                     TextureInternalFormat internal_format,
+                                     const glm::ivec3& size) {
+	glTextureStorage3D(_id, static_cast<GLsizei>(levels), static_cast<GLenum>(internal_format), size.x, size.y, size.z);
 	_size = size;
 	_internal_format = internal_format;
 }
 
-void Texture::set_sub_image_2d(
-	unsigned int level, const glm::ivec2& offset, const glm::ivec2& size, TextureFormat format,
-	const void* pixels
-) const {
-	glTextureSubImage2D(
-		_id,
-		static_cast<GLint>(level),
-		offset.x,
-		offset.y,
-		size.x,
-		size.y,
-		static_cast<GLenum>(format),
-		GL_UNSIGNED_BYTE,
-		pixels
-	);
+void Texture::set_sub_image_2d(unsigned int level,
+                               const glm::ivec2& offset,
+                               const glm::ivec2& size,
+                               TextureFormat format,
+                               const void* pixels) const {
+	glTextureSubImage2D(_id,
+	                    static_cast<GLint>(level),
+	                    offset.x,
+	                    offset.y,
+	                    size.x,
+	                    size.y,
+	                    static_cast<GLenum>(format),
+	                    GL_UNSIGNED_BYTE,
+	                    pixels);
 }
 
-void Texture::set_sub_image_3d(
-	unsigned int level, const glm::ivec3& offset, const glm::ivec3& size, TextureFormat format,
-	const void* pixels
-) const {
-	glTextureSubImage3D(
-		_id,
-		static_cast<GLint>(level),
-		offset.x,
-		offset.y,
-		offset.z,
-		size.x,
-		size.y,
-		size.z,
-		static_cast<GLenum>(format),
-		GL_UNSIGNED_BYTE,
-		pixels
-	);
+void Texture::set_sub_image_3d(unsigned int level,
+                               const glm::ivec3& offset,
+                               const glm::ivec3& size,
+                               TextureFormat format,
+                               const void* pixels) const {
+	glTextureSubImage3D(_id,
+	                    static_cast<GLint>(level),
+	                    offset.x,
+	                    offset.y,
+	                    offset.z,
+	                    size.x,
+	                    size.y,
+	                    size.z,
+	                    static_cast<GLenum>(format),
+	                    GL_UNSIGNED_BYTE,
+	                    pixels);
 }
 
 void Texture::generate_mipmap() const {
@@ -275,18 +263,13 @@ void Texture::set_wrap_r(TextureWrap wrap) const {
 
 auto Texture::get_data(TextureFormat format) const -> std::vector<std::byte> {
 	std::vector<std::byte> data;
-	data.resize(
-		static_cast<decltype(data)::size_type>(_size.x) * _size.y * _size.z *
-		get_bytes_per_pixel(format)
-	);
-	glGetTextureImage(
-		_id,
-		0,
-		static_cast<GLenum>(format),
-		GL_UNSIGNED_BYTE,
-		static_cast<GLsizei>(data.size()),
-		data.data()
-	);
+	data.resize(static_cast<decltype(data)::size_type>(_size.x) * _size.y * _size.z * get_bytes_per_pixel(format));
+	glGetTextureImage(_id,
+	                  0,
+	                  static_cast<GLenum>(format),
+	                  GL_UNSIGNED_BYTE,
+	                  static_cast<GLsizei>(data.size()),
+	                  data.data());
 	return data;
 }
 
@@ -297,13 +280,13 @@ auto Texture::get_size() const -> const glm::ivec3& {
 auto Texture::get_bytes_per_pixel(TextureFormat format) -> unsigned int {
 	switch (format) {
 		using enum TextureFormat;
-		case r: return 1;
-		case rg: return 2;
-		case rgb:
-		case bgr: return 3;
-		case rgba:
-		case bgra: return 4;
-		default: assert(false && "Not implemented");
+	case r: return 1;
+	case rg: return 2;
+	case rgb:
+	case bgr: return 3;
+	case rgba:
+	case bgra: return 4;
+	default: assert(false && "Not implemented");
 	}
 	return 0;
 }

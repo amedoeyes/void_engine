@@ -6,34 +6,43 @@ export module void_engine.window:monitor;
 
 import :video_mode;
 
-import std;
 import glm;
+import std;
 
 export namespace void_engine::window {
 
-class Monitor {
+class monitor {
 public:
-	Monitor(const Monitor&) = default;
-	Monitor(Monitor&&) = default;
-	auto operator=(const Monitor&) -> Monitor& = default;
-	auto operator=(Monitor&&) -> Monitor& = default;
-	explicit Monitor(GLFWmonitor* monitor);
-	~Monitor() = default;
-
-	[[nodiscard]] auto raw() const -> GLFWmonitor*;
+	explicit monitor(GLFWmonitor* monitor);
 
 	void set_gamma(float gamma) const;
 
-	[[nodiscard]] auto get_content_scale() const -> glm::vec2;
-	[[nodiscard]] auto get_name() const -> std::string_view;
-	[[nodiscard]] auto get_physical_size() const -> glm::ivec2;
-	[[nodiscard]] auto get_video_mode() const -> VideoMode;
-	[[nodiscard]] auto get_video_modes() const -> std::vector<VideoMode>;
-	[[nodiscard]] auto get_virtual_position() const -> glm::ivec2;
-	[[nodiscard]] auto get_work_area() const -> std::pair<glm::ivec2, glm::ivec2>;
+	[[nodiscard]]
+	auto content_scale() const -> glm::vec2;
+
+	[[nodiscard]]
+	auto name() const -> std::string_view;
+
+	[[nodiscard]]
+	auto physical_size() const -> glm::ivec2;
+
+	[[nodiscard]]
+	auto current_video_mode() const -> video_mode;
+
+	[[nodiscard]]
+	auto video_modes() const -> std::vector<video_mode>;
+
+	[[nodiscard]]
+	auto virtual_position() const -> glm::ivec2;
+
+	[[nodiscard]]
+	auto work_area() const -> std::pair<glm::ivec2, glm::ivec2>;
+
+	[[nodiscard]]
+	auto raw() const -> GLFWmonitor*;
 
 private:
-	GLFWmonitor* _monitor;
+	GLFWmonitor* monitor_;
 };
 
 } // namespace void_engine::window

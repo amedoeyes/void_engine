@@ -28,38 +28,16 @@ struct DefaultResources {
 	resources::Font font{liberation_font_bytes};
 	FontAtlas font_atlas{this->font};
 	Shader shape_shader{
-		{
-			.type = ShaderType::vertex,
-			.format = ShaderFormat::spirv,
-			.data = shape_shader_vert_bytes,
-		},
-		{
-			.type = ShaderType::fragment,
-			.format = ShaderFormat::spirv,
-			.data = shape_shader_frag_bytes,
-		}
+		{.type = ShaderType::vertex, .format = ShaderFormat::spirv, .data = shape_shader_vert_bytes},
+		{.type = ShaderType::fragment, .format = ShaderFormat::spirv, .data = shape_shader_frag_bytes},
 	};
 	Shader font_shader{
-		{
-			.type = ShaderType::vertex,
-			.format = ShaderFormat::spirv,
-			.data = font_shader_vert_bytes,
-		},
-		{
-			.type = ShaderType::fragment,
-			.format = ShaderFormat::spirv,
-			.data = font_shader_frag_bytes,
-		},
+		{.type = ShaderType::vertex, .format = ShaderFormat::spirv, .data = font_shader_vert_bytes},
+		{.type = ShaderType::fragment, .format = ShaderFormat::spirv, .data = font_shader_frag_bytes},
 	};
 	Shader font_screen_shader{
-		{.type = ShaderType::vertex,
-		 .format = ShaderFormat::spirv,
-		 .data = font_screen_shader_vert_bytes},
-		{
-			.type = ShaderType::fragment,
-			.format = ShaderFormat::spirv,
-			.data = font_shader_frag_bytes,
-		},
+		{.type = ShaderType::vertex, .format = ShaderFormat::spirv, .data = font_screen_shader_vert_bytes},
+		{.type = ShaderType::fragment, .format = ShaderFormat::spirv, .data = font_shader_frag_bytes},
 	};
 	camera::PerspectiveCamera camera;
 };
@@ -150,28 +128,18 @@ public:
 	void draw_quad(const utility::Transform& transform, const glm::vec4& color);
 	void draw_quad_outline(const utility::Transform& transform, float width, const glm::vec4& color);
 	void draw_circle(const utility::Transform& transform, const glm::vec4& color);
-	void draw_circle_outline(
-		const utility::Transform& transform, float width, const glm::vec4& color
-	);
+	void draw_circle_outline(const utility::Transform& transform, float width, const glm::vec4& color);
 	void draw_cube(const utility::Transform& transform, const glm::vec4& color);
 	void draw_cube_outline(const utility::Transform& transform, float width, const glm::vec4& color);
 	void draw_text(const Text& text, const utility::Transform& transform, const glm::vec4& color);
-	void draw_text(
-		std::string_view text, const utility::Transform& transform, const glm::vec4& color
-	);
-	void draw_text_screen(
-		const Text& text, const utility::Transform& transform, const glm::vec4& color
-	);
-	void draw_text_screen(
-		std::string_view text, const utility::Transform& transform, const glm::vec4& color
-	);
+	void draw_text(std::string_view text, const utility::Transform& transform, const glm::vec4& color);
+	void draw_text_screen(const Text& text, const utility::Transform& transform, const glm::vec4& color);
+	void draw_text_screen(std::string_view text, const utility::Transform& transform, const glm::vec4& color);
 
 	static void draw_mesh(const Mesh& mesh);
 	static void draw_mesh_instanced(const Mesh& mesh, unsigned int instances);
 	static void draw_elements(PrimitiveType type, unsigned int count, void* indices);
-	static void draw_elements_instanced(
-		PrimitiveType type, unsigned int count, void* indices, unsigned int instances
-	);
+	static void draw_elements_instanced(PrimitiveType type, unsigned int count, void* indices, unsigned int instances);
 
 	void set_camera(camera::Camera& camera);
 	void set_clear_color(const glm::vec4& color);
@@ -203,14 +171,22 @@ public:
 	static void set_line_width(float width);
 	static void set_point_size(float size);
 
-	[[nodiscard]] auto get_camera() const -> camera::Camera&;
-	[[nodiscard]] auto get_clear_color() const -> const glm::vec4&;
-	[[nodiscard]] auto get_polygon_mode() const -> PolygonMode;
-	[[nodiscard]] auto get_blend() const -> const Blend&;
-	[[nodiscard]] auto get_cull_face() const -> const CullFace&;
-	[[nodiscard]] auto get_depth() const -> const Depth&;
-	[[nodiscard]] auto get_stencil() const -> const Stencil&;
-	[[nodiscard]] auto get_viewport() const -> const Viewport&;
+	[[nodiscard]]
+	auto get_camera() const -> camera::Camera&;
+	[[nodiscard]]
+	auto get_clear_color() const -> const glm::vec4&;
+	[[nodiscard]]
+	auto get_polygon_mode() const -> PolygonMode;
+	[[nodiscard]]
+	auto get_blend() const -> const Blend&;
+	[[nodiscard]]
+	auto get_cull_face() const -> const CullFace&;
+	[[nodiscard]]
+	auto get_depth() const -> const Depth&;
+	[[nodiscard]]
+	auto get_stencil() const -> const Stencil&;
+	[[nodiscard]]
+	auto get_viewport() const -> const Viewport&;
 
 private:
 	bool _initialized = initialize();

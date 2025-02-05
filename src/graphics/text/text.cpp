@@ -66,10 +66,10 @@ void Text::update() const {
 	auto indices_offset = 0;
 	_size = {0.0f, 0.0f};
 	for (const auto& [glyph, bitmap, uv] : glyphs) {
-		const auto position = glm::vec2(
+		const auto position = glm::vec2{
 			position_offset.x + static_cast<float>(bitmap.bearing.x),
-			position_offset.y - (static_cast<float>(bitmap.size.y) - static_cast<float>(bitmap.bearing.y))
-		);
+			position_offset.y - (static_cast<float>(bitmap.size.y) - static_cast<float>(bitmap.bearing.y)),
+		};
 		const auto size = glm::vec2(bitmap.size);
 		const auto new_positions = std::array{
 			glm::vec2(position.x, position.y + size.y),

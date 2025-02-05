@@ -2,28 +2,28 @@ export module void_engine.window:input.input_manager;
 
 import :input.keyboard;
 import :input.mouse;
-import :window;
+
+export namespace void_engine::window {
+class window;
+}  // namespace void_engine::window
 
 export namespace void_engine::window::input {
 
-class InputManager {
+class input_manager {
 public:
-	InputManager(const InputManager&) = default;
-	InputManager(InputManager&&) = default;
-	auto operator=(const InputManager&) -> InputManager& = default;
-	auto operator=(InputManager&&) -> InputManager& = default;
-	InputManager() = delete;
-	explicit InputManager(Window& window);
-	~InputManager() = default;
+	explicit input_manager(window& window);
 
-	void update();
+	auto update() -> void;
 
-	[[nodiscard]] auto get_keyboard() -> keyboard::Keyboard&;
-	[[nodiscard]] auto get_mouse() -> mouse::Mouse&;
+	[[nodiscard]]
+	auto keyboard() -> keyboard&;
+
+	[[nodiscard]]
+	auto mouse() -> mouse&;
 
 private:
-	keyboard::Keyboard _keyboard;
-	mouse::Mouse _mouse;
+	class keyboard keyboard_;
+	class mouse mouse_;
 };
 
 } // namespace void_engine::window::input

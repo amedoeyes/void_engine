@@ -2,8 +2,7 @@ module void_engine.utility.timer;
 
 namespace void_engine::utility {
 
-Timer::Timer() : _start(Clock::now()), _end(Clock::now()) {
-}
+Timer::Timer() : _start(Clock::now()), _end(Clock::now()) {}
 
 void Timer::reset() {
 	_start = Clock::now();

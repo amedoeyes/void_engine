@@ -1,36 +1,46 @@
 export module void_engine.window:input.keyboard;
 
 import :input.keyboard_enums;
-import :window;
+import :window_event_bus;
 
 import std;
-import void_engine.utility.event;
 import void_engine.utility.state;
 
-export namespace void_engine::window::input::keyboard {
+export namespace void_engine::window {
+class window;
+}  // namespace void_engine::window
 
-class Keyboard {
+export namespace void_engine::window::input {
+
+class keyboard {
 public:
-	Keyboard(const Keyboard&) = default;
-	Keyboard(Keyboard&&) = default;
-	auto operator=(const Keyboard&) -> Keyboard& = default;
-	auto operator=(Keyboard&&) -> Keyboard& = default;
-	explicit Keyboard(window::Window& window);
-	~Keyboard();
+	keyboard(const keyboard&) = delete;
+	keyboard(keyboard&&) = default;
+	auto operator=(const keyboard&) -> keyboard& = delete;
+	auto operator=(keyboard&&) -> keyboard& = default;
+	explicit keyboard(window& window);
+	~keyboard();
 
-	void update();
+	auto update() -> void;
 
-	void set_key(Key key, bool state);
+	auto set_key(keyboard_key key, bool state) -> void;
 
-	[[nodiscard]] auto is_down(Key key) const -> bool;
-	[[nodiscard]] auto is_up(Key key) const -> bool;
-	[[nodiscard]] auto is_pressed(Key key) const -> bool;
-	[[nodiscard]] auto is_released(Key key) const -> bool;
+	[[nodiscard]]
+	auto is_down(keyboard_key key) const -> bool;
+
+	[[nodiscard]]
+	auto is_up(keyboard_key key) const -> bool;
+
+	[[nodiscard]]
+	auto is_pressed(keyboard_key key) const -> bool;
+
+	[[nodiscard]]
+	auto is_released(keyboard_key key) const -> bool;
 
 private:
-	window::Window* _window;
-	std::array<utility::State<bool>, 512> _keys;
-	utility::event::EventListenerID _keyboard_key_listener;
+	std::reference_wrapper<window> window_;
+	std::array<utility::state<bool>, 512> keys_;
+	window_event_bus::id_type key_listener_id_;
 };
 
-} // namespace void_engine::window::input::keyboard
+} // namespace void_engine::window::input
