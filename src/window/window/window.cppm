@@ -62,9 +62,9 @@ public:
 
 	auto set_focus_on_show(bool enabled) -> void;
 
-	auto set_icon(const resources::Image& image) -> void;
+	auto set_icon(const resources::image& image) -> void;
 
-	auto set_icons(std::span<resources::Image> images) -> void;
+	auto set_icons(std::span<resources::image> images) -> void;
 
 	auto set_opacity(float alpha) -> void;
 

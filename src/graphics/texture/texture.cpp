@@ -9,6 +9,7 @@ module void_engine.graphics;
 import std;
 import glm;
 import void_engine.resources;
+import void_engine.utility;
 
 namespace void_engine::graphics {
 
@@ -96,18 +97,19 @@ Texture::Texture(TextureTarget target, const std::filesystem::path& path) : Text
 	switch (_target) {
 		using enum TextureTarget;
 	case texture_2d: {
-		const auto image = resources::Image(path, true);
-		set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.get_size());
+		const auto bytes = *utility::read_bytes(path);
+		auto image = resources::image(bytes);
+		image.flip();
+		set_texture_storage_2d(1, TextureInternalFormat::rgba8, image.size());
 		TextureFormat format = TextureFormat::none;
-		switch (image.get_color_type()) {
-			using enum resources::ColorType;
-		case gray: format = TextureFormat::r; break;
-		case gray_alpha: format = TextureFormat::rg; break;
-		case rgb: format = TextureFormat::rgb; break;
-		case rgba: format = TextureFormat::rgba; break;
+		switch (image.channels()) {
+		case 1: format = TextureFormat::r; break;
+		case 2: format = TextureFormat::rg; break;
+		case 3: format = TextureFormat::rgb; break;
+		case 4: format = TextureFormat::rgba; break;
 		default: std::unreachable();
 		}
-		set_sub_image_2d(0, {0, 0}, image.get_size(), format, image.get_data().data());
+		set_sub_image_2d(0, {0, 0}, image.size(), format, image.data().data());
 		break;
 	}
 	default: break;

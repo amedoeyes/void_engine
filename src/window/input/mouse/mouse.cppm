@@ -42,7 +42,7 @@ public:
 
 	auto set_shape(mouse_shape shape) -> void;
 
-	auto set_image(const resources::Image& image, const glm::ivec2& hot_spot = {0, 0}) -> void;
+	auto set_image(const resources::image& image, const glm::ivec2& hot_spot = {0, 0}) -> void;
 
 	[[nodiscard]]
 	auto position() const -> glm::vec2;

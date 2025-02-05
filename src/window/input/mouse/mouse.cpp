@@ -60,11 +60,11 @@ auto mouse::set_shape(mouse_shape shape) -> void {
 	glfwSetCursor(window_.get().raw(), cursor_.get());
 }
 
-auto mouse::set_image(const resources::Image& image, const glm::ivec2& hot_spot) -> void {
+auto mouse::set_image(const resources::image& image, const glm::ivec2& hot_spot) -> void {
 	const auto glfw_image = GLFWimage{
-		.width = image.get_size().x,
-		.height = image.get_size().y,
-		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
+		.width = image.size().x,
+		.height = image.size().y,
+		.pixels = std::bit_cast<unsigned char*>(image.data().data()),
 	};
 	cursor_.reset(glfwCreateCursor(&glfw_image, hot_spot.x, hot_spot.y));
 	assert(cursor_ != nullptr && "Failed to create cursor");

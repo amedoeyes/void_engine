@@ -1,36 +1,40 @@
 export module void_engine.resources:image;
 
-import :image_enums;
-
-import std;
 import glm;
+import std;
 
 export namespace void_engine::resources {
 
-class Image {
+class image {
 public:
-	Image(const Image&) = default;
-	Image(Image&&) = default;
-	auto operator=(const Image&) -> Image& = default;
-	auto operator=(Image&&) -> Image& = default;
-	Image(std::span<const std::byte> data, ColorType color_type, const glm::uvec2& size);
-	explicit Image(const std::filesystem::path& path, bool flip = false);
-	explicit Image(std::span<std::byte> data, bool flip = false);
-	~Image() = default;
-
-	void write(const std::filesystem::path& path) const;
+	image(std::span<const std::byte> bytes,
+	      const glm::ivec2& size,
+	      std::int32_t bit_depth,
+	      std::int32_t channels) noexcept;
+	explicit image(std::span<const std::byte> bytes);
 
 	[[nodiscard]]
-	auto get_data() const -> std::span<const std::byte>;
+	auto compress() const -> std::vector<std::byte>;
+
+	auto flip() noexcept -> void;
+
 	[[nodiscard]]
-	auto get_color_type() const -> ColorType;
+	auto data() const noexcept -> std::span<const std::byte>;
+
 	[[nodiscard]]
-	auto get_size() const -> const glm::ivec2&;
+	auto size() const noexcept -> const glm::ivec2&;
+
+	[[nodiscard]]
+	auto bit_depth() const noexcept -> std::int32_t;
+
+	[[nodiscard]]
+	auto channels() const noexcept -> std::int32_t;
 
 private:
-	std::vector<std::byte> _data;
-	ColorType _color_type;
-	glm::ivec2 _size = {0, 0};
+	std::vector<std::byte> data_;
+	glm::ivec2 size_ = {0, 0};
+	std::int32_t bit_depth_;
+	std::int32_t channels_;
 };
 
 } // namespace void_engine::resources

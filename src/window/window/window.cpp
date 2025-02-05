@@ -180,23 +180,23 @@ auto window::set_focus_on_show(bool enabled) -> void {
 	glfwSetWindowAttrib(window_.get(), GLFW_FOCUS_ON_SHOW, static_cast<int>(enabled));
 }
 
-auto window::set_icon(const resources::Image& image) -> void {
+auto window::set_icon(const resources::image& image) -> void {
 	glfwSetWindowIcon(window_.get(), 0, nullptr);
 	const auto glfw_image = GLFWimage{
-		.width = image.get_size().x,
-		.height = image.get_size().y,
-		.pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
+		.width = image.size().x,
+		.height = image.size().y,
+		.pixels = std::bit_cast<unsigned char*>(image.data().data()),
 	};
 	glfwSetWindowIcon(window_.get(), 1, &glfw_image);
 }
 
-auto window::set_icons(std::span<resources::Image> images) -> void {
+auto window::set_icons(std::span<resources::image> images) -> void {
 	const auto glfw_images = images //
 	                       | std::views::transform([](const auto& image) {
 														 return GLFWimage{
-															 .width = image.get_size().x,
-															 .height = image.get_size().y,
-															 .pixels = std::bit_cast<unsigned char*>(image.get_data().data()),
+															 .width = image.size().x,
+															 .height = image.size().y,
+															 .pixels = std::bit_cast<unsigned char*>(image.data().data()),
 														 };
 													 })
 	                       | std::ranges::to<std::vector>();
