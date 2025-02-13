@@ -22,13 +22,13 @@ auto main() -> int {
 
 	const auto center = (text.get_size() / 2.0f) * 0.01f;
 
-	auto timer = utility::Timer{};
+	auto timer = utility::timer{};
 	timer.start();
 
 	while (!window.should_close()) {
 		window_manager.poll_events();
 
-		const auto time = timer.get_elapsed();
+		const auto time = timer.elapsed();
 
 		renderer.update();
 		renderer.clear();
