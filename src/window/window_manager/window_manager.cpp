@@ -61,8 +61,7 @@ auto window_manager::destroy(const window& window) -> void {
 auto window_manager::poll_events() -> void {
 	glfwPollEvents();
 	for (auto& window : windows_) {
-		window->inputs().keyboard.update();
-		window->inputs().mouse.update();
+		window->inputs().update();
 		window->events().poll();
 	}
 }

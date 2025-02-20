@@ -2,9 +2,10 @@ export module void_engine.window;
 
 export import :window;
 export import :window_enums;
-export import :window_hints;
-export import :window_events;
 export import :window_event_bus;
+export import :window_events;
+export import :window_hints;
+export import :window_inputs;
 
 export import :monitor;
 export import :video_mode;

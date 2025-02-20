@@ -4,12 +4,11 @@ module;
 
 export module void_engine.window:window;
 
-import :input.keyboard;
-import :input.mouse;
 import :monitor;
+import :window_enums;
 import :window_event_bus;
 import :window_hints;
-import :window_enums;
+import :window_inputs;
 
 import glm;
 import std;
@@ -17,11 +16,6 @@ import void_engine.resources;
 import void_engine.utility;
 
 export namespace void_engine::window {
-
-struct window_inputs {
-	input::keyboard keyboard;
-	input::mouse mouse;
-};
 
 class window {
 public:
