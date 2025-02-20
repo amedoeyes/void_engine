@@ -8,6 +8,7 @@ module void_engine.window;
 import std;
 import glm;
 import void_engine.resources;
+import void_engine.utility.bit_mask;
 
 namespace void_engine::window {
 
@@ -69,34 +70,95 @@ static auto apply_hints(const window_hints& hints) -> void {
 	glfwWindowHintString(GLFW_X11_INSTANCE_NAME, hints.x11.instance_name.c_str());
 }
 
-window::window(std::string_view title,
-               const glm::ivec2& size,
-               const monitor& monitor,
-               const window& share,
-               const window_hints& hints)
-	: window(title, size, monitor.raw(), share.raw(), hints) {}
+auto window::init_events() -> void {
+	static const auto emit = [this](auto&& data) { return events_.emit(std::forward<decltype(data)>(data)); };
+	auto* window = window_.get();
+	glfwSetDropCallback(window, [](auto*, auto count, const char** paths) {
+		emit(event::drop{
+			std::span(paths, count) //
+				| std::views::transform([](auto&& path) { return std::filesystem::path(path); })
+				| std::ranges::to<std::vector>(),
+		});
+	});
+	glfwSetFramebufferSizeCallback(window, [](auto*, auto w, auto h) { emit(event::framebuffer_size{{w, h}}); });
+	glfwSetCharCallback(window, [](auto*, auto codepoint) { emit(event::keyboard_char{codepoint}); });
+	glfwSetCharModsCallback(window, [](auto*, auto codepoint, auto mods) {
+		emit(event::keyboard_char_mods{.codepoint = codepoint, .mods = mods});
+	});
+	glfwSetKeyCallback(window, [](auto*, auto key, auto scancode, auto action, auto mods) {
+		emit(event::keyboard_key{
+			.key = static_cast<input::keyboard_key>(key),
+			.scancode = scancode,
+			.action = static_cast<input::keyboard_action>(action),
+			.mods = utility::BitMask<input::keyboard_mod>(mods),
+		});
+	});
+	glfwSetMouseButtonCallback(window, [](auto*, auto button, auto action, auto mods) {
+		emit(event::mouse_button{
+			.button = static_cast<input::mouse_button>(button),
+			.action = static_cast<input::mouse_action>(action),
+			.mods = utility::BitMask<input::keyboard_mod>(mods),
+		});
+	});
+	glfwSetCursorEnterCallback(window, [](auto*, auto entered) { emit(event::mouse_enter{entered == 1}); });
+	glfwSetCursorPosCallback(window, [](auto*, auto x, auto y) { emit(event::mouse_position{{x, y}}); });
+	glfwSetScrollCallback(window, [](auto*, auto x, auto y) { emit(event::mouse_scroll{{x, y}}); });
+	glfwSetWindowCloseCallback(window, [](auto*) { emit(event::window_close{}); });
+	glfwSetWindowContentScaleCallback(window, [](auto*, float x, float y) { emit(event::window_content_scale{{x, y}}); });
+	glfwSetWindowFocusCallback(window, [](auto*, auto focused) { emit(event::window_focus{focused == 1}); });
+	glfwSetWindowIconifyCallback(window, [](auto*, auto iconified) { emit(event::window_iconify{iconified == 1}); });
+	glfwSetWindowMaximizeCallback(window, [](auto*, auto maximized) { emit(event::window_maximize{maximized == 1}); });
+	glfwSetWindowPosCallback(window, [](auto*, auto x, auto y) { emit(event::window_position{{x, y}}); });
+	glfwSetWindowRefreshCallback(window, [](auto*) { emit(event::window_refresh{}); });
+	glfwSetWindowSizeCallback(window, [](auto*, auto w, auto h) { emit(event::window_size{{w, h}}); });
+}
 
-window::window(std::string_view title, const glm::ivec2& size, const monitor& monitor, const window_hints& hints)
-	: window(title, size, monitor.raw(), nullptr, hints) {}
+auto window::init_inputs() -> void {
+	events_.add_listener<event::keyboard_key>([this](const auto& event) {
+		inputs_.keyboard.set_key(event.key,
+		                         event.action == input::keyboard_action::press
+		                           || event.action == input::keyboard_action::repeat);
+	});
 
-window::window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints)
-	: window(title, size, nullptr, share.raw(), hints) {}
+	events_.add_listener<event::mouse_button>([&](const auto& event) {
+		inputs_.mouse.set_button(event.button, event.action == input::mouse_action::press);
+	});
+	events_.add_listener<event::mouse_position>([&](const auto& event) { inputs_.mouse.set_position(event.position); });
+	events_.add_listener<event::mouse_scroll>([&](const auto& event) { inputs_.mouse.set_scroll(event.offset); });
+}
 
-window::window(std::string_view title, const glm::ivec2& size, const window_hints& hints)
-	: window(title, size, nullptr, nullptr, hints) {}
-
-window::window(std::string_view title,
-               const glm::ivec2& size,
-               GLFWmonitor* monitor,
-               GLFWwindow* share,
-               const window_hints& hints) {
+auto window::init(std::string_view title,
+                  const glm::ivec2& size,
+                  GLFWmonitor* monitor,
+                  GLFWwindow* share,
+                  const window_hints& hints) -> void {
 	apply_hints(hints);
 	window_.reset(glfwCreateWindow(size.x, size.y, std::string(title).c_str(), monitor, share));
 	assert(window_ != nullptr && "Failed to create window");
 	glfwMakeContextCurrent(window_.get());
 	glfwSetWindowUserPointer(window_.get(), this);
-	events_ = std::make_unique<window_event_bus>(*this);
-	inputs_ = std::make_unique<input::input_manager>(*this);
+	init_events();
+	init_inputs();
+}  // namespace void_engine::window
+
+window::window(std::string_view title,
+               const glm::ivec2& size,
+               const monitor& monitor,
+               const window& share,
+               const window_hints& hints) {
+	init(title, size, monitor.raw(), share.raw(), hints);
+}
+
+window::window(std::string_view title, const glm::ivec2& size, const monitor& monitor, const window_hints& hints) {
+	init(title, size, monitor.raw(), nullptr, hints);
+}
+
+window::window(std::string_view title, const glm::ivec2& size, const window& share, const window_hints& hints) {
+	init(title, size, nullptr, share.raw(), hints);
+}
+
+window::window(std::string_view title, const glm::ivec2& size, const window_hints& hints) {
+	init(title, size, nullptr, nullptr, hints);
 }
 
 auto window::swap_buffers() const -> void {
@@ -228,11 +290,11 @@ auto window::set_title(std::string_view title) -> void {
 }
 
 auto window::events() -> window_event_bus& {
-	return *events_;
+	return events_;
 }
 
-auto window::inputs() -> input::input_manager& {
-	return *inputs_;
+auto window::inputs() -> window_inputs& {
+	return inputs_;
 }
 
 auto window::content_scale() const -> glm::vec2 {
@@ -328,6 +390,31 @@ auto window::should_close() const -> bool {
 
 auto window::raw() const -> GLFWwindow* {
 	return window_.get();
+}
+
+auto window::set_mode(cursor_mode mode) const -> void {
+	glfwSetInputMode(window_.get(), GLFW_CURSOR, std::to_underlying(mode));
+}
+
+auto window::set_raw_motion(bool enabled) const -> void {
+	glfwSetInputMode(window_.get(), GLFW_RAW_MOUSE_MOTION, static_cast<int>(enabled));
+}
+
+auto window::set_cursor_shape(cursor_shape shape) -> void {
+	cursor_.reset(glfwCreateStandardCursor(std::to_underlying(shape)));
+	assert(cursor_ != nullptr && "Failed to create cursor");
+	glfwSetCursor(window_.get(), cursor_.get());
+}
+
+auto window::set_cursor_image(const resources::image& image, const glm::ivec2& hot_spot) -> void {
+	const auto glfw_image = GLFWimage{
+		.width = image.size().x,
+		.height = image.size().y,
+		.pixels = std::bit_cast<unsigned char*>(image.data().data()),
+	};
+	cursor_.reset(glfwCreateCursor(&glfw_image, hot_spot.x, hot_spot.y));
+	assert(cursor_ != nullptr && "Failed to create cursor");
+	glfwSetCursor(window_.get(), cursor_.get());
 }
 
 }  // namespace void_engine::window

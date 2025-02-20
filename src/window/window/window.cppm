@@ -4,16 +4,24 @@ module;
 
 export module void_engine.window:window;
 
-import :input.input_manager;
+import :input.keyboard;
+import :input.mouse;
 import :monitor;
 import :window_event_bus;
 import :window_hints;
+import :window_enums;
 
 import glm;
 import std;
 import void_engine.resources;
+import void_engine.utility;
 
 export namespace void_engine::window {
+
+struct window_inputs {
+	input::keyboard keyboard;
+	input::mouse mouse;
+};
 
 class window {
 public:
@@ -82,7 +90,7 @@ public:
 	auto events() -> window_event_bus&;
 
 	[[nodiscard]]
-	auto inputs() -> input::input_manager&;
+	auto inputs() -> window_inputs&;
 
 	[[nodiscard]]
 	auto content_scale() const -> glm::vec2;
@@ -150,22 +158,28 @@ public:
 	[[nodiscard]]
 	auto raw() const -> GLFWwindow*;
 
+	auto set_mode(cursor_mode mode) const -> void;
+
+	auto set_raw_motion(bool enabled) const -> void;
+
+	auto set_cursor_shape(cursor_shape shape) -> void;
+
+	auto set_cursor_image(const resources::image& image, const glm::ivec2& hot_spot = {0, 0}) -> void;
+
 private:
-	struct destroy_glfw_window {
-		auto operator()(GLFWwindow* w) -> void {
-			glfwDestroyWindow(w);
-		}
-	};
+	std::unique_ptr<GLFWwindow, decltype(&glfwDestroyWindow)> window_{nullptr, &glfwDestroyWindow};
+	std::unique_ptr<GLFWcursor, decltype(&glfwDestroyCursor)> cursor_{nullptr, &glfwDestroyCursor};
+	window_event_bus events_;
+	window_inputs inputs_;
 
-	std::unique_ptr<GLFWwindow, destroy_glfw_window> window_;
-	std::unique_ptr<window_event_bus> events_;
-	std::unique_ptr<input::input_manager> inputs_;
+	auto init(std::string_view title,
+	          const glm::ivec2& size,
+	          GLFWmonitor* monitor,
+	          GLFWwindow* share,
+	          const window_hints& hints) -> void;
 
-	window(std::string_view title,
-	       const glm::ivec2& size,
-	       GLFWmonitor* monitor,
-	       GLFWwindow* share,
-	       const window_hints& hints);
+	auto init_events() -> void;
+	auto init_inputs() -> void;
 };
 
 } // namespace void_engine::window

@@ -4,16 +4,6 @@ import std;
 
 namespace void_engine::window::input {
 
-keyboard::keyboard(window& window) : window_{window} {
-	key_listener_id_ = window_.get().events().add_listener<event::keyboard_key>([&](const auto& event) {
-		set_key(event.key, event.action == keyboard_action::press || event.action == keyboard_action::repeat);
-	});
-}
-
-keyboard::~keyboard() {
-	window_.get().events().remove_listener<event::keyboard_key>(key_listener_id_);
-}
-
 auto keyboard::update() -> void {
 	for (auto& key : keys_) key.set_previous(key.current());
 }
