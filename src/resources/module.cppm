@@ -5,4 +5,3 @@ export import :glyph;
 export import :glyph_bitmap;
 
 export import :image;
-export import :image_enums;

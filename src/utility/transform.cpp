@@ -9,15 +9,14 @@ import glm;
 
 namespace void_engine::utility {
 
-Transform::Transform(
-	const glm::vec3& position, const glm::vec3& rotation, const glm::vec3& scale,
-	const glm::vec3& origin
-) :
-	_position(position),
-	_rotation(rotation),
-	_scale(scale),
-	_origin(origin) {
-}
+Transform::Transform(const glm::vec3& position,
+                     const glm::vec3& rotation,
+                     const glm::vec3& scale,
+                     const glm::vec3& origin)
+	: _position(position),
+		_rotation(rotation),
+		_scale(scale),
+		_origin(origin) {}
 
 void Transform::translate(const glm::vec3& translation) {
 	_position += translation;

@@ -9,73 +9,73 @@ import void_engine.utility.bit_mask;
 
 export namespace void_engine::window::event {
 
-struct DropEvent {
+struct drop {
 	std::vector<std::filesystem::path> paths;
 };
 
-struct FramebufferSizeEvent {
+struct framebuffer_size {
 	glm::vec2 size;
 };
 
-struct KeyboardCharEvent {
+struct keyboard_char {
 	unsigned int codepoint;
 };
 
-struct KeyboardCharModsEvent {
+struct keyboard_char_mods {
 	unsigned int codepoint;
 	int mods;
 };
 
-struct KeyboardKeyEvent {
-	input::keyboard::Key key;
-	int scancode;
-	input::keyboard::KeyAction action;
-	utility::BitMask<input::keyboard::KeyMod> mods;
+struct keyboard_key {
+	input::keyboard_key key;
+	std::int32_t scancode;
+	input::keyboard_action action;
+	utility::BitMask<input::keyboard_mod> mods;
 };
 
-struct MouseButtonEvent {
-	input::mouse::Button button;
-	input::mouse::ButtonAction action;
-	utility::BitMask<input::keyboard::KeyMod> mods;
+struct mouse_button {
+	input::mouse_button button;
+	input::mouse_action action;
+	utility::BitMask<input::keyboard_mod> mods;
 };
 
-struct MouseEnterEvent {
+struct mouse_enter {
 	bool entered;
 };
 
-struct MousePositionEvent {
+struct mouse_position {
 	glm::vec2 position;
 };
 
-struct MouseScrollEvent {
+struct mouse_scroll {
 	glm::vec2 offset;
 };
 
-struct WindowCloseEvent {};
+struct window_close {};
 
-struct WindowContentScaleEvent {
+struct window_content_scale {
 	glm::vec2 scale;
 };
 
-struct WindowFocusEvent {
+struct window_focus {
 	bool focused;
 };
 
-struct WindowIconifyEvent {
+struct window_iconify {
 	bool iconified;
 };
 
-struct WindowMaximizeEvent {
+struct window_maximize {
 	bool maximized;
 };
 
-struct WindowPositionEvent {
+struct window_position {
 	glm::vec2 position;
 };
 
-struct WindowRefreshEvent {};
+struct window_refresh {};
 
-struct WindowSizeEvent {
+struct window_size {
 	glm::vec2 size;
 };
 

@@ -8,10 +8,10 @@ import :buffer.enums;
 
 namespace void_engine::graphics::buffer {
 
-Buffer::Buffer(const Buffer& other) :
-	_target(other._target),
-	_usage(other._usage),
-	_allocated_size(other._allocated_size) {
+Buffer::Buffer(const Buffer& other)
+	: _target(other._target),
+		_usage(other._usage),
+		_allocated_size(other._allocated_size) {
 	GLint size = 0;
 	GLint usage = 0;
 	glGetNamedBufferParameteriv(other._id, GL_BUFFER_SIZE, &size);
@@ -21,11 +21,11 @@ Buffer::Buffer(const Buffer& other) :
 	glCopyNamedBufferSubData(other._id, _id, 0, 0, size);
 }
 
-Buffer::Buffer(Buffer&& other) noexcept :
-	_id(other._id),
-	_target(other._target),
-	_usage(other._usage),
-	_allocated_size(other._allocated_size) {
+Buffer::Buffer(Buffer&& other) noexcept
+	: _id(other._id),
+		_target(other._target),
+		_usage(other._usage),
+		_allocated_size(other._allocated_size) {
 	other._id = 0;
 	other._allocated_size = 0;
 }

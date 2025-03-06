@@ -24,9 +24,12 @@ public:
 	explicit Font(std::span<const std::byte> data, std::int32_t size = 48);
 	~Font();
 
-	[[nodiscard]] auto glyphs(std::string_view text) const -> std::vector<Glyph>;
-	[[nodiscard]] auto get_bitmap(std::uint32_t codepoint) const -> GlyphBitmap;
-	[[nodiscard]] auto get_line_height() const -> float;
+	[[nodiscard]]
+	auto glyphs(std::string_view text) const -> std::vector<Glyph>;
+	[[nodiscard]]
+	auto get_bitmap(std::uint32_t codepoint) const -> GlyphBitmap;
+	[[nodiscard]]
+	auto get_line_height() const -> float;
 
 private:
 	static inline FT_Library _ft = nullptr;

@@ -24,15 +24,26 @@ public:
 	void move(const glm::vec3& movement);
 	void rotate(glm::vec3 rotation);
 
-	[[nodiscard]] auto is_in_frustum(const glm::vec3& point) const -> bool;
-	[[nodiscard]] auto get_near_plane() const -> float;
-	[[nodiscard]] auto get_far_plane() const -> float;
-	[[nodiscard]] auto get_position() const -> const glm::vec3&;
-	[[nodiscard]] auto get_rotation() const -> glm::vec3;
-	[[nodiscard]] auto get_view() const -> const glm::mat4&;
-	[[nodiscard]] auto get_projection() const -> const glm::mat4&;
-	[[nodiscard]] auto get_view_projection() const -> const glm::mat4&;
-	[[nodiscard]] virtual auto get_type() const -> Type = 0;
+	[[nodiscard]]
+	auto is_in_frustum(const glm::vec3& point) const -> bool;
+	[[nodiscard]]
+	auto get_near_plane() const -> float;
+	[[nodiscard]]
+	auto get_far_plane() const -> float;
+	[[nodiscard]]
+	auto get_position() const -> const glm::vec3&;
+	[[nodiscard]]
+	auto get_rotation() const -> glm::vec3;
+	[[nodiscard]]
+	auto get_view() const -> const glm::mat4&;
+	[[nodiscard]]
+	auto get_projection() const -> const glm::mat4&;
+	[[nodiscard]]
+	auto get_view_projection() const -> const glm::mat4&;
+
+	[[nodiscard]]
+	virtual auto get_type() const -> Type
+		= 0;
 
 protected:
 	glm::vec3 _position = glm::vec3(0.0f);
@@ -51,4 +62,4 @@ protected:
 	auto calculate_rotation(const glm::vec3& rotation) -> glm::quat;
 };
 
-} // namespace void_engine::graphics::camera
+}  // namespace void_engine::graphics::camera

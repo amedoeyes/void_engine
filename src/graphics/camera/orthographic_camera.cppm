@@ -18,12 +18,18 @@ public:
 	void set_zoom(float zoom);
 	void zoom(float zoom);
 	void set_size(const glm::vec2& size) override;
-	[[nodiscard]] auto get_left() const -> float;
-	[[nodiscard]] auto get_right() const -> float;
-	[[nodiscard]] auto get_bottom() const -> float;
-	[[nodiscard]] auto get_top() const -> float;
-	[[nodiscard]] auto get_zoom() const -> float;
-	[[nodiscard]] auto get_type() const -> Type override;
+	[[nodiscard]]
+	auto get_left() const -> float;
+	[[nodiscard]]
+	auto get_right() const -> float;
+	[[nodiscard]]
+	auto get_bottom() const -> float;
+	[[nodiscard]]
+	auto get_top() const -> float;
+	[[nodiscard]]
+	auto get_zoom() const -> float;
+	[[nodiscard]]
+	auto get_type() const -> Type override;
 
 protected:
 	float _zoom = 1.0f;

@@ -7,16 +7,16 @@ import std;
 
 export namespace void_engine::graphics::buffer {
 
-template <typename T>
+template<typename T>
 class ArrayBuffer final : public Buffer {
 public:
-	ArrayBuffer() : Buffer(Target::array) {
-	}
+	ArrayBuffer() : Buffer(Target::array) {}
+
 	explicit ArrayBuffer(unsigned int size, Usage usage = Usage::static_draw) : ArrayBuffer() {
 		Buffer::allocate(size, usage);
 	}
-	explicit ArrayBuffer(const std::vector<T>& data, Usage usage = Usage::static_draw) :
-		ArrayBuffer() {
+
+	explicit ArrayBuffer(const std::vector<T>& data, Usage usage = Usage::static_draw) : ArrayBuffer() {
 		set_data(data, usage);
 	}
 
@@ -39,7 +39,8 @@ public:
 		_data = data;
 	}
 
-	[[nodiscard]] auto get_data() const -> const std::vector<T>& {
+	[[nodiscard]]
+	auto get_data() const -> const std::vector<T>& {
 		return _data;
 	}
 

@@ -15,10 +15,14 @@ public:
 	void set_atlas(FontAtlas& atlas);
 	void set_data(std::string_view data);
 
-	[[nodiscard]] auto get_atlas() const -> FontAtlas&;
-	[[nodiscard]] auto get_data() const -> const std::string&;
-	[[nodiscard]] auto get_size() const -> const glm::vec2&;
-	[[nodiscard]] auto get_mesh() const -> const Mesh&;
+	[[nodiscard]]
+	auto get_atlas() const -> FontAtlas&;
+	[[nodiscard]]
+	auto get_data() const -> const std::string&;
+	[[nodiscard]]
+	auto get_size() const -> const glm::vec2&;
+	[[nodiscard]]
+	auto get_mesh() const -> const Mesh&;
 
 private:
 	std::reference_wrapper<FontAtlas> _atlas;

@@ -20,12 +20,12 @@ public:
 	void bind() const;
 	static void unbind();
 
-	template <typename T>
+	template<typename T>
 	void add_attribute(unsigned int count, unsigned int offset = 0, bool normalized = false) {
 		add_attribute(utility::get_gl_type<T>(), count, offset, normalized);
 	}
 
-	template <typename T>
+	template<typename T>
 	void add_vertex_buffer(const buffer::ArrayBuffer<T>& buffer) {
 		add_vertex_buffer(buffer, 0, sizeof(T));
 	}

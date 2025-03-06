@@ -160,23 +160,15 @@ void VertexArray::set_element_buffer(const buffer::ElementBuffer& buffer) const 
 	glVertexArrayElementBuffer(_id, buffer.get_id());
 }
 
-void VertexArray::add_attribute(
-	unsigned int type, unsigned int count, unsigned int offset, bool normalized
-) {
+void VertexArray::add_attribute(unsigned int type, unsigned int count, unsigned int offset, bool normalized) {
 	glEnableVertexArrayAttrib(_id, _index);
-	glVertexArrayAttribFormat(
-		_id, _index, static_cast<GLint>(count), type, static_cast<GLboolean>(normalized), offset
-	);
+	glVertexArrayAttribFormat(_id, _index, static_cast<GLint>(count), type, static_cast<GLboolean>(normalized), offset);
 	glVertexArrayAttribBinding(_id, _index, _buffer_index);
 	_index++;
 }
 
-void VertexArray::add_vertex_buffer(
-	const buffer::Buffer& buffer, unsigned int offset, unsigned int stride
-) {
-	glVertexArrayVertexBuffer(
-		_id, _buffer_index, buffer.get_id(), offset, static_cast<GLsizei>(stride)
-	);
+void VertexArray::add_vertex_buffer(const buffer::Buffer& buffer, unsigned int offset, unsigned int stride) {
+	glVertexArrayVertexBuffer(_id, _buffer_index, buffer.get_id(), offset, static_cast<GLsizei>(stride));
 	_buffer_index++;
 }
 

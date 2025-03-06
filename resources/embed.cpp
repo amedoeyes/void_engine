@@ -28,16 +28,13 @@ const std::uint8_t liberation_font[] = {
 };
 // NOLINTEND
 
-const auto shape_shader_vert_bytes =
-	std::as_bytes(std::span<const std::uint8_t>(shape_shader_vert));
+const auto shape_shader_vert_bytes = std::as_bytes(std::span<const std::uint8_t>(shape_shader_vert));
 
-const auto shape_shader_frag_bytes =
-	std::as_bytes(std::span<const std::uint8_t>(shape_shader_frag));
+const auto shape_shader_frag_bytes = std::as_bytes(std::span<const std::uint8_t>(shape_shader_frag));
 
 const auto font_shader_vert_bytes = std::as_bytes(std::span<const std::uint8_t>(font_shader_vert));
 
-const auto font_screen_shader_vert_bytes =
-	std::as_bytes(std::span<const std::uint8_t>(font_screen_shader_vert));
+const auto font_screen_shader_vert_bytes = std::as_bytes(std::span<const std::uint8_t>(font_screen_shader_vert));
 
 const auto font_shader_frag_bytes = std::as_bytes(std::span<const std::uint8_t>(font_shader_frag));
 

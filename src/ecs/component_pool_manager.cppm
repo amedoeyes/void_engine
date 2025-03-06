@@ -21,25 +21,26 @@ public:
 	auto operator=(const ComponentPoolManager&) -> ComponentPoolManager& = default;
 	auto operator=(ComponentPoolManager&&) -> ComponentPoolManager& = delete;
 	ComponentPoolManager() = default;
+
 	~ComponentPoolManager() {
 		for (auto& [_, pool] : _pools) {
 			delete pool;
 		}
 	}
 
-	template <typename Component>
+	template<typename Component>
 	auto create(Entity entity) -> Component& {
 		auto* pool = get_or_create_pool<Component>();
 		return pool->create(entity);
 	}
 
-	template <typename Component>
+	template<typename Component>
 	auto create(Entity entity, Component&& component) -> Component& {
 		auto* pool = get_or_create_pool<Component>();
 		return pool->create(entity, std::forward<Component>(component));
 	}
 
-	template <typename Component>
+	template<typename Component>
 	void destroy(Entity entity) {
 		auto* pool = get_pool<Component>();
 		assert(pool != nullptr && "Component pool does not exist");
@@ -54,22 +55,24 @@ public:
 		}
 	}
 
-	template <typename Component>
+	template<typename Component>
 	void clear() {
 		auto* pool = get_pool<Component>();
 		assert(pool != nullptr && "Component pool does not exist");
 		pool->clear();
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto get(Entity entity) -> Component& {
+	template<typename Component>
+	[[nodiscard]]
+	auto get(Entity entity) -> Component& {
 		auto* pool = get_pool<Component>();
 		assert(pool != nullptr && "Component pool does not exist");
 		return pool->get(entity);
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto contains(Entity entity) const -> bool {
+	template<typename Component>
+	[[nodiscard]]
+	auto contains(Entity entity) const -> bool {
 		auto* pool = get_pool<Component>();
 		if (pool == nullptr) {
 			return false;
@@ -77,13 +80,15 @@ public:
 		return pool->contains(entity);
 	}
 
-	template <typename... Components>
+	template<typename... Components>
 		requires(sizeof...(Components) > 1)
-	[[nodiscard]] auto contains(Entity entity) const -> bool {
+	[[nodiscard]]
+	auto contains(Entity entity) const -> bool {
 		return (contains<Components>(entity) && ...);
 	}
 
-	[[nodiscard]] auto query() const -> std::vector<Entity> {
+	[[nodiscard]]
+	auto query() const -> std::vector<Entity> {
 		std::unordered_set<Entity> unique;
 		for (const auto& [_, pool] : _pools) {
 			const auto& pool_entities = pool->get_entities();
@@ -95,8 +100,9 @@ public:
 		return entities;
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto query() const -> const std::vector<Entity>& {
+	template<typename Component>
+	[[nodiscard]]
+	auto query() const -> const std::vector<Entity>& {
 		static const std::vector<Entity> empty;
 		auto* pool = get_pool<Component>();
 		if (pool == nullptr) {
@@ -105,11 +111,11 @@ public:
 		return pool->get_entities();
 	}
 
-	template <typename... Components>
+	template<typename... Components>
 		requires(sizeof...(Components) > 1)
-	[[nodiscard]] auto query() const -> std::vector<Entity> {
-		const std::array<const std::vector<Entity>*, sizeof...(Components)> pools = {&query<Components>(
-		)...};
+	[[nodiscard]]
+	auto query() const -> std::vector<Entity> {
+		const std::array<const std::vector<Entity>*, sizeof...(Components)> pools = {&query<Components>()...};
 		const std::vector<Entity>* smallest_pool = pools[0];
 		for (const auto& pool : pools) {
 			if (pool->size() < smallest_pool->size()) {
@@ -128,19 +134,22 @@ public:
 private:
 	std::unordered_map<ComponentID, ComponentPoolBase*> _pools;
 
-	[[nodiscard]] static auto component_counter() -> ComponentID {
+	[[nodiscard]]
+	static auto component_counter() -> ComponentID {
 		static ComponentID counter = 0;
 		return counter++;
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto get_component_id() const -> ComponentID {
+	template<typename Component>
+	[[nodiscard]]
+	auto get_component_id() const -> ComponentID {
 		static const ComponentID id = component_counter();
 		return id;
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto get_or_create_pool() -> ComponentPool<Component>* {
+	template<typename Component>
+	[[nodiscard]]
+	auto get_or_create_pool() -> ComponentPool<Component>* {
 		ComponentID id = get_component_id<Component>();
 		const auto it = _pools.find(id);
 		if (it == _pools.end()) {
@@ -149,8 +158,9 @@ private:
 		return static_cast<ComponentPool<Component>*>(_pools[id]);
 	}
 
-	template <typename Component>
-	[[nodiscard]] auto get_pool() const -> ComponentPool<Component>* {
+	template<typename Component>
+	[[nodiscard]]
+	auto get_pool() const -> ComponentPool<Component>* {
 		const auto it = _pools.find(get_component_id<Component>());
 		if (it == _pools.end()) {
 			return nullptr;
